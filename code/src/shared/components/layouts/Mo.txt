@@ -1,0 +1,158 @@
+// export default function ModalNavHeader({
+//     title,
+//     actions,
+//     onClose,
+// }: {
+//     title: string;
+//     actions?: React.ReactNode[];
+//     onClose: () => void;
+// }) {
+//     const HEADER_H = 64; // สูงหัวข้อ
+
+//     return (
+//         <Box
+//             sx={{
+//                 position: 'fixed',
+//                 top: 0,
+//                 left: 0,
+//                 right: 0,
+//                 zIndex: 1000,
+//                 bgcolor: 'white',
+//                 borderBottom: '1px solid #E9ECEF',
+//             }}
+//         >
+//             <Container maxWidth="xl" sx={{ position: 'relative', height: HEADER_H }}>
+//                 {/* ซ้าย: ปุ่มปิด */}
+//                 <IconButton
+//                     size="small"
+//                     onClick={onClose}
+//                     sx={{
+//                         position: 'absolute',
+//                         left: 8,
+//                         top: '50%',
+//                         transform: 'translateY(-50%)',
+//                         width: 56,
+//                         height: 56,
+//                         borderRadius: 2,
+//                         bgcolor: '#F3F5F7',
+//                         '&:hover': { bgcolor: '#E9ECEF' },
+//                     }}
+//                 >
+//                     <img src={CloseIcon} alt="close" />
+//                 </IconButton>
+
+//                 {/* กลาง: ชื่อหน้า */}
+//                 <Typography
+//                     variant="h4"
+//                     sx={{
+//                         position: 'absolute',
+//                         left: '50%',
+//                         top: '50%',
+//                         transform: 'translate(-50%, -50%)',
+//                         textAlign: 'center',
+//                         whiteSpace: 'nowrap',
+//                     }}
+//                 >
+//                     {title || ' '}
+//                 </Typography>
+
+//                 {/* ขวา: ปุ่มต่าง ๆ */}
+//                 <Box
+//                     sx={{
+//                         position: 'absolute',
+//                         right: 8,
+//                         top: '50%',
+//                         transform: 'translateY(-50%)',
+//                         display: 'flex',
+//                         gap: 1,
+//                     }}
+//                 >
+//                     {actions?.map((node, idx) => (
+//                         <React.Fragment key={idx}>{node}</React.Fragment>
+//                     ))}
+//                 </Box>
+//             </Container>
+//         </Box>
+//     );
+// }
+
+
+// export default function ModalNavHeader({
+//     title,
+//     actions,
+//     onClose,
+//  isMobile = false
+// }: {
+//     title: string;
+//     actions?: React.ReactNode[];
+//     onClose: () => void;
+// isMobile?: boolean;
+// }) {
+//     const HEADER_H = 64; // สูงหัวข้อ
+
+//     return (
+//         <Box
+//             sx={{
+//                 position: 'fixed',
+//                 top: 0,
+//                 left: 0,
+//                 right: 0,
+//                 zIndex: 1000,
+//                 bgcolor: 'white',
+//                 borderBottom: '1px solid #E9ECEF',
+//             }}
+//         >
+//             <Container maxWidth="xl" sx={{ position: 'relative', height: HEADER_H }}>
+//                 {/* ซ้าย: ปุ่มปิด */}
+//                 <IconButton
+//                     size="small"
+//                     onClick={onClose}
+//                     sx={{
+//                         position: 'absolute',
+//                         left: 8,
+//                         top: '50%',
+//                         transform: 'translateY(-50%)',
+//                         width: 56,
+//                         height: 56,
+//                         borderRadius: 2,
+//                         bgcolor: '#F3F5F7',
+//                         '&:hover': { bgcolor: '#E9ECEF' },
+//                     }}
+//                 >
+//                     <img src={CloseIcon} alt="close" />
+//                 </IconButton>
+
+//                 {/* กลาง: ชื่อหน้า */}
+//                 <Typography
+//                     variant="h4"
+//                     sx={{
+//                         position: 'absolute',
+//                         left: '50%',
+//                         top: '50%',
+//                         transform: 'translate(-50%, -50%)',
+//                         textAlign: 'center',
+//                         whiteSpace: 'nowrap',
+//                     }}
+//                 >
+//                     {title || ' '}
+//                 </Typography>
+
+//                 {/* ขวา: ปุ่มต่าง ๆ */}
+//                 <Box
+//                     sx={{
+//                         position: 'absolute',
+//                         right: 8,
+//                         top: '50%',
+//                         transform: 'translateY(-50%)',
+//                         display: 'flex',
+//                         gap: 1,
+//                     }}
+//                 >
+//                     {actions?.map((node, idx) => (
+//                         <React.Fragment key={idx}>{node}</React.Fragment>
+//                     ))}
+//                 </Box>
+//             </Container>
+//         </Box>
+//     );
+// }

@@ -1,0 +1,271 @@
+export const useOwnerFromFetch = (owner_id: string) => {
+    const [loading, setLoading] = useState(true);
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setValue,
+        watch,
+        getValues,
+        control,
+        formState: { errors }
+    } = useForm({
+        resolver: zodResolver(OwnerZod)
+    });
+
+    useEffect(() => {
+        (async () => {
+            setLoading(true)
+            if (loading) return <LoadingDisplay />; // ← คอมโพเนนต์เป็นคนเรนเดอร์
+            try {
+                console.log('owner_id', owner_id)
+                if (owner_id === '0') {
+                    reset(IOwnerItemDefault);
+                    setLoading(false);
+                    return;
+                }
+
+                const getData = await getOwnerByOne(owner_id);
+                console.log('getData', getData);
+
+                if (R.isEmpty(getData) || R.isNil(getData)) {
+                    await Swal.fire({
+                        title: `ไม่พบข้อมูล`,
+                        text: `เกิดข้อผิดพลาดบางอย่าง โปรดตรวจสอบก่อนแก้ไข`,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                    return;
+                }
+
+                reset(getData);
+            } catch (error) {
+                console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
+                Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถโหลดข้อมูลได้', 'error');
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [owner_id, reset]);
+
+    return {
+        register,
+        handleSubmit,
+        reset,
+        setValue,
+        watch,
+        getValues,
+        control,
+        loading,
+        errors
+    };
+};
+
+
+// export const useFetchOwnerType = () => {
+//     const [owner_type, setOwner_type] = useState<IFilterOwnerType[]>([]);
+//     const [food_type, setFood_type] = useState<IFilterOwnerType[]>([]);
+//     const [user_type, setUser_type] = useState<IFilterOwnerType[]>([]);
+//     const [loading_owner_type, setLoading_owner_type] = useState(true);
+
+//     useEffect(() => {
+
+//         (async () => {
+//             let res_owner = await getOwnerType()
+//             let res_food = await getFoodOwnerType()
+//             let res_user = await getUserOwnerType()
+//             console.log('owner_type', res_owner);
+//             if (R.isEmpty(res_owner) || R.isNil(res_owner)) {
+//                 await Swal.fire({
+//                     title: `ไม่พบข้อมูล`,
+//                     text: `เกิดข้อผิดพลาดบางอย่าง โปรดตรวจสอบก่อนแก้ไข`,
+//                     icon: 'warning',
+//                     confirmButtonColor: '#3085d6',
+//                     confirmButtonText: 'OK',
+//                 });
+//                 setOwner_type([])
+//                 return;
+//             }
+//             setOwner_type(res_owner);
+//             setFood_type(res_food);
+//             setUser_type(res_user);
+
+//         })().finally(() => setLoading_owner_type(false))
+
+
+//     }, []);
+
+//     return { owner_type, loading_owner_type};
+// };
+
+
+
+// export const useOwnerFromeFetch = (
+//     owner_id: string,
+//     setLoading: React.Dispatch<React.SetStateAction<boolean>>
+// ) => {
+//     const {
+//         register,
+//         handleSubmit,
+//         reset,
+//         setValue,
+//         watch,
+//         getValues,
+//         control,
+//         formState: { errors }
+//     } = useForm({
+//         resolver: zodResolver(OwnerZod)
+//     });
+
+//     useEffect(() => {
+//         let isMounted = true;
+//         const fetchData = async () => {
+//             setLoading(true); // ⬅️ ใช้จากคอมโพเนนต์แม่
+
+//             try {
+//                 console.log("owner_id", owner_id);
+
+//                 if (owner_id === "0") {
+//                     reset(IOwnerItemDefault);
+//                     return;
+//                 }
+
+//                 const data = await getOwnerByOne(owner_id);
+//                 if (!data || R.isEmpty(data) || R.isNil(data)) {
+//                     await Swal.fire({
+//                         title: `ไม่พบข้อมูล`,
+//                         text: `เกิดข้อผิดพลาดบางอย่าง โปรดตรวจสอบก่อนแก้ไข`,
+//                         icon: "warning",
+//                         confirmButtonColor: "#3085d6",
+//                         confirmButtonText: "OK",
+//                     });
+//                     reset(IOwnerItemDefault);
+//                     return;
+//                 }
+//                 reset(data);
+//             } catch (error) {
+//                 console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+//                 Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถโหลดข้อมูลได้", "error");
+//                 reset(IOwnerItemDefault);
+//             } finally {
+//                 if (isMounted) setLoading(false); // ⬅️ ใช้จากคอมโพเนนต์แม่
+//             }
+//         };
+
+//         fetchData();
+//         return () => {
+//             isMounted = false;
+//         };
+//     }, [owner_id, reset, setLoading]);
+
+//     return {
+//         register,
+//         handleSubmit,
+//         reset,
+//         setValue,
+//         watch,
+//         getValues,
+//         control,
+//         errors
+//     };
+// };
+
+
+
+export const useOwnerFormFetch = (owner_id: string) => {
+  const [loading, setLoading] = useState(true);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    getValues,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(OwnerZod),
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const run = async () => {
+      setLoading(true);
+      try {
+        // โหมดสร้างใหม่
+        if (!owner_id || owner_id === "0") {
+          reset(IOwnerItemDefault);
+          return; // finally จะทำงานแน่นอน
+        }
+
+        // โหมดแก้ไข: โหลดข้อมูล
+        const data = await getOwnerByOne(owner_id);
+        if (cancelled) return;
+
+        if (R.isEmpty(data) || R.isNil(data)) {
+          await Swal.fire({
+            title: "ไม่พบข้อมูล",
+            text: "เกิดข้อผิดพลาดบางอย่าง โปรดตรวจสอบก่อนแก้ไข",
+            icon: "warning",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+
+        reset(data);
+      } catch (err) {
+        if (!cancelled) {
+          console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", err);
+          Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถโหลดข้อมูลได้", "error");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [owner_id, reset]);
+
+  // ถ้าต้องการดูค่าแบบ realtime แนะนำ subscribe แทน watch() ตรง ๆ
+  useEffect(() => {
+    const sub = watch((values) => {
+      console.log("values changed", values);
+    });
+    return () => sub.unsubscribe();
+  }, [watch]);
+
+  return {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    getValues,
+    control,
+    loading,
+    errors,
+  };
+};
+
+
+
+
+
+
+   // setDataSubmittedAlert(true);
+      // setTextAlert({
+      //   type_severity: 'success',
+      //   title: '',
+      //   content: 'การบันทึกเอกสารสำเร็จ',
+      //   onClose: () => setDataSubmittedAlert(false),
+      //   onConfirm: () => { },
+      // });
+      // ตัวอย่าง: navigate หลังบันทึกเสร็จ
+      // navigate('/owner-management');

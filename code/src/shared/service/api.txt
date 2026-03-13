@@ -1,0 +1,144 @@
+// --- utils/http.ts (ไฟล์เดียวกับที่คุณวางไว้) ---
+import axios from "axios";
+import { alertError } from "../components/swal";
+import { ENUM_VERSION } from "../components/Enum";
+
+export const HOST_SERVER = `${import.meta.env.VITE_API_DOMAIN}/api`;
+console.log("[ENV] VITE_IMAGE_VERSION ENUM_VERSION=", ENUM_VERSION);
+console.log("[ENV] VITE_API_DOMAIN HOST_SERVER=", HOST_SERVER);
+
+const instance = axios.create({
+  baseURL: HOST_SERVER,
+});
+
+instance.interceptors.request.use(
+  (config) => {
+    // ตั้งเป็น JSON เป็นค่าเริ่มต้น (ถ้าเป็น multipart ให้ override ตอนเรียก api.post เอง)
+    if (!config.headers["Content-Type"]) {
+      config.headers["Content-Type"] = "application/json";
+    }
+    // --- เพิ่มส่วนของ Authorization token ---
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+function unwrap<T>(payload: any): T {
+  if (payload && typeof payload === "object" && payload.status) {
+    const { code, description, err_code } = payload.status ?? {};
+
+    // ✅ success rules
+    const isSuccess =
+      (Number(code) >= 200 && Number(code) < 300) ||
+      (Number(code) >= 1000 && Number(code) < 2000) ||
+      (typeof description === "string" &&
+        description.toLowerCase().includes("success"));
+
+    if (isSuccess) {
+      return (payload.data as T) ?? (undefined as unknown as T);
+    }
+
+    // ✅ รวม message ให้สวย: "err_code - description" เช่น:
+    // "E001 - invalid username"
+    const messageParts = [
+      err_code || null,
+      description || null,
+      code ? `(${code})` : null,
+    ].filter(Boolean);
+
+    const message = messageParts.join(" - ");
+
+    const e = new Error(message || "Unknown Error");
+    (e as any).__backend = payload;
+    throw e;
+  }
+
+  // ✅ fallback
+  return payload as T;
+}
+
+const handleError = (error: any) => {
+  const status = error?.response?.data?.status;
+
+  // ✅ ถ้ามี status จาก backend
+  if (status) {
+    const { err_code, description, code } = status;
+
+    const messageParts = [
+      err_code || null,
+      description || null,
+      code ? `(${code})` : null,
+    ].filter(Boolean);
+
+    const message = messageParts.join(" - ");
+
+    alertError(message || "Unknown Error");
+    throw error;
+  }
+
+  // ✅ fallback (กรณีไม่มี status)
+  const fallback =
+    error?.response?.data?.message ||
+    error?.message ||
+    "Unknown Error";
+
+  alertError(fallback);
+  throw error;
+};
+
+export const api = {
+  get: async <T>(url: string, config = {}): Promise<T> => {
+    try {
+      const res = await instance.get(url, config);
+      return unwrap<T>(res.data);
+    } catch (err) {
+      handleError(err);
+      throw err;
+    }
+  },
+
+  post: async <T>(url: string, data?: any, config = {}): Promise<T> => {
+    try {
+      const res = await instance.post(url, data, config);
+      return unwrap<T>(res.data);
+    } catch (err) {
+      handleError(err);
+      throw err;
+    }
+  },
+
+  put: async <T>(url: string, data?: any, config = {}): Promise<T> => {
+    try {
+      const res = await instance.put(url, data, config);
+      return unwrap<T>(res.data);
+    } catch (err) {
+      handleError(err);
+      throw err;
+    }
+  },
+
+  patch: async <T>(url: string, data?: any, config = {}): Promise<T> => {
+    try {
+      const res = await instance.patch(url, data, config);
+      return unwrap<T>(res.data);
+    } catch (err) {
+      handleError(err);
+      throw err;
+    }
+  },
+
+  delete: async <T>(url: string, config = {}): Promise<T> => {
+    try {
+      const res = await instance.delete(url, config);
+      return unwrap<T>(res.data);
+    } catch (err) {
+      handleError(err);
+      throw err;
+    }
+  },
+};

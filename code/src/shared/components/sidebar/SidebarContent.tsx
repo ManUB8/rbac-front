@@ -1,0 +1,412 @@
+// SidebarContent.tsx
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Box, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
+import { Menu, MenuItem } from "react-pro-sidebar";
+import { AnimatePresence, motion } from "framer-motion";
+import { routesConfig } from "../../../router/router";
+import { useLocation } from "react-router";
+
+type RouteItem = {
+  path?: string;
+  code?: string;
+  name: string;
+  icon?: React.ReactNode;
+  subpath?: boolean;
+  children?: RouteItem[];   // ชั้นที่ 1
+  childrens?: RouteItem[];  // ชั้นที่ 2
+};
+
+const getKey = (r: RouteItem) => r.path || r.code || r.name;
+
+const realChildren = (r?: RouteItem) =>
+  Array.isArray(r?.children) ? r!.children!.filter((c) => !c.subpath) : [];
+
+const realGrandChildren = (r?: RouteItem) =>
+  Array.isArray(r?.childrens) ? r!.childrens!.filter((c) => !c.subpath) : [];
+
+/** หา "เส้นทางแรก" ที่ควร navigate เมื่อคลิก parent (level-0) */
+function pickFirstPathUnderParent(parent: RouteItem): {
+  path?: string;
+  name?: string;
+  childKey?: string | null; // เพื่อเปิด level-2 ถ้าจำเป็น
+} {
+  const l1 = realChildren(parent);
+  if (l1.length === 0) return { path: parent.path, name: parent.name, childKey: null };
+
+  const firstChild = l1[0];
+  const l2 = realGrandChildren(firstChild);
+
+  // ถ้ามี level-2 ให้ไปตัวแรกของ level-2 ก่อน
+  if (l2.length > 0 && l2[0].path) {
+    return { path: l2[0].path, name: l2[0].name, childKey: getKey(firstChild) };
+  }
+
+  // ถ้าไม่มี level-2 ให้ไป path ของ level-1 ตัวแรก
+  if (firstChild.path) {
+    return { path: firstChild.path, name: firstChild.name, childKey: null };
+  }
+
+  // fallback: ถ้าตัวแรกไม่มี path ก็แค่เปิดหมวด
+  return { path: undefined, name: undefined, childKey: null };
+}
+
+/** หา "เส้นทางแรก" ที่ควร navigate เมื่อคลิก child (level-1) ที่มี level-2 */
+function pickFirstPathUnderChild(child: RouteItem): { path?: string; name?: string } {
+  const l2 = realGrandChildren(child);
+  if (l2.length > 0 && l2[0].path) return { path: l2[0].path, name: l2[0].name };
+  return { path: child.path, name: child.name };
+}
+
+export default function SidebarContent({
+  collapsed,
+  onNavigate,
+}: {
+  collapsed: boolean;
+  onNavigate: (path: string, name: string) => void;
+}) {
+  const theme = useTheme();
+  const { pathname } = useLocation();
+
+  // ✅ sidebar scroll container
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const [activeParentKey, setActiveParentKey] = useState<string | null>(null);
+  const [activeChildKey, setActiveChildKey] = useState<string | null>(null);
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+
+  const parents: RouteItem[] = useMemo(() => routesConfig.privateRoutes ?? [], []);
+
+  // sync state from path
+  const syncStateFromPath = (path: string) => {
+    let parentKey: string | null = null;
+    let childKey: string | null = null;
+    let selected: string | null = null;
+
+    for (const parent of parents) {
+      const pKey = getKey(parent);
+
+      if (parent.path && path.startsWith(parent.path)) {
+        parentKey = pKey;
+        selected = pKey;
+      }
+
+      const c1 = realChildren(parent);
+      for (const child of c1) {
+        const cKey = getKey(child);
+
+        if (child.path && path.startsWith(child.path)) {
+          parentKey = pKey;
+          childKey = cKey;
+          selected = cKey;
+        }
+
+        const c2 = realGrandChildren(child);
+        for (const g of c2) {
+          const gKey = getKey(g);
+          if (g.path && path.startsWith(g.path)) {
+            parentKey = pKey;
+            childKey = cKey;
+            selected = gKey;
+          }
+        }
+      }
+    }
+
+    setActiveParentKey(parentKey);
+    setActiveChildKey(childKey);
+    setSelectedKey(selected);
+  };
+
+  useEffect(() => {
+    syncStateFromPath(pathname);
+  }, [pathname, parents]);
+
+  const activeParent = useMemo(
+    () => parents.find((r) => getKey(r) === activeParentKey),
+    [parents, activeParentKey]
+  );
+
+  const level1Children = useMemo(() => realChildren(activeParent), [activeParent]);
+
+  const activeChild = useMemo(() => {
+    if (!activeParent) return undefined;
+    return realChildren(activeParent).find((c) => getKey(c) === activeChildKey);
+  }, [activeParent, activeChildKey]);
+
+  const level2Children = useMemo(() => realGrandChildren(activeChild), [activeChild]);
+
+  const selectedBg = theme.palette.secondaryContainer;
+  const selectedColor = theme.palette.onSecondaryContainer;
+
+  const level =
+    !activeParent
+      ? "level-0"
+      : activeParent && activeChild && level2Children.length > 0
+        ? "level-2"
+        : "level-1";
+
+  // ✅ reset scroll to top whenever level changes (0->1, 1->2, back ฯลฯ)
+  useLayoutEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [level, collapsed]);
+
+  // ===== VIEW 0 =====
+  const renderParentMenu = () => (
+    <Menu
+      menuItemStyles={{
+        button: ({ level, active }) => ({
+          height: level === 0 ? 56 : 48,
+          padding: level === 0 ? "0 14px" : "0 20px",
+          borderRadius: 10,
+          justifyContent: collapsed ? "center" : "flex-start",
+          color: active ? selectedColor : theme.palette.text.primary,
+          backgroundColor: active ? selectedBg : "transparent",
+          "&:hover": {
+            backgroundColor: active ? selectedBg : theme.palette.action.hover,
+            color: active ? selectedColor : theme.palette.text.primary,
+          },
+        }),
+        icon: ({ active }) => ({
+          color: active ? selectedColor : theme.palette.text.secondary,
+        }),
+      }}
+    >
+      {parents.map((route) => {
+        const key = getKey(route);
+        const children = realChildren(route);
+        const isSelected = selectedKey === key;
+
+        const handleClick = () => {
+          if (children.length > 0) {
+            // ✅ เข้า level-1 และ "auto ไป item แรก" ทันที
+            const picked = pickFirstPathUnderParent(route);
+
+            setActiveParentKey(key);
+            setActiveChildKey(picked.childKey ?? null);
+
+            if (picked.path && picked.name) {
+              // ไปหน้าแรกของหมวดนั้นทันที (เช่น Master SKU)
+              onNavigate(picked.path, picked.name);
+            } else {
+              // fallback: แค่เปิดหมวด (ถ้าลูกไม่มี path จริง)
+              // selectedKey จะ sync จาก pathname ทีหลัง
+            }
+          } else if (route.path) {
+            onNavigate(route.path, route.name);
+          }
+        };
+
+        const labelNode = collapsed ? null : (
+          <Typography variant="subtitle2">{route.name}</Typography>
+        );
+
+        return (
+          <Tooltip
+            key={key}
+            title={collapsed ? route.name : ""}
+            placement="right"
+            arrow
+            disableHoverListener={!collapsed}
+          >
+            <MenuItem icon={route.icon} active={isSelected} onClick={handleClick}>
+              {labelNode}
+            </MenuItem>
+          </Tooltip>
+        );
+      })}
+    </Menu>
+  );
+
+  // ===== VIEW 1 =====
+  const renderChildMenu = () => {
+    if (!activeParent) return null;
+
+    const goBack = () => {
+      setActiveParentKey(null);
+      setActiveChildKey(null);
+      setSelectedKey(null);
+    };
+
+    return (
+      <>
+        {collapsed ? (
+          <Box sx={{ display: "flex", justifyContent: "center", py: 1 }}>
+            <IconButton size="small" onClick={goBack}>
+              <ArrowBackOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        ) : (
+          <Box sx={{ display: "flex", alignItems: "center", px: 1.5, py: 1, gap: 1 }}>
+            <IconButton size="small" onClick={goBack}>
+              <ArrowBackOutlinedIcon fontSize="small" />
+            </IconButton>
+            <Typography variant="subtitle2">{activeParent.name}</Typography>
+          </Box>
+        )}
+
+        <Menu
+          menuItemStyles={{
+            button: ({ active }) => ({
+              height: 48,
+              padding: collapsed ? "0 8px" : "0 16px",
+              margin: collapsed ? "4px 4px" : "4px 8px",
+              borderRadius: 10,
+              justifyContent: collapsed ? "center" : "flex-start",
+              color: active ? selectedColor : theme.palette.text.primary,
+              backgroundColor: active ? selectedBg : "transparent",
+              "&:hover": {
+                backgroundColor: active ? selectedBg : theme.palette.action.hover,
+                color: active ? selectedColor : theme.palette.text.primary,
+              },
+            }),
+          }}
+        >
+          {level1Children.map((item) => {
+            const key = getKey(item);
+            const isSelected = selectedKey === key;
+
+            const l2 = realGrandChildren(item);
+            const hasGrandChildren = l2.length > 0;
+
+            const handleClick = () => {
+              if (hasGrandChildren) {
+                // ✅ เข้า level-2 แล้ว auto ไป item แรกของ level-2
+                setActiveChildKey(key);
+
+                const picked = pickFirstPathUnderChild(item);
+                if (picked.path && picked.name) {
+                  onNavigate(picked.path, picked.name);
+                }
+              } else if (item.path) {
+                onNavigate(item.path, item.name);
+              }
+            };
+
+            const labelNode = collapsed ? null : (
+              <Typography variant="subtitle2">{item.name}</Typography>
+            );
+
+            return (
+              <Tooltip
+                key={key}
+                title={collapsed ? item.name : ""}
+                placement="right"
+                arrow
+                disableHoverListener={!collapsed}
+              >
+                <MenuItem icon={item.icon} active={isSelected} onClick={handleClick}>
+                  {labelNode}
+                </MenuItem>
+              </Tooltip>
+            );
+          })}
+        </Menu>
+      </>
+    );
+  };
+
+  // ===== VIEW 2 =====
+  const renderGrandChildMenu = () => {
+    if (!activeParent || !activeChild) return null;
+
+    const goBack = () => {
+      setActiveChildKey(null);
+      setSelectedKey(null);
+    };
+
+    return (
+      <>
+        {collapsed ? (
+          <Box sx={{ display: "flex", justifyContent: "center", py: 1 }}>
+            <IconButton size="small" onClick={goBack}>
+              <ArrowBackOutlinedIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        ) : (
+          <Box sx={{ display: "flex", alignItems: "center", px: 1.5, py: 1, gap: 1 }}>
+            <IconButton size="small" onClick={goBack}>
+              <ArrowBackOutlinedIcon fontSize="small" />
+            </IconButton>
+            <Typography variant="subtitle2">{activeChild.name}</Typography>
+          </Box>
+        )}
+
+        <Menu
+          menuItemStyles={{
+            button: ({ active }) => ({
+              height: 48,
+              padding: collapsed ? "0 8px" : "0 16px",
+              margin: collapsed ? "4px 4px" : "4px 8px",
+              borderRadius: 10,
+              justifyContent: collapsed ? "center" : "flex-start",
+              color: active ? selectedColor : theme.palette.text.primary,
+              backgroundColor: active ? selectedBg : "transparent",
+              "&:hover": {
+                backgroundColor: active ? selectedBg : theme.palette.action.hover,
+                color: active ? selectedColor : theme.palette.text.primary,
+              },
+            }),
+          }}
+        >
+          {level2Children.map((item) => {
+            const key = getKey(item);
+            const isSelected = selectedKey === key;
+
+            const handleClick = () => {
+              if (item.path) onNavigate(item.path, item.name);
+            };
+
+            const labelNode = collapsed ? null : (
+              <Typography variant="subtitle2">{item.name}</Typography>
+            );
+
+            return (
+              <Tooltip
+                key={key}
+                title={collapsed ? item.name : ""}
+                placement="right"
+                arrow
+                disableHoverListener={!collapsed}
+              >
+                <MenuItem icon={item.icon} active={isSelected} onClick={handleClick}>
+                  {labelNode}
+                </MenuItem>
+              </Tooltip>
+            );
+          })}
+        </Menu>
+      </>
+    );
+  };
+
+  const currentView =
+    level === "level-0"
+      ? renderParentMenu()
+      : level === "level-1"
+        ? renderChildMenu()
+        : renderGrandChildMenu();
+
+  return (
+    <Box
+      ref={scrollRef}
+      sx={{
+        minHeight: 0,
+        overflowY: "auto",
+        bgcolor: "background.paper",
+        color: "text.primary",
+      }}
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={level + (collapsed ? "-c" : "-e")}
+          initial={{ opacity: 0, x: -8 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.25, delay: 0.15, ease: "easeOut" }}
+        >
+          {currentView}
+        </motion.div>
+      </AnimatePresence>
+    </Box>
+  );
+}

@@ -1,0 +1,1401 @@
+ //   <Box
+        //     sx={{
+        //       bgcolor: '#fff',
+        //       borderRadius: 1,
+        //       px: 2,
+        //       py: 1.5,
+        //       display: 'grid',
+        //       gridTemplateColumns: 'auto 1fr auto',
+        //       alignItems: 'center',
+        //       gap: 2,
+        //     }}
+        //   >
+        //     <IconButton size="small" onClick={onClose} sx={{ bgcolor: '#f5f5f5' }}>
+        //       <CloseRoundedIcon />
+        //     </IconButton>
+
+        //     <Typography variant="h4" textAlign="center">
+        //       {title || ' '}
+        //     </Typography>
+
+        //     <Box sx={{ display: 'flex', gap: 1 }}>
+        //       {actions?.map((node, idx) => (
+        //         <React.Fragment key={idx}>{node}</React.Fragment>
+        //       ))}
+        //     </Box>
+        //   </Box>
+
+
+
+        // // ModalNavHeader.tsx
+// import React from 'react';
+// import { Box, Grid, IconButton, Typography } from '@mui/material';
+// import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+
+// export default function ModalNavHeader({
+//     title,
+//     actions,
+//     onClose,
+// }: {
+//     title: string;
+//     actions?: React.ReactNode[];           // ✅ ปุ่มที่สร้างจากหน้าลูก
+//     onClose: () => void;
+// }) {
+//     return (
+//         <Grid
+//             container
+//             sx={{
+//                 px: 2,
+//                 py: 1.5,
+//                 gridTemplateColumns: 'auto 1fr auto',
+//                 alignItems: 'center',
+//                 // border: " 1px solid red"
+//             }}
+//         >
+//             <Grid
+//                 size={0.5}
+//                 // sx={{ border: " 1px solid green" }}
+//             >
+//                 <IconButton size="small" onClick={onClose} sx={{ bgcolor: '#f5f5f5' }}>
+//                     <CloseRoundedIcon />
+//                 </IconButton>
+//             </Grid>
+//             <Grid size={7.5}
+//                 container
+//                 justifyContent="center"
+//                 // sx={{ border: " 1px solid black" }}
+//             >
+//                 <Typography variant="h4" textAlign="center">
+//                     {title || ' '}
+//                 </Typography>
+//             </Grid>
+//             <Grid
+//                 size={4}
+//                 container
+//                 justifyContent="flex-end"
+//                 // sx={{ border: "1px solid pink" }}
+//             >
+//                 <Box sx={{ display: 'flex', gap: 1 }}>
+//                     {actions?.map((node, idx) => (
+//                         <React.Fragment key={idx}>{node}</React.Fragment>
+//                     ))}
+//                 </Box>
+//             </Grid>
+//         </Grid>
+//     );
+// }
+
+
+import React from 'react';
+import { Box, Container, IconButton, Typography } from '@mui/material';
+import CloseIcon from '../../../assets/svg/icon/close.svg'
+export default function ModalNavHeader({
+    title,
+    actions,
+    onClose,
+}: {
+    title: string;
+    actions?: React.ReactNode[];
+    onClose: () => void;
+}) {
+    const HEADER_H = 56; // ความสูงหัวข้อ
+
+    return (
+        <Box sx={{ bgcolor: 'white' }}>
+            {/* ใช้ Container เดียวกับเนื้อหาเพื่อให้กึ่งกลางตรงกับรูปด้านล่าง */}
+            <Container maxWidth="xl" sx={{ position: 'relative', height: HEADER_H, p: 5 }}>
+                {/* ซ้าย: ปุ่มปิด */}
+                <IconButton
+                    size="small"
+                    onClick={onClose}
+                    // sx={{
+                    //     position: 'absolute',
+                    //     left: 8,
+                    //     top: '50%',
+                    //     transform: 'translateY(-50%)',
+                    //     bgcolor: '#f5f5f5',
+                    // }}
+                    sx={{
+                        position: 'absolute',
+                        left: 8,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: 56,
+                        height: 56,
+                        borderRadius: 2,
+                        bgcolor: "#F3F5F7",
+                        "&:hover": { bgcolor: "#E9ECEF" },
+                    }}
+                >
+                    <img
+                        src={CloseIcon}
+                        alt="close"
+                    />
+                </IconButton>
+
+                {/* กลาง: ชื่อหน้า — กึ่งกลางจริงของ Container */}
+                <Typography
+                    variant="h4"
+                    sx={{
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        textAlign: 'center',
+                        whiteSpace: 'nowrap',
+                    }}
+                >
+                    {title || ' '}
+                </Typography>
+
+                {/* ขวา: ปุ่มต่าง ๆ */}
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        display: 'flex',
+                        gap: 1,
+                    }}
+                >
+                    {actions?.map((node, idx) => (
+                        <React.Fragment key={idx}>{node}</React.Fragment>
+                    ))}
+                </Box>
+            </Container>
+        </Box>
+    );
+}
+  {/* {BranchContent} */}
+
+                {/* <Menu style={{ padding: '0px' }}>
+                    {routesConfig.privateRoutes?.map((route) =>
+                        Array.isArray(route.children) && route.children.length > 0 ? (
+                            <>
+                                <SubMenu
+                                    key={route.path || route.code}
+                                    style={{ padding: '0px', paddingLeft: '10px', paddingRight: '10px', display: 'flex', alignItems: 'center' }}
+                                    label={route.name}
+                                    icon={route.icon}
+                                >
+                                    {route.children.map((childRoute) => (
+                                        <MenuItem
+                                            key={childRoute.path || childRoute.code}
+                                            style={{ padding: '0px', paddingLeft: '20px', display: 'flex', alignItems: 'center' }}
+                                            onClick={() => onNavigate(childRoute?.path, childRoute?.name)}
+                                        >
+                                            <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                                                {!collapsed && <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: '16px', }}>{childRoute.name}</Typography>}
+                                            </Box>
+                                        </MenuItem>
+                                    ))}
+                                </SubMenu>
+                            </>
+                        ) : (
+                            <MenuItem
+                                style={{ padding: '0px', paddingLeft: '10px', display: 'flex', alignItems: 'center' }}
+                                icon={route.icon}
+                            >
+                                <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                                    {!collapsed && <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: '16px', }}>{route.name}</Typography>}
+                                </Box>
+                            </MenuItem>
+                        )
+                    )}
+                </Menu> */}
+
+
+
+                import { Box, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+
+import { useNavigate } from 'react-router';
+import SyncIcon from '../../../assets/svg/sync_icon.svg';
+
+import ArrowClose from '../../../assets/svg/arrow_menu_close.svg';
+import ArrowOpen from '../../../assets/svg/arrow_menu_open.svg';
+import Avatar from '../../../assets/svg/Avatar.svg';
+import HomeIcon from '../../../assets/svg/home_icon.svg';
+
+import { routesConfig } from '../../../router/router';
+import '../styles/Sidebar.css';
+import { UserProfile } from './UserProfile';
+
+export interface ISidebarMenuProps {
+    toggleDrawer: () => void;
+    isMobile: boolean;
+    open: boolean;
+    drawerWidth: number;
+}
+
+const SidebarMenu: React.FunctionComponent<ISidebarMenuProps> = (props) => {
+    const navigate = useNavigate();
+    const [collapsed, setCollapsed] = useState(false);
+
+    //  const UserProfile = (
+    //         <Menu style={{ marginTop: 8, padding: '0px' }}>
+    //             <MenuItem style={{ padding: '0px', paddingLeft: '10px' }} icon={<img src={Avatar} style={{ fontSize: '24px' }} />}>
+    //                 {!collapsed && (
+    //                     <Box sx={{ lineHeight: 1.1, width: '100%', marginLeft: '20px' }}>
+    //                         <Typography sx={{ fontSize: 16, fontWeight: 600, }}>{"คุณซุปเปอร์ โคโค่นัท"}</Typography>
+    //                         <Typography sx={{ fontSize: 16, fontWeight: 400, color: '#6B7274', }}>{"ร้านซุปเปอร์ โคโค่นัท"}</Typography>
+    //                     </Box>
+    //                 )}
+    //             </MenuItem>
+    //         </Menu>
+    //     );
+
+    const BranchContent = (
+        <Menu style={{ marginTop: 8, padding: '0px' }}>
+            <MenuItem style={{ padding: '0px', paddingLeft: '10px' }} icon={<img src={SyncIcon} style={{ fontSize: '24px' }} />}>
+                {!collapsed && <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: '16px', }}>สาขาเสนานิคม</Typography>}
+            </MenuItem>
+        </Menu>
+    );
+
+    const onNavigate = (path: string, name: string) => {
+        console.log('onNavigate', path);
+        navigate(path);
+
+    };
+
+    if (props.isMobile === false) {
+        return (
+            <Sidebar
+                collapsed={collapsed}
+                backgroundColor="#ffffff"
+                width="265px"
+                collapsedWidth="80px"
+                transitionDuration={350}
+                rootStyles={{
+                    border: 'none',
+                    height: '100%',
+                    padding: '24px 12px',
+                    background: '#fff',
+                    boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                    // borderRadius: 12,
+                    overflow: 'hidden'
+                }}
+            >
+                <Box
+                    sx={{
+                        p: 1,
+                        display: 'flex',
+                        justifyContent: collapsed ? 'center' : 'flex-end'
+                    }}
+                >
+                    <Box sx={{ height: '24px', cursor: 'pointer' }} onClick={() => setCollapsed(!collapsed)}>
+                        {collapsed ? <img src={ArrowOpen} /> : <img src={ArrowClose} />}
+                    </Box>
+                </Box>
+                <UserProfile collapsed={collapsed} isMobile={props.isMobile}/>
+                {/* <UserProfile collapsed={collapsed} /> */}
+
+                <Menu style={{ padding: 0 }}>
+                    {routesConfig.privateRoutes?.map((route) => {
+                        const children = Array.isArray(route.children) ? route.children.filter(c => !c.subpath) : [];
+
+                        return children.length > 0 ? (
+                            <SubMenu
+                                key={route.path || route.code}
+                                // onClick={() => onNavigate(route?.path, route?.name)}
+                                style={{ padding: 0, paddingLeft: 10, paddingRight: 10, display: 'flex', alignItems: 'center' }}
+                                label={route.name}
+                                icon={route.icon}
+                            >
+                                {children.map((child) => (
+                                    <MenuItem
+                                        key={child.path || child.code}
+                                        style={{ padding: 0, paddingLeft: 20, display: 'flex', alignItems: 'center' }}
+                                        onClick={() => onNavigate(child?.path, child?.name)}
+                                    >
+                                        <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                                            {!collapsed && (
+                                                <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: 16 }}>
+                                                    {child.name}
+                                                </Typography>
+                                            )}
+                                        </Box>
+                                    </MenuItem>
+                                ))}
+                            </SubMenu>
+                        ) : (
+                            <MenuItem
+                                key={route.path || route.code}
+                                style={{ padding: 0, paddingLeft: 10, display: 'flex', alignItems: 'center' }}
+                                icon={route.icon}
+                                onClick={() => onNavigate(route?.path, route?.name)}
+                            >
+                                <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                                    {!collapsed && (
+                                        <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: 16 }}>
+                                            {route.name}
+                                        </Typography>
+                                    )}
+                                </Box>
+                            </MenuItem>
+                        );
+                    })}
+                </Menu>
+            </Sidebar >
+        );
+    }
+};
+
+export default SidebarMenu;
+
+
+
+import { Box, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+
+import { useNavigate } from 'react-router';
+import SyncIcon from '../../../assets/svg/sync_icon.svg';
+
+import ArrowClose from '../../../assets/svg/arrow_menu_close.svg';
+import ArrowOpen from '../../../assets/svg/arrow_menu_open.svg';
+import Avatar from '../../../assets/svg/Avatar.svg';
+import HomeIcon from '../../../assets/svg/home_icon.svg';
+
+import { routesConfig } from '../../../router/router';
+import '../styles/Sidebar.css';
+
+export interface ISidebarMenuProps {
+    toggleDrawer: () => void;
+    isMobile: boolean;
+    open: boolean;
+    drawerWidth: number;
+}
+
+const SidebarMenu: React.FunctionComponent<ISidebarMenuProps> = (props) => {
+    const navigate = useNavigate();
+    const [collapsed, setCollapsed] = useState(false);
+
+    const UserProfile = (
+        <Menu style={{ marginTop: 8, padding: '0px' }}>
+            <MenuItem style={{ padding: '0px', paddingLeft: '10px' }} icon={<img src={Avatar} style={{ fontSize: '24px' }} />}>
+                {!collapsed && (
+                    <Box sx={{ lineHeight: 1.1, width: '100%', marginLeft: '20px' }}>
+                        <Typography sx={{ fontSize: 16, fontWeight: 600, }}>{"คุณซุปเปอร์ โคโค่นัท"}</Typography>
+                        <Typography sx={{ fontSize: 16, fontWeight: 400, color: '#6B7274', }}>{"ร้านซุปเปอร์ โคโค่นัท"}</Typography>
+                    </Box>
+                )}
+            </MenuItem>
+        </Menu>
+    );
+
+    const BranchContent = (
+        <Menu style={{ marginTop: 8, padding: '0px' }}>
+            <MenuItem style={{ padding: '0px', paddingLeft: '10px' }} icon={<img src={SyncIcon} style={{ fontSize: '24px' }} />}>
+                {!collapsed && <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: '16px', }}>สาขาเสนานิคม</Typography>}
+            </MenuItem>
+        </Menu>
+    );
+
+    const onNavigate = (path: string, name: string) => {
+        console.log('onNavigate', path);
+        navigate(path);
+
+    };
+
+    // const setRouter = async () => {
+    //     let temp: any[] = [];
+    //     if (routesConfig["privateRoutes"] !== undefined) {
+    //         for await (const item of routesConfig["privateRoutes"]) {
+    //             if (item.children !== undefined) {
+    //                 let inputchildren: Childen[] = [];
+
+    //                 let input: MenuSideBar = {
+    //                     name: item.name ?? "",
+    //                     path: item.path ?? "",
+    //                     childens: inputchildren,
+    //                     icon: item.icon,
+    //                 };
+
+    //                 for await (const itemchildren of item.children) {
+    //                     // let inputChildrenmini: Childenmini[] =
+    //                     //     itemchildren?.children ?? []
+
+    //                     let inputChildrenmini: IChildrenRouter[] =
+    //                         itemchildren?.children ?? [];
+
+    //                     let ch: Childen = {
+    //                         name: itemchildren.name ?? "",
+    //                         path: itemchildren.path ?? "",
+    //                         childens: inputChildrenmini,
+    //                         icon: itemchildren?.icon,
+    //                     };
+    //                     if (itemchildren?.subpath === false) {
+    //                         input.childens.push(ch);
+    //                     }
+    //                 }
+
+    //                 // if (input.childens.length > 0) {
+    //                 temp.push(input);
+    //                 // }
+    //             }
+    //         }
+    //     }
+
+    //     setSidebar(temp);
+    // };
+
+    if (props.isMobile === false) {
+        return (
+            <Sidebar
+                collapsed={collapsed}
+                backgroundColor="#ffffff"
+                width="265px"
+                collapsedWidth="80px"
+                transitionDuration={350}
+                rootStyles={{
+                    border: 'none',
+                    height: '100%',
+                    padding: '24px 12px',
+                    background: '#fff',
+                    boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                    // borderRadius: 12,
+                    overflow: 'hidden'
+                }}
+            >
+                <Box
+                    sx={{
+                        p: 1,
+                        display: 'flex',
+                        justifyContent: collapsed ? 'center' : 'flex-end'
+                    }}
+                >
+                    <Box sx={{ height: '24px', cursor: 'pointer' }} onClick={() => setCollapsed(!collapsed)}>
+                        {collapsed ? <img src={ArrowOpen} /> : <img src={ArrowClose} />}
+                    </Box>
+                </Box>
+                {UserProfile}
+                {/* {BranchContent} */}
+
+                {/* <Menu style={{ padding: '0px' }}>
+                    {routesConfig.privateRoutes?.map((route) =>
+                        Array.isArray(route.children) && route.children.length > 0 ? (
+                            <>
+                                <SubMenu
+                                    key={route.path || route.code}
+                                    style={{ padding: '0px', paddingLeft: '10px', paddingRight: '10px', display: 'flex', alignItems: 'center' }}
+                                    label={route.name}
+                                    icon={route.icon}
+                                >
+                                    {route.children.map((childRoute) => (
+                                        <MenuItem
+                                            key={childRoute.path || childRoute.code}
+                                            style={{ padding: '0px', paddingLeft: '20px', display: 'flex', alignItems: 'center' }}
+                                            onClick={() => onNavigate(childRoute?.path, childRoute?.name)}
+                                        >
+                                            <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                                                {!collapsed && <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: '16px', }}>{childRoute.name}</Typography>}
+                                            </Box>
+                                        </MenuItem>
+                                    ))}
+                                </SubMenu>
+                            </>
+                        ) : (
+                            <MenuItem
+                                style={{ padding: '0px', paddingLeft: '10px', display: 'flex', alignItems: 'center' }}
+                                icon={route.icon}
+                            >
+                                <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                                    {!collapsed && <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: '16px', }}>{route.name}</Typography>}
+                                </Box>
+                            </MenuItem>
+                        )
+                    )}
+                </Menu> */}
+                <Menu style={{ padding: 0 }}>
+                    {routesConfig.privateRoutes?.map((route) => {
+                        const children = Array.isArray(route.children) ? route.children.filter(c => !c.subpath) : [];
+
+                        return children.length > 0 ? (
+                            <SubMenu
+                                key={route.path || route.code}
+                                // onClick={() => onNavigate(route?.path, route?.name)}
+                                style={{ padding: 0, paddingLeft: 10, paddingRight: 10, display: 'flex', alignItems: 'center' }}
+                                label={route.name}
+                                icon={route.icon}
+                            >
+                                {children.map((child) => (
+                                    <MenuItem
+                                        key={child.path || child.code}
+                                        style={{ padding: 0, paddingLeft: 20, display: 'flex', alignItems: 'center' }}
+                                        onClick={() => onNavigate(child?.path, child?.name)}
+                                    >
+                                        <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                                            {!collapsed && (
+                                                <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: 16 }}>
+                                                    {child.name}
+                                                </Typography>
+                                            )}
+                                        </Box>
+                                    </MenuItem>
+                                ))}
+                            </SubMenu>
+                        ) : (
+                            <MenuItem
+                                key={route.path || route.code}
+                                style={{ padding: 0, paddingLeft: 10, display: 'flex', alignItems: 'center' }}
+                                icon={route.icon}
+                                onClick={() => onNavigate(route?.path, route?.name)}
+                            >
+                                <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                                    {!collapsed && (
+                                        <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: 16 }}>
+                                            {route.name}
+                                        </Typography>
+                                    )}
+                                </Box>
+                            </MenuItem>
+                        );
+                    })}
+                </Menu>
+            </Sidebar >
+        );
+    }
+};
+
+export default SidebarMenu;
+
+
+import React from "react";
+import { Drawer } from "antd";
+import CloseIcon from "@mui/icons-material/Close";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import {
+  Box, List, ListItem, ListItemButton, ListItemIcon,
+  ListItemText, Typography, Collapse
+} from "@mui/material";
+import { useNavigate } from "react-router";
+import { UserProfile } from "../layouts/UserProfile";
+import { routesConfig } from "../../../router/router";
+
+export interface IDrawerMenuBarProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  isMobile?: boolean;
+}
+
+const DrawerMenuBar: React.FC<IDrawerMenuBarProps> = ({ open, setOpen, isMobile = false }) => {
+  const navigate = useNavigate();
+
+  // mobile ใช้เมนูแบบเต็ม ไม่มี collapsed
+  const collapsedEffective = false;
+
+  const onClose = () => setOpen(false);
+  const onNavigate = (path: string, _name: string) => {
+    navigate(path);
+    onClose();
+  };
+
+  // เก็บสถานะเปิด/ปิดของแต่ละเมนูย่อย
+  const [openMap, setOpenMap] = React.useState<Record<string, boolean>>({});
+  const toggleSubMenu = (id: string) =>
+    setOpenMap(prev => ({ ...prev, [id]: !prev[id] }));
+
+  return (
+    <Drawer
+      forceRender
+      placement="bottom"
+      title={<UserProfile collapsed={collapsedEffective} isMobile={isMobile} />}
+      extra={
+        <Box sx={{ fontSize: 24, cursor: "pointer" }} onClick={onClose}>
+          <CloseIcon />
+        </Box>
+      }
+      onClose={onClose}
+      open={open}
+      closable={false}
+      rootClassName="drawer-menu-bar"
+      getContainer={false}
+      style={{ position: "absolute", background: "#FCFCFC" }}
+    >
+      <List disablePadding>
+        {routesConfig.privateRoutes?.map((route: any) => {
+          const id = route.path || route.code;
+          const children = Array.isArray(route.children)
+            ? route.children.filter((c: any) => !c.subpath)
+            : [];
+
+          // ===== มีเมนูย่อย =====
+          if (children.length > 0) {
+            const open = !!openMap[id];
+            return (
+              <React.Fragment key={id}>
+                <ListItem disablePadding>
+                  <ListItemButton
+                    onClick={() => toggleSubMenu(id)}
+                    sx={{
+                      px: 1.5,
+                      height: 56,
+                      borderRadius: 1.5,
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 40 }}>
+                      {route.icon}
+                    </ListItemIcon>
+
+                    <ListItemText
+                      primary={route.name}
+                    //   primaryTypographyProps={{ fontSize: 16, fontWeight: 600 }}
+                    />
+
+                    <ChevronRightIcon
+                      sx={{
+                        transform: open ? "rotate(90deg)" : "rotate(0deg)",
+                        transition: "transform 160ms ease",
+                        ml: 1,
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+
+                <Collapse in={open} unmountOnExit>
+                  <List disablePadding>
+                    {children.map((child: any) => (
+                      <ListItem disablePadding key={child.path || child.code}>
+                        <ListItemButton
+                          onClick={() => onNavigate(child.path, child.name)}
+                          sx={{
+                            pl: 6, pr: 1.5,
+                            height: 48,
+                            borderRadius: 1.5,
+                          }}
+                        >
+                          {/* ถ้ามี icon ของ child ค่อยเติม ListItemIcon ตรงนี้ */}
+                          <ListItemText
+                            primary={child.name}
+                            primaryTypographyProps={{ fontSize: 16, fontWeight: 500 }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Collapse>
+              </React.Fragment>
+            );
+          }
+
+          // ===== เมนูเดี่ยว =====
+          return (
+            <ListItem disablePadding key={id}>
+              <ListItemButton
+                onClick={() => onNavigate(route.path, route.name)}
+                sx={{ px: 1.5, height: 52, borderRadius: 1.5 }}
+              >
+                <ListItemIcon sx={{ minWidth: 40 }}>
+                  {route.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={route.name}
+                  primaryTypographyProps={{ fontSize: 16, fontWeight: 500 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+    </Drawer>
+  );
+};
+
+export default DrawerMenuBar;
+
+
+
+export interface IMainContentProps {
+    children: ReactNode;
+    isMobile: boolean;
+    open: boolean;
+    drawerWidth: number;
+    theme: Theme;
+}
+
+const MainContent: React.FunctionComponent<IMainContentProps> = (props) => {
+    return (
+        <Box
+            component="main"
+            sx={{
+                flexGrow: 1,
+                p: 2,
+                overflowY: 'auto',
+                ml: !props.isMobile && props.open ? `${props.drawerWidth}px` : 0,
+                transition: props.theme.transitions.create(['margin', 'width'], {
+                    duration: props.theme.transitions.duration.enteringScreen
+                })
+            }}
+        >
+            {props.children}
+        </Box>
+    );
+};
+
+export default MainContent;
+
+
+
+import { Box, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { useNavigate } from 'react-router';
+import SyncIcon from '../../../assets/svg/sync_icon.svg';
+import ArrowClose from '../../../assets/svg/arrow_menu_close.svg';
+import ArrowOpen from '../../../assets/svg/arrow_menu_open.svg';
+import { routesConfig } from '../../../router/router';
+import '../styles/Sidebar.css';
+import { UserProfile } from './UserProfile';
+
+export interface ISidebarMenuProps {
+    toggleDrawer: () => void;
+    isMobile: boolean;
+    open: boolean;
+    drawerWidth: number;
+}
+
+const SidebarMenu: React.FunctionComponent<ISidebarMenuProps> = (props) => {
+    const navigate = useNavigate();
+    const [collapsed, setCollapsed] = useState(false);
+
+    const BranchContent = (
+        <Menu style={{ marginTop: 8, padding: '0px' }}>
+            <MenuItem style={{ padding: '0px', paddingLeft: '10px' }} icon={<img src={SyncIcon} style={{ fontSize: '24px' }} />}>
+                {!collapsed && <Typography sx={{ color: '#1C1B1B', fontWeight: 500, fontSize: '16px', }}>สาขาเสนานิคม</Typography>}
+            </MenuItem>
+        </Menu>
+    );
+
+    const onNavigate = (path: string, name: string) => {
+        console.log('onNavigate', path);
+        navigate(path);
+
+    };
+
+    if (props.isMobile === false) {
+        return (
+            <>
+            <Sidebar
+                collapsed={collapsed}
+                backgroundColor="#ffffff"
+                width="265px"
+                collapsedWidth="80px"
+                transitionDuration={350}
+                rootStyles={{
+                    border: 'none',
+                    height: '100%',
+                    padding: '24px 12px',
+                    background: '#fff',
+                    boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                    borderRadius: 12,
+                    overflow: 'hidden'
+                    
+                }}
+            >
+                <Box
+                    sx={{
+                        p: 1,
+                        display: 'flex',
+                        justifyContent: collapsed ? 'center' : 'flex-end'
+                    }}
+                >
+                    <Box sx={{ height: '24px', cursor: 'pointer' }} onClick={() => setCollapsed(!collapsed)}>
+                        {collapsed ? <img src={ArrowOpen} /> : <img src={ArrowClose} />}
+                    </Box>
+                </Box>
+                <UserProfile collapsed={collapsed} isMobile={props.isMobile} />
+
+                <Menu
+                    style={{ padding: 0 }}
+                    menuItemStyles={{
+                        root: ({ level }) => (level === 0 ? { fontSize: 16 } : {}),
+                        button: ({ level }) => (level === 0 ? { height: 56, padding: "0 14px" } : {}),
+                    }}
+                >
+                    {routesConfig.privateRoutes?.map((route) => {
+                        const children = Array.isArray(route.children) ? route.children.filter(c => !c.subpath) : [];
+
+                        return children.length > 0 ? (
+                            <SubMenu
+                                key={route.path || route.code}
+                                icon={route.icon}
+                                label={route.name}
+                                style={{ padding: 0, paddingLeft: 10, paddingRight: 10, display: "flex", alignItems: "center" }}
+                            >
+                                {children.map((child) => (
+                                    <MenuItem
+                                        key={child.path || child.code}
+                                        style={{ padding: 0, paddingLeft: 20, display: "flex", alignItems: "center", height: 48 }}
+                                        onClick={() => onNavigate(child?.path, child?.name)}
+                                    >
+                                        {!collapsed && (
+                                            <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                                                {child.name}
+                                            </Typography>
+                                        )}
+                                    </MenuItem>
+                                ))}
+                            </SubMenu>
+                        ) : (
+                            <MenuItem
+                                key={route.path || route.code}
+                                style={{ padding: 0, paddingLeft: 10, display: "flex", alignItems: "center" }}
+                                icon={route.icon}
+                                onClick={() => onNavigate(route?.path, route?.name)}
+                            >
+                                {!collapsed && (
+                                    <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                                        {route.name}
+                                    </Typography>
+                                )}
+                            </MenuItem>
+                        );
+                    })}
+                </Menu>
+                
+            </Sidebar >
+            </>
+        );
+    }
+};
+
+export default SidebarMenu;
+
+
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { useNavigate } from 'react-router';
+import SyncIcon from '../../../assets/svg/sync_icon.svg';
+import LoGo from '../../../assets/image/logo/Logo_Color.png';
+import Logo_sc from '../../../assets/image/logo/SCBlack.png';
+import Exit from '../../../assets/svg/icon/exit_to_app-red.svg';
+import ArrowClose from '../../../assets/svg/arrow_menu_close.svg';
+import ArrowOpen from '../../../assets/svg/arrow_menu_open.svg';
+import { routesConfig } from '../../../router/router';
+import { UserProfile } from './UserProfile';
+import { ENUM_VERSION } from '../Enum';
+import { useAuth } from '../../../modules/auth';
+
+export interface ISidebarMenuProps {
+    toggleDrawer: () => void;
+    isMobile: boolean;
+    open: boolean;
+    drawerWidth: number;
+}
+
+const SidebarMenu: React.FunctionComponent<ISidebarMenuProps> = (props) => {
+    const navigate = useNavigate();
+    const { handleLogOut } = useAuth();
+    const [collapsed, setCollapsed] = useState(false);
+    const SIDEBAR_PAD = 12;
+    const FOOTER_H_EXPANDED = 160;
+    const FOOTER_H_COLLAPSED = 120;
+
+    const footerH = collapsed ? FOOTER_H_COLLAPSED : FOOTER_H_EXPANDED;
+    const scrollBottomPad = footerH + SIDEBAR_PAD * 2; // ✅ กันชนที่ถูกต้อง
+
+
+
+    const onNavigate = (path: string, name: string) => {
+        console.log('onNavigate', path);
+        navigate(path);
+
+    };
+
+    if (props.isMobile === false) {
+        return (
+            <>
+                <Sidebar
+                    collapsed={collapsed}
+                    backgroundColor="#ffffff"
+                    width="265px"
+                    collapsedWidth="80px"
+                    transitionDuration={350}
+                    rootStyles={{
+                        border: 'none',
+                        height: '100vh',
+                        padding: `${24}px ${SIDEBAR_PAD}px 0 ${SIDEBAR_PAD}px`,
+                        position: 'relative',           // ✅ สำคัญ
+                        display: 'flex',
+                        flexDirection: 'column',
+                        background: '#fff',
+                        boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                        borderRadius: 12,
+                        overflow: 'hidden',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            p: 1,
+                            display: 'flex',
+                            justifyContent: collapsed ? 'center' : 'flex-end'
+                        }}
+                    >
+                        <Box sx={{ height: '24px', cursor: 'pointer' }} onClick={() => setCollapsed(!collapsed)}>
+                            {collapsed ? <img src={ArrowOpen} /> : <img src={ArrowClose} />}
+                        </Box>
+                    </Box>
+                    <UserProfile collapsed={collapsed} isMobile={props.isMobile} />
+                    <Box
+                        sx={{
+                            flex: 1,
+                            overflowY: 'auto',
+                            pb: `${scrollBottomPad}px`,   // ✅ ของเดิมใช้ + SIDEBAR_PAD เดียว → ทำให้รายการท้าย ๆ โดน footer ทับ
+                            pr: 0.5,                      // (optional) เผื่อไม่ให้ scrollbar ทับตัวอักษร
+                        }}
+                    >
+                        <Menu
+                            style={{ padding: 0 }}
+                            menuItemStyles={{
+                                root: ({ level }) => (level === 0 ? { fontSize: 16 } : {}),
+                                button: ({ level }) => (level === 0 ? { height: 56, padding: "0 14px" } : {}),
+                            }}
+                        >
+                            {routesConfig.privateRoutes?.map((route) => {
+                                const children = Array.isArray(route.children) ? route.children.filter(c => !c.subpath) : [];
+
+                                return children.length > 0 ? (
+                                    <SubMenu
+                                        key={route.path || route.code}
+                                        icon={route.icon}
+                                        label={route.name}
+                                        style={{ padding: 0, paddingLeft: 10, paddingRight: 10, display: "flex", alignItems: "center" }}
+                                    >
+                                        {children.map((child) => (
+                                            <MenuItem
+                                                key={child.path || child.code}
+                                                style={{ padding: 0, paddingLeft: 20, display: "flex", alignItems: "center", height: 48 }}
+                                                onClick={() => onNavigate(child?.path, child?.name)}
+                                            >
+                                                {!collapsed && (
+                                                    <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                                                        {child.name}
+                                                    </Typography>
+                                                )}
+                                            </MenuItem>
+                                        ))}
+                                    </SubMenu>
+                                ) : (
+                                    <MenuItem
+                                        key={route.path || route.code}
+                                        style={{ padding: 0, paddingLeft: 10, display: "flex", alignItems: "center" }}
+                                        icon={route.icon}
+                                        onClick={() => onNavigate(route?.path, route?.name)}
+                                    >
+                                        {!collapsed && (
+                                            <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                                                {route.name}
+                                            </Typography>
+                                        )}
+                                    </MenuItem>
+                                );
+                            })}
+                        </Menu>
+                    </Box>
+                    {/* ✅ Footer fixed ล่างสุด (responsive ตาม collapsed) */}
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            left: SIDEBAR_PAD,
+                            right: SIDEBAR_PAD,
+                            bottom: SIDEBAR_PAD,
+                            height: `${collapsed ? FOOTER_H_COLLAPSED : FOOTER_H_EXPANDED}px`,
+                            borderTop: '1px solid #E9ECEF',
+                            bgcolor: '#fff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            p: 2,
+                        }}
+                    >
+                        {collapsed ? (
+                            // ===== ฮุบ: ปุ่มออก + โลโก้ + เวอร์ชัน แบบกะทัดรัด =====
+                            <Stack spacing={2} alignItems="center">
+                                <Box
+                                    sx={{
+                                        width: 48,
+                                        height: 48,
+                                        borderRadius: 2,
+                                        border: '2px solid #B3261E',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                    onClick={() => handleLogOut()}
+                                >
+                                    <img src={Exit} />
+                                </Box>
+
+                                {/* โลโก้ย่อ */}
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <img src={LoGo} alt="logo" style={{ width: '34px', height: "34px" }} />
+                                </Box>
+
+                                <Typography >
+                                    {ENUM_VERSION}
+                                </Typography>
+                            </Stack>
+                        ) : (
+                            // ===== ขยาย: ข้อความเต็มตามภาพอ้างอิง =====
+                            <Stack spacing={1.5} sx={{ width: '100%' }}>
+                                <Box
+                                    onClick={() => handleLogOut()}
+                                    sx={{
+                                        cursor: 'pointer',
+                                        '&:hover': { opacity: 0.7 },
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            color: '#B3261E', fontSize: '16px',
+                                            fontWeight: 500,
+                                            lineHeight: '24px',
+                                        }}
+                                    >
+                                        {"ออกจากระบบ :"}
+                                    </Typography>
+                                    <Typography
+                                        sx={{
+                                            color: '#B3261E', fontSize: '16px',
+                                            fontWeight: 500,
+                                            lineHeight: '24px',
+                                        }}
+                                        noWrap
+                                    >
+                                        {"Admin"}
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <img src={LoGo} alt="logo" style={{ width: '34px', height: "34px" }} />
+                                    <img src={Logo_sc} alt="logo" style={{ width: '94px', height: "34px" }} />
+                                </Box>
+
+                                <Typography >
+                                    {`Admin Version ${ENUM_VERSION}`}
+                                </Typography>
+                            </Stack>
+                        )}
+                    </Box>
+                </Sidebar >
+
+            </>
+        );
+    }
+};
+
+export default SidebarMenu;
+
+
+
+   <Sidebar
+                    collapsed={collapsed}
+                    backgroundColor="#ffffff"
+                    width="265px"
+                    collapsedWidth="80px"
+                    transitionDuration={350}
+                    // rootStyles={{
+                    //     height: '100vh',
+                    //     background: '#fff',
+                    //     boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                    //     borderRadius: 12,
+                    //     display: 'grid',
+                    //     gridTemplateRows: 'auto 1fr auto',
+                    //     padding: `${24}px ${SIDEBAR_PAD}px`,
+                    //     gap: 12,              // ระยะห่างแนวตั้งระหว่างแถว
+                    // }}
+                    rootStyles={{
+                        height: '100vh',
+                        display: 'grid',
+                        gridTemplateRows: 'auto 1fr auto',
+                        // ⬇️ เดิมคุณใช้ padding: `${24}px ${SIDEBAR_PAD}px` ซึ่งมี bottom 24px
+                        paddingTop: 24,
+                        paddingLeft: SIDEBAR_PAD,
+                        paddingRight: SIDEBAR_PAD,
+                        paddingBottom: 0,          // ✅ ตัดช่องขาวล่าง
+                        background: '#fff',
+                        boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                        borderRadius: 12,
+                    }}
+                >
+                    {/* ========== ROW 1: Header (toggle + profile) ========== */}
+                    <Box>
+                        <Box sx={{ p: 1, display: 'flex', justifyContent: collapsed ? 'center' : 'flex-end' }}>
+                            <Box sx={{ height: 24, cursor: 'pointer' }} onClick={() => setCollapsed(!collapsed)}>
+                                {collapsed ? <img src={ArrowOpen} /> : <img src={ArrowClose} />}
+                            </Box>
+                        </Box>
+                        <UserProfile collapsed={collapsed} isMobile={props.isMobile} />
+                    </Box>
+
+                    {/* ========== ROW 2: Content (scrollable menu) ========== */}
+                    <Box sx={{ minHeight: 0, overflowY: 'auto' }}>
+                        <Menu
+                            style={{ padding: 0 }}
+                            menuItemStyles={{
+                                root: ({ level }) => (level === 0 ? { fontSize: 16 } : {}),
+                                button: ({ level }) => (level === 0 ? { height: 56, padding: "0 14px" } : {}),
+                            }}
+                        >
+                            {routesConfig.privateRoutes?.map((route) => {
+                                const children = Array.isArray(route.children) ? route.children.filter(c => !c.subpath) : [];
+
+                                return children.length > 0 ? (
+                                    <SubMenu
+                                        key={route.path || route.code}
+                                        icon={route.icon}
+                                        label={route.name}
+                                        style={{ padding: 0, paddingLeft: 10, paddingRight: 10, display: "flex", alignItems: "center" }}
+                                    >
+                                        {children.map((child) => (
+                                            <MenuItem
+                                                key={child.path || child.code}
+                                                style={{ padding: 0, paddingLeft: 20, display: "flex", alignItems: "center", height: 48 }}
+                                                onClick={() => onNavigate(child?.path, child?.name)}
+                                            >
+                                                {!collapsed && (
+                                                    <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                                                        {child.name}
+                                                    </Typography>
+                                                )}
+                                            </MenuItem>
+                                        ))}
+                                    </SubMenu>
+                                ) : (
+                                    <MenuItem
+                                        key={route.path || route.code}
+                                        style={{ padding: 0, paddingLeft: 10, display: "flex", alignItems: "center" }}
+                                        icon={route.icon}
+                                        onClick={() => onNavigate(route?.path, route?.name)}
+                                    >
+                                        {!collapsed && (
+                                            <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                                                {route.name}
+                                            </Typography>
+                                        )}
+                                    </MenuItem>
+                                );
+                            })}
+                        </Menu>
+                    </Box>
+
+                    {/* ========== ROW 3: Footer (fixed at bottom inside sidebar) ========== */}
+                    <Box sx={{ borderTop: '1px solid #E9ECEF', bgcolor: '#fff', p: 2 }}>
+                        {collapsed ? (
+                            <Stack spacing={2} alignItems="center">
+                                <Box
+                                    sx={{
+                                        width: 48, height: 48, borderRadius: 2,
+                                        border: '2px solid #B3261E',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}
+                                    onClick={handleLogOut}
+                                >
+                                    <img src={Exit} />
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <img src={LoGo} alt="logo" style={{ width: 34, height: 34 }} />
+                                </Box>
+                                <Typography>{ENUM_VERSION}</Typography>
+                            </Stack>
+                        ) : (
+                            <Stack spacing={1.5}>
+                                <Box onClick={handleLogOut} sx={{ cursor: 'pointer', '&:hover': { opacity: 0.7 } }}>
+                                    <Typography sx={{ color: '#B3261E', fontSize: 16, fontWeight: 500, lineHeight: '24px' }}>
+                                        ออกจากระบบ :
+                                    </Typography>
+                                    <Typography sx={{ color: '#B3261E', fontSize: 16, fontWeight: 500, lineHeight: '24px' }} noWrap>
+                                        Admin
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <img src={LoGo} alt="logo" style={{ width: 34, height: 34 }} />
+                                    <img src={Logo_sc} alt="logo" style={{ width: 94, height: 34 }} />
+                                </Box>
+
+                                <Typography>{`Admin Version ${ENUM_VERSION}`}</Typography>
+                            </Stack>
+                        )}
+                    </Box>
+                </Sidebar>
+
+
+                 // <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden', width: '100%', bgcolor: 'white' }}>
+        //     <SidebarMenu toggleDrawer={toggleDrawer} isMobile={isMobile} open={open} drawerWidth={drawerWidth} />
+        //     <MainContent isMobile={isMobile} open={open} drawerWidth={drawerWidth} theme={theme} bottomOffset={isMobile ? FOOTER_H : 0}>
+        //         {props.children}
+        //     </MainContent>
+        //     <FooterMain isMobile={isMobile} setOpenDrawer={setOpenDrawer} />
+        //     <DrawerMenuBar open={openDrawer} setOpen={setOpenDrawer} />
+        // </Box>
+        // <Box sx={{ display: 'flex', height: '100vh', width: '100%', bgcolor: 'white', overflow: 'hidden' }}>
+        //     <SidebarMenu
+        //         isMobile={isMobile}
+        //         collapsed={collapsed}
+        //         setCollapsed={setCollapsed}
+        //     />
+        //     <MainContent
+        //         isMobile={isMobile}
+        //         leftOffset={sidebarVisibleWidth}
+        //         bottomOffset={isMobile ? FOOTER_H : 0}
+        //     >
+        //         {props.children}
+        //     </MainContent>
+
+        //     <FooterMain isMobile={isMobile} setOpenDrawer={setDrawerOpen} />
+        //     <DrawerMenuBar open={drawerOpen} setOpen={setDrawerOpen} />
+        // </Box>
+           {/* <FooterMain isMobile={isMobile} setOpenDrawer={setOpenDrawer} />
+            <DrawerMenuBar open={openDrawer} setOpen={setOpenDrawer} isMobile={isMobile} /> */}
+
+
+
+
+            // <Sidebar
+            //     className="app-sidebar"
+            //     width={`${SIDEBAR_WIDTH}px`}
+            //     collapsedWidth={`${SIDEBAR_COLLAPSED}px`}
+            //     collapsed={collapsed}
+            //     backgroundColor="#ffffff"
+            //     transitionDuration={350}
+            //     rootStyles={{
+            //         height: '100vh',
+            //         background: '#fff',
+            //         boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+            //         borderRadius: 12,
+            //         paddingTop: 24,
+            //         paddingLeft: 12,
+            //         paddingRight: 12,
+            //         paddingBottom: 0,
+            //         position: 'relative',
+            //         zIndex: 1300,
+            //         overflow: 'visible',
+            //     }}
+            // >
+
+
+
+import React, { useState } from "react";
+import { Sidebar } from "react-pro-sidebar";
+import LoGo from "../../../assets/image/logo/Logo_Color.png";
+import Logo_sc from "../../../assets/image/logo/SCBlack.png";
+import { useAuth } from "../../../modules/auth";
+import { useNavigate } from "react-router";
+import SidebarHeader from "../sidebar/SidebarHeader";
+import SidebarContent from "../sidebar/SidebarContent";
+import SidebarFooter from "../sidebar/SidebarFooter";
+import { ENUM_VERSION } from "../Enum";
+import { Box } from "@mui/material";
+import { SIDEBAR_COLLAPSED, SIDEBAR_WIDTH } from "./Layout";
+
+const SIDEBAR_PAD = 12;
+export interface ISidebarMenuProps {
+    isMobile: boolean;
+    collapsed: boolean;
+    setCollapsed: (v: boolean) => void;
+}
+
+export const SidebarMenu: React.FunctionComponent<ISidebarMenuProps> = (props) => {
+    const navigate = useNavigate();
+    const { handleLogOut } = useAuth();
+    const [collapsed, setCollapsed] = useState(false);
+    const onNavigate = (path: string, name: string) => {
+        console.log('onNavigate', path);
+        navigate(path);
+
+    };
+
+    if (props.isMobile === false) {
+        return (
+
+            // <Sidebar
+            //     className="app-sidebar"
+            //     width={`${SIDEBAR_WIDTH}px`}
+            //     collapsedWidth={`${SIDEBAR_COLLAPSED}px`}
+            //     collapsed={collapsed}
+            //     backgroundColor="#ffffff"
+            //     transitionDuration={350}
+            //     rootStyles={{
+            //         height: '100vh',
+            //         background: '#fff',
+            //         boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+            //         borderRadius: 12,
+            //         paddingTop: 24,
+            //         paddingLeft: 12,
+            //         paddingRight: 12,
+            //         paddingBottom: 0,
+            //         position: 'relative',
+            //         zIndex: 1300,
+            //         overflow: 'visible',
+            //     }}
+            // >
+
+
+            <Sidebar
+                className="app-sidebar"
+                width={`${SIDEBAR_WIDTH}px`}
+                collapsedWidth={`${SIDEBAR_COLLAPSED}px`}
+                collapsed={collapsed}
+                backgroundColor="#ffffff"
+                transitionDuration={350}
+                rootStyles={{
+                    width: collapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH, // ✅ เสถียร
+                    boxSizing: 'border-box',                               // ✅ รวม padding ใน width
+                    height: '100vh',
+                    background: '#fff',
+                    boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                    borderRadius: 12,
+                    paddingTop: 24,
+                    paddingLeft: 12,
+                    paddingRight: 12,
+                    paddingBottom: 0,
+                    position: 'relative',
+                    zIndex: 1300,
+                    overflow: 'visible',
+                }}
+            >
+                <Box className="sb-header">
+                    {/* <SidebarHeader
+                        collapsed={collapsed}
+                        isMobile={props.isMobile}
+                        onToggle={() => setCollapsed(!collapsed)}
+                    /> */}
+                    <SidebarHeader
+                        collapsed={collapsed}
+                        isMobile={false}
+                        onToggle={() => setCollapsed(!collapsed)}
+                    />
+                </Box>
+
+                <Box className="sb-content">
+                    <SidebarContent
+                        collapsed={collapsed}
+                        onNavigate={onNavigate}
+                    />
+                </Box>
+
+                <Box className="sb-footer">
+                    <SidebarFooter
+                        collapsed={collapsed}
+                        version={ENUM_VERSION}
+                        logoMain={LoGo}
+                        logoText={Logo_sc}
+                        onLogout={handleLogOut}
+                    />
+                </Box>
+            </Sidebar>
+        );
+    }
+}
