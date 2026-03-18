@@ -8,13 +8,3 @@ const getInitialColorMode = (): 'light' | 'dark' => {
 
 export const colorModeAtom = atom<'light' | 'dark'>(getInitialColorMode());
 
-// atom สำหรับ toggle พร้อมบันทึกลง localStorage
-// export const toggleColorModeAtom = atom(
-//   null,
-//   (get, set) => {
-//     const current = get(colorModeAtom);
-//     const next = current === 'light' ? 'dark' : 'light';
-//     localStorage.setItem("theme", next);
-//     set(colorModeAtom, next);
-//   }
-// );

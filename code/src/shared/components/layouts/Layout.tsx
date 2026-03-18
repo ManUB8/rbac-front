@@ -1,60 +1,102 @@
-import { Box, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material';
-import React, { useState, type ReactNode, useEffect } from 'react';
-import Header from './Header';
+import {
+    Box,
+    IconButton,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import React, { useEffect, useState, type ReactNode } from 'react';
 import MainContent from './MainContent';
-import FooterMain from './FooterMain';
-import DrawerMenuBar from '../drawer/DrawerMenuBar';
 import { SidebarMenu } from './SidebarMenu';
+import { useAuth } from '../../../modules/auth/hook/useAuth';
 
 export interface ILayoutProps {
     children: ReactNode;
 }
-export const SIDEBAR_WIDTH = 240;     // ใช้เลขเดียวทุกที่
+
+export const SIDEBAR_WIDTH = 240;
 export const SIDEBAR_COLLAPSED = 90;
 export const FOOTER_H = 64;
-const PAD_X = 24;
-const Layout: React.FunctionComponent<ILayoutProps> = (props) => {
-    const theme = useTheme();
-    const drawerWidth = 240;
-    const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
-    const [open, setOpen] = useState<boolean>(false);
-    const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+export const MOBILE_HEADER_H = 56;
 
-    const toggleDrawer = () => setOpen(!open);
+const Layout: React.FunctionComponent<ILayoutProps> = ({ children }) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 
     const [collapsed, setCollapsed] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
 
-    // ความกว้างที่ต้อง “กันพื้นที่” ให้ main
-    // const sidebarVisibleWidth = isMobile
-    //     ? 0
-    //     : (collapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + PAD_X; // รวม padding
-    const sidebarW = isMobile ? 0 : (collapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH);
+    const { getAuthRole } = useAuth();
+    const role = getAuthRole();
 
     useEffect(() => {
         if (!isMobile) setDrawerOpen(false);
     }, [isMobile]);
 
-
     return (
-
-        // <Box sx={{ display: 'flex', height: '100vh', width: '100%', overflow: 'hidden', bgcolor: 'white' }}>
         <Box
             sx={{
                 display: 'flex',
                 height: '100vh',
                 width: '100%',
                 overflow: 'hidden',
-                bgcolor: 'background.paper', // ✅ ปล่อยให้ตามธีม
-                color: 'text.primary',         // (ถ้าต้องการ)
+                bgcolor: 'background.default',
+                color: 'text.primary',
             }}
         >
-            <SidebarMenu isMobile={isMobile} collapsed={collapsed} setCollapsed={setCollapsed} />
-            <MainContent isMobile={isMobile} bottomOffset={isMobile ? FOOTER_H : 0}>
-                {props.children}
-            </MainContent>
-            <FooterMain isMobile={isMobile} setOpenDrawer={setOpenDrawer} />
-            <DrawerMenuBar open={openDrawer} setOpen={setOpenDrawer} isMobile={isMobile} />
+            <SidebarMenu
+                role={role}
+                isMobile={isMobile}
+                collapsed={collapsed}
+                setCollapsed={setCollapsed}
+                drawerOpen={drawerOpen}
+                setDrawerOpen={setDrawerOpen}
+            />
+
+            <Box
+                sx={{
+                    flex: 1,
+                    minWidth: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}
+            >
+                {isMobile && (
+                    <Box
+                        sx={{
+                            height: MOBILE_HEADER_H,
+                            px: 1.5,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            borderBottom: '1px solid',
+                            borderColor: 'divider',
+                            bgcolor: 'background.paper',
+                            position: 'sticky',
+                            top: 0,
+                            zIndex: 1200,
+                        }}
+                    >
+                        <IconButton onClick={() => setDrawerOpen(true)}>
+                            <MenuOutlinedIcon />
+                        </IconButton>
+
+                        <Typography fontSize={16} fontWeight={700}>
+                            {role === 'admin' ? 'Admin Panel' : 'Student Portal'}
+                        </Typography>
+
+                        <Box sx={{ width: 40 }} />
+                    </Box>
+                )}
+
+                <MainContent
+                    isMobile={isMobile}
+                    bottomOffset={isMobile ? FOOTER_H : 0}
+                >
+                    {children}
+                </MainContent>
+            </Box>
         </Box>
     );
 };

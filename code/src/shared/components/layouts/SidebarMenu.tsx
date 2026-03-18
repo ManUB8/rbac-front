@@ -1,85 +1,249 @@
-import React from "react";
-import { Sidebar } from "react-pro-sidebar";
-import LogoSC from "../../../assets/image/logo/LogoSCBlack02-long.png";
-import LoGo from "../../../assets/image/logo/minilogo.svg";
-import Logo_sc from "../../../assets/image/logo/logo.svg";
-// import LoGo from "../../../assets/image/logo/Logo_Color.png";
-// import Logo_sc from "../../../assets/image/logo/SCBlack.png";
-import { useAuth } from "../../../modules/auth";
-import { useNavigate } from "react-router";
-import SidebarHeader from "../sidebar/SidebarHeader";
-import SidebarContent from "../sidebar/SidebarContent";
-import SidebarFooter from "../sidebar/SidebarFooter";
-import { ENUM_VERSION } from "../Enum";
-import { Box, useTheme } from "@mui/material";
-import { SIDEBAR_COLLAPSED, SIDEBAR_WIDTH } from "./Layout";
+import React, { useMemo } from "react";
+import {
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 
-export interface ISidebarMenuProps {
-    isMobile: boolean;
-    collapsed: boolean;
-    setCollapsed: (v: boolean) => void;
+import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { SIDEBAR_COLLAPSED, SIDEBAR_WIDTH } from "./Layout";
+import { sidebarMenuConfig } from "./sidebarMenuConfig";
+
+import { usePermission } from "../../../modules/auth/hook/usePermission";
+import { useAuth } from "../../../modules/auth";
+
+import type { UserRole } from "../../../modules/auth/hook/useAuth";
+
+interface ISidebarMenuProps {
+  role: UserRole | "";
+  isMobile: boolean;
+  collapsed: boolean;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  drawerOpen: boolean;
+  setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SidebarMenu: React.FunctionComponent<ISidebarMenuProps> = (props) => {
-    const { isMobile, collapsed, setCollapsed } = props;
-    const navigate = useNavigate();
-    const { handleLogOut } = useAuth();
-    const theme = useTheme();
+export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
+  role,
+  isMobile,
+  collapsed,
+  setCollapsed,
+  drawerOpen,
+  setDrawerOpen,
+}) => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const onNavigate = (path: string, _name: string) => {
-        navigate(path);
-    };
+  const { getStudentPermissions } = usePermission();
+  const { handleLogOut } = useAuth();
 
-    // เดสก์ท็อปเท่านั้น (มือถือใช้ Drawer)
-    if (isMobile) return null;
+  const studentPermissions = getStudentPermissions();
 
-    return (
-        <Sidebar
-            className="app-sidebar"
-            width={`${SIDEBAR_WIDTH}px`}
-            collapsedWidth={`${SIDEBAR_COLLAPSED}px`}
-            collapsed={collapsed}
-            backgroundColor={theme.palette.background.paper}              // ✅ ตาม theme
-            transitionDuration={350}
-            rootStyles={{
-                width: collapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH, // ✅ เสถียร
-                boxSizing: 'border-box',
-                height: "100vh",
-                background: theme.palette.background.paper,                 // ✅ ตาม theme
-                color: theme.palette.text.primary,                          // ✅ ตาม theme
-                boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
-                borderRadius: 12,
-                paddingTop: 24,
-                paddingLeft: 12,
-                paddingRight: 12,
-                paddingBottom: 0,
-                position: 'relative',
-                zIndex: 1000,
-                overflow: 'visible',
-                borderRight: `1px solid ${theme.palette.divider}`,          // ✅ ใช้ divider
-            }}
+  const menuItems = useMemo(() => {
+    return sidebarMenuConfig.filter((item) => {
+      if (!role) return false;
+      if (!item.roles.includes(role)) return false;
+
+      if (role === "student" && item.permissionKey) {
+        return studentPermissions[item.permissionKey];
+      }
+
+      return true;
+    });
+  }, [role, studentPermissions]);
+
+  const sidebarWidth = collapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH;
+
+  const menuContent = (
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        bgcolor: "background.paper",
+        borderRight: "1px solid",
+        borderColor: "divider",
+      }}
+    >
+      {/* HEADER */}
+      <Box
+        sx={{
+          height: 72,
+          px: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: collapsed && !isMobile ? "center" : "space-between",
+        }}
+      >
+        {(!collapsed || isMobile) && (
+          <Box>
+            <Typography fontWeight={800} fontSize={18}>
+              {role === "admin" ? "Admin Panel" : "Student Portal"}
+            </Typography>
+
+            <Typography variant="body2" color="text.secondary">
+              {role === "admin"
+                ? "จัดการระบบกิจกรรม"
+                : "ระบบสำหรับนิสิต"}
+            </Typography>
+          </Box>
+        )}
+
+        {!isMobile && (
+          <IconButton onClick={() => setCollapsed((prev) => !prev)}>
+            {collapsed ? <MenuOutlinedIcon /> : <MenuOpenOutlinedIcon />}
+          </IconButton>
+        )}
+      </Box>
+
+      <Divider />
+
+      {/* MENU */}
+      <List sx={{ px: 1.5, py: 1.5, flex: 1 }}>
+        {menuItems.map((item) => {
+          const active = location.pathname === item.path;
+
+          return (
+            <ListItemButton
+              key={item.key}
+              onClick={() => {
+                navigate(item.path);
+                if (isMobile) setDrawerOpen(false);
+              }}
+              sx={{
+                minHeight: 48,
+                mb: 0.75,
+                px: collapsed && !isMobile ? 1.25 : 1.5,
+                borderRadius: 2,
+                justifyContent:
+                  collapsed && !isMobile ? "center" : "flex-start",
+                bgcolor: active ? "action.selected" : "transparent",
+                color: active ? "primary.main" : "text.primary",
+                "&:hover": {
+                  bgcolor: "action.hover",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: collapsed && !isMobile ? 0 : 36,
+                  mr: collapsed && !isMobile ? 0 : 1,
+                  color: active ? "primary.main" : "text.secondary",
+                  justifyContent: "center",
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+
+              {(!collapsed || isMobile) && (
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
+                    fontSize: 15,
+                    fontWeight: active ? 700 : 500,
+                  }}
+                />
+              )}
+            </ListItemButton>
+          );
+        })}
+      </List>
+
+      {/* FOOTER */}
+      <Divider />
+
+      <Box sx={{ p: 1.5 }}>
+        <ListItemButton
+          onClick={() => {
+            handleLogOut();
+          }}
+          sx={{
+            borderRadius: 2,
+            justifyContent: collapsed && !isMobile ? "center" : "flex-start",
+            "&:hover": {
+              bgcolor: "error.main",
+              color: "white",
+              "& .MuiListItemIcon-root": {
+                color: "white",
+              },
+            },
+          }}
         >
-            <Box className="sb-header">
-                <SidebarHeader
-                    collapsed={collapsed}
-                    isMobile={false}
-                    onToggle={() => setCollapsed(!collapsed)}                 // ✅ ใช้ state จาก Layout
-                />
-            </Box>
+          <ListItemIcon
+            sx={{
+              minWidth: collapsed && !isMobile ? 0 : 36,
+              mr: collapsed && !isMobile ? 0 : 1,
+              color: "text.secondary",
+              justifyContent: "center",
+            }}
+          >
+            <LogoutOutlinedIcon />
+          </ListItemIcon>
 
-            <Box className="sb-content" sx={{ minHeight: 0, overflowY: "auto", overflowX: "visible" }}>
-                <SidebarContent collapsed={collapsed} onNavigate={onNavigate} />
-            </Box>
+          {(!collapsed || isMobile) && (
+            <ListItemText
+              primary="Logout"
+              primaryTypographyProps={{
+                fontWeight: 600,
+              }}
+            />
+          )}
+        </ListItemButton>
+      </Box>
+    </Box>
+  );
 
-            <Box className="sb-footer" sx={{ borderTop: `1px solid ${theme.palette.divider}` }}>
-                <SidebarFooter
-                    collapsed={collapsed}
-                    version={ENUM_VERSION}
-                    logoMain={LoGo}
-                    logoText={Logo_sc}
-                    onLogout={handleLogOut}
-                />
-            </Box>
-        </Sidebar>
+  /* MOBILE DRAWER */
+  if (isMobile) {
+    return (
+      <Drawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        variant="temporary"
+        ModalProps={{ keepMounted: true }}
+        PaperProps={{
+          sx: {
+            width: SIDEBAR_WIDTH,
+          },
+        }}
+      >
+        {menuContent}
+      </Drawer>
     );
+  }
+
+  /* DESKTOP SIDEBAR */
+  return (
+    <Box
+      sx={{
+        width: sidebarWidth,
+        flexShrink: 0,
+        transition: "width 0.25s ease",
+      }}
+    >
+      <Box
+        sx={{
+          width: sidebarWidth,
+          height: "100vh",
+          position: "fixed",
+          left: 0,
+          top: 0,
+          transition: "width 0.25s ease",
+        }}
+      >
+        {menuContent}
+      </Box>
+    </Box>
+  );
 };

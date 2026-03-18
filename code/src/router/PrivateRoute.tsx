@@ -1,12 +1,13 @@
 // PrivateRoute.tsx (เฉพาะ Bare)
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import Layout from '../shared/components/layouts/Layout';
 import { useAuth } from '../modules/auth';
 import * as R from 'ramda';
 import { Box, Container, useMediaQuery, useTheme } from '@mui/material';
 import { getRouteNameByPath } from './RoutesByModalFlag';
 import { ModalHeaderProvider } from '../shared/components/layouts/ModalHeaderContext';
 import ModalNavHeader from '../shared/components/layouts/ModalNavHeader';
+import Layout from '../shared/components/layouts/Layout';
+
 
 export const PrivateLayoutRoute = () => {
     const { getAuthToken } = useAuth();
