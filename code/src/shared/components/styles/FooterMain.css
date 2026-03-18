@@ -1,0 +1,24 @@
+.footer-box {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 100%;
+    background: #fcfcfc;
+    display: flex;
+    height: 60px;
+    box-shadow: 0px 4px 24px 0px #0000001f;
+    z-index: 5;
+    padding: 16px 8px;
+}
+
+
+/* FooterMain.css
+.footer-box{
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 64px;              
+  background: #fff;
+  border-top: 1px solid #E9ECEF;
+  z-index: 1200;            
+} */

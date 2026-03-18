@@ -1,0 +1,87 @@
+//     return (
+//         <>
+//             <Dialog
+//                 fullWidth
+//                 maxWidth={'sm'}
+//                 open={open}
+//                 onClose={popupValue.onClose}
+//                 PaperProps={{
+//                     sx: {
+//                         borderRadius: 2.5,
+//                         p: 3,
+//                     },
+//                 }}
+//             >
+//                 {/* แถบด้านบน: ซ้ายปุ่มปิด, ขวาปุ่มยกเลิก/ยืนยัน */}
+//                 <Box
+//                     sx={{
+//                         display: "flex",
+//                         alignItems: "center",
+//                         justifyContent: "space-between",
+//                         mb: 2,
+//                     }}
+//                 >
+//                     <IconButton
+//                         onClick={popupValue.onClose}
+//                         sx={{
+//                             width: '48px',
+//                             height: '48px',
+//                             borderRadius: 2,
+//                             bgcolor: "#F3F5F7",
+//                             "&:hover": { bgcolor: "#E9ECEF" },
+//                         }}
+//                     >
+//                         <img
+//                             src={CloseIcon}
+//                             alt="close"
+//                         />
+//                     </IconButton>
+
+//                     <Box sx={{ display: "flex", gap: 1 }}>
+//                         <Button
+//                             variant="contained"
+//                             color="warning"
+//                             onClick={popupValue.onClose}
+//                         >
+//                             ยกเลิก
+//                         </Button>
+//                         <Button
+//                             variant="contained"
+//                             onClick={popupValue?.onConfirm}
+//                         >
+//                             ยืนยัน
+//                         </Button>
+//                     </Box>
+//                 </Box>
+//                 <DialogContent>
+//                     <DialogContentText
+//                         sx={{
+//                             fontSize: '28px',
+//                             fontWeight: 500,
+//                             textAlign: 'left',
+//                             color:
+//                                 popupValue?.type === 'warning' ||
+//                                     popupValue?.type === 'reject'
+//                                     ? '#FE3C22'
+//                                     : '#525252'
+//                         }}
+//                     >
+//                         <div
+//                             dangerouslySetInnerHTML={{
+//                                 __html: popupValue?.title
+//                             }}
+//                         ></div>
+//                     </DialogContentText>
+//                     <Typography variant='body2' sx={{ textAlign: 'left' }}>
+//                         <div
+//                             dangerouslySetInnerHTML={{
+//                                 __html: popupValue?.content
+//                             }}
+//                         ></div>
+//                     </Typography>
+//                 </DialogContent>
+
+//             </Dialog>
+//         </>
+//     )
+// }

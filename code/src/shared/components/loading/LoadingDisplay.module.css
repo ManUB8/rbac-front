@@ -1,0 +1,31 @@
+.logoanima {
+    position: relative;
+    animation-name: example;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes example {
+    0% {
+        top: 0px;
+    }
+    50% {
+        top: 30px;
+    }
+    100% {
+        top: 0px;
+    }
+    
+}
+
+/* ป้องกัน global CSS ของโปรเจกต์มาจับ svg ให้เต็มจอ */
+.react-loading-wrap {
+  width: 48px;
+  height: 48px;
+}
+.react-loading-wrap svg {
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+  display: block;
+}

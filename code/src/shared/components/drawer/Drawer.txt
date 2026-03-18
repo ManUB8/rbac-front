@@ -1,0 +1,514 @@
+// DrawerMenuBar.tsx
+import React, { useState } from "react";
+import { Drawer } from "antd";
+import CloseIcon from "@mui/icons-material/Close";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { Box, Typography } from "@mui/material";
+import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { useNavigate } from "react-router";
+import { UserProfile } from "../layouts/UserProfile";
+import { routesConfig } from "../../../router/router";
+
+import ArrowClose from "../../../assets/svg/arrow_menu_close.svg";
+import ArrowOpen from "../../../assets/svg/arrow_menu_open.svg";
+
+export interface IDrawerMenuBarProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  isMobile?: boolean; // ✅ เพิ่ม
+}
+
+const DrawerMenuBar: React.FC<IDrawerMenuBarProps> = ({ open, setOpen, isMobile = false }) => {
+  const navigate = useNavigate();
+
+  // ใน mobile บังคับให้ไม่ยุบเสมอ เพื่อหน้าตาแบบรูปที่ 2
+  const [collapsed, setCollapsedState] = useState(false);
+  const collapsedEffective = isMobile ? false : collapsed;
+
+  const setCollapsed = (v: boolean) => {
+    if (isMobile) return; // mobile ไม่ให้ยุบ/ขยาย
+    setCollapsedState(v);
+  };
+
+  const onClose = () => setOpen(false);
+  const onNavigate = (path: string) => navigate(path);
+
+  return (
+    <Drawer
+      forceRender
+      placement="bottom"
+      title="UserProfile"
+      onClose={onClose}
+      open={open}
+      closable={false}
+      height="calc(100vh - 50px)"
+      rootClassName="drawer-menu-bar"
+      getContainer={false}
+      style={{ position: "absolute", background: "#FCFCFC" }}
+    >
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+        <Box sx={{ fontSize: 24, cursor: "pointer" }} onClick={onClose}>
+          <CloseIcon />
+        </Box>
+      </Box>
+
+      {/* โปรไฟล์บนสุด */}
+      <UserProfile collapsed={collapsedEffective} isMobile={isMobile}/>
+
+      {/* เมนูหลัก */}
+      <Menu
+        style={{ padding: isMobile ? "4px 8px" : 0 }}
+        menuItemStyles={{
+          root: {
+            fontSize: isMobile ? 16 : 14,
+            borderRadius: 8,
+            margin: "6px 0",
+          },
+          button: {
+            height: 44,
+            padding: isMobile ? "6px 10px" : "6px 8px",
+          },
+          label: {
+            fontWeight: 500,
+            color: "#1C1B1B",
+          },
+        }}
+      >
+        {routesConfig.privateRoutes?.map((route: any) => {
+          const children = Array.isArray(route.children)
+            ? route.children.filter((c: any) => !c.subpath)
+            : [];
+
+          // เมนูที่มีลูก — ทำให้หน้าตาเหมือน “เข้าไปยังหน้า” (ลูกศรขวา)
+          if (children.length > 0) {
+            return (
+              <SubMenu
+                key={route.path || route.code}
+                label={route.name}
+                icon={route.icon}
+                suffix={<ChevronRightIcon sx={{ fontSize: 20 }} />} // ✅ ไอคอนขวาแบบรูปที่ 2
+                defaultOpen={false}
+                style={{
+                  padding: 0,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  display: "flex",
+                  alignItems: "center",
+                  outline: isMobile ? "2px solid transparent" : "none",
+                }}
+              >
+                {children.map((child: any) => (
+                  <MenuItem
+                    key={child.path || child.code}
+                    style={{
+                      padding: 0,
+                      paddingLeft: 20,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={() => onNavigate(child.path)}
+                  >
+                    {!collapsedEffective && (
+                      <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
+                        <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                          {child.name}
+                        </Typography>
+                      </Box>
+                    )}
+                  </MenuItem>
+                ))}
+              </SubMenu>
+            );
+          }
+
+          // เมนูปกติ
+          return (
+            <MenuItem
+              key={route.path || route.code}
+              style={{
+                padding: 0,
+                paddingLeft: 10,
+                display: "flex",
+                alignItems: "center",
+                outline: "2px solid transparent",
+              }}
+              icon={route.icon}
+              onClick={() => onNavigate(route.path)}
+            >
+              {!collapsedEffective && (
+                <Box sx={{ height: "100%", display: "flex", alignItems: "center" }}>
+                  <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                    {route.name}
+                  </Typography>
+                </Box>
+              )}
+            </MenuItem>
+          );
+        })}
+      </Menu>
+
+      {/* เอฟเฟกต์โฟกัส/เลือกใน mobile ให้ดูชัดแบบกรอบน้ำเงิน */}
+      <style>
+        {`
+          .ps-menuitem:hover > .ps-menu-button {
+            background: ${isMobile ? "rgba(59,130,246,0.06)" : "#F4F6F8"};
+          }
+          .ps-menuitem.ps-active > .ps-menu-button {
+            outline: ${isMobile ? "2px solid #3B82F6" : "none"};
+            background: ${isMobile ? "rgba(59,130,246,0.08)" : "inherit"};
+          }
+        `}
+      </style>
+    </Drawer>
+  );
+};
+
+export default DrawerMenuBar;
+
+
+
+// DrawerMenuBar.tsx
+import React, { useState } from "react";
+import { Drawer } from "antd";
+import CloseIcon from "@mui/icons-material/Close";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { useNavigate } from "react-router";
+import { UserProfile } from "../layouts/UserProfile";
+import { routesConfig } from "../../../router/router";
+
+import ArrowClose from "../../../assets/svg/arrow_menu_close.svg";
+import ArrowOpen from "../../../assets/svg/arrow_menu_open.svg";
+
+export interface IDrawerMenuBarProps {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    isMobile?: boolean; // ✅ เพิ่ม
+}
+
+const DrawerMenuBar: React.FC<IDrawerMenuBarProps> = ({ open, setOpen, isMobile = false }) => {
+    const navigate = useNavigate();
+
+    // ใน mobile บังคับให้ไม่ยุบเสมอ เพื่อหน้าตาแบบรูปที่ 2
+    const [collapsed, setCollapsedState] = useState(false);
+    const collapsedEffective = isMobile ? false : collapsed;
+
+    const setCollapsed = (v: boolean) => {
+        if (isMobile) return; // mobile ไม่ให้ยุบ/ขยาย
+        setCollapsedState(v);
+    };
+
+    const onClose = () => setOpen(false);
+    const onNavigate = (path: string, name: string) => {
+        console.log('onNavigate', path);
+        navigate(path);
+
+    };
+
+    return (
+        <Drawer
+            forceRender
+            placement="bottom"
+            title={<UserProfile collapsed={collapsedEffective} isMobile={isMobile} />}  // ✅ ใส่ component ใน title
+            extra={(
+                <Box sx={{ fontSize: 24, cursor: "pointer" }} onClick={onClose}>
+                    <CloseIcon />
+                </Box>
+            )}                                                                          // ✅ ปุ่มปิดด้านขวา
+            onClose={onClose}
+            open={open}
+            closable={false}                         // ใช้ extra แทนปุ่มปิดของ antd
+            rootClassName="drawer-menu-bar"
+            getContainer={false}
+            style={{ position: "absolute", background: "#FCFCFC" }}
+        >
+            <List>
+                 {routesConfig.privateRoutes?.map((route) => {
+                    const children = Array.isArray(route.children) ? route.children.filter(c => !c.subpath) : [];
+
+                    return children.length > 0 ? (
+                        <SubMenu
+                            key={route.path || route.code}
+                            icon={route.icon}
+                            label={route.name}
+                            style={{ padding: 0, paddingLeft: 10, paddingRight: 10, display: "flex", alignItems: "center" }}
+                        >
+                            {children.map((child) => (
+                                <MenuItem
+                                    key={child.path || child.code}
+                                    style={{ padding: 0, paddingLeft: 20, display: "flex", alignItems: "center", height: 48 }}
+                                    onClick={() => onNavigate(child?.path, child?.name)}
+                                >
+                                    {!collapsed && (
+                                        <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                                            {child.name}
+                                        </Typography>
+                                    )}
+                                </MenuItem>
+                            ))}
+                        </SubMenu>
+                    ) : (
+                        <MenuItem
+                            key={route.path || route.code}
+                            style={{ padding: 0, paddingLeft: 10, display: "flex", alignItems: "center" }}
+                            icon={route.icon}
+                            onClick={() => onNavigate(route?.path, route?.name)}
+                        >
+                            {!collapsed && (
+                                <Typography sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}>
+                                    {route.name}
+                                </Typography>
+                            )}
+                        </MenuItem>
+                    );
+                })}
+            </List>
+        </Drawer>
+    );
+};
+
+export default DrawerMenuBar;
+
+
+import React, { useEffect, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+    Box, List, ListItem, ListItemButton, ListItemIcon,
+    ListItemText, Typography, Collapse,
+    Grid,
+    Drawer,
+    IconButton,
+    Divider,
+} from "@mui/material";
+import { useLocation, useNavigate } from "react-router";
+import { UserProfile } from "../layouts/UserProfile";
+import { routesConfig } from "../../../router/router";
+import { makeStyles } from "@mui/styles";
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import type { IChildrenRouter } from "../../../router/Router.interface";
+import { ENUM_VERSION } from "../Enum";
+import LoGo from "../../../assets/image/logo/Logo_Color.png";
+import Logo_sc from "../../../assets/image/logo/SCBlack.png";
+import { useAuth } from "../../../modules/auth";
+export interface IDrawerMenuBarProps {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    isMobile?: boolean;
+}
+
+
+export interface miniChilden {
+    name: string;
+    path: string;
+}
+export interface Childen {
+    name: string;
+    path: string;
+    // childens: miniChilden[]
+    childens: IChildrenRouter[];
+    icon?: any;
+}
+
+export interface Childenmini {
+    name: string;
+    path: string;
+    // childens: miniChilden[];
+}
+
+export interface MenuSideBar {
+    name: string;
+    path: string;
+    childens: Childen[];
+    icon: any;
+}
+
+const DrawerMenuBar: React.FC<IDrawerMenuBarProps> = ({ open, setOpen, isMobile = false }) => {
+    const navigate = useNavigate();
+    // const { handleLogOut } = useAuth();
+    // const collapsedEffective = false;
+    // const onClose = () => setOpen(false);
+    // const onNavigate = (path: string, _name: string) => {
+    //     navigate(path);
+    //     onClose();
+    // };
+    const { handleLogOut } = useAuth();
+
+    const onClose = () => setOpen(false);
+
+    // ✅ ปิดเมื่อเปลี่ยนหน้า
+    const loc = useLocation();
+    useEffect(() => { setOpen(false); }, [loc.pathname]);
+
+    // ✅ ปิดทันทีเมื่อยืดจอ (mobile -> desktop)
+    useEffect(() => {
+        if (!isMobile && open) setOpen(false);
+    }, [isMobile, open, setOpen]);
+
+    const onNavigate = (path: string, _name: string) => {
+        navigate(path);
+        onClose();
+    };
+
+    return (
+        <Drawer
+            anchor="bottom"
+            open={open}
+            onClose={onClose}
+            slotProps={{
+                paper: {
+                    sx: {
+                        height: "calc(100vh - 200px)",
+                        display: "flex",
+                        flexDirection: "column",
+                    },
+                },
+            }}
+        >
+            {/* Header */}
+            <Box
+                sx={{
+                    p: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
+            >
+                {/* <UserProfile collapsed={collapsedEffective} isMobile={isMobile} /> */}
+                <UserProfile collapsed={false} isMobile={isMobile} />
+                <IconButton onClick={onClose}>
+                    <CloseIcon />
+                </IconButton>
+            </Box>
+            <Divider />
+
+            {/* Body (scrollable) */}
+            <Box sx={{ flex: 1, overflowY: "auto" }}>
+                <Menu style={{ padding: 0 }}>
+                    {routesConfig.privateRoutes?.map((route) => {
+                        const children = Array.isArray(route.children)
+                            ? route.children.filter((c) => !c.subpath)
+                            : [];
+                        return children.length > 0 ? (
+                            <SubMenu
+                                key={route.path || route.code}
+                                icon={route.icon}
+                                label={route.name}
+                                style={{
+                                    padding: 0,
+                                    paddingLeft: 10,
+                                    paddingRight: 10,
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                            >
+                                {children.map((child) => (
+                                    <MenuItem
+                                        key={child.path || child.code}
+                                        style={{
+                                            padding: 0,
+                                            paddingLeft: 20,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            height: 48,
+                                        }}
+                                        onClick={() => onNavigate(child?.path, child?.name)}
+                                    >
+                                        <Typography
+                                            sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}
+                                        >
+                                            {child.name}
+                                        </Typography>
+                                    </MenuItem>
+                                ))}
+                            </SubMenu>
+                        ) : (
+                            <MenuItem
+                                key={route.path || route.code}
+                                style={{
+                                    padding: 0,
+                                    paddingLeft: 10,
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                                icon={route.icon}
+                                onClick={() => onNavigate(route?.path, route?.name)}
+                            >
+                                <Typography
+                                    sx={{ color: "#1C1B1B", fontWeight: 500, fontSize: 16 }}
+                                >
+                                    {route.name}
+                                </Typography>
+                            </MenuItem>
+                        );
+                    })}
+                </Menu>
+            </Box>
+
+            {/* Footer (sticky) */}
+            <Divider />
+            <Box
+                sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    justifyContent: "center",
+                    gap: 2,
+                    borderTop: "1px solid",
+                    borderColor: "divider",
+                }}
+            >
+                {/* Logout */}
+                <Box
+                    onClick={handleLogOut}
+                    sx={{ cursor: "pointer", "&:hover": { opacity: 0.7 } }}
+                >
+                    <Typography
+                        sx={{
+                            color: "#B3261E",
+                            fontSize: 16,
+                            fontWeight: 500,
+                            lineHeight: "24px",
+                        }}
+                    >
+                        ออกจากระบบ :
+                    </Typography>
+                    <Typography
+                        sx={{
+                            color: "#B3261E",
+                            fontSize: 16,
+                            fontWeight: 500,
+                            lineHeight: "24px",
+                        }}
+                        noWrap
+                        title={'Admin'}
+                    >
+                        {'Admin'}
+                    </Typography>
+                </Box>
+
+                {/* Logo group */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <img
+                        src={LoGo}
+                        alt="logo"
+                        style={{ width: 34, height: 34, display: "block" }}
+                    />
+                    <img
+                        src={Logo_sc}
+                        alt="super"
+                        style={{ width: 94, height: 34, display: "block" }}
+                    />
+                </Box>
+
+                {/* Version */}
+                <Typography sx={{ whiteSpace: "nowrap" }}>
+                    {`Admin Version ${ENUM_VERSION}`}
+                </Typography>
+            </Box>
+        </Drawer>
+    );
+};
+
+export default DrawerMenuBar;
