@@ -1,30 +1,25 @@
 import React from "react";
 import {
+  BrowserRouter as Router,
   Routes,
   Route,
-  BrowserRouter as Router,
   useLocation,
   Navigate,
 } from "react-router-dom";
-import { AppRoutes } from "./router";
+
 import { PrivateLayoutRoute, PrivateBareRoute } from "./PrivateRoute";
-import NotFoundPage from "../shared/NotFoundPage";
-import LoginPage from "../modules/auth/page/LoginPage";
-import LoginForm from "../modules/auth/page/LoginForm";
 import { RoleRoute } from "./RoleRoute";
 import PermissionRoute from "./PermissionRoute";
 import { useAuth } from "../modules/auth";
 
-/* pages */
-import DashBoardPage from "../modules/dashboard/DashBoardPage";
-import StudentCardPage from "../modules/student/page/StudentCardPage";
-
-import StudentSummaryPage from "../modules/student/page/StudentSummaryPage";
-import StudentManagePage from "../modules/admin/page/StudentManagePage";
-import ActivityManagePage from "../modules/admin/page/ActivityManagePage";
-import PermissionManagePage from "../modules/admin/page/PermissionManagePage";
-import RegisterPage from "../modules/auth/page/Register";
-import StudentActivityPage from "../modules/student/page/StudentActivityPage";
+import {
+  AppRoutes,
+  routesConfig,
+  getDefaultRouteByRole,
+  getLayoutRoutesByRole,
+  getBareRoutesByRole,
+  type UserRole,
+} from "./router";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -50,15 +45,25 @@ function DefaultRedirect() {
     return <Navigate to={AppRoutes.authLanding} replace />;
   }
 
-  if (role === "admin") {
-    return <Navigate to={AppRoutes.dashboard} replace />;
-  }
+  return <Navigate to={getDefaultRouteByRole(role)} replace />;
+}
 
-  if (role === "student") {
-    return <Navigate to={AppRoutes.studentCard} replace />;
-  }
+function renderProtectedRoutesByRole(role: UserRole, withLayout: boolean) {
+  const targetRoutes = withLayout
+    ? getLayoutRoutesByRole(role)
+    : getBareRoutesByRole(role);
 
-  return <Navigate to={AppRoutes.authLanding} replace />;
+  return targetRoutes.map((route) => {
+    const element = route.permissionKey ? (
+      <PermissionRoute permissionKey={route.permissionKey}>
+        {route.element}
+      </PermissionRoute>
+    ) : (
+      route.element
+    );
+
+    return <Route key={route.key} path={route.path} element={element} />;
+  });
 }
 
 export default function AuthRoute() {
@@ -68,68 +73,36 @@ export default function AuthRoute() {
 
       <Routes>
         {/* public */}
-        <Route path={AppRoutes.authLanding} element={<LoginPage />} />
-        <Route path={AppRoutes.login} element={<LoginForm />} />
-        <Route path={AppRoutes.register} element={<RegisterPage />} />
+        {routesConfig.publicRoutes.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
 
-        {/* private: มี Layout/Sidebar */}
+        {/* private with layout */}
         <Route path="/" element={<PrivateLayoutRoute />}>
-          {/* default redirect ตาม role */}
           <Route index element={<DefaultRedirect />} />
 
-          {/* ================= ADMIN ================= */}
           <Route element={<RoleRoute role="admin" />}>
-            <Route path={AppRoutes.dashboard} element={<DashBoardPage />} />
-            <Route
-              path={AppRoutes.adminStudents}
-              element={<StudentManagePage />}
-            />
-            <Route
-              path={AppRoutes.adminActivities}
-              element={<ActivityManagePage />}
-            />
-            <Route
-              path={AppRoutes.adminPermissions}
-              element={<PermissionManagePage />}
-            />
+            {renderProtectedRoutesByRole("admin", true)}
           </Route>
 
-          {/* ================= STUDENT ================= */}
           <Route element={<RoleRoute role="student" />}>
-            <Route element={<PermissionRoute permissionKey="student_card" />}>
-              <Route
-                path={AppRoutes.studentCard}
-                element={<StudentCardPage />}
-              />
-            </Route>
-
-            <Route
-              element={<PermissionRoute permissionKey="student_activity" />}
-            >
-              <Route
-                path={AppRoutes.studentActivity}
-                element={<StudentActivityPage />}
-              />
-            </Route>
-
-            <Route
-              element={<PermissionRoute permissionKey="student_summary" />}
-            >
-              <Route
-                path={AppRoutes.studentSummary}
-                element={<StudentSummaryPage />}
-              />
-            </Route>
+            {renderProtectedRoutesByRole("student", true)}
           </Route>
         </Route>
 
-        {/* private: ไม่มี Layout (modal / full page เฉพาะกิจ) */}
+        {/* private bare */}
         <Route path="/" element={<PrivateBareRoute />}>
-          {/* ใส่ modal routes ภายหลัง */}
+          <Route element={<RoleRoute role="admin" />}>
+            {renderProtectedRoutesByRole("admin", false)}
+          </Route>
+
+          <Route element={<RoleRoute role="student" />}>
+            {renderProtectedRoutesByRole("student", false)}
+          </Route>
         </Route>
 
-        {/* not found */}
-        <Route path="*" element={<NotFoundPage />} />
+        {/* fallback */}
+        <Route path="*" element={routesConfig.publicRoutes.find(r => r.path === AppRoutes.notFoundPage)?.element ?? <Navigate to={AppRoutes.authLanding} replace />} />
       </Routes>
     </Router>
   );

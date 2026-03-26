@@ -1,65 +1,55 @@
 export interface ILoginAdminBody {
-    username: string;
-    password: string;
+  username: string;
+  password: string;
 }
 
 export interface ILoginStudentBody {
-    student_id: string;
-    password: string;
+  username: string;
+  password: string;
 }
 
 export type UserRole = "admin" | "student";
 
-export interface IUser {
-    user_id: string;
-    username: string;
-    account_type: UserRole;
-    account_name: string;
-    first_login: boolean;
-    role_id: string;
-    is_auto: boolean;
-}
-
 export interface ILoginAdminItem {
-    access_token: string;
-    refresh_token: string;
-    user: IUser;
-}
-
-export interface IRegisterForm {
-  name: string;
-  studentId: string;
+  user_id: string;
   username: string;
-  password: string;
-}
-
-export interface IStudentRegister {
-  student_id: string;
-  prefix: string;
-  first_name: string;
-  last_name: string;
-  citizen_id: string;
-  gender: string;
-  faculty_name: string;
-  major_name: string;
-  faculty_id: number;
-  major_id: number;
-  img_stu: string;
-  user: IUserRegister;
-}
-
-export interface IUserRegister {
-  username: string;
-  password: string;
+  name:string;
 }
 
 export interface IMajor {
-  id: number;
+  major_id: number;
   major_name: string;
 }
 
 export interface IFaculty {
-  id: number;
+  faculty_id: number;
   faculty_name: string;
   majors: IMajor[];
+}
+
+export interface IUserCredential {
+  username: string;
+  password: string;
+}
+
+export interface IStudentItem {
+  student_id: number;
+  student_code: string;
+  prefix: string;
+  first_name: string;
+  last_name: string;
+  gender: string;
+  faculty_id: number;
+  major_id: number;
+  user_id: number;
+  faculty_name: string;
+  major_name: string;
+  img_stu: string;
+  created_by_id: number;
+  created_by_name: string;
+  updated_by_id: number;
+  updated_by_name: string;
+  created_at: number;
+  updated_at: number;
+  user: IUserCredential;
 }

@@ -1,12 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { AppRoutes } from "../../../router/router";
+import Cookies from "js-cookie";
+import { useAtom } from "jotai";
+
+import {
+  AppRoutes,
+  getDefaultRouteByRole,
+  type UserRole,
+} from "../../../router/router";
+
 import type {
   ILoginAdminBody,
+  ILoginAdminItem,
   ILoginStudentBody,
+  IStudentItem,
 } from "../interface/Login.interface";
-import Cookies from "js-cookie";
-
-export type UserRole = "admin" | "student";
+import { getLoginAdmin, getLoginStudent } from "../service/LoginApi";
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -32,38 +40,43 @@ export const useAuth = () => {
     };
   };
 
-  const authorized = (
+  const setAuthSession = (
     role: UserRole,
     accountName: string,
-    userId: string,
-    path: string
+    userId: string | number
   ) => {
     const fakeToken = `mock-token-${role}-${Date.now()}`;
 
     Cookies.set("accessToken", fakeToken, { expires: 30 });
     Cookies.set("accountName", accountName, { expires: 30 });
     Cookies.set("accountType", role, { expires: 30 });
-    Cookies.set("userId", userId, { expires: 30 });
+    Cookies.set("userId", String(userId), { expires: 30 });
 
     localStorage.setItem("access_token", fakeToken);
     localStorage.setItem("account_type", role);
     localStorage.setItem("account_name", accountName);
-    localStorage.setItem("user_id", userId);
+    localStorage.setItem("user_id", String(userId));
 
-    navigate(path, { replace: true });
+    navigate(getDefaultRouteByRole(role), { replace: true });
+  };
+
+  const authroizedAdmin = (data: ILoginAdminItem) => {
+    setAuthSession("admin", data.name, data.user_id);
+  };
+
+  const authroizedStudent = (data: IStudentItem) => {
+    setAuthSession("student", data.first_name, data.student_id);
   };
 
   const handleLoginAdmin = async (
     payload: ILoginAdminBody
   ): Promise<boolean> => {
     try {
-      if (payload.username === "admin" && payload.password === "1234") {
-        authorized("admin", "Administrator", "admin-001", AppRoutes.dashboard);
-        return true;
-      }
-      return false;
+      const res = await getLoginAdmin(payload);
+      authroizedAdmin(res);
+      return true;
     } catch (err) {
-      console.error("mock admin login error:", err);
+      console.error("login admin error:", err);
       return false;
     }
   };
@@ -72,18 +85,11 @@ export const useAuth = () => {
     payload: ILoginStudentBody
   ): Promise<boolean> => {
     try {
-      if (payload.student_id === "67010533" && payload.password === "1234") {
-        authorized(
-          "student",
-          "Student Demo",
-          "student-001",
-          AppRoutes.studentCard
-        );
-        return true;
-      }
-      return false;
+      const res = await getLoginStudent(payload);
+      authroizedStudent(res);
+      return true;
     } catch (err) {
-      console.error("mock student login error:", err);
+      console.error("login student error:", err);
       return false;
     }
   };

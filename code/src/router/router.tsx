@@ -1,34 +1,49 @@
+import type { ReactNode } from "react";
 import type { RouteObject } from "react-router";
+
 import NotFoundPage from "../shared/NotFoundPage";
 import LoginPage from "../modules/auth/page/LoginPage";
 import LoginForm from "../modules/auth/page/LoginForm";
+import RegisterPage from "../modules/auth/page/Register";
+
 import DashBoardPage from "../modules/dashboard/DashBoardPage";
-import type { IRouterConfig } from "./Router.interface";
+import StadiumOutlinedIcon from '@mui/icons-material/StadiumOutlined';
 import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
-import SettingsSuggestOutlinedIcon from "@mui/icons-material/SettingsSuggestOutlined";
+import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
+import StudentCardPage from "../modules/student/StudentMaster/page/StudentCardPage";
+import StudentActivityPage from "../modules/student/StudentActivity/page/StudentActivityPage";
+import StudentSummaryPage from "../modules/student/Dashboard/ActivitySummary/page/StudentSummaryPage";
+import StudentManagePage from "../modules/admin/StudentManage/page/StudentManagePage";
+import ActivityManagePage from "../modules/admin/ActivityManage/page/ActivityManagePage";
+import FacultyBranchPage from "../modules/admin/Faculty_Majors/page/FacultyBranchPage";
+import StudentActivitiesPage from "../modules/admin/Student_Activities/page/StudentActivitiesPage";
 
-/* test pages */
-import StudentCardPage from "../modules/student/page/StudentCardPage";
+export type UserRole = "admin" | "student";
 
-import StudentSummaryPage from "../modules/student/page/StudentSummaryPage";
-import StudentManagePage from "../modules/admin/page/StudentManagePage";
-import ActivityManagePage from "../modules/admin/page/ActivityManagePage";
-import PermissionManagePage from "../modules/admin/page/PermissionManagePage";
-import RegisterPage from "../modules/auth/page/Register";
-import StudentActivityPage from "../modules/student/page/StudentActivityPage";
+export interface IRouterConfig {
+  path: string;
+  element: ReactNode;
+  code: string;
+  name: string;
+  icon?: ReactNode;
+  roles: UserRole[];
+  key: string;
+  permissionKey?: string;
+  withLayout?: boolean;
+}
 
 export const AppRoutes = {
   default: "/",
   authLanding: "/auth",
   login: "/login",
+  register: "/register",
   notFoundPage: "*",
 
   dashboard: "/dashboard",
-  register:"/register",
 
   // student
   studentCard: "/student/card",
@@ -39,6 +54,19 @@ export const AppRoutes = {
   adminStudents: "/admin/students",
   adminActivities: "/admin/activities",
   adminPermissions: "/admin/permissions",
+  adminBranchFaculty: "/admin/branchfaculty",
+  adminStudentActivities: "/admin/student-activities",
+} as const;
+
+export const getDefaultRouteByRole = (role: UserRole | "") => {
+  switch (role) {
+    case "admin":
+      return AppRoutes.dashboard;
+    case "student":
+      return AppRoutes.studentCard;
+    default:
+      return AppRoutes.authLanding;
+  }
 };
 
 export const routesConfig: {
@@ -52,6 +80,9 @@ export const routesConfig: {
       code: "dashboard",
       name: "Dashboard",
       icon: <SpaceDashboardOutlinedIcon />,
+      roles: ["admin"],
+      key: "dashboard",
+      withLayout: true,
     },
     {
       path: AppRoutes.studentCard,
@@ -59,6 +90,10 @@ export const routesConfig: {
       code: "student-card",
       name: "บัตรนิสิต",
       icon: <BadgeOutlinedIcon />,
+      roles: ["student"],
+      key: "student-card",
+      permissionKey: "student_card",
+      withLayout: true,
     },
     {
       path: AppRoutes.studentActivity,
@@ -66,6 +101,10 @@ export const routesConfig: {
       code: "student-activity",
       name: "กิจกรรม",
       icon: <EventAvailableOutlinedIcon />,
+      roles: ["student"],
+      key: "student-activity",
+      permissionKey: "student_activity",
+      withLayout: true,
     },
     {
       path: AppRoutes.studentSummary,
@@ -73,6 +112,10 @@ export const routesConfig: {
       code: "student-summary",
       name: "ผลรวมเข้ากิจกรรม",
       icon: <AssessmentOutlinedIcon />,
+      roles: ["student"],
+      key: "student-summary",
+      permissionKey: "student_summary",
+      withLayout: true,
     },
     {
       path: AppRoutes.adminStudents,
@@ -80,6 +123,9 @@ export const routesConfig: {
       code: "admin-students",
       name: "จัดการนิสิต",
       icon: <GroupOutlinedIcon />,
+      roles: ["admin"],
+      key: "admin-students",
+      withLayout: true,
     },
     {
       path: AppRoutes.adminActivities,
@@ -87,13 +133,29 @@ export const routesConfig: {
       code: "admin-activities",
       name: "จัดการกิจกรรม",
       icon: <EventAvailableOutlinedIcon />,
+      roles: ["admin"],
+      key: "admin-activities",
+      withLayout: true,
     },
     {
-      path: AppRoutes.adminPermissions,
-      element: <PermissionManagePage />,
-      code: "admin-permissions",
-      name: "สิทธิ์การมองเห็น",
-      icon: <SettingsSuggestOutlinedIcon />,
+      path: AppRoutes.adminBranchFaculty,
+      element: <FacultyBranchPage />,
+      code: "admin-branchfaculty",
+      name: "จัดการคณะสาขา",
+      icon: <ApartmentOutlinedIcon />,
+      roles: ["admin"],
+      key: "admin-branchfaculty",
+      withLayout: true,
+    },
+    {
+      path: AppRoutes.adminStudentActivities,
+      element: <StudentActivitiesPage />,
+      code: "admin-studentactivities",
+      name: "ลงทะเบียนเข้าร่วมกิจกรรม",
+      icon: <StadiumOutlinedIcon />,
+      roles: ["admin"],
+      key: "admin-studentactivities",
+      withLayout: true,
     },
   ],
   publicRoutes: [
@@ -114,4 +176,17 @@ export const routesConfig: {
       element: <NotFoundPage />,
     },
   ],
+};
+
+export const getPrivateRoutesByRole = (role: UserRole | "") => {
+  if (!role) return [];
+  return routesConfig.privateRoutes.filter((route) => route.roles.includes(role));
+};
+
+export const getLayoutRoutesByRole = (role: UserRole | "") => {
+  return getPrivateRoutesByRole(role).filter((route) => route.withLayout !== false);
+};
+
+export const getBareRoutesByRole = (role: UserRole | "") => {
+  return getPrivateRoutesByRole(role).filter((route) => route.withLayout === false);
 };

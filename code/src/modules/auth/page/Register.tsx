@@ -24,9 +24,11 @@ import { NumericFormat } from "react-number-format";
 import type {
   IFaculty,
   IMajor,
-  IStudentRegister,
+  IStudentItem,
 } from "../interface/Login.interface";
 import { CreateStudent } from "../service/LoginApi";
+import Swal from "sweetalert2";
+import { AppRoutes } from "../../../router/router";
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -46,27 +48,38 @@ const RegisterPage: React.FC = () => {
     watch,
     reset,
     control,
-  } = useForm<IStudentRegister>({});
+  } = useForm<IStudentItem>({});
 
-  const onSubmit = async (body: IStudentRegister) => {
+  const onSubmit = async (body: IStudentItem) => {
     try {
       setLoading(true);
       setSuccessMessage("");
       setErrorMessage("");
+
       console.log("body", body);
-      const res = CreateStudent(body);
-      // แก้ URL ให้ตรงกับ backend ของคุณ
+
+      const res = await CreateStudent(body); // ✅ ต้อง await
+
       console.log("CreateStudent", res);
-      setSuccessMessage("สมัครข้อมูลสำเร็จ");
+
+      // ✅ แจ้งสำเร็จ
+      // setSuccessMessage("สมัครข้อมูลสำเร็จ");
+
       reset();
 
-      // ถ้าอยากเด้งกลับหน้า login หลังสมัครสำเร็จ
-      setTimeout(() => {
-        navigate("/login");
-      }, 1200);
+      await Swal.fire({
+        icon: "success",
+        title: "สำเร็จ",
+        text: "สมัครข้อมูลสำเร็จ",
+        timer: 1200,
+        showConfirmButton: false,
+      });
+
+      navigate(AppRoutes.login);
+
     } catch (error: any) {
       setErrorMessage(
-        error?.response?.data?.detail || "สมัครข้อมูลไม่สำเร็จ กรุณาลองใหม่",
+        error?.response?.data?.detail || "สมัครข้อมูลไม่สำเร็จ กรุณาลองใหม่"
       );
     } finally {
       setLoading(false);
@@ -125,19 +138,19 @@ const RegisterPage: React.FC = () => {
                   fullWidth
                   allowNegative={false}
                   decimalScale={0}
-                  value={getValues("student_id") ?? ""}
+                  value={getValues("student_code") ?? ""}
                   onValueChange={(values) => {
-                    setValue("student_id", values.value);
+                    setValue("student_code", values.value);
                     setValue("user.username", values.value);
                   }}
-                  error={!!errors?.student_id}
-                  helperText={errors?.student_id?.message || ""}
-                  slotProps={{
-                    htmlInput: {
-                      maxLength: 8,
-                    },
-                  }}
-                  isAllowed={(values) => values.value.length <= 8}
+                  error={!!errors?.student_code}
+                  helperText={errors?.student_code?.message || ""}
+                  // slotProps={{
+                  //   htmlInput: {
+                  //     maxLength: 8,
+                  //   },
+                  // }}
+                  // isAllowed={(values) => values.value.length <= 8}
                 />
                 <FormControl error={!!errors.prefix}>
                   <FormLabel>คำนำหน้า</FormLabel>
@@ -172,7 +185,7 @@ const RegisterPage: React.FC = () => {
                     </Typography>
                   )}
                 </FormControl>
-                
+
                 <TextField
                   label="ชื่อจริง"
                   fullWidth
@@ -242,12 +255,12 @@ const RegisterPage: React.FC = () => {
                     setSelectedMajor(null);
 
                     setValue("faculty_name", newValue?.faculty_name ?? "");
-                    setValue("faculty_id", newValue?.id ?? 0);
+                    setValue("faculty_id", newValue?.faculty_id ?? 0);
                     setValue("major_name", "");
                   }}
                   getOptionLabel={(option) => option.faculty_name}
                   isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
+                    option.faculty_id === value.faculty_id
                   }
                   fullWidth
                   renderInput={(params) => (
@@ -267,11 +280,11 @@ const RegisterPage: React.FC = () => {
                   onChange={(_, newValue) => {
                     setSelectedMajor(newValue);
                     setValue("major_name", newValue?.major_name ?? "");
-                    setValue("major_id", newValue?.id ?? 0);
+                    setValue("major_id", newValue?.major_id ?? 0);
                   }}
                   getOptionLabel={(option) => option.major_name}
                   isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
+                    option.major_id === value.major_id
                   }
                   fullWidth
                   disabled={!selectedFaculty}
@@ -300,10 +313,10 @@ const RegisterPage: React.FC = () => {
                   fullWidth
                   {...register("user.password", {
                     required: "กรุณากรอก password",
-                    minLength: {
-                      value: 6,
-                      message: "รหัสผ่านต้องอย่างน้อย 6 ตัวอักษร",
-                    },
+                    // minLength: {
+                    //   value: 6,
+                    //   message: "รหัสผ่านต้องอย่างน้อย 6 ตัวอักษร",
+                    // },
                   })}
                   error={!!errors.user?.password}
                   helperText={errors.user?.password?.message}

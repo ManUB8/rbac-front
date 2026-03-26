@@ -10,22 +10,19 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-
 import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { useAuth } from "../../../modules/auth/hook/useAuth";
+import {
+  routesConfig,
+  type UserRole,
+} from "../../../router/router";
 import { SIDEBAR_COLLAPSED, SIDEBAR_WIDTH } from "./Layout";
-import { sidebarMenuConfig } from "./sidebarMenuConfig";
 
-import { usePermission } from "../../../modules/auth/hook/usePermission";
-import { useAuth } from "../../../modules/auth";
-
-import type { UserRole } from "../../../modules/auth/hook/useAuth";
-
-interface ISidebarMenuProps {
+export interface ISidebarMenuProps {
   role: UserRole | "";
   isMobile: boolean;
   collapsed: boolean;
@@ -34,7 +31,7 @@ interface ISidebarMenuProps {
   setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
+const SidebarMenu: React.FC<ISidebarMenuProps> = ({
   role,
   isMobile,
   collapsed,
@@ -44,28 +41,26 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const { getStudentPermissions } = usePermission();
   const { handleLogOut } = useAuth();
 
-  const studentPermissions = getStudentPermissions();
-
   const menuItems = useMemo(() => {
-    return sidebarMenuConfig.filter((item) => {
-      if (!role) return false;
-      if (!item.roles.includes(role)) return false;
+    if (!role) return [];
 
-      if (role === "student" && item.permissionKey) {
-        return studentPermissions[item.permissionKey];
-      }
-
-      return true;
+    return routesConfig.privateRoutes.filter((item) => {
+      return item.roles.includes(role) && item.withLayout !== false;
     });
-  }, [role, studentPermissions]);
+  }, [role]);
 
   const sidebarWidth = collapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH;
 
-  const menuContent = (
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    if (isMobile) {
+      setDrawerOpen(false);
+    }
+  };
+
+  const content = (
     <Box
       sx={{
         height: "100%",
@@ -76,7 +71,6 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
         borderColor: "divider",
       }}
     >
-      {/* HEADER */}
       <Box
         sx={{
           height: 72,
@@ -84,18 +78,25 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: collapsed && !isMobile ? "center" : "space-between",
+          flexShrink: 0,
         }}
       >
         {(!collapsed || isMobile) && (
-          <Box>
-            <Typography fontWeight={800} fontSize={18}>
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              fontWeight={800}
+              fontSize={18}
+              noWrap
+            >
               {role === "admin" ? "Admin Panel" : "Student Portal"}
             </Typography>
 
-            <Typography variant="body2" color="text.secondary">
-              {role === "admin"
-                ? "จัดการระบบกิจกรรม"
-                : "ระบบสำหรับนิสิต"}
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              noWrap
+            >
+              {role === "admin" ? "จัดการระบบกิจกรรม" : "ระบบสำหรับนิสิต"}
             </Typography>
           </Box>
         )}
@@ -109,18 +110,23 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
 
       <Divider />
 
-      {/* MENU */}
-      <List sx={{ px: 1.5, py: 1.5, flex: 1 }}>
+      <List
+        sx={{
+          px: 1.5,
+          py: 1.5,
+          flex: 1,
+          overflowY: "auto",
+        }}
+      >
         {menuItems.map((item) => {
-          const active = location.pathname === item.path;
+          const active =
+            location.pathname === item.path ||
+            (item.path !== "/" && location.pathname.startsWith(item.path + "/"));
 
           return (
             <ListItemButton
-              key={item.key}
-              onClick={() => {
-                navigate(item.path);
-                if (isMobile) setDrawerOpen(false);
-              }}
+              key={item.key || item.code}
+              onClick={() => handleNavigate(item.path)}
               sx={{
                 minHeight: 48,
                 mb: 0.75,
@@ -130,6 +136,7 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
                   collapsed && !isMobile ? "center" : "flex-start",
                 bgcolor: active ? "action.selected" : "transparent",
                 color: active ? "primary.main" : "text.primary",
+                transition: "all 0.2s ease",
                 "&:hover": {
                   bgcolor: "action.hover",
                 },
@@ -148,10 +155,11 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
 
               {(!collapsed || isMobile) && (
                 <ListItemText
-                  primary={item.label}
+                  primary={item.name}
                   primaryTypographyProps={{
                     fontSize: 15,
                     fontWeight: active ? 700 : 500,
+                    noWrap: true,
                   }}
                 />
               )}
@@ -160,22 +168,20 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
         })}
       </List>
 
-      {/* FOOTER */}
       <Divider />
 
-      <Box sx={{ p: 1.5 }}>
+      <Box sx={{ p: 1.5, flexShrink: 0 }}>
         <ListItemButton
-          onClick={() => {
-            handleLogOut();
-          }}
+          onClick={handleLogOut}
           sx={{
             borderRadius: 2,
             justifyContent: collapsed && !isMobile ? "center" : "flex-start",
+            transition: "all 0.2s ease",
             "&:hover": {
               bgcolor: "error.main",
-              color: "white",
+              color: "common.white",
               "& .MuiListItemIcon-root": {
-                color: "white",
+                color: "common.white",
               },
             },
           }}
@@ -196,6 +202,7 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
               primary="Logout"
               primaryTypographyProps={{
                 fontWeight: 600,
+                noWrap: true,
               }}
             />
           )}
@@ -204,7 +211,6 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
     </Box>
   );
 
-  /* MOBILE DRAWER */
   if (isMobile) {
     return (
       <Drawer
@@ -218,12 +224,11 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
           },
         }}
       >
-        {menuContent}
+        {content}
       </Drawer>
     );
   }
 
-  /* DESKTOP SIDEBAR */
   return (
     <Box
       sx={{
@@ -242,8 +247,10 @@ export const SidebarMenu: React.FC<ISidebarMenuProps> = ({
           transition: "width 0.25s ease",
         }}
       >
-        {menuContent}
+        {content}
       </Box>
     </Box>
   );
 };
+
+export default SidebarMenu;

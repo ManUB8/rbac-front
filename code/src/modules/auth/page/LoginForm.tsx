@@ -61,7 +61,7 @@ const LoginForm: React.FC = () => {
       });
     } else {
       ok = await handleLoginStudent({
-        student_id: payload.username,
+        username: payload.username,
         password: payload.password,
       });
     }
@@ -77,13 +77,7 @@ const LoginForm: React.FC = () => {
     setRoleTab(tab);
     setBanner(null);
 
-    if (tab === "student") {
-      setValue("username", "67010533");
-      setValue("password", "1234");
-    } else {
-      setValue("username", "admin");
-      setValue("password", "1234");
-    }
+  
   };
 
   return (
@@ -258,7 +252,7 @@ const LoginForm: React.FC = () => {
                     color: "#111827",
                   }}
                 >
-                  {roleTab === "student" ? "อีเมล" : "ชื่อผู้ใช้"}
+                  {roleTab === "student" ? "รหัสนิสิต" : "Username"}
                 </Typography>
 
                 <TextField
@@ -266,8 +260,8 @@ const LoginForm: React.FC = () => {
                   variant="filled"
                   placeholder={
                     roleTab === "student"
-                      ? "email@university.ac.th"
-                      : "กรอกชื่อผู้ใช้"
+                      ? "63017609"
+                      : "Username"
                   }
                   autoComplete="username"
                   {...register("username", { required: "กรุณากรอกบัญชี" })}
