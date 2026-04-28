@@ -1,6 +1,6 @@
 import { ApiConfig } from "../../../../shared/service/ApiConfig";
 import { api } from "../../../../shared/service/axiosInstance";
-import type { IFacultyItem, IMajorItem, IStudentByMajorResponse, IStudentItem } from "../interface/StudentMange.interface";
+import type { IFacultyItem, IMajorItem, IStudentByMajorResponse, IStudentdelete, IStudentItem } from "../interface/StudentMange.interface";
 
 
 export const getFacultyStudentMange = async (): Promise<IFacultyItem[]> => {
@@ -29,4 +29,33 @@ export const getOneStudent = async (student_id: number): Promise<IStudentItem> =
     );
     return res;
 };
+
+export const UpdateStudent = async (body: IStudentItem): Promise<IStudentItem> => {
+    const res = await api.patch<IStudentItem>(
+        ApiConfig.STUDENT_API + `/admin/update-stu/${body.student_id}`,
+        body
+    );
+    return res;
+};
+
+export const DeleteStudent = async (body: IStudentdelete): Promise<any> => {
+    const res = await api.delete<any>(
+        ApiConfig.STUDENT_API + `/delete/${body.student_id}`,
+        {
+            data: body
+        }
+        
+    );
+    return res;
+};
+
+export const CreateStudent = async (body: IStudentItem): Promise<IStudentItem> => {
+    const res = await api.post<IStudentItem>(
+        ApiConfig.STUDENT_API + `/admin/create`,
+        body
+    );
+    return res;
+};
+
+
 

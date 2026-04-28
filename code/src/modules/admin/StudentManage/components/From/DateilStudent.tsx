@@ -16,6 +16,7 @@ import { Controller } from "react-hook-form";
 import type { IuseMasterFunctionStudentFromFetch } from "../../hook/useFetchStudentMange";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { NumericFormat } from "react-number-format";
 
 export interface IDateilStudentProps {
     MasterStudent: IuseMasterFunctionStudentFromFetch;
@@ -59,13 +60,33 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                             name="student_code"
                             control={control}
                             render={({ field }) => (
-                                <TextField
-                                    {...field}
+                                <NumericFormat
+                                    customInput={TextField}
                                     fullWidth
-                                    id="student_code"
                                     label="รหัสนิสิต"
-                                    error={!!errors.student_code}
-                                    helperText={errors.student_code?.message as string}
+                                    value={field.value ?? ""}
+                                    allowNegative={false}
+                                    decimalScale={0}
+                                    allowLeadingZeros
+                                    isAllowed={(values) => values.value.length <= 8}
+                                    onValueChange={(values) => {
+                                        const value = values.value.slice(0, 8);
+
+                                        field.onChange(value);
+                                        MasterStudent.setValue("user.username", value, {
+                                            shouldValidate: true,
+                                            shouldDirty: true,
+                                        });
+                                    }}
+                                    onBlur={field.onBlur}
+                                    error={!!errors?.student_code}
+                                    helperText={errors?.student_code?.message || ""}
+                                    slotProps={{
+                                        htmlInput: {
+                                            maxLength: 8,
+                                            inputMode: "numeric",
+                                        },
+                                    }}
                                 />
                             )}
                         />
@@ -106,6 +127,8 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                 >
                                     <MenuItem value="ชาย">ชาย</MenuItem>
                                     <MenuItem value="หญิง">หญิง</MenuItem>
+                                    <MenuItem value="LGBTQ">LGBTQ</MenuItem>
+                                    
                                 </TextField>
                             )}
                         />
@@ -151,6 +174,7 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                 <TextField
                                     {...field}
                                     fullWidth
+                                    disabled
                                     id="user.username"
                                     label="ชื่อผู้ใช้"
                                     error={!!errors.user?.username}
@@ -203,7 +227,7 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                             ยกเลิก
                         </Button>
 
-                        <Button type="submit" variant="contained">
+                        <Button type="submit" variant="contained" form="student-form">
                             {actype === "create" ? "บันทึก" : "อัปเดต"}
                         </Button>
                     </Box>

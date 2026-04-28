@@ -14,18 +14,23 @@ import { Controller } from "react-hook-form";
 import type { IuseMasterFunctionActivityFromFetch } from "../../hook/useFetchActivity";
 
 interface IActivityModalProps {
-  mastercontrol: IuseMasterFunctionActivityFromFetch;
+  MasterController: IuseMasterFunctionActivityFromFetch;
 }
 
-const inputSx = {
+const inputSx = (value?: string) => ({
   "& .MuiOutlinedInput-root": {
     borderRadius: "12px",
     backgroundColor: "#f8fafc",
+    "& input": {
+      color: value ? "#6b7280" : "#9ca3af",
+    },
+    "& input:focus": {
+      color: "#111827",
+    },
   },
-};
-
-const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
-  const { control, errors, openModal, setOpenModal, actype } = mastercontrol;
+});
+const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
+  const { control, errors, openModal, setOpenModal, actype } = MasterController;
 
   return (
     <Dialog
@@ -70,7 +75,7 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
                 placeholder="เช่น ปฐมนิเทศนักศึกษาใหม่ 2568"
                 error={!!errors.activity_name}
                 helperText={errors.activity_name?.message as string}
-                sx={inputSx}
+                sx={inputSx(field.value)}
               />
             )}
           />
@@ -89,7 +94,7 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
                   error={!!errors.activity_date}
                   helperText={errors.activity_date?.message as string}
                   InputLabelProps={{ shrink: true }}
-                  sx={inputSx}
+                  sx={inputSx(field.value)}
                 />
               )}
             />
@@ -104,10 +109,19 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
                   id="hours"
                   label="จำนวนชั่วโมง *"
                   type="number"
+                  value={field.value ?? ""} 
                   error={!!errors.hours}
                   helperText={errors.hours?.message as string}
-                  sx={inputSx}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  sx={inputSx(String(field.value ?? "" ))}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    field.onChange(val === "" ? "" : Number(val));
+                  }}
+                  inputProps={{
+                    min: 0,
+                    step: 0.5,  
+                  }}
+
                 />
               )}
             />
@@ -123,11 +137,11 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
                   fullWidth
                   id="start_time"
                   label="เวลาเริ่ม *"
-                  type="time"
+                  // type="time"
                   error={!!errors.start_time}
                   helperText={errors.start_time?.message as string}
                   InputLabelProps={{ shrink: true }}
-                  sx={inputSx}
+                  sx={inputSx(field.value)}
                 />
               )}
             />
@@ -141,11 +155,11 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
                   fullWidth
                   id="end_time"
                   label="เวลาสิ้นสุด *"
-                  type="time"
+                  // type="time"
                   error={!!errors.end_time}
                   helperText={errors.end_time?.message as string}
                   InputLabelProps={{ shrink: true }}
-                  sx={inputSx}
+                  sx={inputSx(field.value)}
                 />
               )}
             />
@@ -163,7 +177,7 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
                 placeholder="เช่น หอประชุมใหญ่ ชั้น 5 อาคาร A"
                 error={!!errors.location}
                 helperText={errors.location?.message as string}
-                sx={inputSx}
+                sx={inputSx(field.value)}
               />
             )}
           />
@@ -180,7 +194,7 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
                 placeholder="https://example.com/image.jpg"
                 error={!!errors.activity_img}
                 helperText={errors.activity_img?.message as string}
-                sx={inputSx}
+                sx={inputSx(field.value)}
               />
             )}
           />
@@ -199,7 +213,7 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
                 rows={4}
                 error={!!errors.description}
                 helperText={errors.description?.message as string}
-                sx={inputSx}
+                sx={inputSx(field.value)}
               />
             )}
           />
@@ -229,8 +243,21 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
             </Button>
 
             <Button
-              type="submit"
               variant="contained"
+              type="button"
+              onClick={() => {
+                console.log("click submit");
+                MasterController.handleSubmit(
+                  MasterController.onSubmitMaster,
+                  (errs: any) => {
+                    console.log("submit errors", errs);
+                    MasterController.handleErrorSubmit(
+                      errs,
+                      MasterController.methods.setFocus
+                    );
+                  }
+                )();
+              }}
               sx={{
                 minWidth: 120,
                 height: 44,
@@ -250,7 +277,7 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ mastercontrol }) => {
           </Box>
         </Stack>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   );
 };
 

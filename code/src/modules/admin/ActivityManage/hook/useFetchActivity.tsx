@@ -9,15 +9,24 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { getAllErrorPaths } from "../../../../shared/components/error/FunctionError";
-import { IActivityDataDefault, type IActivityItem } from "../interface/ActivityManage.interface";
-import { getActivityStatus, getAllActivity, getOneActivity } from "../service/ActivityManageApi";
+import { IActivityDataDefault, type IActivityDelete, type IActivityItem } from "../interface/ActivityManage.interface";
+import {
+    getAllActivity,
+    getOneActivity,
+    CreateActivity,
+    UpdateActivity,
+    DeleteActivity,
+    getActivityStatus,
+} from "../service/ActivityManageApi";
 import { ActivityZod } from "../utils/ValidationActivity";
 
 export const useActivityFetch = () => {
+
     const navigate = useNavigate();
     const [version, setVersion] = useState(0);
     const [openModal, setOpenModal] = useState(false);
     const [selectedId, setSelectedId] = useState<number | 0>(0);
+    const [formMode, setFormMode] = useState<"create" | "edit">("create");
     const reload = useCallback(() => {
         setVersion((v) => v + 1);
     }, []);
@@ -29,27 +38,27 @@ export const useActivityFetch = () => {
             return await getAllActivity();
         },
     });
-    const handleOpenAdd = () => {
+    const handleOpenAdd = useCallback(() => {
+        setFormMode("create");
         setSelectedId(0);
         setOpenModal(true);
-    };
+    }, [setFormMode, setSelectedId, setOpenModal]);
 
-    const handleOpenEdit = (activity_id: number) => {
-        setSelectedId(activity_id);
+    const handleOpenEdit = useCallback((id: number) => {
+        setFormMode("edit");
+        setSelectedId(id);
         setOpenModal(true);
-    };
+    }, [setFormMode, setSelectedId, setOpenModal]);
 
-    const handleDelete = (activity_id: number) => {
-
-    };
     return {
         navigate,
         reload,
         selectedId,
         setSelectedId,
+        formMode,
+        setFormMode,
         handleOpenAdd,
         handleOpenEdit,
-        handleDelete,
         openModal,
         setOpenModal,
         activity_data: Activityquery.data ?? [],
@@ -63,22 +72,26 @@ export const useActivityFetch = () => {
 
 export type IuseActivityFetch = ReturnType<typeof useActivityFetch>;
 
+
 export const useMasterFunctionActivityFromFetch = ({
     id = 0,
     openModal,
+    formMode,
+    activity_id,
     setOpenModal,
+    reload
 }: {
     id?: number;
-    facultyId?: number | null;
-    majorId?: number | null;
+    activity_id: number;
+    formMode: "create" | "edit";
     openModal: boolean;
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+    reload: () => void;
 }) => {
     const theme = useTheme();
     const navigate = useNavigate();
-
     const Id = id ?? 0;
-    const isCreate = Id === 0;
+    const isCreate = formMode === "create";
     const [actype, setActype] = useState<"create" | "edit">("create");
     const [, setConfirmPopup] = useAtom(confirmPopupAtom);
     const [, setFlash] = useAtom(flashAlertAtom);
@@ -106,7 +119,7 @@ export const useMasterFunctionActivityFromFetch = ({
 
     const query = useQuery({
         queryKey: ["activity-one", Id],
-        enabled: openModal && !isCreate && !!Id,
+        enabled: openModal && formMode === "edit" && !!Id,
         retry: false,
         refetchOnWindowFocus: false,
         queryFn: async () => {
@@ -205,33 +218,47 @@ export const useMasterFunctionActivityFromFetch = ({
         });
     };
 
+
+
     const saveHandler = useCallback(async () => {
         const form = getValues();
+        const name_by = localStorage.getItem("account_name") || "";
 
         try {
-            if (isCreate) {
-                console.log("Create-form", form);
+            if (formMode === "create") {
+                const data_create: IActivityItem = {
+                    ...IActivityDataDefault,
+                    ...form,
+                    activity_id: activity_id,
+                    activity_name: form.activity_name,
+                    created_by_name: name_by,
+                };
+                console.log("Create activity", data_create);
+                await CreateActivity(data_create);
+                reload();
+                setOpenModal(false);
+            } else {
+                const data_update: IActivityItem = {
+                    ...IActivityDataDefault,
+                    ...form,
+                    activity_id: activity_id,
+                    activity_name: form.activity_name,
+                    updated_by_name: name_by,
+                };
+                console.log("Update activity", data_update);
+                await UpdateActivity(data_update);
+                reload();
+                setOpenModal(false);
 
                 setFlash({
                     type_severity: "success",
                     title: "",
-                    content: "การสร้างข้อมูลสำเร็จ",
+                    content: formMode === "edit" ? "การสร้างข้อมูลสำเร็จ" : "การแก้ไขข้อมูลสำเร็จ",
                 });
-
-                setOpenModal(false);
-                reset(IActivityDataDefault);
-                return;
             }
-
-            console.log("Update-form", form);
-
-            setFlash({
-                type_severity: "success",
-                title: "",
-                content: "แก้ไขบันทึกข้อสำเร็จ",
-            });
-
             setOpenModal(false);
+            reset(IActivityDataDefault);
+            // return;
         } catch (error) {
             console.error(error);
             setFlash({
@@ -240,7 +267,7 @@ export const useMasterFunctionActivityFromFetch = ({
                 content: "เกิดข้อผิดพลาด ไม่สามารถบันทึกข้อมูลได้",
             });
         }
-    }, [getValues, isCreate, reset, setFlash, setOpenModal]);
+    }, [formMode, activity_id, getValues, isCreate, reset, setFlash, setOpenModal]);
 
     const onSubmitMaster = useCallback(() => {
         setConfirmPopup({
@@ -257,55 +284,71 @@ export const useMasterFunctionActivityFromFetch = ({
         });
     }, [saveHandler, setConfirmPopup]);
 
-    const handleDelete = useCallback(async () => {
-        try {
-            const idToDelete = !isCreate ? Id : getValues("activity_id");
 
-            console.log("delete id", idToDelete);
 
-            setFlash({
-                type_severity: "success",
-                title: "",
-                content: "ลบข้อมูลสำเร็จ",
-            });
+    const handleDelete = useCallback(
+        async (activityId?: number) => {
+            try {
+                const name_by = localStorage.getItem("account_name") || "";
 
-            setOpenModal(false);
-        } catch (error) {
-            console.error(error);
-            setFlash({
-                type_severity: "error",
-                title: "",
-                content: "เกิดข้อผิดพลาด ไม่สามารถลบข้อมูลได้",
-            });
-        }
-    }, [getValues, isCreate, Id, setFlash, setOpenModal]);
+                console.log("deleteactivity",activityId)
+                const data_delete: IActivityDelete = {
+                    activity_id: Number(activityId),
+                    updated_by_name: name_by,
+                };
+                await DeleteActivity(data_delete);
 
-    const onClickDeleteMaster = useCallback(() => {
+
+                setFlash({
+                    type_severity: "success",
+                    title: "",
+                    content: "ลบข้อมูลสำเร็จ",
+                });
+                reload();
+                setOpenModal(false);
+
+            } catch (error) {
+                console.error(error);
+                setFlash({
+                    type_severity: "error",
+                    title: "",
+                    content: "เกิดข้อผิดพลาด ไม่สามารถลบข้อมูลได้",
+                });
+            }
+        },
+        [activity_id, isCreate, Id, getValues, setFlash, setOpenModal, reload]
+    );
+    const onClickDeleteMaster = useCallback((activity_id?: number) => {
         setConfirmPopup({
             type: "warning",
             title: "ท่านต้องการลบข้อมูล !!",
             content: "ยืนยันหากต้องการลบข้อมูล ข้อมูลที่ลบไม่สามารถนำกลับมาได้",
             onClose: () => setConfirmPopup(null),
             onConfirm: async () => {
-                await handleDelete();
+                await handleDelete(activity_id);
                 setConfirmPopup(null);
             },
             confirmText: "ยืนยัน",
             cancelText: "ยกเลิก",
         });
-    }, [handleDelete, setConfirmPopup]);
+
+    },
+        [handleDelete, setConfirmPopup]
+    );
+
 
     return {
         register,
         handleSubmit,
         reset,
         setValue,
+        actype,
         watch,
         getValues,
         control,
+        formMode,
         loading,
         errors,
-        actype,
         setError,
         clearErrors,
         setFlash,
@@ -313,19 +356,24 @@ export const useMasterFunctionActivityFromFetch = ({
         navigate,
         theme,
         methods,
-        onSubmitMaster,
         onClickDeleteMaster,
+        onSubmitMaster,
         handleErrorSubmit,
+        handleDelete,
         refetch: query.refetch,
         queryError: query.error,
+
         openModal,
         setOpenModal,
+
         id: Id,
+        activity_id, // ✅ เพิ่ม
         isCreate,
     };
 };
 
 export type IuseMasterFunctionActivityFromFetch = ReturnType<typeof useMasterFunctionActivityFromFetch>;
+
 
 
 export const useActivityStatusFetch = () => {
@@ -342,7 +390,7 @@ export const useActivityStatusFetch = () => {
             return await getActivityStatus();
         },
     });
-  
+
     return {
         navigate,
         reload,

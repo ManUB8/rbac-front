@@ -68,6 +68,16 @@ export const api = {
     }
   },
 
+    patch: async <T>(url: string, data?: any, config: RequestConfig = {}): Promise<T> => {
+    try {
+      const res = await instance.patch<T>(url, data, config);
+      return res.data;
+    } catch (err: any) {
+      if (!config.skipSwal) handleError(err);
+      throw err;
+    }
+  },
+
   delete: async <T>(url: string, config = {}): Promise<T> => {
     try {
       const res = await instance.delete<T>(url, config);

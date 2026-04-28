@@ -1,0 +1,288 @@
+            <Dialog
+                open={false}
+                fullWidth
+                maxWidth="md"
+                PaperProps={{
+                    sx: {
+                        borderRadius: "22px",
+                        p: 1,
+                    },
+                }}
+            >
+                <DialogTitle sx={{ pb: 0 }}>
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="flex-start"
+                    >
+                        <Box>
+                            <Typography
+                                sx={{
+                                    fontSize: 24,
+                                    fontWeight: 800,
+                                    color: "#111827",
+                                }}
+                            >
+                                เพิ่มสาขาใหม่
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: 1,
+                                    color: "#6b7280",
+                                    fontSize: 16,
+                                    fontWeight: 500,
+                                }}
+                            >
+                                กรอกข้อมูลให้ครบถ้วน
+                            </Typography>
+                        </Box>
+
+                        <IconButton 
+                        // onClick={handleCloseBranchAdd}
+                        >
+                            <CloseIcon sx={{ color: "#52525b" }} />
+                        </IconButton>
+                    </Stack>
+                </DialogTitle>
+
+                <DialogContent sx={{ pt: 4 }}>
+                    <Stack spacing={2.2}>
+                        <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                        >
+                            <Typography
+                                sx={{
+                                    fontSize: 16,
+                                    fontWeight: 700,
+                                    color: "#111827",
+                                }}
+                            >
+                                ชื่อสาขา *
+                            </Typography>
+
+                            <Typography
+                                sx={{
+                                    fontSize: 14,
+                                    fontWeight: 600,
+                                    color: "#64748b",
+                                }}
+                            >
+                                สามารถเพิ่มได้หลายสาขาพร้อมกัน
+                            </Typography>
+                        </Stack>
+
+                        {/* {newBranchNames.map((branchValue, index) => (
+                            <Stack
+                                key={index}
+                                direction="row"
+                                spacing={1.5}
+                                alignItems="center"
+                            >
+                                <TextField
+                                    fullWidth
+                                    value={branchValue}
+                                    onChange={(e) =>
+                                        handleChangeNewBranchName(index, e.target.value)
+                                    }
+                                    placeholder={`สาขาที่ ${index + 1}`}
+                                    sx={inputSx}
+                                />
+
+                                <IconButton
+                                    onClick={() => handleRemoveBranchInput(index)}
+                                    sx={{
+                                        width: 42,
+                                        height: 42,
+                                        color: "#ef4444",
+                                        fontSize: 26,
+                                        fontWeight: 700,
+                                    }}
+                                >
+                                    ×
+                                </IconButton>
+                            </Stack>
+                        ))} */}
+
+                        <Button
+                            variant="outlined"
+                            startIcon={<AddIcon />}
+                            // onClick={handleAddBranchInput}
+                            sx={{
+                                height: 56,
+                                borderRadius: "16px",
+                                textTransform: "none",
+                                fontSize: 16,
+                                fontWeight: 700,
+                                color: "#111827",
+                                borderColor: "#9ca3af",
+                                justifyContent: "center",
+                            }}
+                        >
+                            เพิ่มช่องกรอกสาขา
+                        </Button>
+                    </Stack>
+
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                        justifyContent="flex-end"
+                        sx={{ mt: 6 }}
+                    >
+                        <Button
+                            variant="outlined"
+                            // onClick={handleCloseBranchAdd}
+                            sx={{
+                                minWidth: 110,
+                                height: 52,
+                                borderRadius: "14px",
+                                textTransform: "none",
+                                fontWeight: 700,
+                                fontSize: "1rem",
+                                borderColor: "#d1d5db",
+                                color: "#111827",
+                            }}
+                        >
+                            ยกเลิก
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            // onClick={handleSaveNewBranches}
+                            sx={{
+                                minWidth: 110,
+                                height: 52,
+                                borderRadius: "14px",
+                                textTransform: "none",
+                                fontWeight: 700,
+                                fontSize: "1rem",
+                                backgroundColor: "#020617",
+                                boxShadow: "none",
+                                "&:hover": {
+                                    backgroundColor: "#111827",
+                                    boxShadow: "none",
+                                },
+                            }}
+                        >
+                            เพิ่ม
+                        </Button>
+                    </Stack>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={false}
+                fullWidth
+                maxWidth="md"
+                PaperProps={{
+                    sx: {
+                        borderRadius: "22px",
+                        p: 1,
+                    },
+                }}
+            >
+                <DialogTitle sx={{ pb: 0 }}>
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="flex-start"
+                    >
+                        <Box>
+                            <Typography
+                                sx={{
+                                    fontSize: 24,
+                                    fontWeight: 800,
+                                    color: "#111827",
+                                }}
+                            >
+                                แก้ไขสาขา
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: 1,
+                                    color: "#6b7280",
+                                    fontSize: 16,
+                                    fontWeight: 500,
+                                }}
+                            >
+                                กรอกข้อมูลให้ครบถ้วน
+                            </Typography>
+                        </Box>
+
+                        <IconButton 
+                        // onClick={handleCloseBranchEdit}
+                        >
+                            <CloseIcon sx={{ color: "#52525b" }} />
+                        </IconButton>
+                    </Stack>
+                </DialogTitle>
+
+                <DialogContent sx={{ pt: 4 }}>
+                    <Box>
+                        <Typography
+                            sx={{
+                                mb: 1.2,
+                                fontSize: 16,
+                                fontWeight: 700,
+                                color: "#111827",
+                            }}
+                        >
+                            ชื่อสาขา *
+                        </Typography>
+
+                        <TextField
+                            fullWidth
+                            // value={branchName}
+                            // onChange={(e) => setBranchName(e.target.value)}
+                            placeholder="กรอกชื่อสาขา"
+                            sx={inputSx}
+                        />
+                    </Box>
+
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                        justifyContent="flex-end"
+                        sx={{ mt: 6 }}
+                    >
+                        <Button
+                            variant="outlined"
+                            // onClick={handleCloseBranchEdit}
+                            sx={{
+                                minWidth: 110,
+                                height: 52,
+                                borderRadius: "14px",
+                                textTransform: "none",
+                                fontWeight: 700,
+                                fontSize: "1rem",
+                                borderColor: "#d1d5db",
+                                color: "#111827",
+                            }}
+                        >
+                            ยกเลิก
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            // onClick={handleSaveBranchEdit}
+                            sx={{
+                                minWidth: 180,
+                                height: 52,
+                                borderRadius: "14px",
+                                textTransform: "none",
+                                fontWeight: 700,
+                                fontSize: "1rem",
+                                backgroundColor: "#020617",
+                                boxShadow: "none",
+                                "&:hover": {
+                                    backgroundColor: "#111827",
+                                    boxShadow: "none",
+                                },
+                            }}
+                        >
+                            บันทึกการแก้ไข
+                        </Button>
+                    </Stack>
+                </DialogContent>
+            </Dialog>

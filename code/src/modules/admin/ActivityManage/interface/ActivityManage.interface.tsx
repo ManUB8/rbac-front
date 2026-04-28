@@ -35,3 +35,8 @@ export const IActivityDataDefault:IActivityItem ={
     created_at: 0,
     updated_at: 0
 }
+
+export interface IActivityDelete {
+  activity_id: number;
+  updated_by_name: string;
+}

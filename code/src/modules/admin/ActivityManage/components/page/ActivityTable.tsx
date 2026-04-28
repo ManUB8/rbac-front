@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { Activity, useState } from "react";
 import {
     Box,
-    Button,
     Card,
     CardContent,
     IconButton,
@@ -14,21 +13,19 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import type { IuseActivityFetch } from "../../hook/useFetchActivity";
+import type { IuseActivityFetch, IuseMasterFunctionActivityFromFetch } from "../../hook/useFetchActivity";
 import { formatDateThai, formatTimeRange } from "../../../../../shared/components/Date-Time/DateAndTime";
 
 export interface IActivityTableProps {
-    master: IuseActivityFetch
+    MasterActivity: IuseActivityFetch
+    MasterController: IuseMasterFunctionActivityFromFetch
 };
 
-const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
-    master
-}) => {
+const ActivityTable: React.FunctionComponent<IActivityTableProps> =  props => {
     return (
         <>
 
@@ -39,7 +36,7 @@ const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
                             <Typography fontWeight={600}>รายการกิจกรรมทั้งหมด</Typography>
                         </Stack>
 
-                        <Typography>{master.total} กิจกรรม</Typography>
+                        <Typography>{props.MasterActivity.total} กิจกรรม</Typography>
                     </Stack>
 
                     <TableContainer>
@@ -58,8 +55,8 @@ const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
                             </TableHead>
 
                             <TableBody>
-                                {master.activity_data.map((item, index) => (
-                                    <TableRow key={item.activity_id} hover>
+                                {props.MasterActivity.activity_data.map((row, index) => (
+                                    <TableRow key={row.activity_id} hover>
                                         <TableCell>{index + 1}</TableCell>
 
                                         <TableCell>
@@ -70,16 +67,16 @@ const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
                                                     bgcolor: "#f1f5f9",
                                                     borderRadius: 2,
                                                     display: "flex",
-                                                    alignItems: "center",
+                                                    alignactivitys: "center",
                                                     justifyContent: "center",
                                                     overflow: "hidden",
                                                 }}
                                             >
-                                                {item.activity_img ? (
+                                                {row.activity_img ? (
                                                     <Box
                                                         component="img"
-                                                        src={item.activity_img}
-                                                        alt={item.activity_name}
+                                                        src={row.activity_img}
+                                                        alt={row.activity_name}
                                                         sx={{
                                                             width: "100%",
                                                             height: "100%",
@@ -94,23 +91,23 @@ const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
 
                                         <TableCell>
                                             <Typography fontWeight={600}>
-                                                {item.activity_name}
+                                                {row.activity_name}
                                             </Typography>
                                             <Typography fontSize={13} color="text.secondary">
-                                                {item.description}
+                                                {row.description}
                                             </Typography>
                                         </TableCell>
 
-                                        <TableCell>{formatDateThai(item.activity_date)}</TableCell>
+                                        <TableCell>{formatDateThai(row.activity_date)}</TableCell>
                                         <TableCell>
-                                            {formatTimeRange(item.start_time, item.end_time)}
+                                            {formatTimeRange(row.start_time, row.end_time)}
                                         </TableCell>
-                                        <TableCell>{item.hours} ชม.</TableCell>
+                                        <TableCell>{row.hours} ชม.</TableCell>
 
                                         <TableCell>
                                             <Stack direction="row" spacing={1}>
                                                 <LocationOnOutlinedIcon fontSize="small" />
-                                                <Typography fontSize={13}>{item.location}</Typography>
+                                                <Typography fontSize={13}>{row.location}</Typography>
                                             </Stack>
                                         </TableCell>
 
@@ -120,12 +117,12 @@ const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
                                                 spacing={1}
                                                 justifyContent="center"
                                             >
-                                                <IconButton onClick={() => master.handleOpenEdit(item.activity_id)}>
+                                                <IconButton onClick={() => props.MasterActivity.handleOpenEdit(row.activity_id)}>
                                                     <EditOutlinedIcon />
                                                 </IconButton>
 
                                                 <IconButton
-                                                    onClick={() => master.handleDelete(item.activity_id)}
+                                                    onClick={() => props.MasterController.onClickDeleteMaster(row.activity_id)}
                                                     sx={{
                                                         bgcolor: "error.main",
                                                         color: "#fff",
@@ -141,7 +138,7 @@ const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
                                     </TableRow>
                                 ))}
 
-                                {master.activity_data.length === 0 && (
+                                {props.MasterActivity.activity_data.length === 0 && (
                                     <TableRow>
                                         <TableCell colSpan={8} align="center">
                                             <Typography color="text.secondary">

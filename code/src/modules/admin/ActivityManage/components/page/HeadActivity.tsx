@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     Box,
     Button,
     Card,
     CardContent,
-    Stack,
     Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import type { IuseActivityFetch } from "../../hook/useFetchActivity";
 
 export interface IHeadActivityProps {
-    master: IuseActivityFetch
+    MasterActivity: IuseActivityFetch
 };
 
 const HeadActivity: React.FunctionComponent<IHeadActivityProps> = ({
-    master
+    MasterActivity
 }) => {
     return (
         <>
@@ -35,9 +34,9 @@ const HeadActivity: React.FunctionComponent<IHeadActivityProps> = ({
                     <Button
                         variant="contained"
                         startIcon={<AddIcon />}
-                        onClick={master.handleOpenAdd}
+                        onClick={MasterActivity.handleOpenAdd}
                         sx={{
-                            borderRadius: "12px",
+                            borderRadius: "50px",
                             px: 2.5,
                             py: 1.2,
                             textTransform: "none",

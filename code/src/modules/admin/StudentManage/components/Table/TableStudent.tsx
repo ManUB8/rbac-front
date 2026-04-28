@@ -1,18 +1,17 @@
-import { useAtom, useSetAtom, type SetStateAction } from "jotai";
 import React from "react";
-import { useNavigate, type NavigateFunction } from "react-router";
-import {
-  confirmPopupAtom,
-  flashAlertAtom,
-} from "../../../../../shared/components/constants/OptionsAtom";
-import { Box, IconButton, Stack, Typography } from "@mui/material";
-import type { ITextAlert } from "../../../../../shared/components/message/Alert.interface";
-import type { ITextPopup } from "../../../../../shared/components/popup/PopupConfirm.interface";
+import {IconButton, Stack, Typography } from "@mui/material";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import type { IStudentItem } from "../../interface/StudentMange.interface";
-
+export interface ITableStudentProps {};
+const TableStudent: React.FunctionComponent<ITableStudentProps> = props => {
+  return (<>
+  
+  
+  </>);
+};
+export default TableStudent;
 export interface Column<T> {
   id: string;
   label: string;
@@ -25,11 +24,11 @@ export interface Column<T> {
 function RowActions({
   row,
   onEdit,
-  onDelete,
+  onClickDeleteMaster,
 }: {
   row: IStudentItem;
   onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
+  onClickDeleteMaster: (id: number) => void;
 }) {
   return (
     <Stack direction="row" spacing={1} justifyContent="center">
@@ -44,7 +43,7 @@ function RowActions({
       </IconButton>
 
       <IconButton
-        onClick={() => onDelete(row.student_id)}
+        onClick={() => onClickDeleteMaster(row.student_id)}
         sx={{
           borderRadius: "12px",
           backgroundColor: "#e11d48",
@@ -60,15 +59,13 @@ function RowActions({
   );
 }
 
+
 export function useMasterStudentColumns(deps: {
   reload: () => void;
   onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
+  onClickDeleteMaster: (id: number) => void;
 }): Column<IStudentItem>[] {
-  const { reload, onEdit, onDelete } = deps;
-  const navigate = useNavigate();
-  const [, setConfirmPopup] = useAtom(confirmPopupAtom);
-  const setFlash = useSetAtom(flashAlertAtom);
+  const { onEdit, onClickDeleteMaster } = deps;
 
   return React.useMemo<Column<IStudentItem>[]>(
     () => [
@@ -133,10 +130,10 @@ export function useMasterStudentColumns(deps: {
         minWidth: 120,
         align: "center",
         render: (row) => (
-          <RowActions row={row} onEdit={onEdit} onDelete={onDelete} />
+          <RowActions row={row} onEdit={onEdit} onClickDeleteMaster={onClickDeleteMaster} />
         ),
       },
     ],
-    [navigate, setFlash, setConfirmPopup, reload, onEdit, onDelete]
+    [onEdit, onClickDeleteMaster]
   );
 }
