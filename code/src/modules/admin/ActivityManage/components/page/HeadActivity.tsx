@@ -19,7 +19,7 @@ const HeadActivity: React.FunctionComponent<IHeadActivityProps> = ({
 }) => {
     return (
         <>
-            <Card sx={{ mb: 3, borderRadius: 3 }}>
+            <Card sx={{ mb: 3 }}>
                 <CardContent
                     sx={{ display: "flex", justifyContent: "space-between" }}
                 >
@@ -37,7 +37,7 @@ const HeadActivity: React.FunctionComponent<IHeadActivityProps> = ({
                         startIcon={<AddIcon />}
                         onClick={master.handleOpenAdd}
                         sx={{
-                            borderRadius: "12px",
+                            borderRadius: "10px",
                             px: 2.5,
                             py: 1.2,
                             textTransform: "none",

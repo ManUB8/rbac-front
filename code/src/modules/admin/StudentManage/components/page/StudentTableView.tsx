@@ -84,7 +84,7 @@ const StudentTableView: React.FunctionComponent<IStudentTableViewProps> = ({
             <Card
                 elevation={0}
                 sx={{
-                    borderRadius: "0px",
+                    borderRadius: "10px",
                     border: `1px solid ${cardBorder}`,
                     mb: 4,
                 }}

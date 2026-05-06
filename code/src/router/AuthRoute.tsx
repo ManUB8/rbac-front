@@ -16,9 +16,8 @@ import {
   AppRoutes,
   routesConfig,
   getDefaultRouteByRole,
-  getLayoutRoutesByRole,
-  getBareRoutesByRole,
   type UserRole,
+  type IRouterConfig,
 } from "./router";
 
 function ScrollToTop() {
@@ -48,12 +47,23 @@ function DefaultRedirect() {
   return <Navigate to={getDefaultRouteByRole(role)} replace />;
 }
 
-function renderProtectedRoutesByRole(role: UserRole, withLayout: boolean) {
-  const targetRoutes = withLayout
-    ? getLayoutRoutesByRole(role)
-    : getBareRoutesByRole(role);
+function filterRoutesByRole(
+  routes: IRouterConfig[],
+  role: UserRole,
+  withLayout: boolean
+): IRouterConfig[] {
+  return routes
+    .filter((route) => route.roles.includes(role) && (withLayout ? route.withLayout !== false : route.withLayout === false))
+    .map((route) => ({
+      ...route,
+      children: route.children
+        ? filterRoutesByRole(route.children, role, withLayout)
+        : undefined,
+    }));
+}
 
-  return targetRoutes.map((route) => {
+function renderRouteTree(routes: IRouterConfig[]) {
+  return routes.map((route) => {
     const element = route.permissionKey ? (
       <PermissionRoute permissionKey={route.permissionKey}>
         {route.element}
@@ -62,8 +72,19 @@ function renderProtectedRoutesByRole(role: UserRole, withLayout: boolean) {
       route.element
     );
 
-    return <Route key={route.key} path={route.path} element={element} />;
+    return (
+      <Route key={route.key} path={route.path} element={element}>
+        {route.children && route.children.length > 0
+          ? renderRouteTree(route.children)
+          : null}
+      </Route>
+    );
   });
+}
+
+function renderProtectedRoutesByRole(role: UserRole, withLayout: boolean) {
+  const targetRoutes = filterRoutesByRole(routesConfig.privateRoutes, role, withLayout);
+  return renderRouteTree(targetRoutes);
 }
 
 export default function AuthRoute() {
@@ -72,12 +93,10 @@ export default function AuthRoute() {
       <ScrollToTop />
 
       <Routes>
-        {/* public */}
         {routesConfig.publicRoutes.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
 
-        {/* private with layout */}
         <Route path="/" element={<PrivateLayoutRoute />}>
           <Route index element={<DefaultRedirect />} />
 
@@ -90,7 +109,6 @@ export default function AuthRoute() {
           </Route>
         </Route>
 
-        {/* private bare */}
         <Route path="/" element={<PrivateBareRoute />}>
           <Route element={<RoleRoute role="admin" />}>
             {renderProtectedRoutesByRole("admin", false)}
@@ -101,8 +119,13 @@ export default function AuthRoute() {
           </Route>
         </Route>
 
-        {/* fallback */}
-        <Route path="*" element={routesConfig.publicRoutes.find(r => r.path === AppRoutes.notFoundPage)?.element ?? <Navigate to={AppRoutes.authLanding} replace />} />
+        <Route
+          path="*"
+          element={
+            routesConfig.publicRoutes.find((r) => r.path === AppRoutes.notFoundPage)
+              ?.element ?? <Navigate to={AppRoutes.authLanding} replace />
+          }
+        />
       </Routes>
     </Router>
   );

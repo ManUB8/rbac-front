@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getFacultyStudentMange, getMajorFaculty, getOneStudent, getStudentMange } from "../service/StudentMangeApi";
+import { CreateStudent, getFacultyStudentMange, getMajorFaculty, getOneStudent, getStudentMange, UpdateStudent } from "../service/StudentMangeApi";
 import { IStudentDataDefule, type IFacultyItem, type IMajorItem, type IStudentByMajorResponse, type IStudentItem } from "../interface/StudentMange.interface";
 import { useTheme } from "@mui/material";
 import { useAtom } from "jotai";
@@ -282,7 +282,11 @@ export const useMasterFunctionStudentFromFetch = ({
 
         try {
             if (isCreate) {
-                console.log("Create-form", form);
+               
+                const name_by = localStorage.getItem("account_name") || "";
+                const data_create = { ...form, created_by_name: name_by };
+                 console.log("Create-form", data_create);
+                const res = await CreateStudent(data_create);
 
                 setFlash({
                     type_severity: "success",
@@ -296,6 +300,9 @@ export const useMasterFunctionStudentFromFetch = ({
             }
 
             console.log("Update-form", form);
+            const name_by = localStorage.getItem("account_name") || "";
+            const data_update = { ...form, updated_by_name: name_by };
+            const res = await UpdateStudent(data_update);
 
             setFlash({
                 type_severity: "success",

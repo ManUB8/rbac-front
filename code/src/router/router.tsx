@@ -1,19 +1,20 @@
 import type { ReactNode } from "react";
 import type { RouteObject } from "react-router";
 
-import NotFoundPage from "../shared/NotFoundPage";
-import LoginPage from "../modules/auth/page/LoginPage";
-import LoginForm from "../modules/auth/page/LoginForm";
-import RegisterPage from "../modules/auth/page/Register";
 
-import DashBoardPage from "../modules/dashboard/DashBoardPage";
-import StadiumOutlinedIcon from '@mui/icons-material/StadiumOutlined';
+import StadiumOutlinedIcon from "@mui/icons-material/StadiumOutlined";
 import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
+
+import NotFoundPage from "../shared/NotFoundPage";
+import LoginPage from "../modules/auth/page/LoginPage";
+import LoginForm from "../modules/auth/page/LoginForm";
+import RegisterPage from "../modules/auth/page/Register";
+import DashBoardPage from "../modules/dashboard/DashBoardPage";
 import StudentCardPage from "../modules/student/StudentMaster/page/StudentCardPage";
 import StudentActivityPage from "../modules/student/StudentActivity/page/StudentActivityPage";
 import StudentSummaryPage from "../modules/student/Dashboard/ActivitySummary/page/StudentSummaryPage";
@@ -34,6 +35,8 @@ export interface IRouterConfig {
   key: string;
   permissionKey?: string;
   withLayout?: boolean;
+  subpath?: boolean;
+  children?: IRouterConfig[];
 }
 
 export const AppRoutes = {
@@ -56,6 +59,10 @@ export const AppRoutes = {
   adminPermissions: "/admin/permissions",
   adminBranchFaculty: "/admin/branchfaculty",
   adminStudentActivities: "/admin/student-activities",
+
+  // nested examples
+  adminStudentFaculty: "/admin/students/faculty",
+  adminStudentFacultyDetail: "/admin/students/faculty/:facultyId",
 } as const;
 
 export const getDefaultRouteByRole = (role: UserRole | "") => {
@@ -84,6 +91,7 @@ export const routesConfig: {
       key: "dashboard",
       withLayout: true,
     },
+
     {
       path: AppRoutes.studentCard,
       element: <StudentCardPage />,
@@ -117,6 +125,7 @@ export const routesConfig: {
       permissionKey: "student_summary",
       withLayout: true,
     },
+
     {
       path: AppRoutes.adminStudents,
       element: <StudentManagePage />,
@@ -126,6 +135,28 @@ export const routesConfig: {
       roles: ["admin"],
       key: "admin-students",
       withLayout: true,
+      children: [
+        {
+          path: AppRoutes.adminStudentFaculty,
+          element: <StudentManagePage />,
+          code: "admin-students-faculty",
+          name: "ตามคณะ",
+          roles: ["admin"],
+          key: "admin-students-faculty",
+          withLayout: true,
+          subpath: true,
+        },
+        {
+          path: AppRoutes.adminStudentFacultyDetail,
+          element: <StudentManagePage />,
+          code: "admin-students-faculty-detail",
+          name: "รายละเอียดคณะ",
+          roles: ["admin"],
+          key: "admin-students-faculty-detail",
+          withLayout: true,
+          subpath: true,
+        },
+      ],
     },
     {
       path: AppRoutes.adminActivities,
@@ -158,6 +189,7 @@ export const routesConfig: {
       withLayout: true,
     },
   ],
+
   publicRoutes: [
     {
       path: AppRoutes.authLanding,
@@ -178,9 +210,18 @@ export const routesConfig: {
   ],
 };
 
+function flattenRoutes(routes: IRouterConfig[]): IRouterConfig[] {
+  return routes.flatMap((route) => [
+    route,
+    ...(route.children ? flattenRoutes(route.children) : []),
+  ]);
+}
+
 export const getPrivateRoutesByRole = (role: UserRole | "") => {
   if (!role) return [];
-  return routesConfig.privateRoutes.filter((route) => route.roles.includes(role));
+  return flattenRoutes(
+    routesConfig.privateRoutes.filter((route) => route.roles.includes(role))
+  );
 };
 
 export const getLayoutRoutesByRole = (role: UserRole | "") => {

@@ -55,19 +55,16 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
             <DialogContent>
                 <Stack spacing={2} sx={{ pt: 1 }}>
                     <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-                        <Controller
-                            name="student_code"
-                            control={control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    id="student_code"
-                                    label="รหัสนิสิต"
-                                    error={!!errors.student_code}
-                                    helperText={errors.student_code?.message as string}
-                                />
-                            )}
+                        <TextField
+                            value={MasterStudent.getValues('student_code')}
+                            onChange={(e) => {
+                                MasterStudent.setValue('student_code', e.target.value)
+                            }}
+                            fullWidth
+                            id="student_code"
+                            label="รหัสนิสิต"
+                            error={!!errors.student_code}
+                            helperText={errors.student_code?.message}
                         />
                     </Stack>
 
@@ -151,6 +148,7 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                 <TextField
                                     {...field}
                                     fullWidth
+                                    disabled
                                     id="user.username"
                                     label="ชื่อผู้ใช้"
                                     error={!!errors.user?.username}
@@ -203,7 +201,11 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                             ยกเลิก
                         </Button>
 
-                        <Button type="submit" variant="contained">
+                        <Button
+                            type="submit"
+                            form="student-form"
+                            variant="contained"
+                        >
                             {actype === "create" ? "บันทึก" : "อัปเดต"}
                         </Button>
                     </Box>

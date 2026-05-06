@@ -17,7 +17,9 @@ export interface ILayoutProps {
 
 export const SIDEBAR_WIDTH = 240;
 export const SIDEBAR_COLLAPSED = 90;
-export const MOBILE_HEADER_H = 56;
+export const FOOTER_H = 64;
+export const APPBAR_H = 64;
+export const HEADER_PX = 3;
 
 const Layout: React.FunctionComponent<ILayoutProps> = ({ children }) => {
   const theme = useTheme();
@@ -30,24 +32,25 @@ const Layout: React.FunctionComponent<ILayoutProps> = ({ children }) => {
   const role = getAuthRole();
 
   useEffect(() => {
-    if (!isMobile) setDrawerOpen(false);
+    if (!isMobile) {
+      setDrawerOpen(false);
+    }
   }, [isMobile]);
 
   const sidebarWidth = isMobile
     ? 0
     : collapsed
-    ? SIDEBAR_COLLAPSED
-    : SIDEBAR_WIDTH;
+      ? SIDEBAR_COLLAPSED
+      : SIDEBAR_WIDTH;
 
   return (
     <Box
       sx={{
         minHeight: "100vh",
         width: "100%",
-        maxWidth: "100vw",
         bgcolor: "background.default",
         color: "text.primary",
-        overflowX: "clip",
+        overflowX: "hidden",
       }}
     >
       <SidebarMenu
@@ -61,37 +64,35 @@ const Layout: React.FunctionComponent<ILayoutProps> = ({ children }) => {
 
       <Box
         sx={{
-          ml: isMobile ? 0 : `${sidebarWidth}px`,
-          width: isMobile ? "100%" : `calc(100vw - ${sidebarWidth}px)`,
-          maxWidth: isMobile ? "100%" : `calc(100vw - ${sidebarWidth}px)`,
           minHeight: "100vh",
-          transition: "margin-left 0.25s ease, width 0.25s ease",
+          width: "100%",
+          ml: isMobile ? 0 : `${sidebarWidth}px`,
+          transition: "margin-left 0.25s ease",
           display: "flex",
           flexDirection: "column",
-          overflowX: "clip",
         }}
       >
         {isMobile && (
           <Box
             sx={{
               height: MOBILE_HEADER_H,
-              px: 2,
+              px: 1.5,
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              borderBottom: "1px solid",
+              borderColor: "divider",
+              bgcolor: "background.paper",
               position: "sticky",
               top: 0,
-              zIndex: theme.zIndex.appBar,
-              bgcolor: "background.paper",
-              borderBottom: `1px solid ${theme.palette.divider}`,
-              flexShrink: 0,
+              zIndex: 1200,
             }}
           >
             <IconButton onClick={() => setDrawerOpen(true)}>
               <MenuOutlinedIcon />
             </IconButton>
 
-            <Typography fontWeight={700}>
+            <Typography fontSize={16} fontWeight={700}>
               {role === "admin" ? "Admin" : "Student"}
             </Typography>
 
@@ -99,7 +100,13 @@ const Layout: React.FunctionComponent<ILayoutProps> = ({ children }) => {
           </Box>
         )}
 
-        <MainContent>{children}</MainContent>
+        <MainContent
+          isMobile={isMobile}
+          topOffset={isMobile ? MOBILE_HEADER_H : 0}
+          bottomOffset={0}
+        >
+          {children}
+        </MainContent>
       </Box>
     </Box>
   );

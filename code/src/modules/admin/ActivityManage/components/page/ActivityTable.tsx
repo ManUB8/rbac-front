@@ -32,7 +32,7 @@ const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
     return (
         <>
 
-            <Card sx={{ borderRadius: 3 }}>
+            <Card>
                 <CardContent>
                     <Stack direction="row" justifyContent="space-between" mb={2}>
                         <Stack direction="row" spacing={1} alignItems="center">

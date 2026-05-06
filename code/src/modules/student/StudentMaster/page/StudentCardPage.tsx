@@ -14,6 +14,7 @@ import TagOutlinedIcon from "@mui/icons-material/TagOutlined";
 import AutoStoriesOutlinedIcon from "@mui/icons-material/AutoStoriesOutlined";
 import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
 import QrCode2OutlinedIcon from "@mui/icons-material/QrCode2Outlined";
+import HeadStuden from "../components/page/HeadStuden";
 
 export interface IStudentCardPageProps {}
 
@@ -40,14 +41,7 @@ const StudentCardPage: React.FunctionComponent<IStudentCardPageProps> = () => {
 
   return (
     <>
-      <Box p={3}>
-        <Card>
-          <CardContent>
-            <Typography variant="h4">หน้าข้อมูลนิสิต</Typography>
-            <Typography sx={{ mt: 1 }}>Student information page</Typography>
-          </CardContent>
-        </Card>
-      </Box>
+    <HeadStuden/>
 
       <Box
         sx={{

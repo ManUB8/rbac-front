@@ -172,16 +172,14 @@ const StudentActivitiesFrom: React.FunctionComponent<IStudentActivitiesFromProps
 
     return (
         <FormProvider {...methods}>
-            <Box sx={{ maxWidth: 920, mx: "auto" }}>
                 <Card
                     sx={{
-                        borderRadius: "20px",
                         border: "1px solid #e5e7eb",
                         boxShadow: "none",
-                        mb: 3,
+                        marginTop: 2
                     }}
                 >
-                    <CardContent sx={{ p: 3 }}>
+                    <CardContent >
                         <Stack direction="row" spacing={1.2} alignItems="center" mb={3}>
                             <AppRegistrationOutlinedIcon sx={{ color: "#2563eb" }} />
                             <Typography fontSize={28} fontWeight={700}>
@@ -268,10 +266,10 @@ const StudentActivitiesFrom: React.FunctionComponent<IStudentActivitiesFromProps
                 {result?.data ? (
                     <Card
                         sx={{
-                            borderRadius: "20px",
                             boxShadow: "none",
                             border: "1px solid #bbf7d0",
                             backgroundColor: "#f0fdf4",
+                             marginTop: 2
                         }}
                     >
                         <CardContent sx={{ p: 3 }}>
@@ -368,8 +366,7 @@ const StudentActivitiesFrom: React.FunctionComponent<IStudentActivitiesFromProps
                             </Box>
                         </CardContent>
                     </Card>
-                ) : null} 
-            </Box>
+                ) : null}
         </FormProvider>
     );
 };

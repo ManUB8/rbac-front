@@ -1,10 +1,9 @@
-// DrawerMenuBody.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import { Menu, MenuItem } from "react-pro-sidebar";
 import { AnimatePresence, motion } from "framer-motion";
-import { routesConfig } from "../../../router/router";
+import { routesConfig, type UserRole } from "../../../router/router";
 import { useLocation } from "react-router";
 
 type RouteItem = {
@@ -13,15 +12,23 @@ type RouteItem = {
   name: string;
   icon?: React.ReactNode;
   subpath?: boolean;
+  roles?: UserRole[];
+  withLayout?: boolean;
   children?: RouteItem[];
   childrens?: RouteItem[];
 };
 
-export default function DrawerMenuBody({
-  onNavigate,
-}: {
+interface IDrawerMenuBodyProps {
+  role: UserRole | "";
+  collapsed?: boolean;
   onNavigate: (path: string, name: string) => void;
-}) {
+}
+
+export default function DrawerMenuBody({
+  role,
+  collapsed = false,
+  onNavigate,
+}: IDrawerMenuBodyProps) {
   const theme = useTheme();
   const { pathname } = useLocation();
 
@@ -29,7 +36,13 @@ export default function DrawerMenuBody({
   const [activeChildKey, setActiveChildKey] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
-  const parents: RouteItem[] = useMemo(() => routesConfig.privateRoutes ?? [], []);
+  const parents: RouteItem[] = useMemo(() => {
+    if (!role) return [];
+
+    return (routesConfig.privateRoutes ?? []).filter((route: any) => {
+      return route.roles?.includes(role) && route.withLayout !== false;
+    });
+  }, [role]);
 
   const syncStateFromPath = (path: string) => {
     let parentKey: string | null = null;
@@ -100,28 +113,34 @@ export default function DrawerMenuBody({
     return activeChild.childrens.filter((c) => !c.subpath);
   }, [activeChild]);
 
-  const selectedBg = theme.palette.secondaryContainer;
-  const selectedColor = theme.palette.onSecondaryContainer;
-
   const menuItemStyles = {
     button: ({ level, active }: any) => ({
-      height: level === 0 ? 56 : 48,
-      padding: level === 0 ? "0 14px" : "0 16px",
-      borderRadius: 10,
-      justifyContent: "flex-start",
-      color: active ? selectedColor : theme.palette.text.primary,
-      backgroundColor: active ? selectedBg : "transparent",
+      height: level === 0 ? 52 : 46,
+      padding: collapsed ? "0 10px" : level === 0 ? "0 14px" : "0 16px",
+      borderRadius: 12,
+      justifyContent: collapsed ? "center" : "flex-start",
+      color: active ? theme.palette.primary.main : theme.palette.text.primary,
+      backgroundColor: active ? theme.palette.action.selected : "transparent",
+      transition: "all 0.2s ease",
       "&:hover": {
-        backgroundColor: active ? selectedBg : theme.palette.action.hover,
-        color: active ? selectedColor : theme.palette.text.primary,
+        backgroundColor: active
+          ? theme.palette.action.selected
+          : theme.palette.action.hover,
+        color: active ? theme.palette.primary.main : theme.palette.text.primary,
       },
     }),
     icon: ({ active }: any) => ({
-      color: active ? selectedColor : theme.palette.text.secondary,
+      color: active ? theme.palette.primary.main : theme.palette.text.secondary,
+      marginRight: collapsed ? 0 : undefined,
     }),
+    label: {
+      fontWeight: 500,
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    },
   };
 
-  // ===== VIEW 0 =====
   const renderParentMenu = () => (
     <Menu menuItemStyles={menuItemStyles}>
       {parents.map((route) => {
@@ -143,33 +162,41 @@ export default function DrawerMenuBody({
         };
 
         return (
-          <MenuItem key={key} icon={route.icon} active={isSelected} onClick={handleClick}>
-            <Typography variant="subtitle2">{route.name}</Typography>
+          <MenuItem
+            key={key}
+            icon={route.icon}
+            active={isSelected}
+            onClick={handleClick}
+          >
+            {!collapsed && <Typography variant="subtitle2">{route.name}</Typography>}
           </MenuItem>
         );
       })}
     </Menu>
   );
 
-  // ===== VIEW 1 =====
   const renderChildMenu = () => {
     if (!activeParent) return null;
 
     return (
       <>
-        <Box sx={{ display: "flex", alignItems: "center", px: 1.5, py: 1, gap: 1 }}>
-          <IconButton
-            size="small"
-            onClick={() => {
-              setActiveParentKey(null);
-              setActiveChildKey(null);
-              setSelectedKey(null);
-            }}
-          >
-            <ArrowBackOutlinedIcon fontSize="small" />
-          </IconButton>
-          <Typography variant="subtitle2">{activeParent.name}</Typography>
-        </Box>
+        {!collapsed && (
+          <Box sx={{ display: "flex", alignItems: "center", px: 1.5, py: 1, gap: 1 }}>
+            <IconButton
+              size="small"
+              onClick={() => {
+                setActiveParentKey(null);
+                setActiveChildKey(null);
+                setSelectedKey(null);
+              }}
+            >
+              <ArrowBackOutlinedIcon fontSize="small" />
+            </IconButton>
+            <Typography variant="subtitle2" noWrap>
+              {activeParent.name}
+            </Typography>
+          </Box>
+        )}
 
         <Menu menuItemStyles={menuItemStyles}>
           {level1Children.map((item) => {
@@ -193,8 +220,13 @@ export default function DrawerMenuBody({
             };
 
             return (
-              <MenuItem key={key} icon={item.icon} active={isSelected} onClick={handleClick}>
-                <Typography variant="subtitle2">{item.name}</Typography>
+              <MenuItem
+                key={key}
+                icon={item.icon}
+                active={isSelected}
+                onClick={handleClick}
+              >
+                {!collapsed && <Typography variant="subtitle2">{item.name}</Typography>}
               </MenuItem>
             );
           })}
@@ -203,24 +235,27 @@ export default function DrawerMenuBody({
     );
   };
 
-  // ===== VIEW 2 =====
   const renderGrandChildMenu = () => {
     if (!activeParent || !activeChild) return null;
 
     return (
       <>
-        <Box sx={{ display: "flex", alignItems: "center", px: 1.5, py: 1, gap: 1 }}>
-          <IconButton
-            size="small"
-            onClick={() => {
-              setActiveChildKey(null);
-              setSelectedKey(null);
-            }}
-          >
-            <ArrowBackOutlinedIcon fontSize="small" />
-          </IconButton>
-          <Typography variant="subtitle2">{activeChild.name}</Typography>
-        </Box>
+        {!collapsed && (
+          <Box sx={{ display: "flex", alignItems: "center", px: 1.5, py: 1, gap: 1 }}>
+            <IconButton
+              size="small"
+              onClick={() => {
+                setActiveChildKey(null);
+                setSelectedKey(null);
+              }}
+            >
+              <ArrowBackOutlinedIcon fontSize="small" />
+            </IconButton>
+            <Typography variant="subtitle2" noWrap>
+              {activeChild.name}
+            </Typography>
+          </Box>
+        )}
 
         <Menu menuItemStyles={menuItemStyles}>
           {level2Children.map((item) => {
@@ -235,8 +270,13 @@ export default function DrawerMenuBody({
             };
 
             return (
-              <MenuItem key={key} icon={item.icon} active={isSelected} onClick={handleClick}>
-                <Typography variant="subtitle2">{item.name}</Typography>
+              <MenuItem
+                key={key}
+                icon={item.icon}
+                active={isSelected}
+                onClick={handleClick}
+              >
+                {!collapsed && <Typography variant="subtitle2">{item.name}</Typography>}
               </MenuItem>
             );
           })}
@@ -253,20 +293,32 @@ export default function DrawerMenuBody({
       : "level-1";
 
   const currentView =
-    level === "level-0"
+    collapsed && !activeParent
+      ? renderParentMenu()
+      : level === "level-0"
       ? renderParentMenu()
       : level === "level-1"
       ? renderChildMenu()
       : renderGrandChildMenu();
 
   return (
-    <Box sx={{ minHeight: 0 }}>
+    <Box
+      sx={{
+        flex: 1,
+        minHeight: 0,
+        overflowY: "auto",
+        overflowX: "hidden",
+        px: 1,
+        py: 1,
+      }}
+    >
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
-          key={level}
+          key={collapsed ? "collapsed" : level}
           initial={{ opacity: 0, x: -8 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.25, delay: 0.05, ease: "easeOut" }}
+          exit={{ opacity: 0, x: 8 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
         >
           {currentView}
         </motion.div>

@@ -37,21 +37,20 @@ const MajorView: React.FunctionComponent<IMajorViewProps> = ({
       <Card
         elevation={0}
         sx={{
-          borderRadius: "0px",
+          borderRadius: "10px",
           border: `1px solid ${cardBorder}`,
           mb: 4,
         }}
       >
         <CardContent sx={{ px: 3, py: 3 }}>
           <Button
+            variant="contained"
             startIcon={<ArrowBackRoundedIcon />}
             onClick={onBack}
             sx={{
               textTransform: "none",
-              color: titleColor,
               fontWeight: 700,
               mb: 3,
-              px: 0,
             }}
           >
             กลับไปหน้าคณะ
@@ -97,78 +96,78 @@ const MajorView: React.FunctionComponent<IMajorViewProps> = ({
       >
         {isLoading
           ? Array.from({ length: 4 }).map((_, index) => (
-              <Card
-                key={index}
-                elevation={0}
-                sx={{
-                  borderRadius: "20px",
-                  border: `1px solid ${cardBorder}`,
-                  minHeight: 145,
-                }}
-              >
-                <CardContent sx={{ p: 3 }}>
-                  <Skeleton width="75%" height={34} />
-                  <Skeleton width="35%" height={24} sx={{ mt: 4 }} />
-                </CardContent>
-              </Card>
-            ))
+            <Card
+              key={index}
+              elevation={0}
+              sx={{
+                borderRadius: "20px",
+                border: `1px solid ${cardBorder}`,
+                minHeight: 145,
+              }}
+            >
+              <CardContent sx={{ p: 3 }}>
+                <Skeleton width="75%" height={34} />
+                <Skeleton width="35%" height={24} sx={{ mt: 4 }} />
+              </CardContent>
+            </Card>
+          ))
           : data.map((major) => (
-              <Card
-                key={major.major_id}
-                elevation={0}
-                onClick={() => onSelectMajor(major)}
+            <Card
+              key={major.major_id}
+              elevation={0}
+              onClick={() => onSelectMajor(major)}
+              sx={{
+                borderRadius: "20px",
+                border: `1px solid ${cardBorder}`,
+                minHeight: 145,
+                cursor: "pointer",
+                transition: "all .2s ease",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 8px 24px rgba(15,23,42,0.08)",
+                },
+              }}
+            >
+              <CardContent
                 sx={{
-                  borderRadius: "20px",
-                  border: `1px solid ${cardBorder}`,
-                  minHeight: 145,
-                  cursor: "pointer",
-                  transition: "all .2s ease",
-                  "&:hover": {
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 8px 24px rgba(15,23,42,0.08)",
-                  },
+                  p: 3,
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                 }}
               >
-                <CardContent
-                  sx={{
-                    p: 3,
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                  }}
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="flex-start"
                 >
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-start"
-                  >
-                    <Stack direction="row" spacing={1.2} sx={{ maxWidth: "88%" }}>
-                      <Groups2OutlinedIcon
-                        sx={{ color: "#2563eb", mt: "2px" }}
-                      />
-                      <Typography
-                        sx={{
-                          fontSize: 18,
-                          fontWeight: 800,
-                          color: titleColor,
-                        }}
-                      >
-                        {major.major_name}
-                      </Typography>
-                    </Stack>
-
-                    <ArrowForwardIosRoundedIcon
-                      sx={{ color: "#94a3b8", fontSize: 24 }}
+                  <Stack direction="row" spacing={1.2} sx={{ maxWidth: "88%" }}>
+                    <Groups2OutlinedIcon
+                      sx={{ color: "#2563eb", mt: "2px" }}
                     />
+                    <Typography
+                      sx={{
+                        fontSize: 18,
+                        fontWeight: 800,
+                        color: titleColor,
+                      }}
+                    >
+                      {major.major_name}
+                    </Typography>
                   </Stack>
 
-                  <Typography sx={{ fontSize: 16, color: titleColor, mt: 3 }}>
-                    จำนวนนิสิต: {major.count_student} คน
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
+                  <ArrowForwardIosRoundedIcon
+                    sx={{ color: "#94a3b8", fontSize: 24 }}
+                  />
+                </Stack>
+
+                <Typography sx={{ fontSize: 16, color: titleColor, mt: 3 }}>
+                  จำนวนนิสิต: {major.count_student} คน
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
       </Box>
     </>
   );

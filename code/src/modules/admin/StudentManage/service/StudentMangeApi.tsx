@@ -23,6 +23,7 @@ export const getStudentMange = async (major_id: number): Promise<IStudentByMajor
     );
     return res;
 };
+
 export const getOneStudent = async (student_id: number): Promise<IStudentItem> => {
     const res = await api.get<IStudentItem>(
         ApiConfig.STUDENT_API + `/get-one/${student_id}`
@@ -30,3 +31,20 @@ export const getOneStudent = async (student_id: number): Promise<IStudentItem> =
     return res;
 };
 
+export const CreateStudent = async (body: IStudentItem): Promise<any> => {
+  const res = await api.post<IStudentItem>(
+    ApiConfig.STUDENT_API + `/admin/create`,
+    body
+  );
+
+  return res;
+};
+
+export const UpdateStudent = async (body: IStudentItem): Promise<any> => {
+  const res = await api.post<IStudentItem>(
+    ApiConfig.STUDENT_API + `/admin/update-stu/${body.student_id}`,
+    body
+  );
+
+  return res;
+};

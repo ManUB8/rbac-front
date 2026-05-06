@@ -423,7 +423,6 @@ const FacultyBranchPage: React.FunctionComponent<
 
   return (
     <>
-      <Box p={1}>
         <Card>
           <CardContent
             sx={{
@@ -464,19 +463,11 @@ const FacultyBranchPage: React.FunctionComponent<
             </Button>
           </CardContent>
         </Card>
-      </Box>
 
-      <Box
-        sx={{
-          minHeight: "100vh",
-          p: 3,
-        }}
-      >
         <Card
           sx={{
-            borderRadius: "26px",
             boxShadow: "none",
-            backgroundColor: "#ffffff",
+            marginTop:2
           }}
         >
           <CardContent sx={{ p: 4 }}>
@@ -1340,7 +1331,6 @@ const FacultyBranchPage: React.FunctionComponent<
             </Stack>
           </DialogContent>
         </Dialog>
-      </Box>
     </>
   );
 };

@@ -145,12 +145,12 @@ const RegisterPage: React.FC = () => {
                   }}
                   error={!!errors?.student_code}
                   helperText={errors?.student_code?.message || ""}
-                  // slotProps={{
-                  //   htmlInput: {
-                  //     maxLength: 8,
-                  //   },
-                  // }}
-                  // isAllowed={(values) => values.value.length <= 8}
+                  slotProps={{
+                    htmlInput: {
+                      maxLength: 8,
+                    },
+                  }}
+                  isAllowed={(values) => values.value.length <= 8}
                 />
                 <FormControl error={!!errors.prefix}>
                   <FormLabel>คำนำหน้า</FormLabel>

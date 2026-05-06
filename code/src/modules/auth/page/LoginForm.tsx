@@ -77,7 +77,7 @@ const LoginForm: React.FC = () => {
     setRoleTab(tab);
     setBanner(null);
 
-  
+
   };
 
   return (
@@ -85,13 +85,12 @@ const LoginForm: React.FC = () => {
       maxWidth={false}
       disableGutters
       sx={{
-        minHeight: "100dvh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        px: 2,
-        py: 2,
-        backgroundColor: "#F3F4F6",
+        minHeight: '100dvh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        pt: { xs: '12vh', md: '16vh' },
+        bgcolor: "background.paper"
       }}
     >
       <Box
@@ -144,7 +143,7 @@ const LoginForm: React.FC = () => {
           elevation={0}
           sx={{
             width: "100%",
-            maxWidth: 640,
+            maxWidth: 540,
             backgroundColor: "#FFFFFF",
             borderRadius: "24px",
             border: "1px solid #E5E7EB",
@@ -290,9 +289,9 @@ const LoginForm: React.FC = () => {
                       border: "1px solid #D32F2F",
                     },
                     "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after":
-                      {
-                        display: "none",
-                      },
+                    {
+                      display: "none",
+                    },
                     "& .MuiInputBase-input": {
                       py: 2,
                       fontSize: 17,
@@ -356,9 +355,9 @@ const LoginForm: React.FC = () => {
                       border: "1px solid #D32F2F",
                     },
                     "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after":
-                      {
-                        display: "none",
-                      },
+                    {
+                      display: "none",
+                    },
                     "& .MuiInputBase-input": {
                       py: 2,
                       fontSize: 17,
@@ -416,7 +415,7 @@ const LoginForm: React.FC = () => {
               </Typography>
             </Button>
 
-            <Box
+            {/* <Box
               sx={{
                 mt: 2.5,
                 borderRadius: "16px",
@@ -437,7 +436,7 @@ const LoginForm: React.FC = () => {
                 คลิก "นิสิต" หรือ "แอดมิน" เพื่อเติมข้อมูลอัตโนมัติ
                 แล้วกดเข้าสู่ระบบ
               </Typography>
-            </Box>
+            </Box> */}
 
             <Box
               sx={{

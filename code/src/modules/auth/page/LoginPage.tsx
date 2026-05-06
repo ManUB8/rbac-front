@@ -5,7 +5,7 @@ import Video from "../../../assets/video/vdo-rbac.mp4";
 import { useNavigate } from "react-router";
 import { AppRoutes } from "../../../router/router";
 
-export interface ILoginPageProps {}
+export interface ILoginPageProps { }
 
 const LoginPage: React.FC<ILoginPageProps> = () => {
   const navigate = useNavigate();
@@ -56,14 +56,14 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
         }}
       >
         <Stack spacing={2}>
-         <Box display="flex" alignItems="center" gap={1}>
-             <Box component="img" width={100} src={Logo} alt="logo_rbac" />
+          <Box display="flex" alignItems="center" gap={1}>
+            <Box component="img" width={100} src={Logo} alt="logo_rbac" />
             <Typography sx={{ fontSize: 28, color: "white", fontWeight: 700 }}>
               {"Web SMO Activity"}
             </Typography>
           </Box>
 
-          <Box  display="flex" justifyContent="center">
+          <Box display="flex" justifyContent="center">
             <Button
               onClick={() => navigate(AppRoutes.login)}
               fullWidth

@@ -13,7 +13,7 @@ export interface IHeadStudentActivitiesProps { };
 const HeadStudentActivities: React.FunctionComponent<IHeadStudentActivitiesProps> = props => {
     return (
         <>
-            <Card sx={{ mb: 3, borderRadius: 3 }}>
+            <Card >
                 <CardContent
                     sx={{ display: "flex", justifyContent: "space-between" }}
                 >
