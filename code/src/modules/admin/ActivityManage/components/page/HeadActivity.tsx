@@ -1,59 +1,135 @@
 import React from "react";
 import {
-    Box,
     Button,
-    Card,
-    CardContent,
+    Chip,
+    Grid,
+    Stack,
     Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { NumericFormat } from "react-number-format";
+
 import type { IuseActivityFetch } from "../../hook/useFetchActivity";
 
 export interface IHeadActivityProps {
-    MasterActivity: IuseActivityFetch
-};
+    MasterActivity: IuseActivityFetch;
+}
 
-const HeadActivity: React.FunctionComponent<IHeadActivityProps> = ({
-    MasterActivity
+const HeadActivity: React.FC<IHeadActivityProps> = ({
+    MasterActivity,
 }) => {
     return (
-        <>
-            <Card sx={{ mb: 3, borderRadius: 3 }}>
-                <CardContent
-                    sx={{ display: "flex", justifyContent: "space-between" }}
+        <Grid
+            container
+            spacing={1.5}
+            sx={{
+                alignItems: "center",
+            }}
+        >
+            <Grid
+                size={{ xs: 12, sm: 12, md: 6 }}
+                sx={{
+                    display: "flex",
+                    justifyContent: {
+                        xs: "center",
+                        md: "flex-start",
+                    },
+                }}
+            >
+                <Stack
+                    direction="row"
+                    spacing={1.25}
+                    sx={{
+                        alignItems: "center",
+                        textAlign: {
+                            xs: "center",
+                            md: "left",
+                        },
+                    }}
                 >
-                    <Box>
-                        <Typography variant="h4" fontWeight={700}>
-                            จัดการกิจกรรม
-                        </Typography>
-                        <Typography color="text.secondary">
-                            เพิ่ม แก้ไข และลบกิจกรรมต่างๆ
-                        </Typography>
-                    </Box>
+                    <Typography
+                        variant="h5"
+                        sx={{
+                            flexShrink: 0,
+                            fontWeight: 800,
+                        }}
+                    >
+                        จัดการกิจกรรม
+                    </Typography>
 
+                    <Chip
+                        label={
+                            <span>
+                                <NumericFormat
+                                    value={MasterActivity.total_activity}
+                                    displayType="text"
+                                    thousandSeparator=","
+                                />
+                                {" รายการ"}
+                            </span>
+                        }
+                        sx={{
+                            fontWeight: 700,
+                        }}
+                    />
+                    <Chip
+                        label={
+                            <span>
+                                {"กิจกรรมที่เปิด "}
+                                <NumericFormat
+                                    value={MasterActivity.total_active_activity}
+                                    displayType="text"
+                                    thousandSeparator=","
+                                />
+                                {" รายการ"}
+                            </span>
+                        }
+                        sx={{
+                            fontWeight: 700,
+                        }}
+                    />
+                </Stack>
+            </Grid>
+
+            <Grid
+                size={{ xs: 12, sm: 12, md: 6 }}
+                sx={{
+                    display: "flex",
+                    justifyContent: {
+                        xs: "center",
+                        md: "flex-end",
+                    },
+                }}
+            >
+                <Stack
+                    direction="row"
+                    spacing={1.5}
+                    sx={{
+                        alignItems: "center",
+                        ml: {
+                            md: "auto",
+                        },
+                        mt: {
+                            xs: 1,
+                            md: 0,
+                        },
+                    }}
+                >
                     <Button
                         variant="contained"
                         startIcon={<AddIcon />}
                         onClick={MasterActivity.handleOpenAdd}
                         sx={{
-                            borderRadius: "50px",
-                            px: 2.5,
-                            py: 1.2,
                             textTransform: "none",
-                            backgroundColor: "#020617",
-                            boxShadow: "none",
-                            "&:hover": {
-                                backgroundColor: "#111827",
-                                boxShadow: "none",
-                            },
+                            fontWeight: 700,
                         }}
                     >
                         เพิ่มกิจกรรม
                     </Button>
-                </CardContent>
-            </Card>
-        </>
-    )
+                </Stack>
+            </Grid>
+        </Grid>
+    );
 };
 
 export default HeadActivity;

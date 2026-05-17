@@ -1,9 +1,9 @@
 import { ApiConfig } from "../../../../shared/service/ApiConfig";
 import { api } from "../../../../shared/service/axiosInstance";
-import type { IFacultyBody, IFaculty_MajorsItem, IMajorsBody, } from "../interface/Faculty_Majors.Interface";
+import type { IFacultyBody, IFacultyMajorResponse, IFaculty_MajorsItem, IMajorsBody, } from "../interface/Faculty_Majors.Interface";
 
-export const getAllFaculty_Majors = async (): Promise<IFaculty_MajorsItem[]> => {
-    const res = await api.get<IFaculty_MajorsItem[]>(
+export const getAllFaculty_Majors = async (): Promise<IFacultyMajorResponse> => {
+    const res = await api.get<IFacultyMajorResponse>(
         ApiConfig.FACULTY_API + `/faculties-all`
     );
     return res;

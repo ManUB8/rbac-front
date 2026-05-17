@@ -9,7 +9,7 @@ const StudentActivitiesPage: React.FunctionComponent<IStudentActivitiesPageProps
     
     return (
         <>
-            <HeadStudentActivities />
+            <HeadStudentActivities/>
             <StudentActivitiesFrom/>
         </>
     )

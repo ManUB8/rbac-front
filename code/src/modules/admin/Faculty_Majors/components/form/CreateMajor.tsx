@@ -31,14 +31,44 @@ const CreateMajor: React.FC<ICreateMajorProps> = ({
     } = useFormContext<any>();
 
     return (
-        <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+        <Dialog
+            open={open}
+            onClose={onClose}
+            fullWidth
+            maxWidth="md"
+            slotProps={{
+                paper: {
+                    sx: {
+                        borderRadius: "22px",
+                        p: 1,
+                    },
+                },
+            }}
+        >
             <DialogTitle>
-                <Stack direction="row" justifyContent="space-between">
+                <Stack
+                    direction="row"
+                    sx={{
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                    }}
+                >
                     <Box>
-                        <Typography fontSize={24} fontWeight={800}>
+                        <Typography
+                            sx={{
+                                fontSize: 24,
+                                fontWeight: 800,
+                            }}
+                        >
                             เพิ่มสาขาใหม่
                         </Typography>
-                        <Typography sx={{ mt: 1, color: "#6b7280" }}>
+
+                        <Typography
+                            sx={{
+                                mt: 1,
+                                color: "#6b7280",
+                            }}
+                        >
                             กรอกข้อมูลสาขาวิชา
                         </Typography>
                     </Box>
@@ -49,8 +79,17 @@ const CreateMajor: React.FC<ICreateMajorProps> = ({
                 </Stack>
             </DialogTitle>
 
-            <DialogContent sx={{ pt: 4 }}>
-                <Typography sx={{ mb: 1.2, fontWeight: 700 }}>
+            <DialogContent
+                sx={{
+                    pt: 4,
+                }}
+            >
+                <Typography
+                    sx={{
+                        mb: 1.2,
+                        fontWeight: 700,
+                    }}
+                >
                     ชื่อสาขา *
                 </Typography>
 
@@ -69,7 +108,14 @@ const CreateMajor: React.FC<ICreateMajorProps> = ({
                     )}
                 />
 
-                <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 6 }}>
+                <Stack
+                    direction="row"
+                    spacing={2}
+                    sx={{
+                        mt: 6,
+                        justifyContent: "flex-end",
+                    }}
+                >
                     <Button variant="outlined" onClick={onClose}>
                         ยกเลิก
                     </Button>

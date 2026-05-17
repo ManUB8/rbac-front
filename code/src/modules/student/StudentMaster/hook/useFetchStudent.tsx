@@ -11,7 +11,7 @@ export const useStudentFetch = () => {
     }, []);
 
     const Studentquery = useQuery<IStudentItem, Error>({
-        queryKey: ["student_id", version],
+        queryKey: ["student_id", version,Stu_ID],
         retry: 1,
         queryFn: async () => {
             return await getOneStudent(Number(Stu_ID));

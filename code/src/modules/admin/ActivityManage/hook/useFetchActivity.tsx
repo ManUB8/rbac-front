@@ -9,20 +9,27 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { getAllErrorPaths } from "../../../../shared/components/error/FunctionError";
-import { IActivityDataDefault, type IActivityDelete, type IActivityItem } from "../interface/ActivityManage.interface";
+import { IActivityDataDefault, type IActivityDelete, type IActivityFilter, type IActivityItem, type IActivityListResponse } from "../interface/ActivityManage.interface";
 import {
     getAllActivity,
     getOneActivity,
     CreateActivity,
     UpdateActivity,
     DeleteActivity,
-    getActivityStatus,
+    getActivityStatusTrue,
+    getActivityFilter,
 } from "../service/ActivityManageApi";
 import { ActivityZod } from "../utils/ValidationActivity";
+import { searchStateActivity } from "./useContext";
 
 export const useActivityFetch = () => {
-
     const navigate = useNavigate();
+    const [searchState, setSearchStateActivity] = useAtom(searchStateActivity);
+    const [, setConfirmPopup] = useAtom(confirmPopupAtom);
+
+    const [searchInput, setSearchInput] = useState(searchState.search ?? "");
+    const debounceRef = useRef<number | null>(null);
+
     const [version, setVersion] = useState(0);
     const [openModal, setOpenModal] = useState(false);
     const [selectedId, setSelectedId] = useState<number | 0>(0);
@@ -31,13 +38,34 @@ export const useActivityFetch = () => {
         setVersion((v) => v + 1);
     }, []);
 
-    const Activityquery = useQuery<IActivityItem[], Error>({
-        queryKey: ["activity", version],
+    const Activityquery = useQuery<IActivityListResponse, Error>({
+        queryKey: ["activity", version, searchState],
+        staleTime: 0,
+        refetchOnMount: "always",
         retry: 1,
         queryFn: async () => {
-            return await getAllActivity();
+            return await getAllActivity(searchState);
         },
     });
+
+    const handleChangeSearch = useCallback((text: string) => {
+        setSearchInput(text);
+
+        if (debounceRef.current) window.clearTimeout(debounceRef.current);
+
+        debounceRef.current = window.setTimeout(() => {
+            setSearchStateActivity((prev) => ({
+                ...prev,
+                search: text || "",
+                page: 1,
+            }));
+        }, 800);
+    }, [setSearchStateActivity]);
+
+    useEffect(() => {
+        setSearchInput(searchState.search ?? "");
+    }, [searchState.search]);
+
     const handleOpenAdd = useCallback(() => {
         setFormMode("create");
         setSelectedId(0);
@@ -50,6 +78,14 @@ export const useActivityFetch = () => {
         setOpenModal(true);
     }, [setFormMode, setSelectedId, setOpenModal]);
 
+
+    const activity_data = Activityquery.data?.activity ?? []
+    const total_activity = Activityquery.data?.total_activity ?? 0;
+    const total_inactive_activity = Activityquery.data?.total_inactive_activity
+    const total_active_activity = Activityquery.data?.total_active_activity
+
+    console.log('activity_data', activity_data)
+
     return {
         navigate,
         reload,
@@ -61,12 +97,21 @@ export const useActivityFetch = () => {
         handleOpenEdit,
         openModal,
         setOpenModal,
-        activity_data: Activityquery.data ?? [],
-        total: Activityquery.data?.length ?? 0,
         activityLoading: Activityquery.isLoading,
         activityFetching: Activityquery.isFetching,
         activityError: Activityquery.error,
         refetchActivity: Activityquery.refetch,
+        activity_data,
+        total_activity,
+        total_inactive_activity,
+        total_active_activity,
+        searchInput,
+        searchState,
+        searchStateActivity,
+        setSearchInput,
+        handleChangeSearch,
+        setConfirmPopup,
+        setSearchStateActivity
     };
 };
 
@@ -291,7 +336,7 @@ export const useMasterFunctionActivityFromFetch = ({
             try {
                 const name_by = localStorage.getItem("account_name") || "";
 
-                console.log("deleteactivity",activityId)
+                console.log("deleteactivity", activityId)
                 const data_delete: IActivityDelete = {
                     activity_id: Number(activityId),
                     updated_by_name: name_by,
@@ -374,8 +419,6 @@ export const useMasterFunctionActivityFromFetch = ({
 
 export type IuseMasterFunctionActivityFromFetch = ReturnType<typeof useMasterFunctionActivityFromFetch>;
 
-
-
 export const useActivityStatusFetch = () => {
     const navigate = useNavigate();
     const [version, setVersion] = useState(0);
@@ -387,10 +430,14 @@ export const useActivityStatusFetch = () => {
         queryKey: ["activity", version],
         retry: 1,
         queryFn: async () => {
-            return await getActivityStatus();
+            return await getActivityStatusTrue();
         },
     });
 
+    // const activity_data = Activityquery.data?.activity ?? []
+    // const total_activity = Activityquery.data?.total_activity
+    // const total_inactive_activity = Activityquery.data?.total_inactive_activity
+    // const total_active_activity = Activityquery.data?.total_active_activity
     return {
         navigate,
         reload,
@@ -400,5 +447,33 @@ export const useActivityStatusFetch = () => {
         activityFetching: Activityquery.isFetching,
         activityError: Activityquery.error,
         refetchActivity: Activityquery.refetch,
+    };
+};
+
+
+export const useFetchActivityFilter = () => {
+    const navigate = useNavigate();
+    const [version, setVersion] = useState(0);
+    const reload = useCallback(() => {
+        setVersion((v) => v + 1);
+    }, []);
+
+    const Activityquery = useQuery<IActivityFilter[], Error>({
+        queryKey: ["activity-filter", version],
+        retry: 1,
+        queryFn: async () => {
+            return await getActivityFilter();
+        },
+    });
+
+    const activity_filter = Activityquery.data ?? []
+    return {
+        navigate,
+        reload,
+        activity_filter,
+        activity_filter_Loading: Activityquery.isLoading,
+        activity_filter_Fetching: Activityquery.isFetching,
+        activity_filter_Error: Activityquery.error,
+        refetch_filter_Activity: Activityquery.refetch,
     };
 };

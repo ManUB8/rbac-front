@@ -1,5 +1,5 @@
 import { createTheme, alpha } from "@mui/material/styles";
-import type {} from "@mui/x-date-pickers/themeAugmentation";
+import type { } from "@mui/x-date-pickers/themeAugmentation";
 
 declare module "@mui/material/styles" {
   interface Palette {
@@ -40,117 +40,117 @@ export const getTheme = (mode: "light" | "dark") => {
 
       ...(isLight
         ? {
-            primary: {
-              main: "#2952D9",
-              light: "#4F72E5",
-              dark: "#1F43BD",
-              contrastText: "#FFFFFF",
-            },
-            secondary: {
-              main: "#F59E0B",
-              light: "#FBBF24",
-              dark: "#D97706",
-              contrastText: "#111827",
-            },
-            error: {
-              main: "#DC2626",
-              light: "#EF4444",
-              dark: "#B91C1C",
-              contrastText: "#FFFFFF",
-            },
-            warning: {
-              main: "#F59E0B",
-            },
-            info: {
-              main: "#2563EB",
-            },
-            success: {
-              main: "#16A34A",
-            },
-            background: {
-              default: "#F4F6FB",
-              paper: "#FFFFFF",
-            },
-            text: {
-              primary: "#111827",
-              secondary: "#64748B",
-              disabled: "#9CA3AF",
-            },
-            divider: "#E2E8F0",
-            action: {
-              hover: "rgba(15, 23, 42, 0.04)",
-              selected: "rgba(41, 82, 217, 0.10)",
-              disabledBackground: "#E5E7EB",
-              disabled: "#9CA3AF",
-            },
-            custom: {
-              pageBg: "#F4F6FB",
-              cardBg: "#FFFFFF",
-              cardBorder: "#E5E7EB",
-              mutedBg: "#F8FAFC",
-              inputBg: "#F8FAFC",
-              brand: "#2952D9",
-              brandHover: "#2348BF",
-              brandSoft: "#E8EEFF",
-              textSoft: "#64748B",
-            },
-          }
+          primary: {
+            main: "#2952D9",
+            light: "#4F72E5",
+            dark: "#1F43BD",
+            contrastText: "#FFFFFF",
+          },
+          secondary: {
+            main: "#F59E0B",
+            light: "#FBBF24",
+            dark: "#D97706",
+            contrastText: "#111827",
+          },
+          error: {
+            main: "#DC2626",
+            light: "#EF4444",
+            dark: "#B91C1C",
+            contrastText: "#FFFFFF",
+          },
+          warning: {
+            main: "#F59E0B",
+          },
+          info: {
+            main: "#2563EB",
+          },
+          success: {
+            main: "#16A34A",
+          },
+          background: {
+            default: "#F4F6FB",
+            paper: "#FFFFFF",
+          },
+          text: {
+            primary: "#111827",
+            secondary: "#64748B",
+            disabled: "#9CA3AF",
+          },
+          divider: "#E2E8F0",
+          action: {
+            hover: "rgba(15, 23, 42, 0.04)",
+            selected: "rgba(41, 82, 217, 0.10)",
+            disabledBackground: "#E5E7EB",
+            disabled: "#9CA3AF",
+          },
+          custom: {
+            pageBg: "#F4F6FB",
+            cardBg: "#FFFFFF",
+            cardBorder: "#E5E7EB",
+            mutedBg: "#F8FAFC",
+            inputBg: "#F8FAFC",
+            brand: "#2952D9",
+            brandHover: "#2348BF",
+            brandSoft: "#E8EEFF",
+            textSoft: "#64748B",
+          },
+        }
         : {
-            primary: {
-              main: "#7C9BFF",
-              light: "#9CB3FF",
-              dark: "#5E7EF2",
-              contrastText: "#081120",
-            },
-            secondary: {
-              main: "#FBBF24",
-              light: "#FCD34D",
-              dark: "#D97706",
-              contrastText: "#111827",
-            },
-            error: {
-              main: "#F87171",
-              light: "#FCA5A5",
-              dark: "#DC2626",
-              contrastText: "#1F0A0A",
-            },
-            warning: {
-              main: "#FBBF24",
-            },
-            info: {
-              main: "#60A5FA",
-            },
-            success: {
-              main: "#4ADE80",
-            },
-            background: {
-              default: "#0F172A",
-              paper: "#111827",
-            },
-            text: {
-              primary: "#F8FAFC",
-              secondary: "#94A3B8",
-              disabled: "#64748B",
-            },
-            divider: "#243041",
-            action: {
-              hover: "rgba(148, 163, 184, 0.08)",
-              selected: "rgba(124, 155, 255, 0.16)",
-              disabledBackground: "#1E293B",
-              disabled: "#64748B",
-            },
-            custom: {
-              pageBg: "#0F172A",
-              cardBg: "#111827",
-              cardBorder: "#243041",
-              mutedBg: "#182233",
-              inputBg: "#182233",
-              brand: "#7C9BFF",
-              brandHover: "#6B8CFF",
-              brandSoft: "#1A2750",
-              textSoft: "#94A3B8",
-            },
-          }),
+          primary: {
+            main: "#7C9BFF",
+            light: "#9CB3FF",
+            dark: "#5E7EF2",
+            contrastText: "#081120",
+          },
+          secondary: {
+            main: "#FBBF24",
+            light: "#FCD34D",
+            dark: "#D97706",
+            contrastText: "#111827",
+          },
+          error: {
+            main: "#F87171",
+            light: "#FCA5A5",
+            dark: "#DC2626",
+            contrastText: "#1F0A0A",
+          },
+          warning: {
+            main: "#FBBF24",
+          },
+          info: {
+            main: "#60A5FA",
+          },
+          success: {
+            main: "#4ADE80",
+          },
+          background: {
+            default: "#0F172A",
+            paper: "#111827",
+          },
+          text: {
+            primary: "#F8FAFC",
+            secondary: "#94A3B8",
+            disabled: "#64748B",
+          },
+          divider: "#243041",
+          action: {
+            hover: "rgba(148, 163, 184, 0.08)",
+            selected: "rgba(124, 155, 255, 0.16)",
+            disabledBackground: "#1E293B",
+            disabled: "#64748B",
+          },
+          custom: {
+            pageBg: "#0F172A",
+            cardBg: "#111827",
+            cardBorder: "#243041",
+            mutedBg: "#182233",
+            inputBg: "#182233",
+            brand: "#7C9BFF",
+            brandHover: "#6B8CFF",
+            brandSoft: "#1A2750",
+            textSoft: "#94A3B8",
+          },
+        }),
     },
 
     typography: {
@@ -293,64 +293,76 @@ export const getTheme = (mode: "light" | "dark") => {
           disableElevation: true,
           color: "primary",
         },
+
         styleOverrides: {
-          root: ({ theme }) => ({
+          root: ({ theme, ownerState }) => ({
             borderRadius: 14,
             fontWeight: 700,
             boxShadow: "none",
             outline: "none",
             transition: "all 0.2s ease",
+
             "&:focus": {
               outline: "none",
               boxShadow: "none",
             },
+
             "&:focus-visible": {
               outline: "none",
               boxShadow: "none",
             },
+
             "&.Mui-focusVisible": {
               outline: "none",
               boxShadow: "none",
             },
-          }),
 
-          containedPrimary: ({ theme }) => ({
-            backgroundColor: theme.palette.custom.brand,
-            color: theme.palette.primary.contrastText,
-            "&:hover": {
-              backgroundColor: theme.palette.custom.brandHover,
-            },
-          }),
+            // ===== contained primary =====
+            ...(ownerState.variant === "contained" &&
+              ownerState.color === "primary" && {
+              backgroundColor: theme.palette.custom.brand,
+              color: theme.palette.primary.contrastText,
 
-          outlined: ({ theme }) => ({
-            borderColor: theme.palette.divider,
-            "&:hover": {
-              borderColor: theme.palette.text.secondary,
-              backgroundColor: theme.palette.action.hover,
-            },
-          }),
+              "&:hover": {
+                backgroundColor: theme.palette.custom.brandHover,
+              },
+            }),
 
-          text: ({ theme }) => ({
-            "&:hover": {
-              backgroundColor: theme.palette.action.hover,
-            },
-          }),
+            // ===== outlined =====
+            ...(ownerState.variant === "outlined" && {
+              borderColor: theme.palette.divider,
 
-          sizeSmall: {
-            height: 36,
-            fontSize: 13,
-          },
-          sizeMedium: {
-            height: 42,
-            fontSize: 14,
-          },
-          sizeLarge: {
-            height: 48,
-            fontSize: 15,
-          },
+              "&:hover": {
+                borderColor: theme.palette.text.secondary,
+                backgroundColor: theme.palette.action.hover,
+              },
+            }),
+
+            // ===== text =====
+            ...(ownerState.variant === "text" && {
+              "&:hover": {
+                backgroundColor: theme.palette.action.hover,
+              },
+            }),
+
+            // ===== sizes =====
+            ...(ownerState.size === "small" && {
+              height: 36,
+              fontSize: 13,
+            }),
+
+            ...(ownerState.size === "medium" && {
+              height: 42,
+              fontSize: 14,
+            }),
+
+            ...(ownerState.size === "large" && {
+              height: 48,
+              fontSize: 15,
+            }),
+          }),
         },
       },
-
       MuiIconButton: {
         styleOverrides: {
           root: {
@@ -526,19 +538,26 @@ export const getTheme = (mode: "light" | "dark") => {
 
       MuiAlert: {
         styleOverrides: {
-          root: {
+          root: ({ theme, ownerState }) => ({
             borderRadius: 14,
-          },
-          standardError: ({ theme }) => ({
-            backgroundColor:
-              theme.palette.mode === "light"
-                ? "#FEECEC"
-                : alpha(theme.palette.error.main, 0.14),
-            color: theme.palette.error.main,
-          }),
-          filledError: ({ theme }) => ({
-            backgroundColor: theme.palette.error.main,
-            color: theme.palette.error.contrastText,
+
+            // ===== standard error =====
+            ...(ownerState.variant === "standard" &&
+              ownerState.severity === "error" && {
+              backgroundColor:
+                theme.palette.mode === "light"
+                  ? "#FEECEC"
+                  : alpha(theme.palette.error.main, 0.14),
+
+              color: theme.palette.error.main,
+            }),
+
+            // ===== filled error =====
+            ...(ownerState.variant === "filled" &&
+              ownerState.severity === "error" && {
+              backgroundColor: theme.palette.error.main,
+              color: theme.palette.error.contrastText,
+            }),
           }),
         },
       },

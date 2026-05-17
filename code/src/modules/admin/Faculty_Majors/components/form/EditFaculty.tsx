@@ -23,9 +23,12 @@ const EditFaculty: React.FunctionComponent<IEditFacultyProps> = ({ open, onClose
             <DialogTitle sx={{ pb: 0 }}>
                 <Stack
                     direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-start"
+                    sx={{
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                    }}
                 >
+
                     <Box>
                         <Typography
                             sx={{
@@ -76,26 +79,18 @@ const EditFaculty: React.FunctionComponent<IEditFacultyProps> = ({ open, onClose
                     )}
                 />
 
-                <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 6 }}>
+                <Stack
+                    direction="row"
+                    spacing={2}
+                    sx={{
+                        mt: 6,
+                        justifyContent: "flex-end",
+                    }}
+                >
                     <Button variant="outlined" onClick={onClose}>
                         ยกเลิก
                     </Button>
 
-                    {/* <Button
-                        variant="contained"
-                        type="submit"
-                        form='faculty-form'
-                        onClick={Master_Controller.handleSubmit(
-                            Master_Controller.onSubmitMaster,
-                            (errs: any) =>
-                                Master_Controller.handleErrorSubmit(
-                                    errs,
-                                    Master_Controller.methods.setFocus
-                                )
-                        )}
-                    >
-                        บันทึกการแก้ไข
-                    </Button> */}
                     <Button
                         variant="contained"
                         type="button"

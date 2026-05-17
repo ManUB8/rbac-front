@@ -1,7 +1,7 @@
 
 export const iconButtonSx = {
-    width: 56,
-    height: 46,
+    // width: 56,
+    // height: 46,
     borderRadius: "14px",
     border: "1px solid #d7dbe3",
     backgroundColor: "#ffffff",

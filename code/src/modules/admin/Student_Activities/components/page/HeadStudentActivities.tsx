@@ -13,20 +13,24 @@ export interface IHeadStudentActivitiesProps { };
 const HeadStudentActivities: React.FunctionComponent<IHeadStudentActivitiesProps> = props => {
     return (
         <>
-            <Card sx={{ mb: 3, borderRadius: 3 }}>
-                <CardContent
-                    sx={{ display: "flex", justifyContent: "space-between" }}
-                >
-                    <Box>
-                        <Typography variant="h4" fontWeight={700}>
-                            ลงทะเบียนเข้าร่วมกิจกรรม
-                        </Typography>
-                        <Typography color="text.secondary">
-                            เลือกกิจกรรมและกรอกรหัสนิสิตเพื่อลงทะเบียน
-                        </Typography>
-                    </Box>
-                </CardContent>
-            </Card>
+            <Typography
+                sx={{
+                    fontSize: 24,
+                    fontWeight: 800,
+                }}
+            >
+                กิจกรรมทั้งหมด
+            </Typography>
+
+            <Typography
+                sx={{
+                    color: "text.secondary",
+                    mb: 3,
+                }}
+            >
+                กิจกรรมที่เปิดให้เข้าร่วม
+            </Typography>
+
         </>
     )
 };

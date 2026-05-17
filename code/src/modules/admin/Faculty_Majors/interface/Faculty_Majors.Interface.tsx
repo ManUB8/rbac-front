@@ -1,12 +1,3 @@
-export interface IMajorItem {
-    major_id: number;
-    major_name: string;
-
-    created_by_id: number;
-    created_by_name: string;
-    updated_by_id: number;
-    updated_by_name: string;
-}
 
 export interface IFaculty_MajorsItem {
     faculty_id: number;
@@ -47,3 +38,37 @@ export interface IMajorsBody {
     updated_by_name: string;
 }
 
+
+
+export interface IMajorItem {
+    major_id: number;
+    major_name: string;
+
+    created_by_id: number;
+    created_by_name: string;
+
+    updated_by_id: number;
+    updated_by_name: string;
+}
+
+export interface IFacultyItem {
+    faculty_id: number;
+    faculty_name: string;
+
+    majors_count: number;
+
+    majors: IMajorItem[];
+
+    created_by_id: number;
+    created_by_name: string;
+
+    updated_by_id: number;
+    updated_by_name: string;
+}
+
+export interface IFacultyMajorResponse {
+    total_faculty: number;
+    total_major: number;
+
+    data: IFacultyItem[];
+}

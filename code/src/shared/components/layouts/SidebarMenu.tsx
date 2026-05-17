@@ -3,24 +3,20 @@ import {
   Box,
   Divider,
   Drawer,
-  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Stack,
   Typography,
 } from "@mui/material";
-import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../modules/auth/hook/useAuth";
-import {
-  routesConfig,
-  type UserRole,
-} from "../../../router/router";
-import { SIDEBAR_COLLAPSED, SIDEBAR_WIDTH } from "./Layout";
+import { routesConfig, type UserRole } from "../../../router/router";
+import { SIDEBAR_WIDTH } from "./Layout";
 
 export interface ISidebarMenuProps {
   role: UserRole | "";
@@ -35,7 +31,6 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
   role,
   isMobile,
   collapsed,
-  setCollapsed,
   drawerOpen,
   setDrawerOpen,
 }) => {
@@ -46,18 +41,14 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
   const menuItems = useMemo(() => {
     if (!role) return [];
 
-    return routesConfig.privateRoutes.filter((item) => {
-      return item.roles.includes(role) && item.withLayout !== false;
-    });
+    return routesConfig.privateRoutes.filter(
+      (item) => item.roles.includes(role) && item.withLayout !== false
+    );
   }, [role]);
-
-  const sidebarWidth = collapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH;
 
   const handleNavigate = (path: string) => {
     navigate(path);
-    if (isMobile) {
-      setDrawerOpen(false);
-    }
+    if (isMobile) setDrawerOpen(false);
   };
 
   const content = (
@@ -66,100 +57,75 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        bgcolor: "background.paper",
-        borderRight: "1px solid",
-        borderColor: "divider",
+        bgcolor: "#fff",
+        borderRight: "1px solid #eee",
       }}
     >
-      <Box
-        sx={{
-          height: 72,
-          px: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: collapsed && !isMobile ? "center" : "space-between",
-          flexShrink: 0,
-        }}
-      >
-        {(!collapsed || isMobile) && (
-          <Box sx={{ minWidth: 0 }}>
-            <Typography
-              fontWeight={800}
-              fontSize={18}
-              noWrap
-            >
-              {role === "admin" ? "Admin Panel" : "Student Portal"}
-            </Typography>
+      {/* HEADER */}
+      <Box sx={{ px: 2.5, py: 2 }}>
+        <Stack direction="row" spacing={1.2} alignItems="center">
+          <SchoolOutlinedIcon sx={{ color: "primary.main" }} />
 
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              noWrap
-            >
-              {role === "admin" ? "จัดการระบบกิจกรรม" : "ระบบสำหรับนิสิต"}
-            </Typography>
-          </Box>
-        )}
-
-        {!isMobile && (
-          <IconButton onClick={() => setCollapsed((prev) => !prev)}>
-            {collapsed ? <MenuOutlinedIcon /> : <MenuOpenOutlinedIcon />}
-          </IconButton>
-        )}
+          {!collapsed && (
+            <Box>
+              <Typography fontWeight={800} fontSize={15}>
+                RBAC Activity
+              </Typography>
+              <Typography fontSize={12} color="text.secondary">
+                ระบบทะเบียนกิจกรรม
+              </Typography>
+            </Box>
+          )}
+        </Stack>
       </Box>
 
       <Divider />
 
-      <List
-        sx={{
-          px: 1.5,
-          py: 1.5,
-          flex: 1,
-          overflowY: "auto",
-        }}
-      >
+      {/* MENU */}
+      <List sx={{ px: 1, py: 1.5, flex: 1 }}>
         {menuItems.map((item) => {
           const active =
             location.pathname === item.path ||
-            (item.path !== "/" && location.pathname.startsWith(item.path + "/"));
+            location.pathname.startsWith(item.path + "/");
 
           return (
             <ListItemButton
-              key={item.key || item.code}
+              key={item.key}
               onClick={() => handleNavigate(item.path)}
               sx={{
-                minHeight: 48,
-                mb: 0.75,
-                px: collapsed && !isMobile ? 1.25 : 1.5,
-                borderRadius: 2,
-                justifyContent:
-                  collapsed && !isMobile ? "center" : "flex-start",
-                bgcolor: active ? "action.selected" : "transparent",
-                color: active ? "primary.main" : "text.primary",
-                transition: "all 0.2s ease",
+                mb: 0.5,
+                borderRadius: "0 25px 25px 0",
+                px: collapsed ? 1.5 : 2,
+                justifyContent: collapsed ? "center" : "flex-start",
+
+                bgcolor: active ? "primary.main" : "transparent",
+                color: active ? "#fff" : "text.primary",
+
                 "&:hover": {
-                  bgcolor: "action.hover",
+                  bgcolor: active ? "primary.main" : "#f5f5f5",
+                },
+
+                "& .MuiListItemIcon-root": {
+                  color: active ? "#fff" : "text.secondary",
                 },
               }}
             >
               <ListItemIcon
                 sx={{
-                  minWidth: collapsed && !isMobile ? 0 : 36,
-                  mr: collapsed && !isMobile ? 0 : 1,
-                  color: active ? "primary.main" : "text.secondary",
+                  minWidth: collapsed ? 0 : 36,
+                  mr: collapsed ? 0 : 1,
                   justifyContent: "center",
                 }}
               >
                 {item.icon}
               </ListItemIcon>
 
-              {(!collapsed || isMobile) && (
+              {!collapsed && (
                 <ListItemText
                   primary={item.name}
                   primaryTypographyProps={{
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: active ? 700 : 500,
-                    noWrap: true,
                   }}
                 />
               )}
@@ -170,42 +136,76 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
 
       <Divider />
 
-      <Box sx={{ p: 1.5, flexShrink: 0 }}>
+      {/* USER INFO
+      {!collapsed && (
+        <Box
+          sx={{
+            px: 2,
+            py: 2,
+            mx: 1.5,
+            mb: 1,
+            borderRadius: 3,
+            bgcolor: "#f8f9fb",
+          }}
+        >
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                bgcolor: "primary.main",
+                color: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 700,
+              }}
+            >
+              {role === "admin" ? "A" : "S"}
+            </Box>
+
+            <Box>
+              <Typography fontSize={12} color="text.secondary">
+                เข้าใช้งานในชื่อ
+              </Typography>
+
+              <Typography fontWeight={700} fontSize={14}>
+                {role === "admin" ? "ผู้ดูแลระบบ" : "นิสิต"}
+              </Typography>
+            </Box>
+          </Stack>
+        </Box>
+      )} */}
+
+      {/* LOGOUT */}
+      <Box sx={{ p: 1.5 }}>
         <ListItemButton
           onClick={handleLogOut}
           sx={{
             borderRadius: 2,
-            justifyContent: collapsed && !isMobile ? "center" : "flex-start",
-            transition: "all 0.2s ease",
+            justifyContent: collapsed ? "center" : "flex-start",
+
             "&:hover": {
               bgcolor: "error.main",
-              color: "common.white",
+              color: "#fff",
+
               "& .MuiListItemIcon-root": {
-                color: "common.white",
+                color: "#fff",
               },
             },
           }}
         >
           <ListItemIcon
             sx={{
-              minWidth: collapsed && !isMobile ? 0 : 36,
-              mr: collapsed && !isMobile ? 0 : 1,
-              color: "text.secondary",
-              justifyContent: "center",
+              minWidth: collapsed ? 0 : 36,
+              mr: collapsed ? 0 : 1,
             }}
           >
             <LogoutOutlinedIcon />
           </ListItemIcon>
 
-          {(!collapsed || isMobile) && (
-            <ListItemText
-              primary="Logout"
-              primaryTypographyProps={{
-                fontWeight: 600,
-                noWrap: true,
-              }}
-            />
-          )}
+          {!collapsed && <ListItemText primary="Logout" />}
         </ListItemButton>
       </Box>
     </Box>
@@ -216,13 +216,7 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
       <Drawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        variant="temporary"
-        ModalProps={{ keepMounted: true }}
-        PaperProps={{
-          sx: {
-            width: SIDEBAR_WIDTH,
-          },
-        }}
+        PaperProps={{ sx: { width: SIDEBAR_WIDTH } }}
       >
         {content}
       </Drawer>
@@ -232,19 +226,15 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
   return (
     <Box
       sx={{
-        width: sidebarWidth,
-        flexShrink: 0,
-        transition: "width 0.25s ease",
+        width: collapsed ? 70 : SIDEBAR_WIDTH,
+        transition: "0.2s",
       }}
     >
       <Box
         sx={{
-          width: sidebarWidth,
-          height: "100vh",
+          width: collapsed ? 70 : SIDEBAR_WIDTH,
           position: "fixed",
-          left: 0,
-          top: 0,
-          transition: "width 0.25s ease",
+          height: "100vh",
         }}
       >
         {content}

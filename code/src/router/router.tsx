@@ -21,7 +21,12 @@ import StudentManagePage from "../modules/admin/StudentManage/page/StudentManage
 import ActivityManagePage from "../modules/admin/ActivityManage/page/ActivityManagePage";
 import FacultyBranchPage from "../modules/admin/Faculty_Majors/page/FacultyBranchPage";
 import StudentActivitiesPage from "../modules/admin/Student_Activities/page/StudentActivitiesPage";
+import Student_ManagePage from "../modules/admin/Student_Manage/page/Student_ManagePage";
 
+
+// icon
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import DashboardAdminPage from "../modules/admin/Dashboard_Admin/page/DashboardAdminPage";
 export type UserRole = "admin" | "student";
 
 export interface IRouterConfig {
@@ -52,6 +57,7 @@ export const AppRoutes = {
 
   // admin
   adminStudents: "/admin/students",
+  adminStudents_last: "/admin/students-last",
   adminActivities: "/admin/activities",
   adminPermissions: "/admin/permissions",
   adminBranchFaculty: "/admin/branchfaculty",
@@ -76,7 +82,7 @@ export const routesConfig: {
   privateRoutes: [
     {
       path: AppRoutes.dashboard,
-      element: <DashBoardPage />,
+      element: <DashboardAdminPage />,
       code: "dashboard",
       name: "Dashboard",
       icon: <SpaceDashboardOutlinedIcon />,
@@ -117,12 +123,22 @@ export const routesConfig: {
       permissionKey: "student_summary",
       withLayout: true,
     },
+    // {
+    //   path: AppRoutes.adminStudents_last,
+    //   element: <StudentManagePage />,
+    //   code: "admin-students",
+    //   name: "จัดการนิสิต-last",
+    //   icon: <GroupOutlinedIcon />,
+    //   roles: ["admin"],
+    //   key: "admin-students-last",
+    //   withLayout: true,
+    // },
     {
       path: AppRoutes.adminStudents,
-      element: <StudentManagePage />,
+      element: <Student_ManagePage />,
       code: "admin-students",
       name: "จัดการนิสิต",
-      icon: <GroupOutlinedIcon />,
+      icon: <GroupsOutlinedIcon />,
       roles: ["admin"],
       key: "admin-students",
       withLayout: true,
@@ -151,7 +167,7 @@ export const routesConfig: {
       path: AppRoutes.adminStudentActivities,
       element: <StudentActivitiesPage />,
       code: "admin-studentactivities",
-      name: "ลงทะเบียนเข้าร่วมกิจกรรม",
+      name: "ลงทะเบียนกิจกรรม",
       icon: <StadiumOutlinedIcon />,
       roles: ["admin"],
       key: "admin-studentactivities",

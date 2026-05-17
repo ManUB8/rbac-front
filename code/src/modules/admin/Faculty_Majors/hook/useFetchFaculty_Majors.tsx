@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateFaculty, CreateMajors, DeleteFaculty, DeleteMajors, getAllFaculty_Majors, getOneFaculty, getOneMajors, UpdateFaculty, UpdateMajors } from "../service/Faculty_MajorsApi";
-import { IFacultyDataDefule, type IFaculty_MajorsItem, type IFacultyBody } from "../interface/Faculty_Majors.Interface";
+import { IFacultyDataDefule, type IFaculty_MajorsItem, type IFacultyBody, type IFacultyMajorResponse } from "../interface/Faculty_Majors.Interface";
 import { useAtom } from "jotai";
 import { confirmPopupAtom, flashAlertAtom } from "../../../../shared/components/constants/OptionsAtom";
 import { useForm, type FieldErrors, type Path, type Resolver, type UseFormSetFocus } from "react-hook-form";
@@ -27,7 +27,7 @@ export const useFaculty_MajorsFetch = () => {
         setVersion((v) => v + 1);
     }, []);
 
-    const Faculty_MajorsItemquery = useQuery<IFaculty_MajorsItem[], Error>({
+    const Faculty_MajorsItemquery = useQuery<IFacultyMajorResponse, Error>({
         queryKey: ["faculty-majors", version],
         retry: 1,
         queryFn: async () => {
@@ -66,7 +66,7 @@ export const useFaculty_MajorsFetch = () => {
         setOpenModal(true);
     }, []);
 
-    const handleOpenEditMajor = useCallback((majorId: number,facultyId: number) => {
+    const handleOpenEditMajor = useCallback((majorId: number, facultyId: number) => {
         setFormType("major");
         setFacultyId(facultyId);
         setFormMode("edit");
@@ -81,6 +81,10 @@ export const useFaculty_MajorsFetch = () => {
         setFacultyId(0);
         setMajorId(0);
     }, []);
+
+    const faculty_majors = Faculty_MajorsItemquery.data?.data ?? []
+    const majors_total = Faculty_MajorsItemquery.data?.total_major
+    const faculty_total = Faculty_MajorsItemquery.data?.total_faculty
 
     return {
         reload,
@@ -106,8 +110,9 @@ export const useFaculty_MajorsFetch = () => {
         handleOpenCreateMajor,
         handleOpenEditMajor,
         handleCloseModal,
-
-        Faculty_MajorsItem_data: Faculty_MajorsItemquery.data ?? [],
+        faculty_majors,
+        majors_total,
+        faculty_total,
         Faculty_MajorsItemLoading: Faculty_MajorsItemquery.isLoading,
         Faculty_MajorsItemFetching: Faculty_MajorsItemquery.isFetching,
         Faculty_MajorsItemError: Faculty_MajorsItemquery.error,
@@ -323,7 +328,7 @@ export const useFacultyFormFetch = ({
                     setOpenModal(false);
                 } else {
                     const data_update = {
-                        faculty_id: String(facultyId) ,
+                        faculty_id: String(facultyId),
                         major_id: majorId, // ✅ ใช้ majorId ตอนแก้ไขสาขา
                         major_name: form.major_name,
                         updated_by_name: name_by,
@@ -470,3 +475,32 @@ export const useFacultyFormFetch = ({
 };
 
 export type IuseFacultyFormFetch = ReturnType<typeof useFacultyFormFetch>;
+
+export const useFetchFacultyMajors = () => {
+    const [version, setVersion] = useState(0);
+    const reload = useCallback(() => {
+        setVersion((v) => v + 1);
+    }, []);
+
+    const Faculty_MajorsItemquery = useQuery<IFacultyMajorResponse, Error>({
+        queryKey: ["faculty-majors", version],
+        retry: 1,
+        queryFn: async () => {
+            return await getAllFaculty_Majors();
+        },
+    });
+
+    const faculty_majors = Faculty_MajorsItemquery.data?.data ?? []
+    const majors_total = Faculty_MajorsItemquery.data?.total_major
+    const faculty_total = Faculty_MajorsItemquery.data?.total_faculty
+
+    return {
+        reload,
+        faculty_majors,
+        majors_total,
+        faculty_total,
+        faculty_loading: Faculty_MajorsItemquery.isLoading,
+        faculty_fetching: Faculty_MajorsItemquery.isFetching,
+        refetchFaculty: Faculty_MajorsItemquery.refetch,
+    };
+};

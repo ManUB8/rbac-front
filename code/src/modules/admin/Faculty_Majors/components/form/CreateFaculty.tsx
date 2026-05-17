@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Button, Card, CardContent, Dialog, DialogContent, DialogTitle, IconButton, Stack, TextField, Typography } from '@mui/material';
-
+import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Stack, TextField, Typography } from '@mui/material';
 import CloseIcon from "@mui/icons-material/Close";
 import { inputSx } from '../../utils/faculty_major_sx';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -23,18 +22,22 @@ const CreateFaculty: React.FunctionComponent<ICreateFacultyProps> = ({ open, onC
                 open={open}
                 fullWidth
                 maxWidth="md"
-                PaperProps={{
-                    sx: {
-                        borderRadius: "22px",
-                        p: 1,
+                slotProps={{
+                    paper: {
+                        sx: {
+                            borderRadius: "22px",
+                            p: 1,
+                        },
                     },
                 }}
             >
                 <DialogTitle sx={{ pb: 0 }}>
                     <Stack
                         direction="row"
-                        justifyContent="space-between"
-                        alignItems="flex-start"
+                        sx={{
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                        }}
                     >
                         <Box>
                             <Typography
@@ -86,26 +89,18 @@ const CreateFaculty: React.FunctionComponent<ICreateFacultyProps> = ({ open, onC
                         )}
                     />
 
-                    <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 6 }}>
+                    <Stack
+                        direction="row"
+                        spacing={2}
+                        sx={{
+                            mt: 6,
+                            justifyContent: "flex-end",
+                        }}
+                    >
                         <Button variant="outlined" onClick={onClose}>
                             ยกเลิก
                         </Button>
 
-                        {/* <Button
-                            variant="contained"
-                            type="submit"
-                            form='faculty-form'
-                            onClick={Master_Controller.handleSubmit(
-                                Master_Controller.onSubmitMaster,
-                                (errs: any) =>
-                                    Master_Controller.handleErrorSubmit(
-                                        errs,
-                                        Master_Controller.methods.setFocus
-                                    )
-                            )}
-                        >
-                            เพิ่ม
-                        </Button> */}
                         <Button
                             variant="contained"
                             type="button"

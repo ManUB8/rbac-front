@@ -3,6 +3,7 @@ import ActivityFrom from "../components/From/ActivityFrom";
 import { useActivityFetch, useMasterFunctionActivityFromFetch } from "../hook/useFetchActivity";
 import HeadActivity from "../components/page/HeadActivity";
 import ActivityTable from "../components/page/ActivityTable";
+import ActivityFilter from "../components/page/ActivityFilter";
 
 export interface IActivityManagePageProps { }
 
@@ -21,6 +22,7 @@ const ActivityManagePage: React.FC<IActivityManagePageProps> = () => {
   return (
     <>
       <HeadActivity MasterActivity={MasterActivity} />
+      <ActivityFilter MasterActivity={MasterActivity} />
       <ActivityTable
         MasterActivity={MasterActivity}
         MasterController={MasterController}

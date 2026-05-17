@@ -35,6 +35,7 @@ export interface IUserCredential {
 export interface IStudentItem {
   student_id: number;
   student_code: string;
+  year_status: string;
   prefix: string;
   first_name: string;
   last_name: string;

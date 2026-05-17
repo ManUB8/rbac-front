@@ -33,9 +33,19 @@ const EditMajor: React.FC<IEditMajorProps> = ({
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
             <DialogTitle>
-                <Stack direction="row" justifyContent="space-between">
+                <Stack
+                    direction="row"
+                    sx={{
+                        justifyContent: "space-between",
+                    }}
+                >
                     <Box>
-                        <Typography fontSize={24} fontWeight={800}>
+                        <Typography
+                            sx={{
+                                fontSize: 24,
+                                fontWeight: 800,
+                            }}
+                        >
                             แก้ไขสาขา
                         </Typography>
                         <Typography sx={{ mt: 1, color: "#6b7280" }}>
@@ -69,7 +79,14 @@ const EditMajor: React.FC<IEditMajorProps> = ({
                     )}
                 />
 
-                <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 6 }}>
+                <Stack
+                    direction="row"
+                    spacing={2}
+                    sx={{
+                        mt: 6,
+                        justifyContent: "flex-end",
+                    }}
+                >
                     <Button variant="outlined" onClick={onClose}>
                         ยกเลิก
                     </Button>
