@@ -13,7 +13,6 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,18 +20,36 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useFetchFaculty } from "../hook/useFaculty";
 import { NumericFormat } from "react-number-format";
-import type {
-  IFaculty,
-  IMajor,
-  IStudentRegister,
-} from "../interface/Login.interface";
+import type { IStudentItem } from "../interface/Login.interface";
 import { CreateStudent } from "../service/LoginApi";
+import Swal from "sweetalert2";
+import { AppRoutes } from "../../../router/router";
+import type {
+  IFacultyItem,
+  IMajorItem,
+} from "../../admin/Faculty_Majors/interface/Faculty_Majors.Interface";
+
+interface IYearType {
+  label: string;
+  id: string;
+}
+
+export const Year_type: IYearType[] = [
+  { label: "ปี 1", id: "ปี 1" },
+  { label: "ปี 2", id: "ปี 2" },
+  { label: "ปี 3", id: "ปี 3" },
+  { label: "ปี 4", id: "ปี 4" },
+];
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
-  const { faculty, loading_faculty, reload } = useFetchFaculty();
-  const [selectedFaculty, setSelectedFaculty] = useState<IFaculty | null>(null);
-  const [selectedMajor, setSelectedMajor] = useState<IMajor | null>(null);
+  const { faculty, loading_faculty } = useFetchFaculty();
+
+  const [selectedFaculty, setSelectedFaculty] =
+    useState<IFacultyItem | null>(null);
+
+  const [selectedMajor, setSelectedMajor] = useState<IMajorItem | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -46,27 +63,50 @@ const RegisterPage: React.FC = () => {
     watch,
     reset,
     control,
-  } = useForm<IStudentRegister>({});
+  } = useForm<IStudentItem>({
+    defaultValues: {
+      student_code: "",
+      prefix: "",
+      first_name: "",
+      last_name: "",
+      gender: "",
+      faculty_id: 0,
+      faculty_name: "",
+      major_id: 0,
+      major_name: "",
+      year_status: "",
+      user: {
+        username: "",
+        password: "",
+      },
+    },
+  });
 
-  const onSubmit = async (body: IStudentRegister) => {
+  const onSubmit = async (body: IStudentItem) => {
     try {
       setLoading(true);
       setSuccessMessage("");
       setErrorMessage("");
-      console.log("body", body);
-      const res = CreateStudent(body);
-      // แก้ URL ให้ตรงกับ backend ของคุณ
-      console.log("CreateStudent", res);
-      setSuccessMessage("สมัครข้อมูลสำเร็จ");
-      reset();
 
-      // ถ้าอยากเด้งกลับหน้า login หลังสมัครสำเร็จ
-      setTimeout(() => {
-        navigate("/login");
-      }, 1200);
+      const res = await CreateStudent(body);
+      console.log("CreateStudent", res);
+
+      reset();
+      setSelectedFaculty(null);
+      setSelectedMajor(null);
+
+      await Swal.fire({
+        icon: "success",
+        title: "สำเร็จ",
+        text: "สมัครข้อมูลสำเร็จ",
+        timer: 1200,
+        showConfirmButton: false,
+      });
+
+      navigate(AppRoutes.login);
     } catch (error: any) {
       setErrorMessage(
-        error?.response?.data?.detail || "สมัครข้อมูลไม่สำเร็จ กรุณาลองใหม่",
+        error?.response?.data?.detail || "สมัครข้อมูลไม่สำเร็จ กรุณาลองใหม่"
       );
     } finally {
       setLoading(false);
@@ -75,7 +115,7 @@ const RegisterPage: React.FC = () => {
 
   useEffect(() => {
     console.log("Value set", getValues());
-  }, [watch()]);
+  }, [watch(), getValues]);
 
   return (
     <Box
@@ -96,27 +136,38 @@ const RegisterPage: React.FC = () => {
           <CardContent sx={{ p: 4 }}>
             <Typography
               variant="h4"
-              fontWeight={800}
-              textAlign="center"
-              gutterBottom
+              sx={{
+                fontWeight: 800,
+                textAlign: "center",
+                mb: 1,
+              }}
             >
               สมัครข้อมูล
             </Typography>
 
             <Typography
               variant="body1"
-              color="text.secondary"
-              textAlign="center"
-              sx={{ mb: 3 }}
+              sx={{
+                color: "text.secondary",
+                textAlign: "center",
+                mb: 3,
+              }}
             >
               กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้งาน
             </Typography>
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-              <Stack spacing={2.2}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2.2,
+                }}
+              >
                 {successMessage && (
                   <Alert severity="success">{successMessage}</Alert>
                 )}
+
                 {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
                 <NumericFormat
@@ -125,13 +176,17 @@ const RegisterPage: React.FC = () => {
                   fullWidth
                   allowNegative={false}
                   decimalScale={0}
-                  value={getValues("student_id") ?? ""}
+                  value={watch("student_code") ?? ""}
                   onValueChange={(values) => {
-                    setValue("student_id", values.value);
-                    setValue("user.username", values.value);
+                    setValue("student_code", values.value, {
+                      shouldValidate: true,
+                    });
+                    setValue("user.username", values.value, {
+                      shouldValidate: true,
+                    });
                   }}
-                  error={!!errors?.student_id}
-                  helperText={errors?.student_id?.message || ""}
+                  error={!!errors?.student_code}
+                  helperText={errors?.student_code?.message || ""}
                   slotProps={{
                     htmlInput: {
                       maxLength: 8,
@@ -139,6 +194,7 @@ const RegisterPage: React.FC = () => {
                   }}
                   isAllowed={(values) => values.value.length <= 8}
                 />
+
                 <FormControl error={!!errors.prefix}>
                   <FormLabel>คำนำหน้า</FormLabel>
 
@@ -167,12 +223,17 @@ const RegisterPage: React.FC = () => {
                   />
 
                   {errors.prefix && (
-                    <Typography color="error" fontSize={12}>
+                    <Typography
+                      sx={{
+                        color: "error.main",
+                        fontSize: 12,
+                      }}
+                    >
                       {errors.prefix.message}
                     </Typography>
                   )}
                 </FormControl>
-                
+
                 <TextField
                   label="ชื่อจริง"
                   fullWidth
@@ -182,6 +243,7 @@ const RegisterPage: React.FC = () => {
                   error={!!errors.first_name}
                   helperText={errors.first_name?.message}
                 />
+
                 <TextField
                   label="นามสกุล"
                   fullWidth
@@ -202,7 +264,6 @@ const RegisterPage: React.FC = () => {
                     render={({ field }) => (
                       <RadioGroup
                         row
-                        {...field}
                         value={field.value ?? ""}
                         onChange={(e) => field.onChange(e.target.value)}
                       >
@@ -217,22 +278,59 @@ const RegisterPage: React.FC = () => {
                           label="หญิง"
                         />
                         <FormControlLabel
-                          value="อื่นๆ"
+                          value="LGBTQ+"
                           control={<Radio />}
-                          label="อื่นๆ"
+                          label="LGBTQ+"
                         />
                       </RadioGroup>
                     )}
                   />
 
                   {errors.gender && (
-                    <Typography color="error" fontSize={12}>
+                    <Typography
+                      sx={{
+                        color: "error.main",
+                        fontSize: 12,
+                      }}
+                    >
                       {errors.gender.message}
                     </Typography>
                   )}
                 </FormControl>
 
-                <Autocomplete<IFaculty>
+                <Controller
+                  name="year_status"
+                  control={control}
+                  rules={{ required: "กรุณาเลือกชั้นปี" }}
+                  render={({ field }) => (
+                    <Autocomplete
+                      fullWidth
+                      disablePortal
+                      options={Year_type}
+                      value={
+                        Year_type.find((item) => item.id === field.value) ??
+                        null
+                      }
+                      getOptionLabel={(option) => option.label}
+                      isOptionEqualToValue={(option, value) =>
+                        option.id === value.id
+                      }
+                      onChange={(_, newValue) => {
+                        field.onChange(newValue?.id ?? "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="ชั้นปี"
+                          error={!!errors.year_status}
+                          helperText={errors.year_status?.message}
+                        />
+                      )}
+                    />
+                  )}
+                />
+
+                <Autocomplete
                   disablePortal
                   loading={loading_faculty}
                   options={faculty ?? []}
@@ -241,13 +339,22 @@ const RegisterPage: React.FC = () => {
                     setSelectedFaculty(newValue);
                     setSelectedMajor(null);
 
-                    setValue("faculty_name", newValue?.faculty_name ?? "");
-                    setValue("faculty_id", newValue?.id ?? 0);
-                    setValue("major_name", "");
+                    setValue("faculty_name", newValue?.faculty_name ?? "", {
+                      shouldValidate: true,
+                    });
+                    setValue("faculty_id", newValue?.faculty_id ?? 0, {
+                      shouldValidate: true,
+                    });
+                    setValue("major_name", "", {
+                      shouldValidate: true,
+                    });
+                    setValue("major_id", 0, {
+                      shouldValidate: true,
+                    });
                   }}
-                  getOptionLabel={(option) => option.faculty_name}
+                  getOptionLabel={(option) => option.faculty_name ?? ""}
                   isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
+                    option.faculty_id === value.faculty_id
                   }
                   fullWidth
                   renderInput={(params) => (
@@ -260,18 +367,23 @@ const RegisterPage: React.FC = () => {
                   )}
                 />
 
-                <Autocomplete<IMajor>
+                <Autocomplete
                   disablePortal
                   options={selectedFaculty?.majors ?? []}
                   value={selectedMajor}
                   onChange={(_, newValue) => {
                     setSelectedMajor(newValue);
-                    setValue("major_name", newValue?.major_name ?? "");
-                    setValue("major_id", newValue?.id ?? 0);
+
+                    setValue("major_name", newValue?.major_name ?? "", {
+                      shouldValidate: true,
+                    });
+                    setValue("major_id", newValue?.major_id ?? 0, {
+                      shouldValidate: true,
+                    });
                   }}
-                  getOptionLabel={(option) => option.major_name}
+                  getOptionLabel={(option) => option.major_name ?? ""}
                   isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
+                    option.major_id === value.major_id
                   }
                   fullWidth
                   disabled={!selectedFaculty}
@@ -288,7 +400,7 @@ const RegisterPage: React.FC = () => {
                 <TextField
                   label="Username"
                   fullWidth
-                  value={getValues("user.username") ?? ""}
+                  value={watch("user.username") ?? ""}
                   disabled
                   error={!!errors.user?.username}
                   helperText={errors.user?.username?.message}
@@ -300,10 +412,6 @@ const RegisterPage: React.FC = () => {
                   fullWidth
                   {...register("user.password", {
                     required: "กรุณากรอก password",
-                    minLength: {
-                      value: 6,
-                      message: "รหัสผ่านต้องอย่างน้อย 6 ตัวอักษร",
-                    },
                   })}
                   error={!!errors.user?.password}
                   helperText={errors.user?.password?.message}
@@ -340,7 +448,7 @@ const RegisterPage: React.FC = () => {
                 >
                   กลับไปหน้าเข้าสู่ระบบ
                 </Button>
-              </Stack>
+              </Box>
             </Box>
           </CardContent>
         </Card>
