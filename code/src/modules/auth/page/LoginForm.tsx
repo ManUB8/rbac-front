@@ -77,7 +77,7 @@ const LoginForm: React.FC = () => {
     setRoleTab(tab);
     setBanner(null);
 
-  
+
   };
 
   return (
@@ -290,9 +290,9 @@ const LoginForm: React.FC = () => {
                       border: "1px solid #D32F2F",
                     },
                     "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after":
-                      {
-                        display: "none",
-                      },
+                    {
+                      display: "none",
+                    },
                     "& .MuiInputBase-input": {
                       py: 2,
                       fontSize: 17,
@@ -356,9 +356,9 @@ const LoginForm: React.FC = () => {
                       border: "1px solid #D32F2F",
                     },
                     "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after":
-                      {
-                        display: "none",
-                      },
+                    {
+                      display: "none",
+                    },
                     "& .MuiInputBase-input": {
                       py: 2,
                       fontSize: 17,
@@ -411,7 +411,7 @@ const LoginForm: React.FC = () => {
                 },
               }}
             >
-              <Typography fontSize={18} fontWeight={800}>
+              <Typography sx={{ fontSize: 18, fontWeight: 800 }}>
                 {isSubmitting ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
               </Typography>
             </Button>

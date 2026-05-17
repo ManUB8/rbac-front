@@ -5,22 +5,24 @@ import { useMasterFunctionActivityFromFetch, type IuseActivityFetch } from "../.
 import ActivityModal from "./ActivityModal";
 
 export interface IActivityFromProps {
-    master: IuseActivityFetch;
+    MasterActivity: IuseActivityFetch;
 }
 
 const ActivityFrom: React.FunctionComponent<IActivityFromProps> = ({
-    master,
+    MasterActivity,
 }) => {
-    const mastercontrol = useMasterFunctionActivityFromFetch({
-        id: master.selectedId,
-        openModal: master.openModal,
-        setOpenModal: master.setOpenModal,
+    const MasterActivitycontrol = useMasterFunctionActivityFromFetch({
+        id: MasterActivity.selectedId,
+        activity_id: MasterActivity.selectedId,
+        formMode: MasterActivity.formMode,
+        openModal: MasterActivity.openModal,
+        setOpenModal: MasterActivity.setOpenModal,
+        reload: MasterActivity.reload,
     });
+    const methods = MasterActivitycontrol.methods;
 
-    const methods = mastercontrol.methods;
-
-    if (mastercontrol.loading) {
-        return <LoadingDisplayLast loading={mastercontrol.loading} />;
+    if (MasterActivitycontrol.loading) {
+        return <LoadingDisplayLast loading={MasterActivitycontrol.loading} />;
     }
 
     return (
@@ -28,12 +30,12 @@ const ActivityFrom: React.FunctionComponent<IActivityFromProps> = ({
             <form
                 autoComplete="off"
                 id="activity-form"
-                onSubmit={mastercontrol.handleSubmit(
-                    mastercontrol.onSubmitMaster,
-                    (errs) => mastercontrol.handleErrorSubmit(errs, methods.setFocus)
+                onSubmit={MasterActivitycontrol.handleSubmit(
+                    MasterActivitycontrol.onSubmitMaster,
+                    (errs) => MasterActivitycontrol.handleErrorSubmit(errs, methods.setFocus)
                 )}
             >
-                <ActivityModal mastercontrol={mastercontrol} />
+                <ActivityModal MasterController={MasterActivitycontrol} />
             </form>
         </FormProvider>
     );

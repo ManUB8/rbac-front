@@ -43,7 +43,8 @@ export const useAuth = () => {
   const setAuthSession = (
     role: UserRole,
     accountName: string,
-    userId: string | number
+    userId: string | number,
+    code:string | number
   ) => {
     const fakeToken = `mock-token-${role}-${Date.now()}`;
 
@@ -51,21 +52,23 @@ export const useAuth = () => {
     Cookies.set("accountName", accountName, { expires: 30 });
     Cookies.set("accountType", role, { expires: 30 });
     Cookies.set("userId", String(userId), { expires: 30 });
+    Cookies.set("user_code", String(code), { expires: 30 });
 
     localStorage.setItem("access_token", fakeToken);
     localStorage.setItem("account_type", role);
     localStorage.setItem("account_name", accountName);
     localStorage.setItem("user_id", String(userId));
+    localStorage.setItem("user_code", String(code));
 
     navigate(getDefaultRouteByRole(role), { replace: true });
   };
 
   const authroizedAdmin = (data: ILoginAdminItem) => {
-    setAuthSession("admin", data.name, data.user_id);
+    setAuthSession("admin", data.name, data.user_id, data.username);
   };
 
   const authroizedStudent = (data: IStudentItem) => {
-    setAuthSession("student", data.first_name, data.student_id);
+    setAuthSession("student", data.first_name, data.student_id,data.student_code);
   };
 
   const handleLoginAdmin = async (

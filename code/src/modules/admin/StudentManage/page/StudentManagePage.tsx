@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { Box, Card, CardContent, Container, Typography } from "@mui/material";
-import Swal from "sweetalert2";
 import { useStudentMangeFetch } from "../hook/useFetchStudentMange";
 import type { IStudentItem } from "../interface/StudentMange.interface";
 import FacultyView from "../components/page/FacultyView";
 import MajorView from "../components/page/MajorView";
 import StudentTableView from "../components/page/StudentTableView";
-import StudentFrom from "../components/From/StudentFrom";
 
 export interface IStudentManagePageProps { }
 
@@ -20,34 +18,6 @@ const StudentManagePage: React.FunctionComponent<IStudentManagePageProps> = () =
   const [openStudentModal, setOpenStudentModal] = useState(false);
   const [modalMode, setModalMode] = useState<"create" | "edit">("create");
   const [_selectedStudent, setSelectedStudent] = useState<IStudentItem | null>(null);
-
-  const handleOpenAdd = () => {
-    setModalMode("create");
-    setSelectedStudent(null);
-    setOpenStudentModal(true);
-  };
-
-  const handleOpenEdit = (student: IStudentItem) => {
-    setModalMode("edit");
-    setSelectedStudent(student);
-    setOpenStudentModal(true);
-  };
-
-  const handleDelete = async (student: IStudentItem) => {
-    const result = await Swal.fire({
-      icon: "warning",
-      title: "ยืนยันการลบ",
-      text: `ต้องการลบนิสิต ${student.first_name} ${student.last_name} ใช่หรือไม่`,
-      showCancelButton: true,
-      confirmButtonText: "ลบ",
-      cancelButtonText: "ยกเลิก",
-      confirmButtonColor: "#e11d48",
-    });
-
-    if (result.isConfirmed) {
-      console.log("delete student id:", student.student_id);
-    }
-  };
 
   return (
     <Box

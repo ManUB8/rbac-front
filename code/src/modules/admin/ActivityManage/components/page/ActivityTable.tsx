@@ -1,11 +1,5 @@
-import React, { useState } from "react";
+import React, { Activity, useState } from "react";
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    IconButton,
-    Stack,
     Typography,
     Table,
     TableBody,
@@ -13,148 +7,112 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    Grid,
+    Paper,
+    Skeleton,
+    TablePagination,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import type { IuseActivityFetch } from "../../hook/useFetchActivity";
-import { formatDateThai, formatTimeRange } from "../../../../../shared/components/Date-Time/DateAndTime";
+import type { IuseActivityFetch, IuseMasterFunctionActivityFromFetch } from "../../hook/useFetchActivity";
+import { useMasterActivityColumns } from "../Table/ActivityColumns";
 
 export interface IActivityTableProps {
-    master: IuseActivityFetch
+    MasterActivity: IuseActivityFetch
+    MasterController: IuseMasterFunctionActivityFromFetch
 };
 
 const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
-    master
+    MasterActivity,
+    MasterController
 }) => {
+    const columns = useMasterActivityColumns(MasterActivity, MasterController);
+
+    const handleChangePage = (_event: unknown, newPage: number) => {
+        MasterActivity.setSearchStateActivity((prev) => ({
+            ...prev,
+            page: newPage + 1,
+        }));
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        MasterActivity.setSearchStateActivity((prev) => ({
+            ...prev,
+            page: 1,
+            limit: +event.target.value,
+        }));
+    };
     return (
         <>
-
-            <Card sx={{ borderRadius: 3 }}>
-                <CardContent>
-                    <Stack direction="row" justifyContent="space-between" mb={2}>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                            <Typography fontWeight={600}>รายการกิจกรรมทั้งหมด</Typography>
-                        </Stack>
-
-                        <Typography>{master.total} กิจกรรม</Typography>
-                    </Stack>
-
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
+            <Grid container spacing={2} sx={{ marginTop: 2 }}>
+                <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                    <TableContainer sx={{ maxHeight: 500 }}>
+                        <Table stickyHeader >
+                            <TableHead
+                                sx={{
+                                    '& .MuiTableCell-root': (theme) => ({
+                                        position: 'sticky',
+                                    }),
+                                }}
+                            >
                                 <TableRow>
-                                    <TableCell>ลำดับ</TableCell>
-                                    <TableCell>รูป</TableCell>
-                                    <TableCell>ชื่อกิจกรรม</TableCell>
-                                    <TableCell>วันที่</TableCell>
-                                    <TableCell>เวลา</TableCell>
-                                    <TableCell>ชั่วโมง</TableCell>
-                                    <TableCell>สถานที่</TableCell>
-                                    <TableCell align="center">จัดการ</TableCell>
+                                    {columns.map((column) => (
+                                        <TableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            sx={{ minWidth: column.minWidth }}
+                                        >
+                                            <Typography variant="subtitle2">
+                                                {column.headerRender ? column.headerRender() : column.label}
+                                            </Typography>
+                                        </TableCell>
+                                    ))}
                                 </TableRow>
                             </TableHead>
-
                             <TableBody>
-                                {master.activity_data.map((item, index) => (
-                                    <TableRow key={item.activity_id} hover>
-                                        <TableCell>{index + 1}</TableCell>
-
-                                        <TableCell>
-                                            <Box
-                                                sx={{
-                                                    width: 60,
-                                                    height: 60,
-                                                    bgcolor: "#f1f5f9",
-                                                    borderRadius: 2,
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    overflow: "hidden",
-                                                }}
-                                            >
-                                                {item.activity_img ? (
-                                                    <Box
-                                                        component="img"
-                                                        src={item.activity_img}
-                                                        alt={item.activity_name}
-                                                        sx={{
-                                                            width: "100%",
-                                                            height: "100%",
-                                                            objectFit: "cover",
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <CalendarTodayOutlinedIcon />
-                                                )}
-                                            </Box>
-                                        </TableCell>
-
-                                        <TableCell>
-                                            <Typography fontWeight={600}>
-                                                {item.activity_name}
-                                            </Typography>
-                                            <Typography fontSize={13} color="text.secondary">
-                                                {item.description}
-                                            </Typography>
-                                        </TableCell>
-
-                                        <TableCell>{formatDateThai(item.activity_date)}</TableCell>
-                                        <TableCell>
-                                            {formatTimeRange(item.start_time, item.end_time)}
-                                        </TableCell>
-                                        <TableCell>{item.hours} ชม.</TableCell>
-
-                                        <TableCell>
-                                            <Stack direction="row" spacing={1}>
-                                                <LocationOnOutlinedIcon fontSize="small" />
-                                                <Typography fontSize={13}>{item.location}</Typography>
-                                            </Stack>
-                                        </TableCell>
-
-                                        <TableCell align="center">
-                                            <Stack
-                                                direction="row"
-                                                spacing={1}
-                                                justifyContent="center"
-                                            >
-                                                <IconButton onClick={() => master.handleOpenEdit(item.activity_id)}>
-                                                    <EditOutlinedIcon />
-                                                </IconButton>
-
-                                                <IconButton
-                                                    onClick={() => master.handleDelete(item.activity_id)}
-                                                    sx={{
-                                                        bgcolor: "error.main",
-                                                        color: "#fff",
-                                                        "&:hover": {
-                                                            bgcolor: "error.dark",
-                                                        },
-                                                    }}
-                                                >
-                                                    <DeleteOutlineOutlinedIcon />
-                                                </IconButton>
-                                            </Stack>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-
-                                {master.activity_data.length === 0 && (
+                                {MasterActivity.activityLoading ? (
                                     <TableRow>
-                                        <TableCell colSpan={8} align="center">
-                                            <Typography color="text.secondary">
-                                                ยังไม่มีกิจกรรม
-                                            </Typography>
+                                        <TableCell colSpan={columns.length} align="center">
+                                            <Skeleton
+                                                variant="rounded"
+                                                height={40}
+                                                sx={{ mb: 1, borderRadius: "8px" }}
+                                            />
                                         </TableCell>
                                     </TableRow>
+                                ) : MasterActivity.activity_data?.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={columns.length} align="center">
+                                            <Typography variant="body1">{"ไม่พบข้อมูล"}</Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    MasterActivity.activity_data.map((row, rowIndex) => (
+                                        <TableRow
+                                            key={row.activity_id}
+                                            hover
+                                            tabIndex={0}
+                                        >
+                                            {columns.map((column) => (
+                                                <TableCell key={column.id} align={column.align}>
+                                                    {column.render(row, rowIndex)}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    ))
                                 )}
                             </TableBody>
                         </Table>
                     </TableContainer>
-                </CardContent>
-            </Card>
+                    <TablePagination
+                        rowsPerPageOptions={[20, 50, 100]}
+                        component="div"
+                        count={MasterActivity.total_activity}
+                        rowsPerPage={MasterActivity.searchState.limit}
+                        page={MasterActivity.searchState.page - 1}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </Paper>
+            </Grid>
         </>
     )
 };

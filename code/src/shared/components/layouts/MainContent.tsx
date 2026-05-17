@@ -39,6 +39,7 @@ const MainContent: React.FC<IMainContentProps> = ({
         overflowY: 'auto',
         overflowX: 'hidden',
         p: 2,
+        m:2,
         pt: topOffset || undefined,
         pb: bottomOffset || undefined,
       }}

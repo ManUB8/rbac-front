@@ -46,14 +46,17 @@ export const api = {
     }
   },
 
-  post: async <T>(url: string, data?: any, config = {}): Promise<T> => {
+  post: async <T>(
+    url: string,
+    data?: any,
+    config: RequestConfig = {}
+  ): Promise<T> => {
     try {
       const res = await instance.post<T>(url, data, config);
       return res.data;
-    } catch (err) {
-      handleError(err);
+    } catch (err: any) {
+      if (!config.skipSwal) handleError(err);
       throw err;
-
     }
   },
 
@@ -65,6 +68,16 @@ export const api = {
       handleError(err);
       throw err;
 
+    }
+  },
+
+  patch: async <T>(url: string, data?: any, config: RequestConfig = {}): Promise<T> => {
+    try {
+      const res = await instance.patch<T>(url, data, config);
+      return res.data;
+    } catch (err: any) {
+      if (!config.skipSwal) handleError(err);
+      throw err;
     }
   },
 

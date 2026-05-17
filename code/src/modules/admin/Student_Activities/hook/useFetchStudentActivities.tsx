@@ -8,5 +8,3 @@ import { useForm, type FieldErrors, type Path, type Resolver, type UseFormSetFoc
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as R from 'ramda';
 import Swal from "sweetalert2";
-import { getAllErrorPaths } from "../../../../shared/components/error/FunctionError";
-

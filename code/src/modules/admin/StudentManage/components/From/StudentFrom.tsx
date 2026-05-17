@@ -10,14 +10,15 @@ export interface IStudentFromProps {
     facultyId?: number | null;
     majorId?: number | null;
     onClose: () => void;
+    reload: () => void; // ✅ เพิ่ม
 }
-
 const StudentFrom: React.FunctionComponent<IStudentFromProps> = ({
     open,
     id = 0,
     facultyId,
     majorId,
     onClose,
+    reload,
 }) => {
     const MasterStudent = useMasterFunctionStudentFromFetch({
         id,
@@ -28,6 +29,8 @@ const StudentFrom: React.FunctionComponent<IStudentFromProps> = ({
             if (typeof value === "function") return;
             if (!value) onClose();
         },
+        reload,
+
     });
 
     const methods = MasterStudent.methods;

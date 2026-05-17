@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getFacultyStudentMange, getMajorFaculty, getOneStudent, getStudentMange } from "../service/StudentMangeApi";
-import { IStudentDataDefule, type IFacultyItem, type IMajorItem, type IStudentByMajorResponse, type IStudentItem } from "../interface/StudentMange.interface";
+import { CreateStudent, DeleteStudent, getFacultyStudentMange, getMajorFaculty, getOneStudent, getStudentMange, UpdateStudent } from "../service/StudentMangeApi";
+import { IStudentDataDefule, type IFacultyItem, type IMajorItem, type IStudentByMajorResponse, type IStudentdelete, type IStudentItem } from "../interface/StudentMange.interface";
 import { useTheme } from "@mui/material";
 import { useAtom } from "jotai";
 import { confirmPopupAtom, flashAlertAtom } from "../../../../shared/components/constants/OptionsAtom";
@@ -16,12 +16,15 @@ import { getAllErrorPaths } from "../../../../shared/components/error/FunctionEr
 type ViewMode = "faculty" | "branch" | "student";
 
 export const useStudentMangeFetch = () => {
+
     const navigate = useNavigate();
     const [version, setVersion] = useState(0);
 
     const [viewMode, setViewMode] = useState<ViewMode>("faculty");
     const [selectedFacultyId, setSelectedFacultyId] = useState<number | null>(null);
     const [selectedFacultyName, setSelectedFacultyName] = useState<string>("");
+    const [, setConfirmPopup] = useAtom(confirmPopupAtom);
+    const [, setFlash] = useAtom(flashAlertAtom);
     const [selectedMajorId, setSelectedMajorId] = useState<number | null>(null);
     const [selectedMajorName, setSelectedMajorName] = useState<string>("");
 
@@ -89,9 +92,60 @@ export const useStudentMangeFetch = () => {
         setViewMode("branch");
     };
 
+    const handleDelete = useCallback(
+        async (studentId: number) => {
+            try {
+                const name_by = localStorage.getItem("account_name") || "";
+
+                const data_delete: IStudentdelete = {
+                    student_id: Number(studentId),
+                    updated_by_name: name_by,
+                };
+
+                await DeleteStudent(data_delete);
+
+                setFlash({
+                    type_severity: "success",
+                    title: "",
+                    content: "ลบข้อมูลสำเร็จ",
+                });
+
+                reload();
+            } catch (error) {
+                console.error(error);
+
+                setFlash({
+                    type_severity: "error",
+                    title: "",
+                    content: "เกิดข้อผิดพลาด ไม่สามารถลบข้อมูลได้",
+                });
+            }
+        },
+        [reload, setFlash]
+    );
+
+    const onClickDeleteMaster = useCallback(
+        (id: number) => {
+            setConfirmPopup({
+                type: "warning",
+                title: "ต้องการลบข้อมูล?",
+                content: "ข้อมูลที่ลบจะไม่สามารถกู้คืนได้",
+                onClose: () => setConfirmPopup(null),
+                onConfirm: async () => {
+                    await handleDelete(id);
+                    setConfirmPopup(null);
+                },
+                confirmText: "ยืนยัน",
+                cancelText: "ยกเลิก",
+            });
+        },
+        [handleDelete, setConfirmPopup]
+    );
     return {
         navigate,
         reload,
+        onClickDeleteMaster,
+
 
         viewMode,
         selectedFacultyId,
@@ -134,6 +188,7 @@ export const useMasterFunctionStudentFromFetch = ({
     facultyId,
     majorId,
     openStudentModal,
+    reload,
     setOpenStudentModal,
 }: {
     id?: number;
@@ -141,6 +196,7 @@ export const useMasterFunctionStudentFromFetch = ({
     majorId?: number | null;
     openStudentModal: boolean;
     setOpenStudentModal: React.Dispatch<React.SetStateAction<boolean>>;
+    reload: () => void;
 }) => {
     const theme = useTheme();
     const navigate = useNavigate();
@@ -168,7 +224,6 @@ export const useMasterFunctionStudentFromFetch = ({
         setError,
         clearErrors,
         formState: { errors },
-        setFocus,
     } = methods;
 
 
@@ -282,7 +337,11 @@ export const useMasterFunctionStudentFromFetch = ({
 
         try {
             if (isCreate) {
-                console.log("Create-form", form);
+                const name_by = localStorage.getItem("account_name") || "";
+                const data_create = { ...form, created_by_name: name_by };
+                console.log("Create-form", data_create);
+                const res = await CreateStudent(data_create);
+
 
                 setFlash({
                     type_severity: "success",
@@ -296,6 +355,9 @@ export const useMasterFunctionStudentFromFetch = ({
             }
 
             console.log("Update-form", form);
+            const name_by = localStorage.getItem("account_name") || "";
+            const data_update = { ...form, updated_by_name: name_by };
+            const res = await UpdateStudent(data_update);
 
             setFlash({
                 type_severity: "success",
@@ -329,49 +391,12 @@ export const useMasterFunctionStudentFromFetch = ({
         });
     }, [saveHandler, setConfirmPopup]);
 
-    const handleDelete = useCallback(async () => {
-        try {
-            const idToDelete = !isCreate ? Id : getValues("student_id");
-
-            console.log("delete id", idToDelete);
-
-            setFlash({
-                type_severity: "success",
-                title: "",
-                content: "ลบข้อมูลสำเร็จ",
-            });
-
-            setOpenStudentModal(false);
-        } catch (error) {
-            console.error(error);
-            setFlash({
-                type_severity: "error",
-                title: "",
-                content: "เกิดข้อผิดพลาด ไม่สามารถลบข้อมูลได้",
-            });
-        }
-    }, [getValues, isCreate, Id, setFlash, setOpenStudentModal]);
-
-    const onClickDeleteMaster = useCallback(() => {
-        setConfirmPopup({
-            type: "warning",
-            title: "ท่านต้องการลบข้อมูล !!",
-            content: "ยืนยันหากต้องการลบข้อมูล ข้อมูลที่ลบไม่สามารถนำกลับมาได้",
-            onClose: () => setConfirmPopup(null),
-            onConfirm: async () => {
-                await handleDelete();
-                setConfirmPopup(null);
-            },
-            confirmText: "ยืนยัน",
-            cancelText: "ยกเลิก",
-        });
-    }, [handleDelete, setConfirmPopup]);
-
     return {
         register,
         handleSubmit,
         reset,
         setValue,
+        reload,
         watch,
         getValues,
         control,
@@ -386,7 +411,6 @@ export const useMasterFunctionStudentFromFetch = ({
         theme,
         methods,
         onSubmitMaster,
-        onClickDeleteMaster,
         handleErrorSubmit,
         refetch: query.refetch,
         queryError: query.error,

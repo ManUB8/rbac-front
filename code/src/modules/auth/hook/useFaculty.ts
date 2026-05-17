@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import type { IFaculty } from "../interface/Login.interface";
 import { getAllFaculty } from "../service/LoginApi";
+import type { IFacultyItem } from "../../admin/Faculty_Majors/interface/Faculty_Majors.Interface";
 
 
 export const useFetchFaculty = () => {
-    const [faculty, setFaculty] = useState<IFaculty[]>([]);
+    const [faculty, setFaculty] = useState<IFacultyItem[]>([]);
     const [loading_faculty, setLoading_Faculty] = useState(true);
     const [version, setVersion] = useState(0);
 
@@ -17,7 +18,7 @@ export const useFetchFaculty = () => {
             setLoading_Faculty(true);
             try {
                 const res = await getAllFaculty();
-                const rows = res;
+                const rows = res.data;
                 console.log(rows)
 
                 if (!cancelled) setFaculty(rows);

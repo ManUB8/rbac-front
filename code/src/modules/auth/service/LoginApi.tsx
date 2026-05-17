@@ -1,5 +1,6 @@
 import { ApiConfig } from "../../../shared/service/ApiConfig";
 import { api } from "../../../shared/service/axiosInstance";
+import type { IFacultyMajorResponse } from "../../admin/Faculty_Majors/interface/Faculty_Majors.Interface";
 import type { IFaculty, ILoginAdminBody, ILoginAdminItem, ILoginStudentBody, IStudentItem } from "../interface/Login.interface";
 
 export const getLoginAdmin = async (body: ILoginAdminBody): Promise<ILoginAdminItem> => {
@@ -18,16 +19,24 @@ export const getLoginStudent = async (body: ILoginStudentBody): Promise<IStudent
   return res;
 };
 
-export const getAllFaculty = async (): Promise<IFaculty[]> => {
-  const res = await api.get<IFaculty[]>(
+export const getAllFaculty = async (): Promise<IFacultyMajorResponse> => {
+  const res = await api.get<IFacultyMajorResponse>(
     ApiConfig.FACULTY_API + `/faculties-all`
   );
   return res;
 };
 
-export const CreateStudent = async (body: IStudentItem): Promise<any> => {
+export const CreateStudent_v1 = async (body: IStudentItem): Promise<any> => {
   const res = await api.post<IStudentItem>(
     ApiConfig.STUDENT_API + `/register`,
+    body
+  );
+
+  return res;
+};
+export const CreateStudent = async (body: IStudentItem): Promise<any> => {
+  const res = await api.post<IStudentItem>(
+    ApiConfig.STUDENT_API_V2 + `/register`,
     body
   );
 

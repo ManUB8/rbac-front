@@ -24,6 +24,7 @@ import LoadingTable from "../../../../../shared/components/loading/LoadingTable"
 
 export interface IStudentTableViewProps {
     master: IuseStudentMangeFetch;
+
 }
 
 const cardBorder = "#dbe3ef";
@@ -46,15 +47,16 @@ const StudentTableView: React.FunctionComponent<IStudentTableViewProps> = ({
 
     const columns = useMasterStudentColumns({
         reload: master.reload,
-        onEdit: (id: number) => {
+
+        onEdit: (id) => {
             setSelectedStudentId(id);
             setOpenStudentModal(true);
         },
-        onDelete: (id: number) => {
-            console.log("delete id", id);
+
+        onClickDeleteMaster: (id) => { // ✅ เปลี่ยนชื่อ
+            master.onClickDeleteMaster(id); // ✅ ต้องมีใน master
         },
     });
-
     const filteredStudents = master.student_data.filter((student) => {
         const matchStudentId = student.student_code
             ?.toLowerCase()
@@ -70,7 +72,7 @@ const StudentTableView: React.FunctionComponent<IStudentTableViewProps> = ({
 
         return matchStudentId && matchFirstName && matchLastName;
     });
-    
+
     return (
         <>
             <StudentFrom
@@ -79,6 +81,7 @@ const StudentTableView: React.FunctionComponent<IStudentTableViewProps> = ({
                 facultyId={master.selectedFacultyId}
                 majorId={master.selectedMajorId}
                 onClose={() => setOpenStudentModal(false)}
+                reload={master.reload} // ✅ เพิ่ม
             />
 
             <Card
@@ -187,10 +190,18 @@ const StudentTableView: React.FunctionComponent<IStudentTableViewProps> = ({
                         >
                             <TextField
                                 fullWidth
-                                size="small"
+                                // size="small"
                                 placeholder="ค้นหารหัสนิสิต"
                                 value={searchStudentId}
-                                onChange={(e) => setSearchStudentId(e.target.value)}
+                                onChange={(e) => {
+                                    const value = e.target.value.replace(/[^0-9]/g, "");
+                                    setSearchStudentId(value);
+                                }}
+                                inputProps={{
+                                    inputMode: "numeric",
+                                    pattern: "[0-9]*",
+                                    maxLength: 8, // (ถ้าต้องการจำกัด)
+                                }}
                                 sx={{
                                     maxWidth: { xs: "100%", md: 260 },
                                     "& .MuiOutlinedInput-root": {
