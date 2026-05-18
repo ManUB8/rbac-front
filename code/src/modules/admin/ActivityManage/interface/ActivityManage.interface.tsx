@@ -5,6 +5,12 @@ export interface IActivitySearch {
   activity_status: string;
   check_type: string
   require_registration: string;
+  hour_type_id: string;
+}
+
+export interface IHourType {
+  hour_type_id: string;
+  hour_type_name: string;
 }
 
 export interface IActivityItem {
@@ -15,6 +21,8 @@ export interface IActivityItem {
 
   start_time: string;
   end_time: string;
+  hour_type_id: string;
+  hour_type: IHourType;
 
   hours: number;
 
@@ -85,7 +93,12 @@ export const IActivityDataDefault: IActivityItem = {
   updated_at: 0,
   registered_count: 0,
   register_text: '',
-  is_full: false
+  is_full: false,
+  hour_type_id: "",
+  hour_type: {
+    hour_type_id: "",
+    hour_type_name: ""
+  }
 }
 
 export interface IActivityDelete {
@@ -108,4 +121,11 @@ export interface IActivityFilter {
   id: number;
   name: string;
   code: string;
+}
+
+export interface IActivityFilterAll {
+  hour_type: IActivityType[];
+  check_type: IActivityType[];
+  activity_status: IActivityType[];
+  require_registration: IActivityType[];
 }

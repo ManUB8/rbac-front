@@ -1,8 +1,28 @@
 /* index.css */
+@font-face {
+    font-family: 'IBMPlexSansThai';
+    src: url('./assets/fonts/IBM_Plex_Sans_Thai/IBMPlexSansThai-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'IBMPlexSansThai';
+    src: url('./assets/fonts/IBM_Plex_Sans_Thai/IBMPlexSansThai-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'IBMPlexSansThai';
+    src: url('./assets/fonts/IBM_Plex_Sans_Thai/IBMPlexSansThai-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
 :root {
     /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
-    font-family: "IBM Plex Sans", "IBMPlexSansThai", system-ui, -apple-system,
-    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: "IBMPlexSansThai", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
 
@@ -35,8 +55,7 @@ html, body {
 }
 
 body {
-  font-family: "IBM Plex Sans", "IBMPlexSansThai", system-ui, -apple-system,
-  "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+     font-family: "IBMPlexSansThai", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
   /* display: flex;            */
   min-width: 320px;
@@ -80,26 +99,7 @@ button:focus-visible {
     }
 }
 
-@font-face {
-    font-family: 'IBMPlexSansThai';
-    src: url('./assets/fonts/IBM_Plex_Sans_Thai/IBMPlexSansThai-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-}
 
-@font-face {
-    font-family: 'IBMPlexSansThai';
-    src: url('./assets/fonts/IBM_Plex_Sans_Thai/IBMPlexSansThai-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'IBMPlexSansThai';
-    src: url('./assets/fonts/IBM_Plex_Sans_Thai/IBMPlexSansThai-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-}
 
 
 .app-sidebar .ps-sidebar-container {

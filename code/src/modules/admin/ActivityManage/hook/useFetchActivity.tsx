@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { getAllErrorPaths } from "../../../../shared/components/error/FunctionError";
-import { IActivityDataDefault, type IActivityDelete, type IActivityFilter, type IActivityItem, type IActivityListResponse } from "../interface/ActivityManage.interface";
+import { IActivityDataDefault, type IActivityDelete, type IActivityFilter, type IActivityFilterAll, type IActivityItem, type IActivityListResponse } from "../interface/ActivityManage.interface";
 import {
     getAllActivity,
     getOneActivity,
@@ -18,6 +18,7 @@ import {
     DeleteActivity,
     getActivityStatusTrue,
     getActivityFilter,
+    getActivityFilterAll,
 } from "../service/ActivityManageApi";
 import { ActivityZod } from "../utils/ValidationActivity";
 import { searchStateActivity } from "./useContext";
@@ -81,8 +82,8 @@ export const useActivityFetch = () => {
 
     const activity_data = Activityquery.data?.activity ?? []
     const total_activity = Activityquery.data?.total_activity ?? 0;
-    const total_inactive_activity = Activityquery.data?.total_inactive_activity
-    const total_active_activity = Activityquery.data?.total_active_activity
+    const total_inactive_activity = Activityquery.data?.total_inactive_activity ?? 0;
+    const total_active_activity = Activityquery.data?.total_active_activity ?? 0;
 
     console.log('activity_data', activity_data)
 
@@ -279,7 +280,7 @@ export const useMasterFunctionActivityFromFetch = ({
                     created_by_name: name_by,
                 };
                 console.log("Create activity", data_create);
-                await CreateActivity(data_create);
+                const res = await CreateActivity(data_create);
                 reload();
                 setOpenModal(false);
             } else {
@@ -291,7 +292,7 @@ export const useMasterFunctionActivityFromFetch = ({
                     updated_by_name: name_by,
                 };
                 console.log("Update activity", data_update);
-                await UpdateActivity(data_update);
+                const res = await UpdateActivity(data_update);
                 reload();
                 setOpenModal(false);
 
@@ -475,5 +476,39 @@ export const useFetchActivityFilter = () => {
         activity_filter_Fetching: Activityquery.isFetching,
         activity_filter_Error: Activityquery.error,
         refetch_filter_Activity: Activityquery.refetch,
+    };
+};
+
+
+export const useFetchActivityFilterAll = () => {
+    const navigate = useNavigate();
+    const [version, setVersion] = useState(0);
+    const reload = useCallback(() => {
+        setVersion((v) => v + 1);
+    }, []);
+
+    const query = useQuery<IActivityFilterAll, Error>({
+        queryKey: ["activity-filter-all", version],
+        retry: 1,
+        queryFn: async () => {
+            return await getActivityFilterAll();
+        },
+    });
+
+    const hour_type = query.data?.hour_type ?? [];
+    const check_type = query.data?.check_type ?? [];
+    const activity_status = query.data?.activity_status ?? [];
+    const require_registration = query.data?.require_registration ?? [];
+    return {
+        navigate,
+        reload,
+        hour_type,
+        check_type,
+        activity_status,
+        require_registration,
+        activity_all_Loading: query.isLoading,
+        activity_all_Fetching: query.isFetching,
+        activity_all_Error: query.error,
+        refetch_all_Activity: query.refetch,
     };
 };

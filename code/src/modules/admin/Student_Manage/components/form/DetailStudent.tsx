@@ -174,7 +174,7 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                 >
                                     <MenuItem value="ชาย">ชาย</MenuItem>
                                     <MenuItem value="หญิง">หญิง</MenuItem>
-                                    <MenuItem value="LGBTQ">LGBTQ</MenuItem>
+                                    <MenuItem value="LGBTQ+">LGBTQ+</MenuItem>
 
                                 </TextField>
                             )}

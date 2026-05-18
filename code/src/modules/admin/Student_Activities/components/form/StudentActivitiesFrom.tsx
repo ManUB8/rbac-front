@@ -263,7 +263,7 @@ const StudentActivitiesFrom: React.FC = () => {
                             <Typography variant="body2" color="text.secondary">
                                 พิกัดล่าสุด:{" "}
                                 {lastLat && lastLng
-                                    ? `${lastLat.toFixed(5)}, ${lastLng.toFixed(5)}`
+                                    ? `${lastLat.toFixed(5)}|${lastLng.toFixed(5)}`
                                     : "-"}
                             </Typography>
                         </Stack>
