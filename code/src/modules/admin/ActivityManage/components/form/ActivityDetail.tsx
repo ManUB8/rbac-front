@@ -60,7 +60,7 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                                     textField: {
                                         fullWidth: true,
                                         error: !!errors.activity_date,
-                                        helperText: (errors.activity_date?.message as string) || " ",
+                                        helperText: (errors.activity_date?.message as string),
                                         sx: inputSx(field.value),
                                     },
                                     popper: {

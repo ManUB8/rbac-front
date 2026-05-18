@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { IuseMasterFunctionActivityFromFetch } from "../../hook/useFetchActivity";
+import { useFetchActivityFilterAll, type IuseMasterFunctionActivityFromFetch } from "../../hook/useFetchActivity";
 import {
     Autocomplete,
     Box,
@@ -24,6 +24,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
 }) => {
     const { errors, getValues, setValue } = MasterController;
     const [mapsUrl, setMapsUrl] = useState("");
+    const { hour_type, check_type, activity_status, require_registration, activity_all_Loading } = useFetchActivityFilterAll()
     return (
         <>
             <Stack
@@ -35,10 +36,10 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
             >
                 <Autocomplete
                     fullWidth
-                    options={Check_type}
+                    options={check_type}
                     getOptionLabel={(option) => option.label}
                     value={
-                        Check_type.find(
+                        check_type.find(
                             (item) => item.id === getValues("check_type")
                         ) ?? null
                     }
@@ -71,17 +72,26 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
             </Stack>
 
             <Stack
-                direction="row"
+                direction={{ xs: "column", md: "row" }}
                 spacing={3}
                 sx={{
                     mt: 2,
-                    alignItems: "center",
+                    width: "100%",
+                    alignItems: {
+                        xs: "stretch",
+                        md: "center",
+                    },
                 }}
             >
                 <FormControlLabel
                     sx={{
+                        m: 0,
+                        minWidth: 220,
+
                         ".MuiFormControlLabel-label": {
                             ml: 1,
+                            fontWeight: 500,
+                            whiteSpace: "nowrap",
                         },
                     }}
                     control={
@@ -97,8 +107,13 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
 
                 <FormControlLabel
                     sx={{
+                        m: 0,
+                        minWidth: 200,
+
                         ".MuiFormControlLabel-label": {
                             ml: 1,
+                            fontWeight: 500,
+                            whiteSpace: "nowrap",
                         },
                     }}
                     control={
@@ -111,6 +126,34 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                     }
                     label="เปิดให้เข้าร่วม"
                 />
+
+                <Box
+                    sx={{
+                        minWidth: 240,
+                        flex: 1,
+                    }}
+                >
+                    <Autocomplete
+                        fullWidth
+                        options={hour_type}
+                        getOptionLabel={(option) => option.label}
+                        value={
+                            hour_type.find(
+                                (item) => item.id === getValues("hour_type_id")
+                            ) ?? null
+                        }
+                        onChange={(_, v) => {
+                            setValue("hour_type_id", v?.id ?? "");
+                        }}
+                        renderInput={(p) => (
+                            <TextField
+                                {...p}
+                                label="ประเภทชั่วโมง"
+                                variant="outlined"
+                            />
+                        )}
+                    />
+                </Box>
             </Stack>
 
             <Box
@@ -169,7 +212,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                         <CheckCircleOutlineIcon />
                     </Button>
                 </Stack>
-                
+
                 <Stack
                     direction="row"
                     spacing={1}

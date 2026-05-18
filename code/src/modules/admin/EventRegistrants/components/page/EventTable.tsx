@@ -1,5 +1,5 @@
-import React from "react";
-import type { IuseMasterFunctionStudent } from "../../hook/useFetchStudent";
+import React from 'react';
+import { type IuseFetchEventRegistrants } from '../../hook/useFetchEventRegistrants';
 import {
     Grid,
     Paper,
@@ -13,23 +13,22 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
+import { useMasterEventColumns } from '../Table/EventColumns';
 
-import { useMasterStudentColumns } from "../Table/StudentColumns";
+export interface IEventTableProps {
+    mastercontroller: IuseFetchEventRegistrants
+};
 
-export interface ITableStudentProps {
-    masterController: IuseMasterFunctionStudent;
-}
-
-const TableStudent: React.FC<ITableStudentProps> = ({
-    masterController,
+const EventTable: React.FunctionComponent<IEventTableProps> = ({
+    mastercontroller
 }) => {
-    const columns = useMasterStudentColumns(masterController);
+    const columns = useMasterEventColumns(mastercontroller);
 
     const handleChangePage = (
         _event: unknown,
         newPage: number
     ) => {
-        masterController.setSearchStateStudent((prev) => ({
+        mastercontroller.setSearchStateEventRegistrants((prev) => ({
             ...prev,
             page: newPage + 1,
         }));
@@ -38,7 +37,7 @@ const TableStudent: React.FC<ITableStudentProps> = ({
     const handleChangeRowsPerPage = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        masterController.setSearchStateStudent((prev) => ({
+        mastercontroller.setSearchStateEventRegistrants((prev) => ({
             ...prev,
             page: 1,
             limit: +event.target.value,
@@ -58,7 +57,6 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                 sx={{
                     width: "100%",
                     overflow: "hidden",
-                    borderRadius: 3,
                 }}
             >
                 <TableContainer
@@ -74,6 +72,7 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                                     top: 0,
                                     bgcolor: "background.paper",
                                     zIndex: 1,
+                                    backgroundColor:'##e8f4fd'
                                 },
                             }}
                         >
@@ -102,7 +101,7 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                         </TableHead>
 
                         <TableBody>
-                            {masterController.loading_student ? (
+                            {mastercontroller.event_loading ? (
                                 <TableRow>
                                     <TableCell
                                         colSpan={columns.length}
@@ -118,7 +117,7 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                                         />
                                     </TableCell>
                                 </TableRow>
-                            ) : masterController.student_data?.length === 0 ? (
+                            ) : mastercontroller.event_data?.length === 0 ? (
                                 <TableRow>
                                     <TableCell
                                         colSpan={columns.length}
@@ -130,7 +129,7 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                masterController.student_data.map((row) => (
+                                mastercontroller.event_data.map((row, index) => (
                                     <TableRow
                                         key={row.student_id}
                                         hover
@@ -141,7 +140,7 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                                                 key={column.id}
                                                 align={column.align}
                                             >
-                                                {column.render(row)}
+                                                {column.render(row, index)}
                                             </TableCell>
                                         ))}
                                     </TableRow>
@@ -154,9 +153,9 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                 <TablePagination
                     rowsPerPageOptions={[20, 50, 100]}
                     component="div"
-                    count={masterController.total_student}
-                    rowsPerPage={masterController.searchState.limit}
-                    page={masterController.searchState.page - 1}
+                    count={mastercontroller.total_all}
+                    rowsPerPage={mastercontroller.searchState.limit}
+                    page={mastercontroller.searchState.page - 1}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
@@ -165,4 +164,4 @@ const TableStudent: React.FC<ITableStudentProps> = ({
     );
 };
 
-export default TableStudent;
+export default EventTable;

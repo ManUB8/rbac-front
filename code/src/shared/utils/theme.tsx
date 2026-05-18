@@ -154,7 +154,16 @@ export const getTheme = (mode: "light" | "dark") => {
     },
 
     typography: {
-      fontFamily: ["IBM Plex Sans", "IBM Plex Sans Thai", "sans-serif"].join(","),
+      fontFamily: [
+        "IBMPlexSansThai",
+        "system-ui",
+        "-apple-system",
+        "Segoe UI",
+        "Roboto",
+        "Helvetica",
+        "Arial",
+        "sans-serif",
+      ].join(","),
       fontSize: 16,
 
       h1: {
