@@ -27,6 +27,11 @@ import Student_ManagePage from "../modules/admin/Student_Manage/page/Student_Man
 // icon
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import DashboardAdminPage from "../modules/admin/Dashboard_Admin/page/DashboardAdminPage";
+import EventRegistrantsPage from "../modules/admin/EventRegistrants/page/EventRegistrantsPage";
+import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
+import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
+import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
+import StudentReportPage from "../modules/admin/StudentReport/page/StudentReportPage";
 export type UserRole = "admin" | "student";
 
 export interface IRouterConfig {
@@ -62,6 +67,8 @@ export const AppRoutes = {
   adminPermissions: "/admin/permissions",
   adminBranchFaculty: "/admin/branchfaculty",
   adminStudentActivities: "/admin/student-activities",
+  adminEventRegistrants: "/admin/student-event",
+  adminStudentReport: "/admin/student-report",
 } as const;
 
 export const getDefaultRouteByRole = (role: UserRole | "") => {
@@ -168,9 +175,29 @@ export const routesConfig: {
       element: <StudentActivitiesPage />,
       code: "admin-studentactivities",
       name: "ลงทะเบียนกิจกรรม",
-      icon: <StadiumOutlinedIcon />,
+      icon: <QrCodeScannerOutlinedIcon />,
       roles: ["admin"],
       key: "admin-studentactivities",
+      withLayout: true,
+    },
+    {
+      path: AppRoutes.adminEventRegistrants,
+      element: <EventRegistrantsPage />,
+      code: "student-event",
+      name: "ผู้ลงทะเบียนกิจกรรม",
+      icon: <PersonPinOutlinedIcon />,
+      roles: ["admin"],
+      key: "student-event",
+      withLayout: true,
+    },
+    {
+      path: AppRoutes.adminStudentReport,
+      element: <StudentReportPage />,
+      code: "student-report",
+      name: "ผู้ลงทะเบียนกิจกรรม",
+      icon: <PersonSearchOutlinedIcon />,
+      roles: ["admin"],
+      key: "student-report",
       withLayout: true,
     },
   ],

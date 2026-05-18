@@ -7,7 +7,8 @@ export const searchStateActivity = atom<IActivitySearch>({
     limit: 20,
     activity_status: "",
     check_type: "",
-    require_registration: ""
+    require_registration: "",
+    hour_type_id: "",
 });
 
 

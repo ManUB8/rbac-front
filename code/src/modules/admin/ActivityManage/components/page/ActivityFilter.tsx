@@ -1,8 +1,7 @@
 import React from 'react';
 import { Autocomplete, Box, Button, Chip, Grid, Stack, TextField, Typography } from '@mui/material';
 import { NumericFormat } from 'react-number-format';
-import type { IuseActivityFetch } from '../../hook/useFetchActivity';
-import { Activity_status, Check_type, Require_registration } from '../../utils/activity_option';
+import { useFetchActivityFilterAll, type IuseActivityFetch } from '../../hook/useFetchActivity';
 
 export interface IActivityFilterProps {
     MasterActivity: IuseActivityFetch
@@ -11,8 +10,9 @@ export interface IActivityFilterProps {
 const ActivityFilter: React.FunctionComponent<IActivityFilterProps> = ({
     MasterActivity
 }) => {
+    const { hour_type, check_type, activity_status, require_registration, activity_all_Loading } = useFetchActivityFilterAll()
     return (
-          <>
+        <>
             <Grid container spacing={2} >
                 <Grid size={12}>
                     <Stack direction="row" spacing={1} >
@@ -36,10 +36,11 @@ const ActivityFilter: React.FunctionComponent<IActivityFilterProps> = ({
                         <Box sx={{ flex: 1 }}>
                             <Autocomplete
                                 fullWidth
-                                options={Activity_status}
+                                loading={activity_all_Loading}
+                                options={activity_status}
                                 getOptionLabel={(option) => option.label}
                                 value={
-                                    Activity_status.find(
+                                    activity_status.find(
                                         (item) => item.id === MasterActivity.searchState.activity_status
                                     ) ?? null
                                 }
@@ -58,10 +59,11 @@ const ActivityFilter: React.FunctionComponent<IActivityFilterProps> = ({
                         <Box sx={{ flex: 1 }}>
                             <Autocomplete
                                 fullWidth
-                                options={Check_type}
+                                loading={activity_all_Loading}
+                                options={check_type}
                                 getOptionLabel={(option) => option.label}
                                 value={
-                                    Check_type.find(
+                                    check_type.find(
                                         (item) => item.id === MasterActivity.searchState.check_type
                                     ) ?? null
                                 }
@@ -80,10 +82,11 @@ const ActivityFilter: React.FunctionComponent<IActivityFilterProps> = ({
                         <Box sx={{ flex: 1 }}>
                             <Autocomplete
                                 fullWidth
-                                options={Require_registration}
+                                loading={activity_all_Loading}
+                                options={require_registration}
                                 getOptionLabel={(option) => option.label}
                                 value={
-                                    Require_registration.find(
+                                    require_registration.find(
                                         (item) => item.id === MasterActivity.searchState.require_registration
                                     ) ?? null
                                 }
@@ -96,6 +99,29 @@ const ActivityFilter: React.FunctionComponent<IActivityFilterProps> = ({
                                 }}
                                 renderInput={(p) => (
                                     <TextField {...p} label="ลงทะเบียน" variant="outlined" />
+                                )}
+                            />
+                        </Box>
+                        <Box sx={{ flex: 1 }}>
+                            <Autocomplete
+                                fullWidth
+                                loading={activity_all_Loading}
+                                options={hour_type}
+                                getOptionLabel={(option) => option.label}
+                                value={
+                                    hour_type.find(
+                                        (item) => item.id === MasterActivity.searchState.hour_type_id
+                                    ) ?? null
+                                }
+                                onChange={(_, v) => {
+                                    MasterActivity.setSearchStateActivity((prev) => ({
+                                        ...prev,
+                                        hour_type_id: v?.id ?? "",
+                                        page: 1,
+                                    }));
+                                }}
+                                renderInput={(p) => (
+                                    <TextField {...p} label="ประเภทชั่วโมง" variant="outlined" />
                                 )}
                             />
                         </Box>

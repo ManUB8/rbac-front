@@ -1,6 +1,6 @@
 import { ApiConfig } from "../../../../shared/service/ApiConfig";
 import { api } from "../../../../shared/service/axiosInstance";
-import type { IActivityDelete, IActivityFilter, IActivityItem, IActivityListResponse, IActivitySearch } from "../interface/ActivityManage.interface";
+import type { IActivityDelete, IActivityFilter, IActivityFilterAll, IActivityItem, IActivityListResponse, IActivitySearch } from "../interface/ActivityManage.interface";
 
 
 export const getAllActivity = async (body: IActivitySearch): Promise<IActivityListResponse> => {
@@ -55,6 +55,13 @@ export const CreateActivity = async (body: IActivityItem): Promise<IActivityItem
 export const getActivityFilter = async (): Promise<IActivityFilter[]> => {
     const res = await api.get<IActivityFilter[]>(
         ApiConfig.ACTIVITY_API + `/filter-info`
+    );
+    return res;
+};
+
+export const getActivityFilterAll = async (): Promise<IActivityFilterAll> => {
+    const res = await api.get<IActivityFilterAll>(
+        ApiConfig.ACTIVITY_API + `/filter-all`
     );
     return res;
 };

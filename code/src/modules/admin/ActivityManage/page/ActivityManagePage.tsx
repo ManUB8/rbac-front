@@ -1,5 +1,5 @@
 import React from "react";
-import ActivityFrom from "../components/From/ActivityFrom";
+import ActivityFrom from "../components/form/ActivityFrom";
 import { useActivityFetch, useMasterFunctionActivityFromFetch } from "../hook/useFetchActivity";
 import HeadActivity from "../components/page/HeadActivity";
 import ActivityTable from "../components/page/ActivityTable";

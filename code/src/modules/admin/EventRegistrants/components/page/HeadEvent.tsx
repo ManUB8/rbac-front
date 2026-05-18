@@ -8,9 +8,9 @@ import {
     Typography,
 } from "@mui/material";
 
-export interface IHeadStudentActivitiesProps { };
+export interface IHeadEventProps { };
 
-const HeadStudentActivities: React.FunctionComponent<IHeadStudentActivitiesProps> = props => {
+const HeadEvent: React.FunctionComponent<IHeadEventProps> = props => {
     return (
         <>
             <Typography
@@ -19,7 +19,7 @@ const HeadStudentActivities: React.FunctionComponent<IHeadStudentActivitiesProps
                     fontWeight: 800,
                 }}
             >
-                {"เช็คอิน / เช็คเอาท์"}
+                {"ผู้ลงทะเบียนกิจกรรม"}
             </Typography>
 
             <Typography
@@ -28,11 +28,10 @@ const HeadStudentActivities: React.FunctionComponent<IHeadStudentActivitiesProps
                     mb: 3,
                 }}
             >
-                {"สแกน QR หรือกรอกรหัสนิสิต"}
+                {"จัดการรายชื่อนิสิตในแต่ละกิจกรรม"}
             </Typography>
-
         </>
     )
 };
 
-export default HeadStudentActivities;
+export default HeadEvent;

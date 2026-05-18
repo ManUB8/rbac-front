@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from 'react';
 import {
     Box,
     Button,
@@ -7,10 +7,9 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
+export interface IHeadStudentReportProps { };
 
-export interface IHeadStudentActivitiesProps { };
-
-const HeadStudentActivities: React.FunctionComponent<IHeadStudentActivitiesProps> = props => {
+const HeadStudentReport: React.FunctionComponent<IHeadStudentReportProps> = props => {
     return (
         <>
             <Typography
@@ -19,7 +18,7 @@ const HeadStudentActivities: React.FunctionComponent<IHeadStudentActivitiesProps
                     fontWeight: 800,
                 }}
             >
-                {"เช็คอิน / เช็คเอาท์"}
+                {"รายงานกิจกรรมของนิสิต"}
             </Typography>
 
             <Typography
@@ -28,11 +27,10 @@ const HeadStudentActivities: React.FunctionComponent<IHeadStudentActivitiesProps
                     mb: 3,
                 }}
             >
-                {"สแกน QR หรือกรอกรหัสนิสิต"}
+                {"ค้นหาและดูประวัติกิจกรรมของนิสิตรายบุคคล"}
             </Typography>
-
         </>
     )
 };
 
-export default HeadStudentActivities;
+export default HeadStudentReport;
