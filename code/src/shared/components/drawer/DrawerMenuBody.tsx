@@ -100,8 +100,8 @@ export default function DrawerMenuBody({
     return activeChild.childrens.filter((c) => !c.subpath);
   }, [activeChild]);
 
-  const selectedBg = theme.palette.secondaryContainer;
-  const selectedColor = theme.palette.onSecondaryContainer;
+  const selectedBg = theme.palette.secondary;
+  const selectedColor = theme.palette.success;
 
   const menuItemStyles = {
     button: ({ level, active }: any) => ({

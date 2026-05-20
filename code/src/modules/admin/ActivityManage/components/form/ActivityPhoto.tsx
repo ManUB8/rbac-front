@@ -12,14 +12,12 @@ import { UploadImage } from '../../../../../shared/components/UploadImg/service/
 type ActivityPhotoProps = {
     value: string;                 // URL หรือ base64 ของรูป
     onChange: (url: string | null) => void;
-    size?: number;                         // px (สี่เหลี่ยมจัตุรัส)
     label?: string;
 };
 
 export const ActivityPhoto: React.FC<ActivityPhotoProps> = ({
     value,
     onChange,
-    size = 240,
     label = 'No Photo',
 }) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -90,8 +88,8 @@ export const ActivityPhoto: React.FC<ActivityPhotoProps> = ({
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
                 sx={{
-                    width: size,
-                    height: size,
+                    width: 600,
+                    height: 300,
                     borderRadius: 2,
                     position: 'relative',
                     overflow: 'hidden',

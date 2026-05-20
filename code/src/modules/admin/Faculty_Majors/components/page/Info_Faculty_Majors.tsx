@@ -45,7 +45,6 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                 sx={{
                     borderRadius: "26px",
                     boxShadow: "none",
-                    bgcolor: "#ffffff",
                 }}
             >
                 <CardContent
@@ -82,7 +81,6 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                 sx={{
                                     fontSize: 20,
                                     fontWeight: 700,
-                                    color: "#0f172a",
                                 }}
                             >
                                 {"คณะทั้งหมด"}
@@ -95,7 +93,7 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                             (faculty, facultyIndex) => {
                                 const isOpen =
                                     !!Master_Faculty_Majors.openRows?.[
-                                        faculty.faculty_id
+                                    faculty.faculty_id
                                     ];
 
                                 return (
@@ -119,13 +117,11 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                 sx={{
                                                     fontSize: 18,
                                                     fontWeight: 700,
-                                                    color: "#0f172a",
                                                 }}
                                             >
                                                 <Box
                                                     component="span"
                                                     sx={{
-                                                        color: "#64748b",
                                                         fontWeight: 500,
                                                         mr: 2,
                                                     }}
@@ -160,13 +156,8 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                             faculty.faculty_id
                                                         )
                                                     }
-                                                    sx={iconButtonSx}
                                                 >
-                                                    <EditOutlinedIcon
-                                                        sx={{
-                                                            color: "#111827",
-                                                        }}
-                                                    />
+                                                    <EditOutlinedIcon />
                                                 </IconButton>
 
                                                 <IconButton
@@ -184,11 +175,7 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                         },
                                                     }}
                                                 >
-                                                    <DeleteOutlineOutlinedIcon
-                                                        sx={{
-                                                            color: "#ffffff",
-                                                        }}
-                                                    />
+                                                    <DeleteOutlineOutlinedIcon />
                                                 </IconButton>
 
                                                 <IconButton
@@ -244,7 +231,6 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                     >
                                                         <SchoolOutlinedIcon
                                                             sx={{
-                                                                color: "#475569",
                                                                 fontSize: 24,
                                                             }}
                                                         />
@@ -253,7 +239,6 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                             sx={{
                                                                 fontSize: 16,
                                                                 fontWeight: 700,
-                                                                color: "#334155",
                                                             }}
                                                         >
                                                             สาขาวิชาทั้งหมด
@@ -277,9 +262,6 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                                 "none",
                                                             fontSize: 16,
                                                             fontWeight: 600,
-                                                            color: "#111827",
-                                                            borderColor:
-                                                                "#d7dbe3",
                                                         }}
                                                     >
                                                         เพิ่มสาขา
@@ -300,22 +282,20 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                                     minHeight: 82,
                                                                     borderRadius:
                                                                         "18px",
-                                                                    bgcolor:
-                                                                        "#f8fafc",
                                                                     px: 2.5,
                                                                     py: 2,
                                                                     display:
                                                                         "flex",
                                                                     flexDirection:
-                                                                        {
-                                                                            xs: "column",
-                                                                            sm: "row",
-                                                                        },
+                                                                    {
+                                                                        xs: "column",
+                                                                        sm: "row",
+                                                                    },
                                                                     alignItems:
-                                                                        {
-                                                                            xs: "flex-start",
-                                                                            sm: "center",
-                                                                        },
+                                                                    {
+                                                                        xs: "flex-start",
+                                                                        sm: "center",
+                                                                    },
                                                                     justifyContent:
                                                                         "space-between",
                                                                     gap: 2,
@@ -324,7 +304,6 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                                 <Typography
                                                                     sx={{
                                                                         fontSize: 16,
-                                                                        color: "#0f172a",
                                                                         fontWeight: 700,
                                                                         flex: 1,
                                                                     }}
@@ -332,19 +311,14 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                                     <Box
                                                                         component="span"
                                                                         sx={{
-                                                                            color: "#64748b",
                                                                             fontWeight: 500,
                                                                             mr: 2,
                                                                         }}
                                                                     >
-                                                                        {branchIndex +
-                                                                            1}
-                                                                        .
+                                                                        {branchIndex + 1}.
                                                                     </Box>
 
-                                                                    {
-                                                                        branch.major_name
-                                                                    }
+                                                                    {branch.major_name}
                                                                 </Typography>
 
                                                                 <Stack
@@ -358,15 +332,8 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                                                 faculty.faculty_id
                                                                             )
                                                                         }
-                                                                        sx={
-                                                                            iconButtonSx
-                                                                        }
                                                                     >
-                                                                        <EditOutlinedIcon
-                                                                            sx={{
-                                                                                color: "#111827",
-                                                                            }}
-                                                                        />
+                                                                        <EditOutlinedIcon />
                                                                     </IconButton>
 
                                                                     <IconButton
@@ -382,17 +349,13 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                                             bgcolor:
                                                                                 "#e11d48",
                                                                             "&:hover":
-                                                                                {
-                                                                                    bgcolor:
-                                                                                        "#be123c",
-                                                                                },
+                                                                            {
+                                                                                bgcolor:
+                                                                                    "#be123c",
+                                                                            },
                                                                         }}
                                                                     >
-                                                                        <DeleteOutlineOutlinedIcon
-                                                                            sx={{
-                                                                                color: "#ffffff",
-                                                                            }}
-                                                                        />
+                                                                        <DeleteOutlineOutlinedIcon />
                                                                     </IconButton>
                                                                 </Stack>
                                                             </Box>

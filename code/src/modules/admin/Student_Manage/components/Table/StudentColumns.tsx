@@ -103,16 +103,25 @@ export function useMasterStudentColumns(masterController: IuseMasterFunctionStud
         {
             id: "student_code",
             label: "รหัสนิสิต",
-            minWidth: 80,
+            minWidth: 120,
             align: "left",
             render: (row) => (
                 <Typography variant="subtitle2">{row?.student_code || "-"}</Typography>
             ),
         },
         {
+            id: "prefix",
+            label: "คำนำหน้า",
+            minWidth: 100,
+            align: "left",
+            render: (row) => (
+                <Typography variant="subtitle2">{row?.prefix || "-"}</Typography>
+            ),
+        },
+        {
             id: "first_name",
             label: "ชื่อจริง",
-            minWidth: 120,
+            minWidth: 130,
             align: "left",
             render: (row) => (
                 <Typography variant="subtitle2">{row?.first_name || "-"}</Typography>
@@ -121,7 +130,7 @@ export function useMasterStudentColumns(masterController: IuseMasterFunctionStud
         {
             id: "last_name",
             label: "นามสกุล",
-            minWidth: 120,
+            minWidth: 130,
             align: "left",
             render: (row) => (
                 <Typography variant="subtitle2">{row?.last_name || "-"}</Typography>
@@ -130,7 +139,7 @@ export function useMasterStudentColumns(masterController: IuseMasterFunctionStud
         {
             id: "faculty_name",
             label: "คณะ",
-            minWidth: 120,
+            minWidth: 200,
             align: "left",
             render: (row) => (
                 <Typography variant="subtitle2">{row?.faculty_name || "-"}</Typography>
@@ -139,7 +148,7 @@ export function useMasterStudentColumns(masterController: IuseMasterFunctionStud
         {
             id: "major_name",
             label: "สาขา",
-            minWidth: 150,
+            minWidth: 240,
             align: "left",
             render: (row) => (
                 <Typography variant="subtitle2">{row?.major_name || "-"}</Typography>
@@ -155,10 +164,19 @@ export function useMasterStudentColumns(masterController: IuseMasterFunctionStud
             ),
         },
         {
+            id: "position_name",
+            label: "ตำแหน่ง",
+            minWidth: 120,
+            align: "left",
+            render: (row) => (
+                <Typography variant="subtitle2">{row?.position?.position_name || "-"}</Typography>
+            ),
+        },
+        {
             id: "management",
             label: "",
             headerRender: () => <AddBoxOutlinedIcon />,
-            minWidth: 64,
+            minWidth: 80,
             align: "center",
             render: (row) => (
                 <RowActions

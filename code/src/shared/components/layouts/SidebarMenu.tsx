@@ -1,6 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Box,
+  Collapse,
   Divider,
   Drawer,
   List,
@@ -10,13 +11,19 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
 
 import { useAuth } from "../../../modules/auth/hook/useAuth";
-import { routesConfig, type UserRole } from "../../../router/router";
+import { routesConfig, type IRouterConfig, type UserRole } from "../../../router/router";
 import { SIDEBAR_WIDTH } from "./Layout";
+import { colorModeAtom } from "../../store/themeAtom";
 
 export interface ISidebarMenuProps {
   role: UserRole | "";
@@ -27,6 +34,8 @@ export interface ISidebarMenuProps {
   setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const COLLAPSED_WIDTH = 70;
+
 const SidebarMenu: React.FC<ISidebarMenuProps> = ({
   role,
   isMobile,
@@ -34,9 +43,16 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
   drawerOpen,
   setDrawerOpen,
 }) => {
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const navigate = useNavigate();
   const location = useLocation();
   const { handleLogOut } = useAuth();
+
+  const accountName = localStorage.getItem("account_name") || "";
+  const studentCode = localStorage.getItem("user_code") || "";
+
+  const [mode, setMode] = useAtom(colorModeAtom);
+  const drawerWidth = collapsed ? COLLAPSED_WIDTH : SIDEBAR_WIDTH;
 
   const menuItems = useMemo(() => {
     if (!role) return [];
@@ -46,9 +62,203 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
     );
   }, [role]);
 
-  const handleNavigate = (path: string) => {
+  const isActivePath = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
+
+  const isChildrenActive = (children?: IRouterConfig[]) => {
+    return children?.some((child) => isActivePath(child.path)) ?? false;
+  };
+
+  const handleNavigate = (path?: string) => {
+    if (!path) return;
+
     navigate(path);
-    if (isMobile) setDrawerOpen(false);
+
+    if (isMobile) {
+      setDrawerOpen(false);
+    }
+  };
+
+  const handleToggleGroup = (key: string) => {
+    setOpenGroups((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  const handleToggleTheme = () => {
+    const nextMode = mode === "dark" ? "light" : "dark";
+    setMode(nextMode);
+    localStorage.setItem("theme", nextMode);
+  };
+
+  const renderSingleMenu = (item: IRouterConfig) => {
+    const active = isActivePath(item.path);
+
+    return (
+      <ListItemButton
+        key={item.key}
+        onClick={() => handleNavigate(item.path)}
+        sx={{
+          mb: 0.5,
+          borderRadius: "0 25px 25px 0",
+          px: collapsed ? 1.5 : 2,
+          justifyContent: collapsed ? "center" : "flex-start",
+          bgcolor: active ? "primary.main" : "transparent",
+          color: active ? "primary.contrastText" : "text.primary",
+
+          "&:hover": {
+            bgcolor: active ? "primary.main" : "background.default",
+          },
+
+          "& .MuiListItemIcon-root": {
+            color: active ? "primary.contrastText" : "text.secondary",
+          },
+        }}
+      >
+        <ListItemIcon
+          sx={{
+            minWidth: collapsed ? 0 : 36,
+            mr: collapsed ? 0 : 1,
+            justifyContent: "center",
+          }}
+        >
+          {item.icon}
+        </ListItemIcon>
+
+        {!collapsed && (
+          <ListItemText
+            primary={item.name}
+            slotProps={{
+              primary: {
+                sx: {
+                  fontSize: 14,
+                  fontWeight: active ? 700 : 500,
+                },
+              },
+            }}
+          />
+        )}
+      </ListItemButton>
+    );
+  };
+
+  const renderGroupMenu = (item: IRouterConfig) => {
+    const childActive = isChildrenActive(item.children);
+    const open = openGroups[item.key] ?? childActive;
+
+    return (
+      <Box key={item.key}>
+        <ListItemButton
+          onClick={() => {
+            if (collapsed) {
+              handleNavigate(item.children?.[0]?.path || item.path);
+              return;
+            }
+
+            handleToggleGroup(item.key);
+          }}
+          sx={{
+            mb: 0.5,
+            borderRadius: "0 25px 25px 0",
+            px: collapsed ? 1.5 : 2,
+            justifyContent: collapsed ? "center" : "flex-start",
+            bgcolor: childActive ? "action.selected" : "transparent",
+            color: childActive ? "primary.main" : "text.primary",
+
+            "&:hover": {
+              bgcolor: childActive ? "action.selected" : "background.default",
+            },
+
+            "& .MuiListItemIcon-root": {
+              color: childActive ? "primary.main" : "text.secondary",
+            },
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: collapsed ? 0 : 36,
+              mr: collapsed ? 0 : 1,
+              justifyContent: "center",
+            }}
+          >
+            {item.icon}
+          </ListItemIcon>
+
+          {!collapsed && (
+            <>
+              <ListItemText
+                primary={item.name}
+                slotProps={{
+                  primary: {
+                    sx: {
+                      fontSize: 14,
+                      fontWeight: childActive ? 700 : 500,
+                    },
+                  },
+                }}
+              />
+
+              {open ? (
+                <ExpandLessIcon sx={{ fontSize: 20 }} />
+              ) : (
+                <ExpandMoreIcon sx={{ fontSize: 20 }} />
+              )}
+            </>
+          )}
+        </ListItemButton>
+
+        {!collapsed && (
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List disablePadding sx={{ pl: 1.5 }}>
+              {item.children?.map((child) => {
+                const active = isActivePath(child.path);
+
+                return (
+                  <ListItemButton
+                    key={child.key}
+                    onClick={() => handleNavigate(child.path)}
+                    sx={{
+                      mb: 0.5,
+                      ml: 1,
+                      borderRadius: 2,
+                      px: 1.5,
+                      bgcolor: active ? "primary.main" : "transparent",
+                      color: active ? "primary.contrastText" : "text.secondary",
+
+                      "&:hover": {
+                        bgcolor: active ? "primary.main" : "background.default",
+                      },
+
+                      "& .MuiListItemIcon-root": {
+                        color: active ? "primary.contrastText" : "text.secondary",
+                      },
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 32 }}>
+                      {child.icon}
+                    </ListItemIcon>
+
+                    <ListItemText
+                      primary={child.name}
+                      slotProps={{
+                        primary: {
+                          sx: {
+                            fontSize: 13,
+                            fontWeight: active ? 700 : 500,
+                          },
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                );
+              })}
+            </List>
+          </Collapse>
+        )}
+      </Box>
+    );
   };
 
   const content = (
@@ -57,21 +267,23 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        bgcolor: "#fff",
-        borderRight: "1px solid #eee",
+        borderRight: "1px solid",
+        borderColor: "divider",
       }}
     >
-      {/* HEADER */}
       <Box sx={{ px: 2.5, py: 2 }}>
-        <Stack direction="row" spacing={1.2} alignItems="center">
+        <Stack direction="row" spacing={1.2} sx={{ alignItems: "center" }}>
           <SchoolOutlinedIcon sx={{ color: "primary.main" }} />
 
           {!collapsed && (
             <Box>
-              <Typography fontWeight={800} fontSize={15}>
-                RBAC Activity
+              <Typography sx={{ fontWeight: 800, fontSize: 15 }}>
+                {role === "admin"
+                  ? accountName || "ผู้ดูแลระบบ"
+                  : studentCode || "นิสิต"}
               </Typography>
-              <Typography fontSize={12} color="text.secondary">
+
+              <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
                 ระบบทะเบียนกิจกรรม
               </Typography>
             </Box>
@@ -81,110 +293,60 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
 
       <Divider />
 
-      {/* MENU */}
-      <List sx={{ px: 1, py: 1.5, flex: 1 }}>
+      <List sx={{ px: 1, py: 1.5, flex: 1, overflowY: "auto" }}>
         {menuItems.map((item) => {
-          const active =
-            location.pathname === item.path ||
-            location.pathname.startsWith(item.path + "/");
+          const hasChildren = !!item.children?.length;
 
-          return (
-            <ListItemButton
-              key={item.key}
-              onClick={() => handleNavigate(item.path)}
-              sx={{
-                mb: 0.5,
-                borderRadius: "0 25px 25px 0",
-                px: collapsed ? 1.5 : 2,
-                justifyContent: collapsed ? "center" : "flex-start",
+          if (hasChildren) {
+            return renderGroupMenu(item);
+          }
 
-                bgcolor: active ? "primary.main" : "transparent",
-                color: active ? "#fff" : "text.primary",
-
-                "&:hover": {
-                  bgcolor: active ? "primary.main" : "#f5f5f5",
-                },
-
-                "& .MuiListItemIcon-root": {
-                  color: active ? "#fff" : "text.secondary",
-                },
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: collapsed ? 0 : 36,
-                  mr: collapsed ? 0 : 1,
-                  justifyContent: "center",
-                }}
-              >
-                {item.icon}
-              </ListItemIcon>
-
-              {!collapsed && (
-                <ListItemText
-                  primary={item.name}
-                  primaryTypographyProps={{
-                    fontSize: 14,
-                    fontWeight: active ? 700 : 500,
-                  }}
-                />
-              )}
-            </ListItemButton>
-          );
+          return renderSingleMenu(item);
         })}
       </List>
 
       <Divider />
 
-      {/* USER INFO
-      {!collapsed && (
-        <Box
+      <Box sx={{ p: 1.5 }}>
+        <ListItemButton
+          onClick={handleToggleTheme}
           sx={{
-            px: 2,
-            py: 2,
-            mx: 1.5,
+            borderRadius: 2,
+            justifyContent: collapsed ? "center" : "flex-start",
             mb: 1,
-            borderRadius: 3,
-            bgcolor: "#f8f9fb",
           }}
         >
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                borderRadius: "50%",
-                bgcolor: "primary.main",
-                color: "#fff",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 700,
+          <ListItemIcon
+            sx={{
+              minWidth: collapsed ? 0 : 36,
+              mr: collapsed ? 0 : 1,
+              color: "text.secondary",
+            }}
+          >
+            {mode === "dark" ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
+          </ListItemIcon>
+
+          {!collapsed && (
+            <ListItemText
+              primary={mode === "dark" ? "Light Mode" : "Dark Mode"}
+              slotProps={{
+                primary: {
+                  sx: {
+                    fontSize: 14,
+                    fontWeight: 500,
+                  },
+                },
               }}
-            >
-              {role === "admin" ? "A" : "S"}
-            </Box>
+            />
+          )}
+        </ListItemButton>
 
-            <Box>
-              <Typography fontSize={12} color="text.secondary">
-                เข้าใช้งานในชื่อ
-              </Typography>
-
-              <Typography fontWeight={700} fontSize={14}>
-                {role === "admin" ? "ผู้ดูแลระบบ" : "นิสิต"}
-              </Typography>
-            </Box>
-          </Stack>
-        </Box>
-      )} */}
-
-      {/* LOGOUT */}
-      <Box sx={{ p: 1.5 }}>
         <ListItemButton
           onClick={handleLogOut}
           sx={{
             borderRadius: 2,
             justifyContent: collapsed ? "center" : "flex-start",
+            color: "error.main",
 
             "&:hover": {
               bgcolor: "error.main",
@@ -200,12 +362,25 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
             sx={{
               minWidth: collapsed ? 0 : 36,
               mr: collapsed ? 0 : 1,
+              color: "error.main",
             }}
           >
             <LogoutOutlinedIcon />
           </ListItemIcon>
 
-          {!collapsed && <ListItemText primary="Logout" />}
+          {!collapsed && (
+            <ListItemText
+              primary="Logout"
+              slotProps={{
+                primary: {
+                  sx: {
+                    fontSize: 14,
+                    fontWeight: 500,
+                  },
+                },
+              }}
+            />
+          )}
         </ListItemButton>
       </Box>
     </Box>
@@ -216,7 +391,13 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
       <Drawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        PaperProps={{ sx: { width: SIDEBAR_WIDTH } }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: SIDEBAR_WIDTH,
+            },
+          },
+        }}
       >
         {content}
       </Drawer>
@@ -226,15 +407,17 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
   return (
     <Box
       sx={{
-        width: collapsed ? 70 : SIDEBAR_WIDTH,
-        transition: "0.2s",
+        width: drawerWidth,
+        flexShrink: 0,
+        transition: "width 0.2s ease",
       }}
     >
       <Box
         sx={{
-          width: collapsed ? 70 : SIDEBAR_WIDTH,
+          width: drawerWidth,
           position: "fixed",
           height: "100vh",
+          transition: "width 0.2s ease",
         }}
       >
         {content}

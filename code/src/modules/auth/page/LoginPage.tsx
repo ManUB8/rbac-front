@@ -1,17 +1,17 @@
 import React from "react";
-import { Box, Button, Grid, Typography, Container, Stack } from "@mui/material";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Logo from "../../../assets/svg/logo_rbac.svg";
 import Video from "../../../assets/video/vdo-rbac.mp4";
 import { useNavigate } from "react-router";
 import { AppRoutes } from "../../../router/router";
 
-export interface ILoginPageProps {}
+export interface ILoginPageProps { }
 
 const LoginPage: React.FC<ILoginPageProps> = () => {
   const navigate = useNavigate();
+
   return (
     <>
-      {/* Background video */}
       <Box
         component="video"
         src={Video}
@@ -27,12 +27,11 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
           height: "100%",
           objectFit: "cover",
           zIndex: 0,
-          pointerEvents: "none", // กันไม่ให้รับคลิก
+          pointerEvents: "none",
         }}
         onError={(e) => console.error("Video error", e)}
       />
 
-      {/* Dark overlay for readability */}
       <Box
         sx={{
           position: "fixed",
@@ -43,7 +42,6 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
         }}
       />
 
-      {/* Foreground content */}
       <Container
         maxWidth="xs"
         sx={{
@@ -52,27 +50,53 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
           alignItems: "center",
           justifyContent: "center",
           position: "relative",
-          zIndex: 2, // ⬅️ อยู่บนสุด
+          zIndex: 2,
         }}
       >
         <Stack spacing={2}>
-         <Box display="flex" alignItems="center" gap={1}>
-             <Box component="img" width={100} src={Logo} alt="logo_rbac" />
-            <Typography sx={{ fontSize: 28, color: "white", fontWeight: 700 }}>
-              {"Web SMO Activity"}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            <Box component="img" sx={{ width: 100 }} src={Logo} alt="logo_rbac" />
+
+            <Typography
+              sx={{
+                fontSize: 28,
+                color: "white",
+                fontWeight: 700,
+              }}
+            >
+              Web SMO Activity
             </Typography>
           </Box>
 
-          <Box  display="flex" justifyContent="center">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <Button
               onClick={() => navigate(AppRoutes.login)}
               fullWidth
               variant="contained"
               color="secondary"
-              sx={{ width: "160px", height: "55px" }}
+              sx={{
+                width: 160,
+                height: 55,
+              }}
             >
-              <Typography fontSize={18} fontWeight={500}>
-                {"เข้าสู่ระบบ"}
+              <Typography
+                sx={{
+                  fontSize: 18,
+                  fontWeight: 500,
+                }}
+              >
+                เข้าสู่ระบบ
               </Typography>
             </Button>
           </Box>

@@ -82,7 +82,7 @@ const Layout: React.FunctionComponent<ILayoutProps> = ({ children }) => {
               <MenuOutlinedIcon />
             </IconButton>
 
-            <Typography fontSize={16} fontWeight={700}>
+            <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
               {role === "admin" ? "Admin" : "Student"}
             </Typography>
 

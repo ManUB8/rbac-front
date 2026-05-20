@@ -27,7 +27,7 @@ const FacultyDetail: React.FC<IFacultyDetailProps> = ({ dashboard_data }) => {
         <Card sx={{ mt: 2 }}>
             <CardContent>
                 <Typography sx={{ fontSize: 20, fontWeight: 800, mb: 2 }}>
-                    จำนวนนิสิตแยกตามคณะและสาขา
+                    {"จำนวนนิสิตแยกตามคณะและสาขา"}
                 </Typography>
 
                 {facultyData.map((faculty) => {
@@ -101,7 +101,7 @@ const FacultyDetail: React.FC<IFacultyDetailProps> = ({ dashboard_data }) => {
                                                 variant="outlined"
                                                 sx={{
                                                     p: 1.5,
-                                                    bgcolor: "grey.50",
+                                                    bgcolor: "custom.inputBg",
                                                 }}
                                             >
                                                 <Typography
@@ -115,22 +115,45 @@ const FacultyDetail: React.FC<IFacultyDetailProps> = ({ dashboard_data }) => {
                                                 <Box
                                                     sx={{
                                                         display: "flex",
+                                                        alignItems: "center",
+                                                        gap: 0.6,
+                                                        flexWrap: "wrap",
+                                                    }}
+                                                >
+                                                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                                        นิสิต
+                                                    </Typography>
+
+                                                    <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 800 }}>
+                                                        {major.total_student}
+                                                    </Typography>
+
+                                                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                                        · เข้าร่วม
+                                                    </Typography>
+
+                                                    <Typography variant="caption" sx={{ color: "success.main", fontWeight: 800 }}>
+                                                        {major.joined_count}
+                                                    </Typography>
+
+                                                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                                        · ไม่เข้า
+                                                    </Typography>
+
+                                                    <Typography variant="caption" sx={{ color: "error.main", fontWeight: 800 }}>
+                                                        {major.not_joined_count}
+                                                    </Typography>
+
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
                                                         justifyContent: "space-between",
                                                         alignItems: "center",
                                                         gap: 1,
                                                         mt: 0.5,
                                                     }}
                                                 >
-                                                    <Typography
-                                                        variant="caption"
-                                                        color="text.secondary"
-                                                        noWrap
-                                                    >
-                                                        {major.total_student} คน · เข้าร่วม{" "}
-                                                        {major.joined_count} · ไม่เข้า{" "}
-                                                        {major.not_joined_count}
-                                                    </Typography>
-
                                                     <Typography
                                                         variant="caption"
                                                         sx={{
