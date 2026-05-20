@@ -16,7 +16,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type Resolver } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useFetchFaculty } from "../hook/useFaculty";
 import { NumericFormat } from "react-number-format";
@@ -28,6 +28,8 @@ import type {
   IFacultyItem,
   IMajorItem,
 } from "../../admin/Faculty_Majors/interface/Faculty_Majors.Interface";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterZod } from "../utils/RegisterValidation";
 
 interface IYearType {
   label: string;
@@ -64,6 +66,7 @@ const RegisterPage: React.FC = () => {
     reset,
     control,
   } = useForm<IStudentItem>({
+    resolver: zodResolver(RegisterZod as any) as Resolver<IStudentItem>,
     defaultValues: {
       student_code: "",
       prefix: "",
@@ -87,7 +90,7 @@ const RegisterPage: React.FC = () => {
       setLoading(true);
       setSuccessMessage("");
       setErrorMessage("");
-
+      console.log('body', body)
       const res = await CreateStudent(body);
       console.log("CreateStudent", res);
 
@@ -123,7 +126,6 @@ const RegisterPage: React.FC = () => {
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
-        bgcolor: "#f3f4f6",
       }}
     >
       <Container maxWidth="sm">
@@ -153,7 +155,7 @@ const RegisterPage: React.FC = () => {
                 mb: 3,
               }}
             >
-              กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้งาน
+              {"กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้งาน"}
             </Typography>
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -181,9 +183,7 @@ const RegisterPage: React.FC = () => {
                     setValue("student_code", values.value, {
                       shouldValidate: true,
                     });
-                    setValue("user.username", values.value, {
-                      shouldValidate: true,
-                    });
+                    setValue("user.username", values.value)
                   }}
                   error={!!errors?.student_code}
                   helperText={errors?.student_code?.message || ""}
@@ -403,7 +403,8 @@ const RegisterPage: React.FC = () => {
                   value={watch("user.username") ?? ""}
                   disabled
                   error={!!errors.user?.username}
-                  helperText={errors.user?.username?.message}
+                  // helperText={errors.user?.username?.message}
+                  helperText={'* Username คือ รหัสนิสิต *'}
                 />
 
                 <TextField
@@ -446,7 +447,7 @@ const RegisterPage: React.FC = () => {
                     fontWeight: 700,
                   }}
                 >
-                  กลับไปหน้าเข้าสู่ระบบ
+                  {"กลับไปหน้าเข้าสู่ระบบ"}
                 </Button>
               </Box>
             </Box>

@@ -9,6 +9,7 @@ import {
     Table,
     TableBody,
     TableCell,
+    TableContainer,
     TableHead,
     TableRow,
     Typography,
@@ -21,138 +22,209 @@ export interface IMajorRankCardProps {
 
 const MajorRankCard: React.FC<IMajorRankCardProps> = ({ majorRank }) => {
     return (
-        <Card variant="outlined" sx={{ height: "100%" }}>
+        <Card sx={{ height: "100%" }}>
             <CardContent>
-                <Typography sx={{ fontSize: 18, fontWeight: 800, mb: 2 }}>
+                <Typography variant="h6" sx={{ fontWeight: 800, mb: 2 }}>
                     อันดับการเข้าร่วมตามสาขา
                 </Typography>
-
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>อันดับ</TableCell>
-                            <TableCell>สาขา</TableCell>
-                            <TableCell>คณะ</TableCell>
-                            <TableCell align="center">นิสิต</TableCell>
-                            <TableCell align="center">เข้าร่วม</TableCell>
-                            <TableCell align="center">ไม่เข้าร่วม</TableCell>
-                            <TableCell align="center">เช็คอิน</TableCell>
-                            <TableCell align="center">เช็คเอาท์</TableCell>
-                            <TableCell align="center">% เข้าร่วม</TableCell>
-                        </TableRow>
-                    </TableHead>
-
-                    <TableBody>
-                        {majorRank.map((item, index) => (
-                            <TableRow key={item.major_id}>
-                                <TableCell>
-                                    <Chip
-                                        size="small"
-                                        label={index + 1}
-                                        color={
-                                            index === 0
-                                                ? "warning"
-                                                : index < 3
-                                                    ? "primary"
-                                                    : "default"
-                                        }
-                                        sx={{
-                                            fontWeight: 600,
-                                            borderRadius: "50%",
-                                            width: 34,
-                                            height: 34,
-                                        }}
-                                    />
+                <TableContainer
+                    sx={{
+                        width: "100%",
+                        overflowX: "auto",
+                        WebkitOverflowScrolling: "touch",
+                    }}
+                >
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow
+                                hover
+                                sx={{
+                                    "&:hover td": {
+                                        bgcolor: "action.hover",
+                                    },
+                                }}
+                            >
+                                <TableCell>อันดับ</TableCell>
+                                <TableCell>สาขา</TableCell>
+                                <TableCell>คณะ</TableCell>
+                                <TableCell align="center">นิสิต</TableCell>
+                                <TableCell
+                                    align="center"
+                                    sx={{
+                                        color: "success.main",
+                                        fontWeight: 800,
+                                        bgcolor: "rgba(34,197,94,0.08)",
+                                    }}
+                                >
+                                    เข้าร่วม
                                 </TableCell>
 
-                                <TableCell>
-                                    <Typography sx={{ fontWeight: 500 }}>
-                                        {item.major_name}
-                                    </Typography>
+                                <TableCell
+                                    align="center"
+                                    sx={{
+                                        color: "error.main",
+                                        fontWeight: 800,
+                                        bgcolor: "rgba(239,68,68,0.05)"
+                                    }}
+                                >
+                                    ไม่เข้าร่วม
                                 </TableCell>
 
-                                <TableCell>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {item.faculty_name}
-                                    </Typography>
+                                <TableCell
+                                    align="center"
+                                    sx={{
+                                        color: "info.main",
+                                        fontWeight: 800,
+                                        bgcolor: "rgba(59,130,246,0.05)"
+                                    }}
+                                >
+                                    เช็คอิน
                                 </TableCell>
 
-                                <TableCell align="center">{item.total_student}</TableCell>
-
-                                <TableCell align="center" sx={{ color: "success.main", fontWeight: 700 }}>
-                                    {item.joined_count}
+                                <TableCell
+                                    align="center"
+                                    sx={{
+                                        color: "warning.main",
+                                        fontWeight: 800,
+                                        bgcolor: "rgba(245,158,11,0.05)"
+                                    }}
+                                >
+                                    เช็คเอาท์
                                 </TableCell>
+                                <TableCell align="center">% เข้าร่วม</TableCell>
+                            </TableRow>
+                        </TableHead>
 
-                                <TableCell align="center" sx={{ color: "error.main", fontWeight: 700 }}>
-                                    {item.not_joined_count}
-                                </TableCell>
-
-                                <TableCell align="center">{item.checkin_count}</TableCell>
-                                <TableCell align="center">{item.checkout_count}</TableCell>
-
-                                <TableCell sx={{ minWidth: 160 }}>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: 1,
-                                        }}
-                                    >
-                                        <LinearProgress
-                                            variant="determinate"
-                                            value={Math.min(item.join_rate_percent, 100)}
+                        <TableBody>
+                            {majorRank.map((item, index) => (
+                                <TableRow
+                                    key={item.major_id}
+                                    hover
+                                    sx={{
+                                        "&:hover td": {
+                                            bgcolor: "action.hover",
+                                        },
+                                    }}>
+                                    <TableCell>
+                                        <Chip
+                                            size="small"
+                                            label={index + 1}
+                                            color={
+                                                index === 0
+                                                    ? "warning"
+                                                    : index < 3
+                                                        ? "primary"
+                                                        : "default"
+                                            }
                                             sx={{
-                                                flex: 1,
-                                                height: 8,
-                                                borderRadius: 4,
-                                                bgcolor: "#c7bdf9",
-
-                                                "& .MuiLinearProgress-bar": {
-                                                    bgcolor: "error.main",
-                                                },
+                                                fontWeight: 600,
+                                                borderRadius: "50%",
+                                                width: 34,
+                                                height: 34,
                                             }}
                                         />
+                                    </TableCell>
 
-                                        <Typography
-                                            variant="body2"
+                                    <TableCell>
+                                        <Typography sx={{ fontWeight: 500 }}>
+                                            {item.major_name}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell>
+                                        <Typography variant="body2" color="text.secondary">
+                                            {item.faculty_name}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell align="center">{item.total_student}</TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={{
+                                            color: "success.main",
+                                            fontWeight: 700,
+                                            bgcolor: "rgba(34,197,94,0.04)",
+                                        }}
+                                    >
+                                        {item.joined_count}
+                                    </TableCell>
+
+                                    <TableCell
+                                        align="center"
+                                        sx={{
+                                            color: "error.main",
+                                            fontWeight: 700,
+                                            bgcolor: "rgba(239,68,68,0.05)"
+                                        }}
+                                    >
+                                        {item.not_joined_count}
+                                    </TableCell>
+
+                                    <TableCell
+                                        align="center"
+                                        sx={{
+                                            color: "info.main",
+                                            fontWeight: 700,
+                                            bgcolor: "rgba(59,130,246,0.05)"
+                                        }}
+                                    >
+                                        {item.checkin_count}
+                                    </TableCell>
+
+                                    <TableCell
+                                        align="center"
+                                        sx={{
+                                            color: "warning.main",
+                                            fontWeight: 700,
+                                            bgcolor: "rgba(245,158,11,0.05)"
+                                        }}
+                                    >
+                                        {item.checkout_count}
+                                    </TableCell>
+
+                                    <TableCell sx={{ minWidth: 160 }}>
+                                        <Box
                                             sx={{
-                                                minWidth: 50,
-                                                fontWeight: 700,
-                                                color: "error.main",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 1,
                                             }}
                                         >
-                                            {item.join_rate_percent}%
-                                        </Typography>
-                                    </Box>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                                            <LinearProgress
+                                                variant="determinate"
+                                                value={Math.min(item.join_rate_percent, 100)}
+                                                sx={{
+                                                    flex: 1,
+                                                    height: 8,
+                                                    borderRadius: 4,
+                                                    bgcolor: "#c7bdf9",
+
+                                                    "& .MuiLinearProgress-bar": {
+                                                        bgcolor: "error.main",
+                                                    },
+                                                }}
+                                            />
+
+                                            <Typography
+                                                variant="body2"
+                                                sx={{
+                                                    minWidth: 50,
+                                                    fontWeight: 700,
+                                                    color: "error.main",
+                                                }}
+                                            >
+                                                {item.join_rate_percent}%
+                                            </Typography>
+                                        </Box>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </CardContent>
         </Card>
     );
 };
 
 export default MajorRankCard;
-
-const RankBadge = ({ index }: { index: number }) => {
-    return (
-        <Box
-            sx={{
-                width: 24,
-                height: 24,
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 800,
-                fontSize: 13,
-                bgcolor: index === 0 ? "warning.main" : index < 3 ? "primary.main" : "grey.200",
-                color: index < 3 ? "#fff" : "text.primary",
-            }}
-        >
-            {index + 1}
-        </Box>
-    );
-};

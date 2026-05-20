@@ -39,7 +39,6 @@ const ActivityTop: React.FC<IActivityTopProps> = ({ dashboard_data }) => {
                     sx={{
                         overflow: "hidden",
                         background: "linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)",
-                        color: "#fff",
                         boxShadow: "0 12px 32px rgba(25, 118, 210, 0.28)",
                     }}
                 >
@@ -75,6 +74,7 @@ const ActivityTop: React.FC<IActivityTopProps> = ({ dashboard_data }) => {
                                     sx={{
                                         fontWeight: 700,
                                         opacity: 0.9,
+                                        color: '#FFFFFF'
                                     }}
                                 >
                                     TOP กิจกรรมที่มีผู้เข้าร่วมสูงสุด
@@ -82,10 +82,10 @@ const ActivityTop: React.FC<IActivityTopProps> = ({ dashboard_data }) => {
 
                                 <Typography
                                     sx={{
-                                        fontSize: 26,
-                                        fontWeight: 900,
-                                        lineHeight: 1.2,
+                                        fontSize: 25,
+                                        fontWeight: 800,
                                         mt: 0.5,
+                                        color: '#FFFFFF'
                                     }}
                                     noWrap
                                 >
@@ -100,6 +100,7 @@ const ActivityTop: React.FC<IActivityTopProps> = ({ dashboard_data }) => {
                                         opacity: 0.95,
                                         alignItems: "center",
                                         flexWrap: "wrap",
+                                        color: '#FFFFFF'
                                     }}
                                 >
                                     <CalendarMonthIcon

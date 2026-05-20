@@ -5,7 +5,7 @@ import type { IuseuseFetchDashboardAdmin } from "../../hook/useFetchDashboardAdm
 import HeadCard from "../modal/HeadCard";
 import FacultyDashboard from "../modal/FacultyDashboard";
 import ActivityTop from "../modal/ActivityTop";
-import YearDashboard from "../modal/ํYearDashboard";
+import YearDashboard from "../modal/YearDashboard";
 import FacultyDetail from "../modal/FacultyDetail";
 import ActivityDetail from "../modal/ActivityDetail";
 

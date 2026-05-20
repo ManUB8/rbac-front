@@ -60,7 +60,7 @@ function RowActions({
 
     return (
         <>
-            <Stack direction='row' spacing={1} sx={{ justifyContent: 'center',  }}>
+            <Stack direction='row' spacing={1} sx={{ justifyContent: 'center', }}>
                 <IconButton
                     onClick={() => MasterActivity.handleOpenEdit(row.activity_id)}
                     sx={{
@@ -142,7 +142,7 @@ export function useMasterActivityColumns(MasterActivity: IuseActivityFetch, Mast
         {
             id: "activity_name",
             label: "ชื่อกิจกรรม",
-            minWidth: 200,
+            minWidth: 250,
             align: "left",
             render: (row) => (
                 <Typography variant="subtitle2">{row?.activity_name || "-"}</Typography>
@@ -214,17 +214,30 @@ export function useMasterActivityColumns(MasterActivity: IuseActivityFetch, Mast
                     <Chip
                         label={getCheckTypeLabel(row.check_type)}
                         size="small"
-                        sx={{
+                        sx={(theme) => ({
                             bgcolor:
                                 row.check_type === "checkin_checkout"
-                                    ? "primary.main"
-                                    : "grey.200",
+                                    ? theme.palette.primary.main
+                                    : theme.palette.mode === "dark"
+                                        ? "rgba(255,255,255,0.12)"
+                                        : "rgba(0,0,0,0.06)",
+
                             color:
                                 row.check_type === "checkin_checkout"
                                     ? "#fff"
-                                    : "text.primary",
+                                    : theme.palette.mode === "dark"
+                                        ? "#fff"
+                                        : theme.palette.text.primary,
+
                             fontWeight: 600,
-                        }}
+
+                            border:
+                                row.check_type === "checkin_checkout"
+                                    ? "none"
+                                    : theme.palette.mode === "dark"
+                                        ? "1px solid rgba(255,255,255,0.18)"
+                                        : "1px solid rgba(0,0,0,0.12)",
+                        })}
                     />
                 ) : (
                     <Typography variant="subtitle2">{"—"}</Typography>

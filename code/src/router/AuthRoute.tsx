@@ -22,15 +22,28 @@ import {
 } from "./router";
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const location = useLocation();
 
   React.useLayoutEffect(() => {
-    const el =
-      (document.querySelector(".main-center-container") as HTMLElement | null) ??
-      (document.scrollingElement as HTMLElement | null);
+    const resetScroll = () => {
+      const el = document.querySelector(
+        ".main-center-container"
+      ) as HTMLElement | null;
 
-    el?.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [pathname]);
+      el?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo(0, 0);
+    };
+
+    resetScroll();
+
+    requestAnimationFrame(resetScroll);
+
+    const timer = setTimeout(resetScroll, 50);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname, location.search, location.key]);
 
   return null;
 }
@@ -48,12 +61,45 @@ function DefaultRedirect() {
   return <Navigate to={getDefaultRouteByRole(role)} replace />;
 }
 
+// function renderProtectedRoutesByRole(role: UserRole, withLayout: boolean) {
+//   const targetRoutes = withLayout
+//     ? getLayoutRoutesByRole(role)
+//     : getBareRoutesByRole(role);
+
+//   return targetRoutes.map((route) => {
+//     const element = route.permissionKey ? (
+//       <PermissionRoute permissionKey={route.permissionKey}>
+//         {route.element}
+//       </PermissionRoute>
+//     ) : (
+//       route.element
+//     );
+
+//     return <Route key={route.key} path={route.path} element={element} />;
+//   });
+// }
+
+function flattenRoutes(routes: typeof routesConfig.privateRoutes) {
+  return routes.flatMap((route) => {
+    const children = route.children ?? [];
+
+    // ถ้า route แม่ไม่มี element ให้เอาเฉพาะ children
+    if (!route.element) {
+      return children;
+    }
+
+    return [route, ...children];
+  });
+}
+
 function renderProtectedRoutesByRole(role: UserRole, withLayout: boolean) {
   const targetRoutes = withLayout
     ? getLayoutRoutesByRole(role)
     : getBareRoutesByRole(role);
 
-  return targetRoutes.map((route) => {
+  const flatRoutes = flattenRoutes(targetRoutes);
+
+  return flatRoutes.map((route) => {
     const element = route.permissionKey ? (
       <PermissionRoute permissionKey={route.permissionKey}>
         {route.element}

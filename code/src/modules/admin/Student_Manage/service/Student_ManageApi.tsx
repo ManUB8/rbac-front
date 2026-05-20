@@ -1,6 +1,6 @@
 import { ApiConfig } from "../../../../shared/service/ApiConfig";
 import { api } from "../../../../shared/service/axiosInstance";
-import type { IStudentItem, IStudentListResponse, IStudentSearch } from "../interface/Student_Manage.interface";
+import type { IStudentDeleteItem, IStudentItem, IStudentListResponse, IStudentSearch } from "../interface/Student_Manage.interface";
 
 
 export const getAllStudent = async (body: IStudentSearch): Promise<IStudentListResponse> => {
@@ -36,9 +36,9 @@ export const UpdateStudent = async (body: IStudentItem): Promise<IStudentItem> =
     return res;
 };
 
-export const DeleteStudent = async (body: any): Promise<any> => {
+export const DeleteStudent = async (body: IStudentDeleteItem): Promise<any> => {
     const res = await api.delete<any>(
-        ApiConfig.STUDENT_API + `/delete/${body.student_id}`,
+        ApiConfig.STUDENT_API_V2 + `/delete/${body.student_id}`,
         {
             data: body
         }

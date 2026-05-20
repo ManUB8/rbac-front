@@ -136,8 +136,8 @@ export default function SidebarContent({
 
   const level2Children = useMemo(() => realGrandChildren(activeChild), [activeChild]);
 
-  const selectedBg = theme.palette.secondaryContainer;
-  const selectedColor = theme.palette.onSecondaryContainer;
+  const selectedBg = theme.palette.secondary;
+  const selectedColor = theme.palette.success;
 
   const level =
     !activeParent

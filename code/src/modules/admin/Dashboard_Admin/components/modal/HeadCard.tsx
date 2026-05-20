@@ -116,7 +116,6 @@ const HeadCard: React.FunctionComponent<IHeadCardProps> = ({
                                             fontSize: 32,
                                             fontWeight: 700,
                                             lineHeight: 1,
-                                            color: '#111827',
                                         }}
                                     >
                                         {item.value}

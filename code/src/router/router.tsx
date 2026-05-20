@@ -22,21 +22,34 @@ import ActivityManagePage from "../modules/admin/ActivityManage/page/ActivityMan
 import FacultyBranchPage from "../modules/admin/Faculty_Majors/page/FacultyBranchPage";
 import StudentActivitiesPage from "../modules/admin/Student_Activities/page/StudentActivitiesPage";
 import Student_ManagePage from "../modules/admin/Student_Manage/page/Student_ManagePage";
+import StudentReportPage from "../modules/admin/StudentReport/page/StudentReportPage";
+import EventRegistrantsPage from "../modules/admin/EventRegistrants/page/EventRegistrantsPage";
+import DashboardAdminPage from "../modules/admin/Dashboard_Admin/page/DashboardAdminPage";
 
 
 // icon
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import DashboardAdminPage from "../modules/admin/Dashboard_Admin/page/DashboardAdminPage";
-import EventRegistrantsPage from "../modules/admin/EventRegistrants/page/EventRegistrantsPage";
 import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
 import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
-import StudentReportPage from "../modules/admin/StudentReport/page/StudentReportPage";
+import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
 export type UserRole = "admin" | "student";
+
+// export interface IRouterConfig {
+//   path: string;
+//   element: ReactNode;
+//   code: string;
+//   name: string;
+//   icon?: ReactNode;
+//   roles: UserRole[];
+//   key: string;
+//   permissionKey?: string;
+//   withLayout?: boolean;
+// }
 
 export interface IRouterConfig {
   path: string;
-  element: ReactNode;
+  element?: ReactNode;
   code: string;
   name: string;
   icon?: ReactNode;
@@ -44,6 +57,7 @@ export interface IRouterConfig {
   key: string;
   permissionKey?: string;
   withLayout?: boolean;
+  children?: IRouterConfig[];
 }
 
 export const AppRoutes = {
@@ -69,6 +83,7 @@ export const AppRoutes = {
   adminStudentActivities: "/admin/student-activities",
   adminEventRegistrants: "/admin/student-event",
   adminStudentReport: "/admin/student-report",
+  adminEvent: "/admin/event",
 } as const;
 
 export const getDefaultRouteByRole = (role: UserRole | "") => {
@@ -130,16 +145,6 @@ export const routesConfig: {
       permissionKey: "student_summary",
       withLayout: true,
     },
-    // {
-    //   path: AppRoutes.adminStudents_last,
-    //   element: <StudentManagePage />,
-    //   code: "admin-students",
-    //   name: "จัดการนิสิต-last",
-    //   icon: <GroupOutlinedIcon />,
-    //   roles: ["admin"],
-    //   key: "admin-students-last",
-    //   withLayout: true,
-    // },
     {
       path: AppRoutes.adminStudents,
       element: <Student_ManagePage />,
@@ -180,26 +185,58 @@ export const routesConfig: {
       key: "admin-studentactivities",
       withLayout: true,
     },
+    // {
+    //   path: AppRoutes.adminEventRegistrants,
+    //   element: <EventRegistrantsPage />,
+    //   code: "student-event",
+    //   name: "ผู้ลงทะเบียนกิจกรรม",
+    //   icon: <PersonPinOutlinedIcon />,
+    //   roles: ["admin"],
+    //   key: "student-event",
+    //   withLayout: true,
+    // },
+    // {
+    //   path: AppRoutes.adminStudentReport,
+    //   element: <StudentReportPage />,
+    //   code: "student-report",
+    //   name: "รายงานกิจกรรมนิสิต",
+    //   icon: <PersonSearchOutlinedIcon />,
+    //   roles: ["admin"],
+    //   key: "student-report",
+    //   withLayout: true,
+    // },
     {
-      path: AppRoutes.adminEventRegistrants,
-      element: <EventRegistrantsPage />,
-      code: "student-event",
-      name: "ผู้ลงทะเบียนกิจกรรม",
-      icon: <PersonPinOutlinedIcon />,
+      path: AppRoutes.adminEvent,
+      element: null,
+      code: "admin-event-management",
+      name: "จัดการลงทะเบียน",
+      icon: <LocalActivityOutlinedIcon />,
       roles: ["admin"],
-      key: "student-event",
+      key: "admin-event-management",
       withLayout: true,
-    },
-    {
-      path: AppRoutes.adminStudentReport,
-      element: <StudentReportPage />,
-      code: "student-report",
-      name: "ผู้ลงทะเบียนกิจกรรม",
-      icon: <PersonSearchOutlinedIcon />,
-      roles: ["admin"],
-      key: "student-report",
-      withLayout: true,
-    },
+      children: [
+        {
+          path: AppRoutes.adminEventRegistrants,
+          element: <EventRegistrantsPage />,
+          code: "student-event",
+          name: "ผู้ลงทะเบียนกิจกรรม",
+          icon: <PersonPinOutlinedIcon />,
+          roles: ["admin"],
+          key: "student-event",
+          withLayout: true,
+        },
+        {
+          path: AppRoutes.adminStudentReport,
+          element: <StudentReportPage />,
+          code: "student-report",
+          name: "รายงานผู้ลงทะเบียน",
+          icon: <PersonSearchOutlinedIcon />,
+          roles: ["admin"],
+          key: "student-report",
+          withLayout: true,
+        },
+      ],
+    }
   ],
   publicRoutes: [
     {
