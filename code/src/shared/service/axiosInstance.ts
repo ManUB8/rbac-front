@@ -41,7 +41,7 @@ export const api = {
       const res = await instance.get<T>(url, config);
       return res.data;
     } catch (err) {
-      handleError(err);
+      // handleError(err);
       throw err;
     }
   },
@@ -55,7 +55,7 @@ export const api = {
       const res = await instance.post<T>(url, data, config);
       return res.data;
     } catch (err: any) {
-      if (!config.skipSwal) handleError(err);
+      // if (!config.skipSwal) handleError(err);
       throw err;
     }
   },
@@ -65,7 +65,7 @@ export const api = {
       const res = await instance.put<T>(url, data, config);
       return res.data;
     } catch (err) {
-      handleError(err);
+      // handleError(err);
       throw err;
 
     }
@@ -76,7 +76,7 @@ export const api = {
       const res = await instance.patch<T>(url, data, config);
       return res.data;
     } catch (err: any) {
-      if (!config.skipSwal) handleError(err);
+      // if (!config.skipSwal) handleError(err);
       throw err;
     }
   },
@@ -86,7 +86,7 @@ export const api = {
       const res = await instance.delete<T>(url, config);
       return res.data;
     } catch (err) {
-      handleError(err);
+      // handleError(err);
       throw err;
 
     }

@@ -4,19 +4,19 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { confirmPopupAtom, flashAlertAtom } from "../../../../shared/components/constants/OptionsAtom";
 import { searchStateStudent } from "./useContext";
-import { CreateStudent, getAllStudent, getOneStudent, UpdateStudent } from "../service/Student_ManageApi";
+import { CreateStudent, DeleteStudent, getAllStudent, getOneStudent, UpdateStudent } from "../service/Student_ManageApi";
 import { useFetchFacultyMajors } from "../../Faculty_Majors/hook/useFetchFaculty_Majors";
 import { useForm, type FieldErrors, type Path, type Resolver, type UseFormSetFocus } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { getAllErrorPaths } from "../../../../shared/components/error/FunctionError";
-import { IStudenItemDefule, type IStudentItem } from "../interface/Student_Manage.interface";
+import { IStudenItemDefule, type IStudentDeleteItem, type IStudentItem } from "../interface/Student_Manage.interface";
 import { MasterStudentZod } from "../utils/FieldValidationStudent";
 
 
 export const useMasterFunctionStudent = () => {
-    const { faculty_majors, faculty_loading ,  } = useFetchFacultyMajors()
+    const { faculty_majors, faculty_loading, } = useFetchFacultyMajors()
     const navigate = useNavigate();
     const setFlash = useSetAtom(flashAlertAtom);
     const [openRows, setOpenRows] = useState<Record<string, boolean>>({});
@@ -36,7 +36,7 @@ export const useMasterFunctionStudent = () => {
         isFetching,
         refetch,
     } = useQuery({
-        queryKey: ["students", searchState],
+        queryKey: ["students-list", searchState],
         queryFn: async () => {
             const res = await getAllStudent(searchState);
             console.log('students-res', res)
@@ -81,22 +81,28 @@ export const useMasterFunctionStudent = () => {
     const handleDelete = useCallback(async () => {
         try {
             const idToDelete = selectedStudentId;
+            const name_by = localStorage.getItem("account_name") || "";
+
+            console.log("deleteactivity", selectedStudentId)
+            const data_delete: IStudentDeleteItem = {
+                student_id: Number(selectedStudentId),
+                updated_by_name: name_by,
+            };
 
             if (!idToDelete) {
                 setFlash({
                     type_severity: "error",
                     title: "",
-                    content: "ไม่พบรหัสนักเรียนที่ต้องการลบ",
+                    content: "ไม่พบรหัสนักศึกษาที่ต้องการลบ",
                 });
                 return;
             }
-            console.log(idToDelete)
-            // await DeleteStudentByOne(idToDelete);
+            await DeleteStudent(data_delete);
 
             setFlash({
                 type_severity: "success",
                 title: "",
-                content: "ลบข้อมูลนักเรียนสำเร็จ",
+                content: "ลบข้อมูลนักศึกษาสำเร็จ",
             });
 
             reload();
@@ -113,8 +119,8 @@ export const useMasterFunctionStudent = () => {
     const onClickDeleteMaster = useCallback(() => {
         setConfirmPopup({
             type: "warning",
-            title: "ท่านต้องการลบข้อมูลบัญชีร้านค้า !!",
-            content: "ยืนยันหากต้องการลบข้อมูลบัญชีร้านค้า ข้อมูลบัญชีร้านค้าที่ลบไม่สามารถนำกลับมาได้",
+            title: "ท่านต้องการลบข้อมูลนักศึกษา !!",
+            content: "ยืนยันหากต้องการลบข้อมูลนักศึกษา ข้อมูลนักศึกษาที่ลบไม่สามารถนำกลับมาได้",
             onClose: () => setConfirmPopup(null),
             onConfirm: async () => {
                 await handleDelete();
@@ -167,6 +173,7 @@ export const useMasterFunctionStudentFromFetch = ({
     setOpenStudentModal: React.Dispatch<React.SetStateAction<boolean>>;
     reload: () => void;
 }) => {
+    const [searchState, setSearchStateStudent] = useAtom(searchStateStudent);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const Id = id ?? 0;
@@ -323,7 +330,7 @@ export const useMasterFunctionStudentFromFetch = ({
             const data_update = { ...form, updated_by_name: name_by };
             const res = await UpdateStudent(data_update);
             await queryClient.invalidateQueries();
-            await queryClient.invalidateQueries({ queryKey: ["students"] });
+            await queryClient.invalidateQueries({ queryKey: ["students-list", searchState] });
 
             setFlash({
                 type_severity: "success",

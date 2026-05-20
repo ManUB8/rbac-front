@@ -1,0 +1,298 @@
+import React, { useMemo, useState } from "react";
+import {
+  Box,
+  createTheme,
+  Divider,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  Typography,
+} from "@mui/material";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Collapse from "@mui/material/Collapse";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { useAuth } from "../../../modules/auth/hook/useAuth";
+import { routesConfig, type UserRole } from "../../../router/router";
+import { SIDEBAR_WIDTH } from "./Layout";
+import { useAtom } from "jotai";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import { colorModeAtom } from "../../store/themeAtom";
+
+export interface ISidebarMenuProps {
+  role: UserRole | "";
+  isMobile: boolean;
+  collapsed: boolean;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  drawerOpen: boolean;
+  setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const COLLAPSED_WIDTH = 70;
+
+const SidebarMenu: React.FC<ISidebarMenuProps> = ({
+  role,
+  isMobile,
+  collapsed,
+  drawerOpen,
+  setDrawerOpen,
+}) => {
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { handleLogOut } = useAuth();
+  const account_name = localStorage.getItem("account_name") || '';
+  const student_code = localStorage.getItem("user_code") || '';
+  const [mode, setMode] = useAtom(colorModeAtom);
+  const drawerWidth = collapsed ? COLLAPSED_WIDTH : SIDEBAR_WIDTH;
+
+  
+  const menuItems = useMemo(() => {
+    if (!role) return [];
+
+    return routesConfig.privateRoutes.filter(
+      (item) => item.roles.includes(role) && item.withLayout !== false
+    );
+  }, [role]);
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
+
+    if (isMobile) {
+      setDrawerOpen(false);
+    }
+  };
+
+  const handleToggleTheme = () => {
+    const nextMode = mode === "dark" ? "light" : "dark";
+    setMode(nextMode);
+    localStorage.setItem("theme", nextMode);
+  };
+
+  const content = (
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        // bgcolor: "#fff",
+        borderRight: "1px solid #eee",
+      }}
+    >
+      <Box sx={{ px: 2.5, py: 2 }}>
+        <Stack
+          direction="row"
+          spacing={1.2}
+          sx={{ alignItems: "center" }}
+        >
+          <SchoolOutlinedIcon sx={{ color: "primary.main" }} />
+
+          {!collapsed && (
+            <Box>
+              <Typography
+                sx={{
+                  fontWeight: 800,
+                  fontSize: 15,
+                }}
+              >
+                {role === "admin" ? account_name || "ผู้ดูแลระบบ" : student_code || "นิสิต"}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: 12,
+                  color: "text.secondary",
+                }}
+              >
+                {"ระบบทะเบียนกิจกรรม"}
+              </Typography>
+            </Box>
+          )}
+        </Stack>
+      </Box>
+
+      <Divider />
+
+      <List sx={{ px: 1, py: 1.5, flex: 1 }}>
+        {menuItems.map((item) => {
+          const active =
+            location.pathname === item.path ||
+            location.pathname.startsWith(`${item.path}/`);
+
+          return (
+            <ListItemButton
+              key={item.key}
+              onClick={() => handleNavigate(item.path)}
+              sx={{
+                mb: 0.5,
+                borderRadius: "0 25px 25px 0",
+                px: collapsed ? 1.5 : 2,
+                justifyContent: collapsed ? "center" : "flex-start",
+                bgcolor: active ? "primary.main" : "transparent",
+                color: active ? "background.paper" : "text.primary",
+
+                "&:hover": {
+                  bgcolor: active ? "primary.main" : "background.default",
+                },
+
+                "& .MuiListItemIcon-root": {
+                  color: active ? "background.paper" : "text.secondary",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: collapsed ? 0 : 36,
+                  mr: collapsed ? 0 : 1,
+                  justifyContent: "center",
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+
+              {!collapsed && (
+                <ListItemText
+                  primary={item.name}
+                  slotProps={{
+                    primary: {
+                      sx: {
+                        fontSize: 14,
+                        fontWeight: active ? 700 : 500,
+                      },
+                    },
+                  }}
+                />
+              )}
+            </ListItemButton>
+          );
+        })}
+      </List>
+
+      <Divider />
+
+      <Box sx={{ p: 1.5 }}>
+        <ListItemButton
+          onClick={handleToggleTheme}
+          sx={{
+            borderRadius: 2,
+            justifyContent: collapsed ? "center" : "flex-start",
+            mb: 1,
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: collapsed ? 0 : 36,
+              mr: collapsed ? 0 : 1,
+              color: "text.secondary",
+            }}
+          >
+            {mode === "dark" ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
+          </ListItemIcon>
+
+          {!collapsed && (
+            <ListItemText
+              primary={mode === "dark" ? "Light Mode" : "Dark Mode"}
+              slotProps={{
+                primary: {
+                  sx: {
+                    fontSize: 14,
+                    fontWeight: 500,
+                  },
+                },
+              }}
+            />
+          )}
+        </ListItemButton>
+
+        <ListItemButton
+          onClick={handleLogOut}
+          sx={{
+            borderRadius: 2,
+            justifyContent: collapsed ? "center" : "flex-start",
+            color: "error.main",
+
+            "&:hover": {
+              bgcolor: "error.main",
+              color: "#fff",
+
+              "& .MuiListItemIcon-root": {
+                color: "#fff",
+              },
+            },
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: collapsed ? 0 : 36,
+              mr: collapsed ? 0 : 1,
+              color: "error.main",
+            }}
+          >
+            <LogoutOutlinedIcon />
+          </ListItemIcon>
+
+          {!collapsed && (
+            <ListItemText
+              primary="Logout"
+              slotProps={{
+                primary: {
+                  sx: {
+                    fontSize: 14,
+                    fontWeight: 500,
+                  },
+                },
+              }}
+            />
+          )}
+        </ListItemButton>
+      </Box>
+    </Box>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        slotProps={{
+          paper: {
+            sx: {
+              width: SIDEBAR_WIDTH,
+            },
+          },
+        }}
+      >
+        {content}
+      </Drawer>
+    );
+  }
+
+  return (
+    <Box
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        transition: "width 0.2s ease",
+      }}
+    >
+      <Box
+        sx={{
+          width: drawerWidth,
+          position: "fixed",
+          height: "100vh",
+          transition: "width 0.2s ease",
+        }}
+      >
+        {content}
+      </Box>
+    </Box>
+  );
+};
+
+export default SidebarMenu;

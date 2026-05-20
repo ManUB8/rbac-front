@@ -103,7 +103,6 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
           sx={{
             px: 3,
             py: 3,
-            color: "#fff",
             background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
           }}
         >
@@ -149,7 +148,6 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
               sx={{
                 border: "1px solid #dbe3f0",
                 borderRadius: "18px",
-                backgroundColor: "#f8fafc",
                 px: { xs: 1.5, sm: 3 },
                 py: 3,
                 textAlign: "center",
@@ -186,7 +184,6 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                   mx: "auto",
                   p: { xs: 1.2, sm: 2 },
                   borderRadius: "16px",
-                  backgroundColor: "#fff",
                   border: "1px solid #e5e7eb",
                   boxShadow: "0 4px 12px rgba(15, 23, 42, 0.05)",
                   overflow: "hidden",
@@ -333,7 +330,7 @@ const InfoRow: React.FC<IInfoRowProps> = ({ icon, label, value }) => {
           sx={{
             fontSize: 18,
             fontWeight: 700,
-            color: "#0f172a",
+            // color: "#0f172a",
             mt: 0.5,
           }}
         >

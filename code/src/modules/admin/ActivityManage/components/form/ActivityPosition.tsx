@@ -47,7 +47,13 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                         setValue("check_type", v?.id ?? "");
                     }}
                     renderInput={(p) => (
-                        <TextField {...p} label="ประเภทการเช็ค" variant="outlined" />
+                        <TextField
+                            {...p}
+                            label="ประเภทการเช็ค"
+                            variant="outlined"
+                            error={!!errors?.check_type}
+                            helperText={errors?.check_type?.message || ""}
+                        />
                     )}
                 />
 
@@ -150,6 +156,8 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                                 {...p}
                                 label="ประเภทชั่วโมง"
                                 variant="outlined"
+                                error={!!errors?.hour_type_id}
+                                helperText={errors?.hour_type_id?.message || ""}
                             />
                         )}
                     />

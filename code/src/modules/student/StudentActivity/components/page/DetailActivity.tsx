@@ -81,15 +81,20 @@ const DetailActivity: React.FC<IDetailActivityProps> = ({ mastercontroller }) =>
                                             size="small"
                                             label={getCheckTypeLabel(item.check_type)}
                                             sx={{
-                                                fontWeight: 700,
+                                                fontWeight: 800,
                                                 bgcolor:
                                                     item.check_type === "checkin_checkout"
                                                         ? "primary.main"
-                                                        : "grey.200",
+                                                        : "background.paper",
                                                 color:
                                                     item.check_type === "checkin_checkout"
-                                                        ? "#fff"
+                                                        ? "primary.contrastText"
                                                         : "text.primary",
+                                                border: "1px solid",
+                                                borderColor:
+                                                    item.check_type === "checkin_checkout"
+                                                        ? "primary.main"
+                                                        : "divider",
                                             }}
                                         />
 

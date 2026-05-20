@@ -91,3 +91,8 @@ export const IStudenItemDefule:IStudentItem={
         password: ""
     }
 }
+
+export interface IStudentDeleteItem {
+    student_id: number;
+    updated_by_name: string;
+}

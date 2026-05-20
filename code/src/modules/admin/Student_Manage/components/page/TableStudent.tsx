@@ -48,7 +48,7 @@ const TableStudent: React.FC<ITableStudentProps> = ({
     return (
         <Grid
             container
-            spacing={2}
+            spacing={1}
             sx={{
                 mt: 2,
             }}
@@ -58,7 +58,6 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                 sx={{
                     width: "100%",
                     overflow: "hidden",
-                    borderRadius: 3,
                 }}
             >
                 <TableContainer
@@ -67,16 +66,7 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                     }}
                 >
                     <Table stickyHeader>
-                        <TableHead
-                            sx={{
-                                "& .MuiTableCell-root": {
-                                    position: "sticky",
-                                    top: 0,
-                                    bgcolor: "background.paper",
-                                    zIndex: 1,
-                                },
-                            }}
-                        >
+                        <TableHead >
                             <TableRow>
                                 {columns.map((column) => (
                                     <TableCell

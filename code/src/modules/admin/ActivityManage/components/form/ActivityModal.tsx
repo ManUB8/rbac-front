@@ -29,7 +29,6 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
   return (
     <Dialog
       open={openModal}
-      // onClose={() => setOpenModal(false)}
       fullWidth
       maxWidth="md"
       slotProps={{
@@ -62,7 +61,6 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
           onChange={(url) => {
             setValue('activity_img', url || '');
           }}
-          size={240}
           label="No Photo"
         />
         <ActivityDetail MasterController={MasterController} />
@@ -86,11 +84,10 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
               borderRadius: "12px",
               textTransform: "none",
               fontWeight: 700,
-              borderColor: "#d1d5db",
-              color: "#111827",
+              color:'error.main'
             }}
           >
-            ยกเลิก
+            {"ยกเลิก"}
           </Button>
 
           <Button
@@ -115,12 +112,7 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
               borderRadius: "12px",
               textTransform: "none",
               fontWeight: 700,
-              backgroundColor: "#020617",
               boxShadow: "none",
-              "&:hover": {
-                backgroundColor: "#111827",
-                boxShadow: "none",
-              },
             }}
           >
             {actype === "create" ? "เพิ่มกิจกรรม" : "บันทึกการแก้ไข"}

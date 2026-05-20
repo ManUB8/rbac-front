@@ -21,6 +21,7 @@ import type { IuseMasterFunctionStudentFromFetch } from "../../hook/useFetchStud
 import { useFetchFacultyMajors } from "../../../Faculty_Majors/hook/useFetchFaculty_Majors";
 import { useFetchPosition } from "../../../Position/hook/useFetchPosition";
 import { Year_type } from "../../utils/student_option";
+import PositionStudent from "./PositionStudent";
 
 export interface IDateilStudentProps {
     MasterStudent: IuseMasterFunctionStudentFromFetch;
@@ -41,7 +42,7 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
 
     const [showPassword, setShowPassword] = useState(false);
     const { faculty_majors, faculty_loading } = useFetchFacultyMajors()
-    const { position_data, loading_position } = useFetchPosition()
+
 
     const selectedFaculty = faculty_majors.find(
         (item) => item.faculty_id === getValues('faculty_id')
@@ -118,23 +119,6 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                             }}
                             renderInput={(p) => (
                                 <TextField {...p} label="ชั้นปี" variant="outlined" />
-                            )}
-                        />
-                        <Autocomplete
-                            fullWidth
-                            options={position_data}
-                            getOptionLabel={(option) => option.position_name}
-                            value={
-                                position_data?.find(
-                                    (item) => item.position_id === getValues('position.position_id')
-                                ) ?? null
-                            }
-                            onChange={(_, v) => {
-                                setValue("position.position_id", v?.position_id ?? 0)
-                                setValue("position.position_name", v?.position_name ?? '')
-                            }}
-                            renderInput={(p) => (
-                                <TextField {...p} label="ตำแหน่ง" variant="outlined" />
                             )}
                         />
                     </Stack>
@@ -255,6 +239,7 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                         </Box>
                     </Stack>
 
+                    <PositionStudent MasterStudent={MasterStudent} />
                     <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
                         <Controller
                             name="user.username"
@@ -308,7 +293,6 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                             )}
                         />
                     </Stack>
-
                     <Box
                         sx={{
                             display: "flex",

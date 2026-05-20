@@ -32,9 +32,9 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                         id="activity_name"
                         label="ชื่อกิจกรรม *"
                         placeholder="เช่น ปฐมนิเทศนักศึกษาใหม่ 2568"
-                        error={!!errors.activity_name}
-                        helperText={errors.activity_name?.message as string}
-                        sx={inputSx(field.value)}
+                        error={!!errors?.activity_name}
+                        helperText={errors?.activity_name?.message || ""}
+
                     />
                 )}
             />
@@ -59,19 +59,8 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                                 slotProps={{
                                     textField: {
                                         fullWidth: true,
-                                        error: !!errors.activity_date,
-                                        helperText: (errors.activity_date?.message as string),
-                                        sx: inputSx(field.value),
-                                    },
-                                    popper: {
-                                        placement: "bottom-start",
-                                        sx: {
-                                            zIndex: 9999,
-                                            "& .MuiPaper-root": {
-                                                borderRadius: "12px",
-                                                boxShadow: "0px 8px 24px rgba(0,0,0,0.18)",
-                                            },
-                                        },
+                                        error: !!errors?.activity_date,
+                                        helperText: errors?.activity_date?.message || "",
                                     },
                                 }}
                             />
@@ -89,9 +78,8 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                             label="จำนวนชั่วโมง *"
                             type="number"
                             value={field.value ?? ""}
-                            error={!!errors.hours}
-                            helperText={errors.hours?.message as string}
-                            sx={inputSx(String(field.value ?? ""))}
+                            error={!!errors?.hours}
+                            helperText={errors?.hours?.message || ""}
                             onChange={(e) => {
                                 const val = e.target.value;
                                 field.onChange(val === "" ? "" : Number(val));
@@ -120,12 +108,6 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                             placeholder="08.00"
                             error={!!errors.start_time}
                             helperText={errors.start_time?.message as string}
-                            sx={inputSx(field.value)}
-                            slotProps={{
-                                inputLabel: {
-                                    shrink: true,
-                                },
-                            }}
                         />
                     )}
                 />
@@ -142,12 +124,6 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                             placeholder="12.00"
                             error={!!errors.end_time}
                             helperText={errors.end_time?.message as string}
-                            sx={inputSx(field.value)}
-                            slotProps={{
-                                inputLabel: {
-                                    shrink: true,
-                                },
-                            }}
                         />
                     )}
                 />
@@ -165,7 +141,7 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                         placeholder="เช่น หอประชุมใหญ่ ชั้น 5 อาคาร A"
                         error={!!errors.location}
                         helperText={errors.location?.message as string}
-                        sx={inputSx(field.value)}
+
                     />
                 )}
             />
@@ -182,7 +158,7 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                         placeholder="https://example.com/image.jpg"
                         error={!!errors.activity_img}
                         helperText={errors.activity_img?.message as string}
-                        sx={inputSx(field.value)}
+
                     />
                 )}
             />
@@ -201,7 +177,7 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                         rows={4}
                         error={!!errors.description}
                         helperText={errors.description?.message as string}
-                        sx={inputSx(field.value)}
+
                     />
                 )}
             />

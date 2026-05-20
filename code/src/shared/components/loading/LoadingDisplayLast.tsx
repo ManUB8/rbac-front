@@ -1,6 +1,6 @@
 import React from "react"
 import { Col, Row } from "antd"
-import logo from "../../../assets/image/LogoSg.png"
+import logo from "../../../assets/svg/logo_rbac.svg"
 import styles from "../loading/LoadingDisplay.module.css"
 import getTheme from "../../utils/theme"
 import { Backdrop, Card, CircularProgress } from "@mui/material"
