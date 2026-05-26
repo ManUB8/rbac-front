@@ -25,6 +25,7 @@ import Student_ManagePage from "../modules/admin/Student_Manage/page/Student_Man
 import StudentReportPage from "../modules/admin/StudentReport/page/StudentReportPage";
 import EventRegistrantsPage from "../modules/admin/EventRegistrants/page/EventRegistrantsPage";
 import DashboardAdminPage from "../modules/admin/Dashboard_Admin/page/DashboardAdminPage";
+import QrScannerPage from "../modules/admin/Qr_Scanner/page/QrScannerPage";
 
 
 // icon
@@ -33,6 +34,7 @@ import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
 import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
+import AddToHomeScreenOutlinedIcon from '@mui/icons-material/AddToHomeScreenOutlined';
 export type UserRole = "admin" | "student";
 
 // export interface IRouterConfig {
@@ -81,6 +83,7 @@ export const AppRoutes = {
   adminPermissions: "/admin/permissions",
   adminBranchFaculty: "/admin/branchfaculty",
   adminStudentActivities: "/admin/student-activities",
+  adminQrScanner: "/admin/qr-scanner",
   adminEventRegistrants: "/admin/student-event",
   adminStudentReport: "/admin/student-report",
   adminEvent: "/admin/event",
@@ -185,6 +188,16 @@ export const routesConfig: {
       key: "admin-studentactivities",
       withLayout: true,
     },
+    // {
+    //   path: AppRoutes.adminQrScanner,
+    //   element: <QrScannerPage />,
+    //   code: "admin-qrscanner",
+    //   name: "ลงทะเบียน Moblie",
+    //   icon: <AddToHomeScreenOutlinedIcon />,
+    //   roles: ["admin"],
+    //   key: "admin-qrscanner",
+    //   withLayout: true,
+    // },
     // {
     //   path: AppRoutes.adminEventRegistrants,
     //   element: <EventRegistrantsPage />,

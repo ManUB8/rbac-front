@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Logo from "../../../assets/svg/logo_rbac.svg";
+import Logo_Samo from "../../../assets/image/logo_samo.jpg";
 import Video from "../../../assets/video/vdo-rbac.mp4";
 import { useNavigate } from "react-router";
 import { AppRoutes } from "../../../router/router";
@@ -61,7 +62,7 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
               gap: 1,
             }}
           >
-            <Box component="img" sx={{ width: 100 }} src={Logo} alt="logo_rbac" />
+            <Box component="img" sx={{ width: 100 }} src={Logo_Samo} alt="logo_rbac" />
 
             <Typography
               sx={{
@@ -70,7 +71,7 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
                 fontWeight: 700,
               }}
             >
-              Web SMO Activity
+              {"Web SAMO"}
             </Typography>
           </Box>
 
@@ -84,7 +85,7 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
               onClick={() => navigate(AppRoutes.login)}
               fullWidth
               variant="contained"
-              color="secondary"
+              color="primary"
               sx={{
                 width: 160,
                 height: 55,
@@ -96,7 +97,7 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
                   fontWeight: 500,
                 }}
               >
-                เข้าสู่ระบบ
+                {"เข้าสู่ระบบ"}
               </Typography>
             </Button>
           </Box>

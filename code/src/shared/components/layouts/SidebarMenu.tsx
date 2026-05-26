@@ -19,11 +19,12 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
-
+import Logo_samo from '../../../assets/image/logo_samo_r.jpg'
 import { useAuth } from "../../../modules/auth/hook/useAuth";
 import { routesConfig, type IRouterConfig, type UserRole } from "../../../router/router";
 import { SIDEBAR_WIDTH } from "./Layout";
 import { colorModeAtom } from "../../store/themeAtom";
+import { ENUM_VERSION } from "../Enum";
 
 export interface ISidebarMenuProps {
   role: UserRole | "";
@@ -273,8 +274,10 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
     >
       <Box sx={{ px: 2.5, py: 2 }}>
         <Stack direction="row" spacing={1.2} sx={{ alignItems: "center" }}>
-          <SchoolOutlinedIcon sx={{ color: "primary.main" }} />
-
+          {/* <SchoolOutlinedIcon sx={{ color: "primary.main" }} /> */}
+          {role === "admin"
+            ? <Box component="img" sx={{ width: 50 }} src={Logo_samo} alt="logo_rbac" />
+            : <SchoolOutlinedIcon sx={{ color: "primary.main" }} />}
           {!collapsed && (
             <Box>
               <Typography sx={{ fontWeight: 800, fontSize: 15 }}>
@@ -284,7 +287,10 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
               </Typography>
 
               <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
-                ระบบทะเบียนกิจกรรม
+                {"ระบบทะเบียนกิจกรรม"}
+              </Typography>
+              <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
+                {`v. ${ENUM_VERSION}`}
               </Typography>
             </Box>
           )}

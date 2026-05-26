@@ -39,6 +39,22 @@
     color: #888;
 }
 
+
+.main-center-container {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* .main-center-container {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+} */
+
 /* .main-center-container {
     width: 100vw;
     margin: 0 auto;
@@ -68,10 +84,3 @@
   flex-direction: column;
 } */
 
-.main-center-container {
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-}

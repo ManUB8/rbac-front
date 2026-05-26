@@ -45,7 +45,7 @@ a:hover {
     color: #535bf2;
 }
 /* html, body, #root { height: 100%; } */
-html, body {
+/* html, body {
   height: 100%;
   overflow: auto;
 }
@@ -55,11 +55,22 @@ html, body {
 }
 
 body {
-     font-family: "IBMPlexSansThai", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "IBMPlexSansThai", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
-  /* display: flex;            */
   min-width: 320px;
   min-height: 100vh;
+} */
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: "IBMPlexSansThai", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
 }
 
 h1 {
