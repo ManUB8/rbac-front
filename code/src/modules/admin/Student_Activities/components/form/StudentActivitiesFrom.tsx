@@ -176,6 +176,7 @@ const StudentActivitiesFrom: React.FC = () => {
                 open={openScanner}
                 onClose={() => setOpenScanner(false)}
                 onScanSuccess={(value) => {
+
                     setQrText(value);
 
                     if (isReadyToSubmit(value)) {
@@ -265,7 +266,7 @@ const StudentActivitiesFrom: React.FC = () => {
                                 </Button>
                             </Box>
 
-                            <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
+                            <Stack direction="row" spacing={2} sx={{ alignItems: "center", justifyContent: 'space-between' }}>
                                 <Button
                                     variant="outlined"
                                     startIcon={<MyLocationIcon />}
@@ -281,8 +282,18 @@ const StudentActivitiesFrom: React.FC = () => {
                                         ? `|${lastLat.toFixed(5)}|${lastLng.toFixed(5)}`
                                         : "-"}
                                 </Typography>
+
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<QrCodeScannerIcon />}
+                                    onClick={() => setOpenScanner(true)}
+                                    sx={{ height: 36, borderRadius: "10px" }}
+                                >
+                                    สแกน QR
+                                </Button>
+
                             </Stack>
-                            <Stack
+                            {/* <Stack
                                 direction="row"
                                 spacing={1}
                                 sx={{ mb: 2 }}
@@ -300,7 +311,7 @@ const StudentActivitiesFrom: React.FC = () => {
                                 >
                                     สแกน QR
                                 </Button>
-                            </Stack>
+                            </Stack> */}
                             <Box>
                                 <TextField
                                     fullWidth
