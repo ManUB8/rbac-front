@@ -83,7 +83,7 @@ const Layout: React.FunctionComponent<ILayoutProps> = ({ children }) => {
             </IconButton>
 
             <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
-              {role === "admin" ? "Admin" : "Student"}
+              {role === "admin" ? "Admin" : "นิสิตนักศึกษา"}
             </Typography>
 
             <Box sx={{ width: 40 }} />

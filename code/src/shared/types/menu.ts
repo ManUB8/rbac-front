@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { UserRole } from "../../modules/auth/hook/useAuth";
+import type { UserRole } from "../../router/router";
 
 export type StudentPagePermissionKey =
   | "student_card"
