@@ -32,4 +32,4 @@ export const EnumSheetNameExcel = {
 } as const;
 
 
-export const ENUM_VERSION = import.meta.env.VITE_IMAGE_VERSION
+export const ENUM_VERSION = import.meta.env.VITE_IMAGE_VERSION;

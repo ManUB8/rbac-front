@@ -44,6 +44,8 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
   drawerOpen,
   setDrawerOpen,
 }) => {
+  console.log('import.meta.env.VITE_IMAGE_VERSION', import.meta.env.VITE_IMAGE_VERSION)
+  console.log('ENUM_VERSION', ENUM_VERSION)
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const navigate = useNavigate();
   const location = useLocation();
