@@ -24,7 +24,7 @@ import { useAuth } from "../hook/useAuth";
 import type { ILoginAdminBody } from "../interface/Login.interface";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-
+import Logo_Samo from "../../../assets/image/logo_samo.jpg";
 const LoginForm: React.FC = () => {
   const { getAuthToken, handleLoginAdmin, handleLoginStudent } = useAuth();
 
@@ -113,8 +113,8 @@ const LoginForm: React.FC = () => {
             textAlign: "center",
           }}
         >
-          <Box>{/* img */}</Box>
-
+          {/* <Box>img</Box> */}
+          <Box component="img" sx={{ width: 200 }} src={Logo_Samo} alt="logo_rbac" />
           <Typography
             sx={{
               fontSize: { xs: 24, md: 30 },
@@ -123,18 +123,9 @@ const LoginForm: React.FC = () => {
               mb: 0.25,
             }}
           >
-            ระบบนิสิต
+            {"ระบบนิสิต"}
           </Typography>
 
-          <Typography
-            sx={{
-              fontSize: { xs: 16, md: 18 },
-              color: "#6B7280",
-              fontWeight: 500,
-            }}
-          >
-            University Student Portal
-          </Typography>
         </Box>
 
         {/* Card */}
@@ -411,7 +402,7 @@ const LoginForm: React.FC = () => {
                 },
               }}
             >
-              <Typography sx={{ fontSize: 18, fontWeight: 800 }}>
+              <Typography sx={{ fontSize: 18, fontWeight: 800, color: '#FFFFFF' }}>
                 {isSubmitting ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
               </Typography>
             </Button>
@@ -447,7 +438,7 @@ const LoginForm: React.FC = () => {
                 gap: 2,
               }}
             >
-              <Link
+              {/* <Link
                 component="button"
                 type="button"
                 underline="hover"
@@ -459,7 +450,7 @@ const LoginForm: React.FC = () => {
                 }}
               >
                 ลืมรหัสผ่านใช่ไหม?
-              </Link>
+              </Link> */}
 
               <Link
                 component="button"
@@ -467,7 +458,7 @@ const LoginForm: React.FC = () => {
                 underline="hover"
                 onClick={() => navigate("/register")}
                 sx={{
-                  fontSize: 15,
+                  fontSize: 18,
                   fontWeight: 700,
                   color: "#111827",
                 }}

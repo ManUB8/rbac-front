@@ -53,7 +53,7 @@ const Header_Faculty_Majors: React.FC<IHeader_Faculty_MajorsProps> = ({
                             fontWeight: 800,
                         }}
                     >
-                        หน้าจัดการคณะสาขา
+                        {"จัดการคณะสาขา"}
                     </Typography>
 
                     <Chip

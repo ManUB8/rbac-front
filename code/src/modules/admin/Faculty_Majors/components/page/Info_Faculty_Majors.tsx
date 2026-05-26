@@ -169,10 +169,11 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                     }
                                                     sx={{
                                                         borderRadius: "14px",
-                                                        bgcolor: "#e11d48",
-                                                        "&:hover": {
-                                                            bgcolor: "#be123c",
-                                                        },
+                                                        color:'error.main'
+                                                        // bgcolor: "#e11d48",
+                                                        // "&:hover": {
+                                                        //     bgcolor: "#be123c",
+                                                        // },
                                                     }}
                                                 >
                                                     <DeleteOutlineOutlinedIcon />
