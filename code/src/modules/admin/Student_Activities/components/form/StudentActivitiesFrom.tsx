@@ -264,7 +264,7 @@ const StudentActivitiesFrom: React.FC = () => {
                                 </Button>
                             </Box>
 
-                            <Stack direction="row" spacing={2} sx={{ alignItems: "center", justifyContent: 'space-between' }}>
+                            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
                                 <Button
                                     variant="outlined"
                                     startIcon={<MyLocationIcon />}
@@ -281,17 +281,17 @@ const StudentActivitiesFrom: React.FC = () => {
                                         : "-"}
                                 </Typography>
 
-                                <Button
+                                {/* <Button
                                     variant="outlined"
                                     startIcon={<QrCodeScannerIcon />}
                                     onClick={() => setOpenScanner(true)}
                                     sx={{ height: 36, borderRadius: "10px" }}
                                 >
                                     สแกน QR
-                                </Button>
+                                </Button> */}
 
                             </Stack>
-                            {/* <Stack
+                            <Stack
                                 direction="row"
                                 spacing={1}
                                 sx={{ mb: 2 }}
@@ -300,16 +300,11 @@ const StudentActivitiesFrom: React.FC = () => {
                                     variant="outlined"
                                     startIcon={<QrCodeScannerIcon />}
                                     onClick={() => setOpenScanner(true)}
-                                    sx={{
-                                        borderRadius: 2,
-                                        fontWeight: 700,
-                                        height: 42,
-                                        minWidth: 140,
-                                    }}
+                                    sx={{ height: 46, borderRadius: "10px" }}
                                 >
                                     สแกน QR
                                 </Button>
-                            </Stack> */}
+                            </Stack>
                             <Box>
                                 <TextField
                                     fullWidth
