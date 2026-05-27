@@ -71,7 +71,7 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
                 fontWeight: 700,
               }}
             >
-              {"Web SAMO"}
+              {"Web Activity"}
             </Typography>
           </Box>
 

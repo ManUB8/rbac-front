@@ -80,10 +80,18 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
     );
   };
 
+  // useEffect(() => {
+  //   if (!studentCode) return;
+
+  //   setQrPayload(studentCode);
+  //   setLocationText("");
+  //   setQrRefreshKey((prev) => prev + 1);
+  // }, [studentCode]);
+
   useEffect(() => {
     if (!studentCode) return;
 
-    setQrPayload(studentCode);
+    setQrPayload("");
     setLocationText("");
     setQrRefreshKey((prev) => prev + 1);
   }, [studentCode]);
@@ -119,9 +127,8 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
             <InfoRow
               icon={<PersonOutlineOutlinedIcon sx={iconSx} />}
               label="ชื่อ-นามสกุล"
-              value={`${Master_Student.Student_data?.first_name || ""} ${
-                Master_Student.Student_data?.last_name || ""
-              }`}
+              value={`${Master_Student.Student_data?.first_name || ""} ${Master_Student.Student_data?.last_name || ""
+                }`}
             />
 
             <InfoRow
@@ -191,7 +198,7 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
               >
                 {studentCode && qrPayload ? (
                   <>
-                    <QRCodeCanvas
+                    {/* <QRCodeCanvas
                       key={qrRefreshKey}
                       value={qrPayload}
                       size={qrSize}
@@ -204,7 +211,21 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                         opacity: qrLoading ? 0.25 : 1,
                         transition: "0.2s",
                       }}
-                    />
+                    /> */
+                      <QRCodeCanvas
+                        key={qrRefreshKey}
+                        value={qrPayload}
+                        size={qrSize}
+                        level="H"
+                        includeMargin
+                        style={{
+                          display: "block",
+                          maxWidth: "100%",
+                          height: "auto",
+                          opacity: qrLoading ? 0.25 : 1,
+                          transition: "0.2s",
+                        }}
+                      />}
 
                     {qrLoading && (
                       <Box
@@ -233,14 +254,16 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                               color: "#1d4ed8",
                             }}
                           >
-                            กำลังดึงตำแหน่ง
+                            {"กำลังดึงตำแหน่ง"}
                           </Typography>
                         </Stack>
                       </Box>
                     )}
                   </>
                 ) : (
-                  <Typography color="text.secondary">ไม่พบรหัสนิสิต</Typography>
+                  <Typography color="text.secondary">
+                    {"กรุณากด Refresh QR Code เพื่อสร้าง QR"}
+                  </Typography>
                 )}
               </Box>
 
