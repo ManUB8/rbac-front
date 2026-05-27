@@ -176,9 +176,7 @@ const StudentActivitiesFrom: React.FC = () => {
                 open={openScanner}
                 onClose={() => setOpenScanner(false)}
                 onScanSuccess={(value) => {
-
                     setQrText(value);
-
                     if (isReadyToSubmit(value)) {
                         handleSubmit(value);
                     }
@@ -277,7 +275,7 @@ const StudentActivitiesFrom: React.FC = () => {
                                 </Button>
 
                                 <Typography variant="body2" color="text.secondary">
-                                    พิกัดล่าสุด:{" "}
+                                    {"พิกัดล่าสุด:"}{" "}
                                     {lastLat && lastLng
                                         ? `|${lastLat.toFixed(5)}|${lastLng.toFixed(5)}`
                                         : "-"}

@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Box,
     Button,
     Dialog,
     DialogContent,
     DialogTitle,
+    Stack,
     Typography,
 } from "@mui/material";
+import CameraswitchIcon from "@mui/icons-material/Cameraswitch";
 import { Html5Qrcode } from "html5-qrcode";
 
 type Props = {
@@ -15,8 +17,19 @@ type Props = {
     onScanSuccess: (value: string) => void;
 };
 
-const QrScannerDialog: React.FC<Props> = ({ open, onClose, onScanSuccess }) => {
+const QrScannerDialog: React.FC<Props> = ({
+    open,
+    onClose,
+    onScanSuccess,
+}) => {
     const scannerRef = useRef<Html5Qrcode | null>(null);
+
+    const [cameras, setCameras] = useState<
+        { id: string; label: string }[]
+    >([]);
+
+    const [cameraIndex, setCameraIndex] = useState(0);
+
     const readerId = "mobile-qr-reader";
 
     useEffect(() => {
@@ -30,23 +43,25 @@ const QrScannerDialog: React.FC<Props> = ({ open, onClose, onScanSuccess }) => {
 
                 if (!mounted) return;
 
-                const scanner = new Html5Qrcode(readerId);
-                scannerRef.current = scanner;
+                const allCameras = await Html5Qrcode.getCameras();
 
-                const cameras = await Html5Qrcode.getCameras();
-
-                if (!cameras || cameras.length === 0) {
+                if (!allCameras || allCameras.length === 0) {
                     console.error("ไม่พบกล้อง");
                     return;
                 }
 
-                const backCamera =
-                    cameras.find((camera) =>
-                        camera.label.toLowerCase().includes("back")
-                    ) ?? cameras[cameras.length - 1];
+                setCameras(allCameras);
+
+                const selectedCamera =
+                    allCameras[cameraIndex] ??
+                    allCameras[allCameras.length - 1];
+
+                const scanner = new Html5Qrcode(readerId);
+
+                scannerRef.current = scanner;
 
                 await scanner.start(
-                    backCamera.id,
+                    selectedCamera.id,
                     {
                         fps: 10,
                         qrbox: { width: 250, height: 250 },
@@ -89,7 +104,24 @@ const QrScannerDialog: React.FC<Props> = ({ open, onClose, onScanSuccess }) => {
 
             scannerRef.current = null;
         };
-    }, [open]);
+    }, [open, cameraIndex]);
+
+    const handleSwitchCamera = async () => {
+        if (cameras.length <= 1) return;
+
+        const scanner = scannerRef.current;
+
+        if (scanner?.isScanning) {
+            try {
+                await scanner.stop();
+                scanner.clear();
+            } catch {}
+        }
+
+        setCameraIndex((prev) =>
+            prev + 1 >= cameras.length ? 0 : prev + 1
+        );
+    };
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
@@ -98,7 +130,11 @@ const QrScannerDialog: React.FC<Props> = ({ open, onClose, onScanSuccess }) => {
             </DialogTitle>
 
             <DialogContent>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mb: 2 }}
+                >
                     กรุณาอนุญาตการใช้กล้อง แล้วนำ QR Code ให้อยู่ในกรอบ
                 </Typography>
 
@@ -121,9 +157,24 @@ const QrScannerDialog: React.FC<Props> = ({ open, onClose, onScanSuccess }) => {
                     }}
                 />
 
-                <Button fullWidth variant="outlined" sx={{ mt: 2 }} onClick={onClose}>
-                    ปิดกล้อง
-                </Button>
+                <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        startIcon={<CameraswitchIcon />}
+                        onClick={handleSwitchCamera}
+                    >
+                        สลับกล้อง
+                    </Button>
+
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={onClose}
+                    >
+                        ปิดกล้อง
+                    </Button>
+                </Stack>
             </DialogContent>
         </Dialog>
     );
