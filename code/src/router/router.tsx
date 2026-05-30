@@ -35,6 +35,7 @@ import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
 import AddToHomeScreenOutlinedIcon from '@mui/icons-material/AddToHomeScreenOutlined';
+import GenerateQr from "../modules/admin/GenerateQr/page/GenerateQr";
 export type UserRole = "admin" | "temporary_admin" | "student";
 export type RouteRole = "admin" | "student";
 
@@ -76,6 +77,7 @@ export const AppRoutes = {
   adminEventRegistrants: "/admin/student-event",
   adminStudentReport: "/admin/student-report",
   adminEvent: "/admin/event",
+  adminGenerateQr: "/admin/generate-qr",
 } as const;
 
 export const getDefaultRouteByRole = (role: UserRole | "") => {
@@ -184,6 +186,7 @@ export const routesConfig: {
       key: "admin-studentactivities",
       withLayout: true,
     },
+    
     {
       path: AppRoutes.adminEvent,
       element: null,
@@ -215,6 +218,16 @@ export const routesConfig: {
           withLayout: true,
         },
       ],
+    },
+    {
+      path: AppRoutes.adminGenerateQr,
+      element: < GenerateQr/>,
+      code: "admin-generate-qr",
+      name: "Generate QR Code",
+      icon: null,
+      roles: ["admin"],
+      key: "admin-generate-qr",
+      withLayout: true,
     }
   ],
   publicRoutes: [
