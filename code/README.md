@@ -175,18 +175,12 @@ Login flow:
 - `src/shared/components/layouts/FooterMain.tsx`
 - `src/shared/components/layouts/MainContent.tsx`
 - `src/shared/components/layouts/SidebarMenu.tsx`
-- `src/shared/components/layouts/sidebarMenuConfig.tsx`
 - `src/shared/components/layouts/ModalNavHeader.tsx`
 - `src/shared/components/layouts/ModalHeaderContext.tsx`
 
 Route ที่มี `withLayout: true` จะอยู่ใน `Layout` และมี sidebar/header ตาม config
 
-เมนู sidebar แยกจาก route config อยู่ที่ `sidebarMenuConfig.tsx` ดังนั้นเวลาเพิ่ม route ใหม่ที่ต้องแสดงใน sidebar ต้องแก้ทั้ง:
-
-- `src/router/router.tsx`
-- `src/shared/components/layouts/sidebarMenuConfig.tsx`
-
-ข้อควรระวัง: ตอนนี้ `router.tsx` มีเมนู admin หลายตัว เช่น จัดการคณะสาขา, ลงทะเบียนกิจกรรม, รายงาน แต่ `sidebarMenuConfig.tsx` ยังมีเมนูน้อยกว่า route config บางส่วน
+เมนู sidebar ปัจจุบันอ่านจาก `routesConfig.privateRoutes` ใน `src/router/router.tsx` โดยตรง และ filter ตาม `roles` กับ `withLayout`
 
 ## Route สำคัญ
 
@@ -217,7 +211,7 @@ Admin route:
 Route ที่มีอยู่แต่ยังไม่เปิดใช้งานหรือยังไม่ถูกใช้เต็ม:
 
 - `/admin/qr-scanner`: มี page อยู่ แต่ใน route config ถูก comment
-- `/admin/permissions`: อยู่ใน `AppRoutes` และ sidebar config แต่ยังไม่เห็น route page ใน `routesConfig.privateRoutes`
+- `/admin/permissions`: อยู่ใน `AppRoutes` แต่ยังไม่เห็น route page ใน `routesConfig.privateRoutes`
 - `/admin/students-last`: อยู่ใน `AppRoutes` แต่ยังไม่ได้ใช้ชัดเจน
 
 ## โครงสร้างไฟล์หลัก
@@ -306,7 +300,7 @@ code/
 - `components/loading/`: loading components
 - `components/message/`: flash/alert provider
 - `components/popup/`: popup confirm provider
-- `components/layouts/`: layout, header, sidebar, menu config
+- `components/layouts/`: layout, header, sidebar
 - `components/drawer/`, `components/sidebar/`: UI navigation เดิม/เสริม
 - `components/UploadImg/`: upload image service/interface
 - `components/search/`: search component
@@ -352,14 +346,14 @@ FeatureName/
 4. สร้าง hook ใน `hook/` ถ้ามี logic fetch/filter ซ้ำ
 5. เพิ่ม path ใน `AppRoutes` ที่ `src/router/router.tsx`
 6. เพิ่ม route object ใน `routesConfig.privateRoutes` หรือ `publicRoutes`
-7. ถ้าต้องมี sidebar ให้เพิ่มใน `src/shared/components/layouts/sidebarMenuConfig.tsx`
+7. ถ้าต้องมี sidebar ให้กำหนด `withLayout: true`, `roles`, `name`, `icon`, และ `key` ใน route object
 8. ถ้ามี permission เฉพาะเมนู ให้กำหนด `permissionKey` และต่อ logic ใน `PermissionRoute.tsx`
 
 ## ข้อควรระวังเวลาให้ AI ช่วยแก้
 
 - อ่าน README นี้ก่อน แล้วค่อยอ่านไฟล์ที่เกี่ยวกับงานจริง
 - อย่าลบของเก่าหรือ refactor กว้างถ้าไม่ได้สั่ง เพราะมีไฟล์เก่า/ไฟล์ทดลองปนอยู่
-- ถ้าแก้ route ต้องตรวจทั้ง `router.tsx` และ `sidebarMenuConfig.tsx`
+- ถ้าแก้ route/sidebar ต้องตรวจ `router.tsx` และ `SidebarMenu.tsx`
 - ถ้าแก้ login/session ต้องตรวจ `useAuth.ts`, `LoginForm.tsx`, `LoginApi.tsx`
 - ถ้าแก้ API ต้องตรวจ `ApiConfig.tsx` และ service ของ module นั้น
 - ถ้าแก้ theme/layout ต้องตรวจ `App.tsx`, `theme.tsx`, layout components และ CSS global
