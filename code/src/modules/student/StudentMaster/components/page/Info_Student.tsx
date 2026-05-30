@@ -162,7 +162,7 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                 overflow: "hidden",
               }}
             >
-              <Stack
+              {/* <Stack
                 direction="row"
                 spacing={1}
                 sx={{
@@ -181,7 +181,7 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                 >
                   QR Code สำหรับเข้าร่วมกิจกรรม
                 </Typography>
-              </Stack>
+              </Stack> */}
 
               <Box
                 sx={{
@@ -261,9 +261,24 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                     )}
                   </>
                 ) : (
-                  <Typography color="text.secondary">
-                    {"กรุณากด Refresh QR Code เพื่อสร้าง QR"}
-                  </Typography>
+                  // <Typography color="text.secondary">
+                  //   {"กรุณากด Refresh QR Code เพื่อสร้าง QR"}
+                  // </Typography>
+                  <QRCodeCanvas
+                    value="placeholder"
+                    size={qrSize}
+                    level="H"
+                    includeMargin
+                    fgColor="#D1D5DB"
+                    bgColor="#FFFFFF"
+                    style={{
+                      display: "block",
+                      maxWidth: "100%",
+                      height: "auto",
+                      opacity: 0.35,
+                      filter: "grayscale(1)",
+                    }}
+                  />
                 )}
               </Box>
 
@@ -312,6 +327,33 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
               >
                 {qrLoading ? "กำลังอัปเดต QR Code..." : "Refresh QR Code"}
               </Button>
+              
+              <Stack
+                direction="row"
+                spacing={0.25}
+                sx={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  mb: 1,
+                  mt: 2,
+                  
+                }}
+              >
+                {/* <QrCode2OutlinedIcon sx={{ color: "#1d4ed8" }} /> */}
+                <Typography
+                  sx={{
+                   
+                    fontSize: { xs: 16, sm: 18  },
+                    fontWeight: 800,
+                    color: "text.secondary",
+                    textAlign: "center",
+                  }}
+                  
+                >
+                  QR Code สำหรับเข้าร่วมกิจกรรม
+                </Typography>
+              </Stack>
+
             </Box>
           </Stack>
         </CardContent>
