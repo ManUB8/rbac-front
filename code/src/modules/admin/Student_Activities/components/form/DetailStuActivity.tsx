@@ -75,6 +75,23 @@ const DetailStuActivity: React.FC<IDetailStuActivityProps> = ({ student }) => {
                             <InfoRow label="เวลา" value={student.activity_time_text} />
                             <InfoRow label="สถานที่" value={student.location || "-"} />
                             <InfoRow
+                                label="ชั่วโมงที่ได้รับ"
+                                value={
+                                    student.earned_hours !== null &&
+                                        student.earned_hours !== undefined
+                                        ? String(student.earned_hours)
+                                        : "-"
+                                }
+                            />
+                            <InfoRow
+                                label="สถานะเช็คอิน"
+                                value={student.checkin_status_text || "-"}
+                            />
+                            <InfoRow
+                                label="สถานะเช็คเอาท์"
+                                value={student.checkout_status_text || "-"}
+                            />
+                            <InfoRow
                                 label="ประเภท"
                                 value={
                                     Check_type.find((e) => e.id === student.check_type)?.label || "-"

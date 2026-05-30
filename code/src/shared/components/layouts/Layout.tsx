@@ -10,6 +10,7 @@ import React, { useEffect, useState, type ReactNode } from "react";
 import MainContent from "./MainContent";
 import { useAuth } from "../../../modules/auth/hook/useAuth";
 import SidebarMenu from "./SidebarMenu";
+import { getRouteRole } from "../../../router/router";
 
 export interface ILayoutProps {
   children: ReactNode;
@@ -29,6 +30,7 @@ const Layout: React.FunctionComponent<ILayoutProps> = ({ children }) => {
 
   const { getAuthRole } = useAuth();
   const role = getAuthRole();
+  const isAdminSide = getRouteRole(role) === "admin";
 
   useEffect(() => {
     if (!isMobile) setDrawerOpen(false);
@@ -83,7 +85,7 @@ const Layout: React.FunctionComponent<ILayoutProps> = ({ children }) => {
             </IconButton>
 
             <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
-              {role === "admin" ? "Admin" : "นิสิตนักศึกษา"}
+              {isAdminSide ? "Admin" : "นิสิตนักศึกษา"}
             </Typography>
 
             <Box sx={{ width: 40 }} />
