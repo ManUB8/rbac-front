@@ -22,96 +22,98 @@ const FilterStudent: React.FunctionComponent<IFilterStudentProps> = ({
     return (
         <>
             <Grid container spacing={2} >
-                <Grid size={12}>
-                    <Stack direction="row" spacing={1} >
-
-                    </Stack>
-                    <Stack direction="row" spacing={2} sx={{ mt: 1 }} >
-                        <Box sx={{ flex: 1 }}>
-                            <TextField
-                                label="ค้นหา (รหัส/ชื่อ/คณะ/สาขา)"
-                                variant="outlined"
-                                autoComplete="off"
-                                fullWidth
-                                value={masterController.searchInput}
-                                onChange={(e) => {
-                                    const sear = e.target.value;
-                                    console.log('SearchOrder', sear)
-                                    masterController.handleChangeSearch(sear);
-                                }}
-                            />
-                        </Box>
-                        <Box sx={{ flex: 1 }}>
-                            <Autocomplete
-                                fullWidth
-                                options={facultyOptions}
-                                getOptionLabel={(option) => option.faculty_name}
-                                value={
-                                    facultyOptions.find(
-                                        (item) => item.faculty_id === masterController.searchState.faculty_id
-                                    ) ?? null
-                                }
-                                onChange={(_, v) => {
-                                    masterController.setSearchStateStudent((prev) => ({
-                                        ...prev,
-                                        faculty_id: v?.faculty_id ?? 0,
-                                        major_id: 0, // เปลี่ยนคณะแล้วล้างสาขา
-                                        page: 1,
-                                    }));
-                                }}
-                                renderInput={(p) => (
-                                    <TextField {...p} label="คณะ" variant="outlined" />
-                                )}
-                            />
-                        </Box>
-                        <Box sx={{ flex: 1 }}>
-                            <Autocomplete
-                                fullWidth
-                                options={majorOptions}
-                                getOptionLabel={(option) => option.major_name}
-                                value={
-                                    majorOptions.find(
-                                        (item) => item.major_id === masterController.searchState.major_id
-                                    ) ?? null
-                                }
-                                onChange={(_, v) => {
-                                    masterController.setSearchStateStudent((prev) => ({
-                                        ...prev,
-                                        major_id: v?.major_id ?? 0,
-                                        page: 1,
-                                    }));
-                                }}
-                                disabled={!masterController.searchState.faculty_id}
-                                renderInput={(p) => (
-                                    <TextField {...p} label="สาขา" variant="outlined" />
-                                )}
-                            />
-                        </Box>
-                        <Box sx={{ flex: 1 }}>
-                            <Autocomplete
-                                fullWidth
-                                options={Year_type}
-                                getOptionLabel={(option) => option.label}
-                                value={
-                                    Year_type.find(
-                                        (item) => item.id === masterController.searchState.year_status
-                                    ) ?? null
-                                }
-                                onChange={(_, v) => {
-                                    masterController.setSearchStateStudent((prev) => ({
-                                        ...prev,
-                                        year_status: v?.id ?? "",
-                                        page: 1,
-                                    }));
-                                }}
-                                renderInput={(p) => (
-                                    <TextField {...p} label="ชั้นปี" variant="outlined" />
-                                )}
-                            />
-                        </Box>
-                    </Stack>
+                <Grid size={{ xs: 6, md: 2 }}>
+                    <Box sx={{ flex: 1 , mt: 2}}>
+                        <TextField
+                            label="รหัส"
+                            variant="outlined"
+                            autoComplete="off"
+                            fullWidth
+                            value={masterController.searchInput}
+                            onChange={(e) => {
+                                const sear = e.target.value;
+                                console.log('SearchOrder', sear)
+                                masterController.handleChangeSearch(sear);
+                            }}
+                        />
+                    </Box>
                 </Grid>
-            </Grid >
+                <Grid size={{ xs: 6, md: 2 }}>
+                    <Box sx={{ flex: 1 , mt: 2}}>
+                        <Autocomplete
+                            fullWidth
+                            options={Year_type}
+                            getOptionLabel={(option) => option.label}
+                            value={
+                                Year_type.find(
+                                    (item) => item.id === masterController.searchState.year_status
+                                ) ?? null
+                            }
+                            onChange={(_, v) => {
+                                masterController.setSearchStateStudent((prev) => ({
+                                    ...prev,
+                                    year_status: v?.id ?? "",
+                                    page: 1,
+                                }));
+                            }}
+                            renderInput={(p) => (
+                                <TextField {...p} label="ชั้นปี" variant="outlined" />
+                            )}
+                        />
+                    </Box>
+                </Grid>
+                <Grid size={{ xs: 12, md: 2 }}>
+                    <Box sx={{ flex: 1, mt: 2 }}>
+                        <Autocomplete
+                            fullWidth
+                            options={facultyOptions}
+                            getOptionLabel={(option) => option.faculty_name}
+                            value={
+                                facultyOptions.find(
+                                    (item) => item.faculty_id === masterController.searchState.faculty_id
+                                ) ?? null
+                            }
+                            onChange={(_, v) => {
+                                masterController.setSearchStateStudent((prev) => ({
+                                    ...prev,
+                                    faculty_id: v?.faculty_id ?? 0,
+                                    major_id: 0, // เปลี่ยนคณะแล้วล้างสาขา
+                                    page: 1,
+                                }));
+                            }}
+                            renderInput={(p) => (
+                                <TextField {...p} label="คณะ" variant="outlined" />
+                            )}
+                        />
+                    </Box>
+                </Grid>
+                <Grid size={{ xs: 12, md: 2 }}>
+                    <Box sx={{ flex: 1, mt: 2 }}>
+                        <Autocomplete
+                            fullWidth
+                            options={majorOptions}
+                            getOptionLabel={(option) => option.major_name}
+                            value={
+                                majorOptions.find(
+                                    (item) => item.major_id === masterController.searchState.major_id
+                                ) ?? null
+                            }
+                            onChange={(_, v) => {
+                                masterController.setSearchStateStudent((prev) => ({
+                                    ...prev,
+                                    major_id: v?.major_id ?? 0,
+                                    page: 1,
+                                }));
+                            }}
+                            disabled={!masterController.searchState.faculty_id}
+                            renderInput={(p) => (
+                                <TextField {...p} label="สาขา" variant="outlined" />
+                            )}
+                        />
+                    </Box>
+                </Grid>
+
+            </Grid>
         </>
     )
 };
