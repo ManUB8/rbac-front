@@ -35,19 +35,8 @@ import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
 import AddToHomeScreenOutlinedIcon from '@mui/icons-material/AddToHomeScreenOutlined';
-export type UserRole = "admin" | "student";
-
-// export interface IRouterConfig {
-//   path: string;
-//   element: ReactNode;
-//   code: string;
-//   name: string;
-//   icon?: ReactNode;
-//   roles: UserRole[];
-//   key: string;
-//   permissionKey?: string;
-//   withLayout?: boolean;
-// }
+export type UserRole = "admin" | "temporary_admin" | "student";
+export type RouteRole = "admin" | "student";
 
 export interface IRouterConfig {
   path: string;
@@ -93,11 +82,18 @@ export const getDefaultRouteByRole = (role: UserRole | "") => {
   switch (role) {
     case "admin":
       return AppRoutes.dashboard;
+    case "temporary_admin":
+      return AppRoutes.adminStudentActivities;
     case "student":
       return AppRoutes.studentCard;
     default:
       return AppRoutes.authLanding;
   }
+};
+
+export const getRouteRole = (role: UserRole | ""): RouteRole | "" => {
+  if (role === "temporary_admin") return "admin";
+  return role;
 };
 
 export const routesConfig: {
@@ -184,40 +180,10 @@ export const routesConfig: {
       code: "admin-studentactivities",
       name: "ลงทะเบียนกิจกรรม",
       icon: <QrCodeScannerOutlinedIcon />,
-      roles: ["admin"],
+      roles: ["admin", "temporary_admin"],
       key: "admin-studentactivities",
       withLayout: true,
     },
-    // {
-    //   path: AppRoutes.adminQrScanner,
-    //   element: <QrScannerPage />,
-    //   code: "admin-qrscanner",
-    //   name: "ลงทะเบียน Moblie",
-    //   icon: <AddToHomeScreenOutlinedIcon />,
-    //   roles: ["admin"],
-    //   key: "admin-qrscanner",
-    //   withLayout: true,
-    // },
-    // {
-    //   path: AppRoutes.adminEventRegistrants,
-    //   element: <EventRegistrantsPage />,
-    //   code: "student-event",
-    //   name: "ผู้ลงทะเบียนกิจกรรม",
-    //   icon: <PersonPinOutlinedIcon />,
-    //   roles: ["admin"],
-    //   key: "student-event",
-    //   withLayout: true,
-    // },
-    // {
-    //   path: AppRoutes.adminStudentReport,
-    //   element: <StudentReportPage />,
-    //   code: "student-report",
-    //   name: "รายงานกิจกรรมนิสิต",
-    //   icon: <PersonSearchOutlinedIcon />,
-    //   roles: ["admin"],
-    //   key: "student-report",
-    //   withLayout: true,
-    // },
     {
       path: AppRoutes.adminEvent,
       element: null,

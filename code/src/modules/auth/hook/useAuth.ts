@@ -51,7 +51,9 @@ export const useAuth = () => {
     Cookies.set("accessToken", fakeToken, { expires: 30 });
     Cookies.set("accountName", accountName, { expires: 30 });
     Cookies.set("accountType", role, { expires: 30 });
+    Cookies.set("account_type", role, { expires: 30 });
     Cookies.set("userId", String(userId), { expires: 30 });
+    Cookies.set("user_id", String(userId), { expires: 30 });
     Cookies.set("user_code", String(code), { expires: 30 });
 
     localStorage.setItem("access_token", fakeToken);
@@ -64,7 +66,7 @@ export const useAuth = () => {
   };
 
   const authroizedAdmin = (data: ILoginAdminItem) => {
-    setAuthSession("admin", data.name, data.user_id, data.username);
+    setAuthSession(data.role, data.name, data.user_id, data.username);
   };
 
   const authroizedStudent = (data: IStudentItem) => {
@@ -101,7 +103,9 @@ export const useAuth = () => {
     Cookies.remove("accessToken");
     Cookies.remove("accountName");
     Cookies.remove("accountType");
+    Cookies.remove("account_type");
     Cookies.remove("userId");
+    Cookies.remove("user_id");
 
     localStorage.removeItem("access_token");
     localStorage.removeItem("account_type");

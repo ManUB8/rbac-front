@@ -16,9 +16,6 @@ import {
   AppRoutes,
   routesConfig,
   getDefaultRouteByRole,
-  getLayoutRoutesByRole,
-  getBareRoutesByRole,
-  type UserRole,
 } from "./router";
 
 function ScrollToTop() {
@@ -92,10 +89,10 @@ function flattenRoutes(routes: typeof routesConfig.privateRoutes) {
   });
 }
 
-function renderProtectedRoutesByRole(role: UserRole, withLayout: boolean) {
-  const targetRoutes = withLayout
-    ? getLayoutRoutesByRole(role)
-    : getBareRoutesByRole(role);
+function renderProtectedRoutes(withLayout: boolean) {
+  const targetRoutes = routesConfig.privateRoutes.filter((route) =>
+    withLayout ? route.withLayout !== false : route.withLayout === false
+  );
 
   const flatRoutes = flattenRoutes(targetRoutes);
 
@@ -108,7 +105,13 @@ function renderProtectedRoutesByRole(role: UserRole, withLayout: boolean) {
       route.element
     );
 
-    return <Route key={route.key} path={route.path} element={element} />;
+    return (
+      <Route
+        key={route.key}
+        path={route.path}
+        element={<RoleRoute roles={route.roles}>{element}</RoleRoute>}
+      />
+    );
   });
 }
 
@@ -127,24 +130,12 @@ export default function AuthRoute() {
         <Route path="/" element={<PrivateLayoutRoute />}>
           <Route index element={<DefaultRedirect />} />
 
-          <Route element={<RoleRoute role="admin" />}>
-            {renderProtectedRoutesByRole("admin", true)}
-          </Route>
-
-          <Route element={<RoleRoute role="student" />}>
-            {renderProtectedRoutesByRole("student", true)}
-          </Route>
+          {renderProtectedRoutes(true)}
         </Route>
 
         {/* private bare */}
         <Route path="/" element={<PrivateBareRoute />}>
-          <Route element={<RoleRoute role="admin" />}>
-            {renderProtectedRoutesByRole("admin", false)}
-          </Route>
-
-          <Route element={<RoleRoute role="student" />}>
-            {renderProtectedRoutesByRole("student", false)}
-          </Route>
+          {renderProtectedRoutes(false)}
         </Route>
 
         {/* fallback */}

@@ -11,9 +11,9 @@ import {
     Typography,
 } from "@mui/material";
 import MyLocationOutlinedIcon from "@mui/icons-material/MyLocationOutlined";
-import { Check_type } from "../../utils/activity_option";
 import { NumericFormat } from "react-number-format";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { Controller } from "react-hook-form";
 
 export interface IActivityPositionProps {
     MasterController: IuseMasterFunctionActivityFromFetch;
@@ -22,9 +22,15 @@ export interface IActivityPositionProps {
 const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
     MasterController,
 }) => {
-    const { errors, getValues, setValue } = MasterController;
+    const { control, errors, getValues, setValue, watch } = MasterController;
     const [mapsUrl, setMapsUrl] = useState("");
-    const { hour_type, check_type, activity_status, require_registration, activity_all_Loading } = useFetchActivityFilterAll()
+    const { hour_type, check_type } = useFetchActivityFilterAll()
+    const selectedCheckType = watch("check_type");
+    const showCheckinWindow =
+        selectedCheckType === "checkin_only" || selectedCheckType === "checkin_checkout";
+    const showCheckoutWindow =
+        selectedCheckType === "checkout_only" || selectedCheckType === "checkin_checkout";
+
     return (
         <>
             <Stack
@@ -76,6 +82,115 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                     }}
                 />
             </Stack>
+
+            {(showCheckinWindow || showCheckoutWindow) && (
+                <Box sx={{ mt: 2 }}>
+                    <Typography
+                        sx={{
+                            fontWeight: 600,
+                            mb: 2,
+                        }}
+                    >
+                        ช่วงเวลาสแกน
+                    </Typography>
+
+                    {showCheckinWindow && (
+                        <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 2 }}>
+                            <Controller
+                                name="checkin_open_time"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        fullWidth
+                                        id="checkin_open_time"
+                                        label="เปิดเช็คอิน"
+                                        type="time"
+                                        value={field.value ?? ""}
+                                        error={!!errors?.checkin_open_time}
+                                        helperText={errors?.checkin_open_time?.message || ""}
+                                        slotProps={{
+                                            inputLabel: {
+                                                shrink: true,
+                                            },
+                                        }}
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="checkin_close_time"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        fullWidth
+                                        id="checkin_close_time"
+                                        label="ปิดเช็คอิน"
+                                        type="time"
+                                        value={field.value ?? ""}
+                                        error={!!errors?.checkin_close_time}
+                                        helperText={errors?.checkin_close_time?.message || ""}
+                                        slotProps={{
+                                            inputLabel: {
+                                                shrink: true,
+                                            },
+                                        }}
+                                    />
+                                )}
+                            />
+                        </Stack>
+                    )}
+
+                    {showCheckoutWindow && (
+                        <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+                            <Controller
+                                name="checkout_open_time"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        fullWidth
+                                        id="checkout_open_time"
+                                        label="เปิดเช็คเอาท์"
+                                        type="time"
+                                        value={field.value ?? ""}
+                                        error={!!errors?.checkout_open_time}
+                                        helperText={errors?.checkout_open_time?.message || ""}
+                                        slotProps={{
+                                            inputLabel: {
+                                                shrink: true,
+                                            },
+                                        }}
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="checkout_close_time"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        fullWidth
+                                        id="checkout_close_time"
+                                        label="ปิดเช็คเอาท์"
+                                        type="time"
+                                        value={field.value ?? ""}
+                                        error={!!errors?.checkout_close_time}
+                                        helperText={errors?.checkout_close_time?.message || ""}
+                                        slotProps={{
+                                            inputLabel: {
+                                                shrink: true,
+                                            },
+                                        }}
+                                    />
+                                )}
+                            />
+                        </Stack>
+                    )}
+                </Box>
+            )}
 
             <Stack
                 direction={{ xs: "column", md: "row" }}
