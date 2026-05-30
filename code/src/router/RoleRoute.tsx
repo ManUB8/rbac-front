@@ -1,12 +1,14 @@
+import type { ReactNode } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../modules/auth";
 import { getDefaultRouteByRole, type UserRole } from "./router";
 
 interface IRoleRouteProps {
-  role: UserRole;
+  roles: UserRole[];
+  children?: ReactNode;
 }
 
-export const RoleRoute: React.FC<IRoleRouteProps> = ({ role }) => {
+export const RoleRoute: React.FC<IRoleRouteProps> = ({ roles, children }) => {
   const { getAuthRole } = useAuth();
   const currentRole = getAuthRole();
 
@@ -14,8 +16,12 @@ export const RoleRoute: React.FC<IRoleRouteProps> = ({ role }) => {
     return <Navigate to={getDefaultRouteByRole("")} replace />;
   }
 
-  if (currentRole !== role) {
+  if (!roles.includes(currentRole)) {
     return <Navigate to={getDefaultRouteByRole(currentRole)} replace />;
+  }
+
+  if (children) {
+    return <>{children}</>;
   }
 
   return <Outlet />;

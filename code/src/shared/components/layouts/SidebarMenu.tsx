@@ -21,7 +21,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAtom } from "jotai";
 import Logo_samo from '../../../assets/image/logo_samo_r.jpg'
 import { useAuth } from "../../../modules/auth/hook/useAuth";
-import { routesConfig, type IRouterConfig, type UserRole } from "../../../router/router";
+import { getPrivateRoutesByRole, getRouteRole, type IRouterConfig, type UserRole } from "../../../router/router";
 import { SIDEBAR_WIDTH } from "./Layout";
 import { colorModeAtom } from "../../store/themeAtom";
 import { ENUM_VERSION } from "../Enum";
@@ -58,12 +58,10 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
   const drawerWidth = collapsed ? COLLAPSED_WIDTH : SIDEBAR_WIDTH;
 
   const menuItems = useMemo(() => {
-    if (!role) return [];
-
-    return routesConfig.privateRoutes.filter(
-      (item) => item.roles.includes(role) && item.withLayout !== false
-    );
+    return getPrivateRoutesByRole(role).filter((item) => item.withLayout !== false);
   }, [role]);
+
+  const isAdminSide = getRouteRole(role) === "admin";
 
   const isActivePath = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
@@ -277,13 +275,13 @@ const SidebarMenu: React.FC<ISidebarMenuProps> = ({
       <Box sx={{ px: 2.5, py: 2 }}>
         <Stack direction="row" spacing={1.2} sx={{ alignItems: "center" }}>
           {/* <SchoolOutlinedIcon sx={{ color: "primary.main" }} /> */}
-          {role === "admin"
+          {isAdminSide
             ? <Box component="img" sx={{ width: 50 }} src={Logo_samo} alt="logo_rbac" />
             : <SchoolOutlinedIcon sx={{ color: "primary.main" }} />}
           {!collapsed && (
             <Box>
               <Typography sx={{ fontWeight: 800, fontSize: 15 }}>
-                {role === "admin"
+                {isAdminSide
                   ? accountName || "ผู้ดูแลระบบ"
                   : studentCode || "นิสิต"}
               </Typography>
