@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
     Alert,
     Autocomplete,
@@ -55,19 +55,37 @@ const StudentActivitiesManualFrom: React.FC = () => {
         );
     }, [activity_filter, activityId]);
 
+    const speechUnlockedRef = useRef(false);
+
+    const unlockSpeech = () => {
+        if (!("speechSynthesis" in window)) return;
+
+        speechUnlockedRef.current = true;
+
+        const utterance = new SpeechSynthesisUtterance(" ");
+        utterance.lang = "th-TH";
+        utterance.volume = 0;
+
+        window.speechSynthesis.speak(utterance);
+    };
+
     const speakMessage = (message: string) => {
         if (!message) return;
         if (!("speechSynthesis" in window)) return;
 
+        if (!speechUnlockedRef.current) return;
+
         window.speechSynthesis.cancel();
 
-        const utterance = new SpeechSynthesisUtterance(message);
-        utterance.lang = "th-TH";
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.volume = 1;
+        setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.lang = "th-TH";
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            utterance.volume = 1;
 
-        window.speechSynthesis.speak(utterance);
+            window.speechSynthesis.speak(utterance);
+        }, 150);
     };
 
     const handleResultMessage = (type: "success" | "error", message: string) => {
@@ -244,7 +262,11 @@ const StudentActivitiesManualFrom: React.FC = () => {
                         >
                             <Button
                                 startIcon={<LoginIcon />}
-                                onClick={() => setMode("checkin")}
+                                onClick={() => {
+                                    unlockSpeech();
+                                    setMode("checkin");
+                                }}
+                                // onClick={() => setMode("checkin")}
                                 sx={{
                                     height: 48,
                                     borderRadius: 0,
@@ -266,7 +288,11 @@ const StudentActivitiesManualFrom: React.FC = () => {
 
                             <Button
                                 startIcon={<LogoutIcon />}
-                                onClick={() => setMode("checkout")}
+                                onClick={() => {
+                                    unlockSpeech();
+                                    setMode("checkout");
+                                }}
+                                // onClick={() => setMode("checkout")}
                                 sx={{
                                     height: 48,
                                     borderRadius: 0,
@@ -301,7 +327,11 @@ const StudentActivitiesManualFrom: React.FC = () => {
                             fullWidth
                             variant="outlined"
                             startIcon={<MyLocationIcon />}
-                            onClick={handleGetLocation}
+                            // onClick={handleGetLocation}
+                            onClick={() => {
+                                unlockSpeech();
+                                handleGetLocation();
+                            }}
                             disabled={loadingLocation}
                             sx={{
                                 height: 46,
@@ -339,7 +369,11 @@ const StudentActivitiesManualFrom: React.FC = () => {
                             fullWidth
                             variant="contained"
                             disabled={loadingSubmit || loadingLocation}
-                            onClick={handleSubmit}
+                            // onClick={handleSubmit}
+                            onClick={() => {
+                                unlockSpeech();
+                                handleSubmit();
+                            }}
                             sx={{
                                 height: 46,
                                 borderRadius: 2.5,
