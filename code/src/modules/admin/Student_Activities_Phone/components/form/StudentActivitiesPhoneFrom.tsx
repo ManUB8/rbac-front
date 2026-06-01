@@ -105,19 +105,37 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
         });
     };
 
+    const speechUnlockedRef = useRef(false);
+
+    const unlockSpeech = () => {
+        if (!("speechSynthesis" in window)) return;
+
+        speechUnlockedRef.current = true;
+
+        const utterance = new SpeechSynthesisUtterance(" ");
+        utterance.lang = "th-TH";
+        utterance.volume = 0;
+
+        window.speechSynthesis.speak(utterance);
+    };
+
     const speakMessage = (message: string) => {
         if (!message) return;
         if (!("speechSynthesis" in window)) return;
 
+        if (!speechUnlockedRef.current) return;
+
         window.speechSynthesis.cancel();
 
-        const utterance = new SpeechSynthesisUtterance(message);
-        utterance.lang = "th-TH";
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.volume = 1;
+        setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.lang = "th-TH";
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            utterance.volume = 1;
 
-        window.speechSynthesis.speak(utterance);
+            window.speechSynthesis.speak(utterance);
+        }, 150);
     };
 
     const handleResultMessage = (type: "success" | "error", message: string) => {
@@ -281,7 +299,11 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
                             >
                                 <Button
                                     startIcon={<LoginIcon />}
-                                    onClick={() => setMode("checkin")}
+                                    onClick={() => {
+                                        unlockSpeech();
+                                        setMode("checkin");
+                                    }}
+                                    // onClick={() => setMode("checkin")}
                                     sx={{
                                         height: { xs: 48, md: 52 },
                                         borderRadius: 0,
@@ -303,7 +325,11 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
 
                                 <Button
                                     startIcon={<LogoutIcon />}
-                                    onClick={() => setMode("checkout")}
+                                    onClick={() => {
+                                        unlockSpeech();
+                                        setMode("checkout");
+                                    }}
+                                    // onClick={() => setMode("checkout")}
                                     sx={{
                                         height: { xs: 48, md: 52 },
                                         borderRadius: 0,
@@ -336,7 +362,11 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
                                     fullWidth
                                     variant="outlined"
                                     startIcon={<MyLocationIcon />}
-                                    onClick={handleGetLocation}
+                                    // onClick={handleGetLocation}
+                                    onClick={() => {
+                                        unlockSpeech();
+                                        handleGetLocation();
+                                    }}
                                     sx={{
                                         height: 46,
                                         borderRadius: 2.5,
@@ -424,7 +454,11 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
                                 fullWidth
                                 variant="contained"
                                 disabled={loadingSubmit}
-                                onClick={() => handleSubmit()}
+                                onClick={() => {
+                                    unlockSpeech();
+                                    handleSubmit();
+                                }}
+                                // onClick={() => handleSubmit()}
                                 sx={{
                                     height: { xs: 46, md: 48 },
                                     borderRadius: 2.5,
