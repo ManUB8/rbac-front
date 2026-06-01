@@ -60,7 +60,7 @@ export function useMasterUserColumns(
 
             {
                 id: "role",
-                label: "บทบาท",
+                label: "Role",
                 minWidth: 140,
                 align: "left",
 

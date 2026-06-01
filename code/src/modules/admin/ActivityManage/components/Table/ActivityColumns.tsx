@@ -163,16 +163,36 @@ export function useMasterActivityColumns(MasterActivity: IuseActivityFetch, Mast
                 <Typography variant="subtitle2">{formatTimeRange(row.start_time, row.end_time) || "-"}</Typography>
             ),
         },
+
         {
             id: "hours",
             label: "ชั่วโมง",
             minWidth: 120,
-            align: "left",
+            align: "center",
             render: (row) => (
                 <Typography variant="subtitle2">
                     {row.hours ? `${row.hours} ชม.` : "-"}
                 </Typography>
             ),
+        },
+        {
+            id: "volunteer_hours",
+            label: "ชั่วโมงจิตอาสา",
+            minWidth: 150,
+            align: "center",
+
+            render: (row) => {
+                const hours = Number(row.volunteer_hours);
+
+                return (
+                    <Typography variant="subtitle2">
+                        {Number.isInteger(hours)
+                            ? hours
+                            : hours.toFixed(2)}{" "}
+                        ชม.
+                    </Typography>
+                );
+            },
         },
         {
             id: "location",
@@ -239,6 +259,76 @@ export function useMasterActivityColumns(MasterActivity: IuseActivityFetch, Mast
                 ) : (
                     <Typography variant="subtitle2">{"—"}</Typography>
                 ),
+        },
+        {
+            id: "checkin_time",
+            label: "เวลา Check In",
+            minWidth: 240,
+            align: "left",
+            render: (row) => (
+                <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{
+                        flexWrap: "wrap",
+                    }}
+                >
+                    <Chip
+                        label={`Open ${row.checkin_open_time || "-"}`}
+                        size="small"
+                        sx={{
+                            bgcolor: "rgba(34,197,94,0.15)",
+                            color: "#22c55e",
+                            fontWeight: 700,
+                        }}
+                    />
+
+                    <Chip
+                        label={`End ${row.checkin_close_time || "-"}`}
+                        size="small"
+                        sx={{
+                            bgcolor: "rgba(239,68,68,0.15)",
+                            color: "#ef4444",
+                            fontWeight: 700,
+                        }}
+                    />
+                </Stack>
+            ),
+        },
+        {
+            id: "checkout_time",
+            label: "เวลา Check Out",
+            minWidth: 240,
+            align: "left",
+            render: (row) => (
+                <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{
+                        flexWrap: "wrap",
+                    }}
+                >
+                    <Chip
+                        label={`Open ${row.checkout_open_time || "-"}`}
+                        size="small"
+                        sx={{
+                            bgcolor: "rgba(34,197,94,0.15)",
+                            color: "#22c55e",
+                            fontWeight: 700,
+                        }}
+                    />
+
+                    <Chip
+                        label={`End ${row.checkout_close_time || "-"}`}
+                        size="small"
+                        sx={{
+                            bgcolor: "rgba(239,68,68,0.15)",
+                            color: "#ef4444",
+                            fontWeight: 700,
+                        }}
+                    />
+                </Stack>
+            ),
         },
         {
             id: "require_registration",
