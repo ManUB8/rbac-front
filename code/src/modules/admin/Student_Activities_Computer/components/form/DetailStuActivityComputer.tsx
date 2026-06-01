@@ -61,7 +61,7 @@ const DetailStuActivity: React.FC<IDetailStuActivityProps> = ({ student }) => {
 
                             <Chip
                                 color="success"
-                                label={student.attendance_status}
+                                label={student.check_detail.attendance_status}
                                 size="medium"
                                 sx={{ fontWeight: 700 }}
                             />
@@ -77,19 +77,19 @@ const DetailStuActivity: React.FC<IDetailStuActivityProps> = ({ student }) => {
                             <InfoRow
                                 label="ชั่วโมงที่ได้รับ"
                                 value={
-                                    student.earned_hours !== null &&
-                                        student.earned_hours !== undefined
-                                        ? String(student.earned_hours)
+                                    student.check_detail.earned_hours !== null &&
+                                        student.check_detail.earned_hours !== undefined
+                                        ? String(student.check_detail.earned_hours)
                                         : "-"
                                 }
                             />
                             <InfoRow
                                 label="สถานะเช็คอิน"
-                                value={student.checkin_status_text || "-"}
+                                value={student.check_detail.checkin.checkin_status_text || "-"}
                             />
                             <InfoRow
                                 label="สถานะเช็คเอาท์"
-                                value={student.checkout_status_text || "-"}
+                                value={student.check_detail.checkout.checkout_status_text || "-"}
                             />
                             <InfoRow
                                 label="ประเภท"
@@ -111,6 +111,7 @@ interface IInfoRowProps {
     label: string;
     value: string;
 }
+
 const InfoRow: React.FC<IInfoRowProps> = ({ label, value }) => {
     return (
         <Stack
