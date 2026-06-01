@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogTitle,
   IconButton,
   Stack,
   TextField,
@@ -41,10 +42,12 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
         },
       }}
     >
-      <DialogContent sx={{ px: 3, py: 2.5 }}>
+
+
+      <DialogTitle sx={{ px: 3, py: 2.5 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 2 }}>
           <Box>
-            <Typography sx={{ fontSize: 34, fontWeight: 800, color: "#0f172a", lineHeight: 1.2 }}>
+            <Typography sx={{ fontSize: 34, fontWeight: 800, color: "text.primary", lineHeight: 1.2 }}>
               {actype === "create" ? "เพิ่มกิจกรรมใหม่" : "แก้ไขกิจกรรม"}
             </Typography>
             <Typography sx={{ mt: 0.5, fontSize: 16, color: "#64748b" }}>
@@ -56,6 +59,10 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
             <CloseIcon />
           </IconButton>
         </Box>
+      </DialogTitle >
+
+      <DialogContent sx={{ px: 3, py: 2.5 }}>
+
         <ActivityPhoto
           value={getValues('activity_img') || NoImg}
           onChange={(url) => {
@@ -65,8 +72,6 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
         />
         <ActivityDetail MasterController={MasterController} />
         <ActivityPosition MasterController={MasterController} />
-      </DialogContent>
-      <DialogActions>
         <Box
           sx={{
             display: "flex",
@@ -84,7 +89,7 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
               borderRadius: "12px",
               textTransform: "none",
               fontWeight: 700,
-              color:'error.main'
+              color: 'error.main'
             }}
           >
             {"ยกเลิก"}
@@ -118,7 +123,7 @@ const ActivityModal: React.FC<IActivityModalProps> = ({ MasterController }) => {
             {actype === "create" ? "เพิ่มกิจกรรม" : "บันทึกการแก้ไข"}
           </Button>
         </Box>
-      </DialogActions>
+      </DialogContent>
     </Dialog >
   );
 };

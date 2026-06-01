@@ -22,6 +22,7 @@ import { useFetchFacultyMajors } from "../../../Faculty_Majors/hook/useFetchFacu
 import { useFetchPosition } from "../../../Position/hook/useFetchPosition";
 import { Year_type } from "../../utils/student_option";
 import PositionStudent from "./PositionStudent";
+import { red } from "@mui/material/colors";
 
 export interface IDateilStudentProps {
     MasterStudent: IuseMasterFunctionStudentFromFetch;
@@ -57,17 +58,15 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
             fullWidth
             maxWidth="md"
         >
-            <DialogTitle sx={{ fontWeight: 800, pr: 6 }}>
+            <DialogTitle sx={{ fontWeight: 1000, pr: 6 }}>
                 {actype === "create" ? "เพิ่มนิสิต" : "แก้ไขข้อมูลนิสิต"}
-
-                <IconButton
-                    onClick={() => setOpenStudentModal(false)}
-                    sx={{ position: "absolute", right: 12, top: 12 }}
-                >
-                    <CloseIcon />
-                </IconButton>
+            <IconButton
+                        onClick={() => setOpenStudentModal(false)}
+                        sx={{ position: "absolute", right: 12, top: 12 }}
+                    >
+                        <CloseIcon  />
+                    </IconButton>
             </DialogTitle>
-
             <DialogContent>
                 <Stack spacing={2} sx={{ pt: 1 }}>
                     <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
@@ -105,20 +104,24 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                 />
                             )}
                         />
-                        <Autocomplete
-                            fullWidth
-                            options={Year_type}
-                            getOptionLabel={(option) => option.label}
-                            value={
-                                Year_type?.find(
-                                    (item) => item.id === getValues('year_status')
-                                ) ?? null
-                            }
-                            onChange={(_, v) => {
-                                setValue("year_status", v?.id ?? '')
-                            }}
-                            renderInput={(p) => (
-                                <TextField {...p} label="ชั้นปี" variant="outlined" />
+                        <Controller
+                            name="year_status"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    select
+                                    fullWidth
+                                    id="year_status"
+                                    label="ชั้นปี"
+                                    error={!!errors.year_status}
+                                    helperText={errors.year_status?.message as string}
+                                >
+                                    <MenuItem value="ปี 1">ปี1</MenuItem>
+                                    <MenuItem value="ปี 2">ปี2</MenuItem>
+                                    <MenuItem value="ปี 3">ปี3</MenuItem>
+                                    <MenuItem value="ปี 4">ปี4</MenuItem>
+                                </TextField>
                             )}
                         />
                     </Stack>
@@ -199,6 +202,7 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
 
                     <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
                         <Box sx={{ flex: 1 }}>
+
                             <Autocomplete
                                 fullWidth
                                 options={faculty_majors}
@@ -213,7 +217,13 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                     setValue("faculty_name", v?.faculty_name ?? '')
                                 }}
                                 renderInput={(p) => (
-                                    <TextField {...p} label="คณะ" variant="outlined" />
+                                    <TextField {...p}
+                                        label="คณะ"
+                                        variant="outlined"
+                                        name="faculty_id"
+                                        error={!!errors?.faculty_id}
+                                        helperText={errors?.faculty_id?.message as string}
+                                    />
                                 )}
                             />
                         </Box>
@@ -228,12 +238,20 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                     ) ?? null
                                 }
                                 onChange={(_, v) => {
-                                    setValue("faculty_id", v?.major_id ?? 0)
-                                    setValue("faculty_name", v?.major_name ?? '')
+                                    setValue("major_id", v?.major_id ?? 0, {
+                                        shouldValidate: true,
+                                    });
+                                    setValue("major_name", v?.major_name ?? "");
                                 }}
-                                disabled={!getValues('major_id')}
+                                disabled={!getValues('faculty_id')}
                                 renderInput={(p) => (
-                                    <TextField {...p} label="สาขา" variant="outlined" />
+                                    <TextField {...p}
+                                        label="สาขา"
+                                        variant="outlined"
+                                        name="major_id"
+                                        error={!!errors?.major_id}
+                                        helperText={errors?.major_id?.message as string}
+                                    />
                                 )}
                             />
                         </Box>
@@ -292,6 +310,40 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                 />
                             )}
                         />
+                        <Controller
+                            name="user.confirm_password"
+                            control={control}
+                            rules={{
+                                required: "กรุณายืนยันรหัสผ่าน",
+                                validate: (value) =>
+                                    value === getValues("user.password") || "รหัสผ่านไม่ตรงกัน",
+                            }}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    fullWidth
+                                    id="user.confirm_password"
+                                    label="ยืนยันรหัสผ่าน"
+                                    type={showPassword ? "text" : "password"}
+                                    error={!!errors.user?.confirm_password}
+                                    helperText={errors.user?.confirm_password?.message as string}
+                                    slotProps={{
+                                        input: {
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={() => setShowPassword((prev) => !prev)}
+                                                        edge="end"
+                                                    >
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        },
+                                    }}
+                                />
+                            )}
+                        />
                     </Stack>
                     <Box
                         sx={{
@@ -309,7 +361,9 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                             ยกเลิก
                         </Button>
 
-                        <Button type="submit" variant="contained" form="student-form">
+                        <Button type="submit"
+                            variant="contained"
+                            form="student-form">
                             {actype === "create" ? "บันทึก" : "อัปเดต"}
                         </Button>
                     </Box>

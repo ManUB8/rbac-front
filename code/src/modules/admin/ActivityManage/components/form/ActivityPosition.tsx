@@ -56,6 +56,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                         <TextField
                             {...p}
                             label="ประเภทการเช็ค"
+                            id="check_type"
                             variant="outlined"
                             error={!!errors?.check_type}
                             helperText={errors?.check_type?.message || ""}
@@ -65,6 +66,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
 
                 <NumericFormat
                     label="จำนวนรับผู้เข้าร่วมกิจกรรม"
+                    id="max_participants"
                     customInput={TextField}
                     fullWidth
                     allowNegative={false}
@@ -93,7 +95,6 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                     >
                         ช่วงเวลาสแกน
                     </Typography>
-
                     {showCheckinWindow && (
                         <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 2 }}>
                             <Controller
@@ -105,15 +106,8 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                                         fullWidth
                                         id="checkin_open_time"
                                         label="เปิดเช็คอิน"
-                                        type="time"
-                                        value={field.value ?? ""}
                                         error={!!errors?.checkin_open_time}
-                                        helperText={errors?.checkin_open_time?.message || ""}
-                                        slotProps={{
-                                            inputLabel: {
-                                                shrink: true,
-                                            },
-                                        }}
+                                        helperText={errors?.checkin_open_time?.message as string }
                                     />
                                 )}
                             />
@@ -127,15 +121,8 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                                         fullWidth
                                         id="checkin_close_time"
                                         label="ปิดเช็คอิน"
-                                        type="time"
-                                        value={field.value ?? ""}
                                         error={!!errors?.checkin_close_time}
-                                        helperText={errors?.checkin_close_time?.message || ""}
-                                        slotProps={{
-                                            inputLabel: {
-                                                shrink: true,
-                                            },
-                                        }}
+                                        helperText={errors?.checkin_close_time?.message  as string }
                                     />
                                 )}
                             />
@@ -153,15 +140,8 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                                         fullWidth
                                         id="checkout_open_time"
                                         label="เปิดเช็คเอาท์"
-                                        type="time"
-                                        value={field.value ?? ""}
                                         error={!!errors?.checkout_open_time}
-                                        helperText={errors?.checkout_open_time?.message || ""}
-                                        slotProps={{
-                                            inputLabel: {
-                                                shrink: true,
-                                            },
-                                        }}
+                                        helperText={errors?.checkout_open_time?.message as string }
                                     />
                                 )}
                             />
@@ -175,15 +155,8 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                                         fullWidth
                                         id="checkout_close_time"
                                         label="ปิดเช็คเอาท์"
-                                        type="time"
-                                        value={field.value ?? ""}
                                         error={!!errors?.checkout_close_time}
-                                        helperText={errors?.checkout_close_time?.message || ""}
-                                        slotProps={{
-                                            inputLabel: {
-                                                shrink: true,
-                                            },
-                                        }}
+                                        helperText={errors?.checkout_close_time?.message as string }
                                     />
                                 )}
                             />
@@ -272,7 +245,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                                 label="ประเภทชั่วโมง"
                                 variant="outlined"
                                 error={!!errors?.hour_type_id}
-                                helperText={errors?.hour_type_id?.message || ""}
+                                helperText={errors?.hour_type_id?.message as string }
                             />
                         )}
                     />
@@ -354,7 +327,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                             setValue("activity_lat", values.floatValue ?? 0);
                         }}
                         error={!!errors?.activity_lat}
-                        helperText={errors?.activity_lat?.message || ""}
+                        helperText={errors?.activity_lat?.message as string  }
                     />
 
                     <NumericFormat
@@ -368,7 +341,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                             setValue("activity_lng", values.floatValue ?? 0);
                         }}
                         error={!!errors?.activity_lng}
-                        helperText={errors?.activity_lng?.message || ""}
+                        helperText={errors?.activity_lng?.message as string  }
                     />
 
                     <NumericFormat
@@ -382,7 +355,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                             setValue("activity_radius_meter", values.floatValue ?? 0);
                         }}
                         error={!!errors?.activity_radius_meter}
-                        helperText={errors?.activity_radius_meter?.message || ""}
+                        helperText={errors?.activity_radius_meter?.message as string  }
                     />
                 </Stack>
 

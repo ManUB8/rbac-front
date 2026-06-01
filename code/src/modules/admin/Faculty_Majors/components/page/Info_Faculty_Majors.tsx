@@ -14,6 +14,7 @@ import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlin
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import AddIcon from "@mui/icons-material/Add";
@@ -156,6 +157,13 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                             faculty.faculty_id
                                                         )
                                                     }
+                                                    sx={{
+                                                        transition: "0.2s",
+                                                        color: 'primary.main',
+                                                        "&:hover": {
+                                                            transform: "scale(1.08)",
+                                                        },
+                                                    }}
                                                 >
                                                     <EditOutlinedIcon />
                                                 </IconButton>
@@ -168,15 +176,14 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                         )
                                                     }
                                                     sx={{
-                                                        borderRadius: "14px",
-                                                        color:'error.main'
-                                                        // bgcolor: "#e11d48",
-                                                        // "&:hover": {
-                                                        //     bgcolor: "#be123c",
-                                                        // },
+                                                        transition: "0.2s",
+                                                        color: "error.main",
+                                                        "&:hover": {
+                                                            transform: "scale(1.08)",
+                                                        },
                                                     }}
                                                 >
-                                                    <DeleteOutlineOutlinedIcon />
+                                                    <DeleteForeverOutlinedIcon />
                                                 </IconButton>
 
                                                 <IconButton
@@ -202,6 +209,9 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                         >
                                             <Box
                                                 sx={{
+                                                    border: "2px solid ",
+                                                    borderColor: "text.primary",
+                                                    borderRadius: "20px",
                                                     pt: 2,
                                                     pb: 1,
                                                 }}
@@ -213,6 +223,7 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                     }}
                                                     spacing={1.5}
                                                     sx={{
+                                                        m: 3,
                                                         mb: 3,
                                                         alignItems: {
                                                             xs: "flex-start",
@@ -226,8 +237,7 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                         direction="row"
                                                         spacing={1.5}
                                                         sx={{
-                                                            alignItems:
-                                                                "center",
+                                                            alignItems: "center",
                                                         }}
                                                     >
                                                         <SchoolOutlinedIcon
@@ -257,10 +267,8 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                         sx={{
                                                             height: 46,
                                                             px: 3,
-                                                            borderRadius:
-                                                                "14px",
-                                                            textTransform:
-                                                                "none",
+                                                            borderRadius: "14px",
+                                                            textTransform: "none",
                                                             fontSize: 16,
                                                             fontWeight: 600,
                                                         }}
@@ -281,12 +289,10 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                                 }
                                                                 sx={{
                                                                     minHeight: 82,
-                                                                    borderRadius:
-                                                                        "18px",
+                                                                    borderRadius: "18px",
                                                                     px: 2.5,
                                                                     py: 2,
-                                                                    display:
-                                                                        "flex",
+                                                                    display: "flex",
                                                                     flexDirection:
                                                                     {
                                                                         xs: "column",
@@ -333,6 +339,13 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                                                 faculty.faculty_id
                                                                             )
                                                                         }
+                                                                        sx={{
+                                                                            transition: "0.2s",
+                                                                            color: 'primary.main',
+                                                                            "&:hover": {
+                                                                                transform: "scale(1.08)",
+                                                                            },
+                                                                        }}
                                                                     >
                                                                         <EditOutlinedIcon />
                                                                     </IconButton>
@@ -341,22 +354,19 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                                         onClick={() =>
                                                                             Master_Controller.onClickDeleteMaster(
                                                                                 "major",
+
                                                                                 branch.major_id
                                                                             )
                                                                         }
                                                                         sx={{
-                                                                            borderRadius:
-                                                                                "14px",
-                                                                            bgcolor:
-                                                                                "#e11d48",
-                                                                            "&:hover":
-                                                                            {
-                                                                                bgcolor:
-                                                                                    "#be123c",
+                                                                            transition: "0.2s",
+                                                                            color: "error.main",
+                                                                            "&:hover": {
+                                                                                transform: "scale(1.08)",
                                                                             },
                                                                         }}
                                                                     >
-                                                                        <DeleteOutlineOutlinedIcon />
+                                                                        <DeleteForeverOutlinedIcon />
                                                                     </IconButton>
                                                                 </Stack>
                                                             </Box>

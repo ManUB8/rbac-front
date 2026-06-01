@@ -13,5 +13,6 @@ export const ActivityZod = z.object({
     hour_type_id: z.string().min(1, { message: "กรุณากรอกจำนวนรับผู้เข้าร่วมกิจกรรม" }),
     activity_lat: z.number().min(1, { message: "กรุณากรอกจ Latitude" }),
     activity_lng: z.number().min(1, { message: "กรุณากรอก Longitude" }),
+    activity_radius_meter: z.number().min(1, { message: "กรุณากรอกรัศมีกิจกรรม" }),
 });
 

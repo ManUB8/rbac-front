@@ -57,6 +57,7 @@ const HeadStudent: React.FC<IHeadStudentProps> = ({ masterController }) => {
                     <Chip
                         label={
                             <span>
+                                {"ทั้งหมด "}
                                 <NumericFormat
                                     value={masterController.total_student}
                                     displayType="text"

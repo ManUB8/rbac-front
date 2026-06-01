@@ -37,10 +37,13 @@ const HeadActivity: React.FC<IHeadActivityProps> = ({
                 }}
             >
                 <Stack
-                    direction="row"
+                    direction={{ xs: "column", md: "row" }}
                     spacing={1.25}
                     sx={{
-                        alignItems: "center",
+                        alignItems: {
+                            xs: "center",
+                            md: "center",
+                        },
                         textAlign: {
                             xs: "center",
                             md: "left",
@@ -57,37 +60,43 @@ const HeadActivity: React.FC<IHeadActivityProps> = ({
                         จัดการกิจกรรม
                     </Typography>
 
-                    <Chip
-                        label={
-                            <span>
-                                <NumericFormat
-                                    value={MasterActivity.total_activity}
-                                    displayType="text"
-                                    thousandSeparator=","
-                                />
-                                {" รายการ"}
-                            </span>
-                        }
+                    <Stack
+                        direction="row"
+                        spacing={1}
                         sx={{
-                            fontWeight: 700,
+                            flexWrap: "wrap",
+                            justifyContent: "center",
                         }}
-                    />
-                    <Chip
-                        label={
-                            <span>
-                                {"กิจกรรมที่เปิด "}
-                                <NumericFormat
-                                    value={MasterActivity.total_active_activity}
-                                    displayType="text"
-                                    thousandSeparator=","
-                                />
-                                {" รายการ"}
-                            </span>
-                        }
-                        sx={{
-                            fontWeight: 700,
-                        }}
-                    />
+                    >
+                        <Chip
+                            label={
+                                <span>
+                                    <NumericFormat
+                                        value={MasterActivity.total_activity}
+                                        displayType="text"
+                                        thousandSeparator=","
+                                    />
+                                    {" รายการ"}
+                                </span>
+                            }
+                            sx={{ fontWeight: 700 }}
+                        />
+
+                        <Chip
+                            label={
+                                <span>
+                                    {"กิจกรรมที่เปิด "}
+                                    <NumericFormat
+                                        value={MasterActivity.total_active_activity}
+                                        displayType="text"
+                                        thousandSeparator=","
+                                    />
+                                    {" รายการ"}
+                                </span>
+                            }
+                            sx={{ fontWeight: 700 }}
+                        />
+                    </Stack>
                 </Stack>
             </Grid>
 

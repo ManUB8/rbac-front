@@ -31,18 +31,16 @@ const Header_Faculty_Majors: React.FC<IHeader_Faculty_MajorsProps> = ({
                 }}
             >
                 <Stack
-                    direction="row"
+                    direction={{ xs: "column", md: "row" }}
                     spacing={1.25}
                     sx={{
-                        alignItems: "center",
+                        alignItems: {
+                            xs: "center",
+                            md: "center",
+                        },
                         textAlign: {
                             xs: "center",
                             md: "left",
-                        },
-                        flexWrap: "wrap",
-                        justifyContent: {
-                            xs: "center",
-                            md: "flex-start",
                         },
                     }}
                 >
@@ -53,43 +51,48 @@ const Header_Faculty_Majors: React.FC<IHeader_Faculty_MajorsProps> = ({
                             fontWeight: 800,
                         }}
                     >
-                        {"จัดการคณะสาขา"}
+                        จัดการคณะสาขา
                     </Typography>
 
-                    <Chip
-                        label={
-                            <span>
-                                <NumericFormat
-                                    value={Master_Faculty_Majors.faculty_total}
-                                    displayType="text"
-                                    thousandSeparator=","
-                                />
-                                {" คณะ"}
-                            </span>
-                        }
+                    <Stack
+                        direction="row"
+                        spacing={1}
                         sx={{
-                            fontWeight: 700,
+                            flexWrap: "wrap",
+                            justifyContent: "center",
                         }}
-                    />
+                    >
+                        <Chip
+                            label={
+                                <span>
+                                    <NumericFormat
+                                        value={Master_Faculty_Majors.faculty_total}
+                                        displayType="text"
+                                        thousandSeparator=","
+                                    />
+                                    {" รายการ"}
+                                </span>
+                            }
+                            sx={{ fontWeight: 700 }}
+                        />
 
-                    <Chip
-                        label={
-                            <span>
-                                <NumericFormat
-                                    value={Master_Faculty_Majors.majors_total}
-                                    displayType="text"
-                                    thousandSeparator=","
-                                />
-                                {" สาขา"}
-                            </span>
-                        }
-                        sx={{
-                            fontWeight: 700,
-                        }}
-                    />
+                        <Chip
+                            label={
+                                <span>
+                                    {"กิจกรรมที่เปิด "}
+                                    <NumericFormat
+                                        value={Master_Faculty_Majors.majors_total}
+                                        displayType="text"
+                                        thousandSeparator=","
+                                    />
+                                    {" รายการ"}
+                                </span>
+                            }
+                            sx={{ fontWeight: 700 }}
+                        />
+                    </Stack>
                 </Stack>
             </Grid>
-
             <Grid
                 size={{ xs: 12, sm: 12, md: 6 }}
                 sx={{
