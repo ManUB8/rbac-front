@@ -59,34 +59,7 @@ const StudentActivitiesFrom: React.FC = () => {
     const selectedActivity = useMemo(() => {
         return activity_filter?.find((item: IActivityFilter) => item.id === activityId) ?? null;
     }, [activity_filter, activityId]);
-
-    const speakMessage = (message: string) => {
-        if (!message) return;
-        if (!("speechSynthesis" in window)) return;
-
-        window.speechSynthesis.cancel();
-
-        const utterance = new SpeechSynthesisUtterance(message);
-        utterance.lang = "th-TH";
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.volume = 1;
-
-        window.speechSynthesis.speak(utterance);
-    };
-
-    const handleResultMessage = (type: "success" | "error", message: string) => {
-        if (type === "success") {
-            setSuccessMessage(message);
-            setErrorMessage("");
-        } else {
-            setErrorMessage(message);
-            setSuccessMessage("");
-        }
-
-        speakMessage(message);
-    };
-
+    
     const parseQR = (value: string): QRPayload => {
         const text = value.trim();
 
