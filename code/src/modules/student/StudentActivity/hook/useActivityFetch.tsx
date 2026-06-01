@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
 import { getAllActivity, getAllActivityCode, RegisterStudentActivity } from "../service/ActivityApi";
-import type { IActivityItem, IActivityListResponse, IStudentActivityRegister, IStudentActivityResponse } from "../interface/Activity.interface";
+import type { IActivityItem, IActivityListResponse, IStudentActivityRegister, IStudentActivityResponse, IStudentAvailableActivitiesResponse } from "../interface/Activity.interface";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { useAtom, useSetAtom } from "jotai";
@@ -42,7 +42,7 @@ export const useFetcheActivityStudentCode = () => {
         setVersion((v) => v + 1);
     }, []);
 
-    const Activityquery = useQuery<IStudentActivityResponse, Error>({
+    const Activityquery = useQuery<IStudentAvailableActivitiesResponse, Error>({
         queryKey: ["activity_code", version, code],
         retry: 1,
         queryFn: async () => {

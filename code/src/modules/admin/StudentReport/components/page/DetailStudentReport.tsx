@@ -10,7 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 import type { IuseFetchStudentReport } from "../../hook/useFetchStudentReport";
-import { formatDateTimeThai } from "../../../../../shared/components/Date-Time/DateAndTime";
+import { formatDateThai, formatDateTimeThai } from "../../../../../shared/components/Date-Time/DateAndTime";
 
 export interface IDetailStudentReportProps {
     mastercontroller: IuseFetchStudentReport;
@@ -33,7 +33,7 @@ const DetailStudentReport: React.FC<IDetailStudentReportProps> = ({
         <Box sx={{ mt: 3 }}>
             <Grid container spacing={2}>
                 {activityList?.map((item) => {
-                    const isJoined = item.attendance_status === "เข้าร่วม";
+                    const isJoined = item.check_detail.attendance_status === "เข้าร่วม";
 
                     return (
                         <Grid key={item.student_activity_id} size={{ xs: 12, md: 6 }}>
@@ -44,7 +44,6 @@ const DetailStudentReport: React.FC<IDetailStudentReportProps> = ({
                                     borderRadius: "14px",
                                     border: "1px solid",
                                     borderColor: "divider",
-                                    bgcolor: "#fff",
                                 }}
                             >
                                 <CardContent sx={{ p: 2 }}>
@@ -62,7 +61,7 @@ const DetailStudentReport: React.FC<IDetailStudentReportProps> = ({
                                             </Typography>
 
                                             <Typography sx={{ fontSize: 14, color: "text.secondary", mt: 0.3 }}>
-                                                {item.activity_date} • {item.location}
+                                                {formatDateThai(item.activity_date)} • {item.location}
                                             </Typography>
                                         </Box>
 
@@ -70,7 +69,7 @@ const DetailStudentReport: React.FC<IDetailStudentReportProps> = ({
                                             label={
                                                 isJoined
                                                     ? "เข้าร่วมแล้ว"
-                                                    : item.registered_at
+                                                    : item.check_detail.registered_at
                                                         ? "ลงทะเบียนแล้ว"
                                                         : "ยังไม่เข้าร่วม"
                                             }
@@ -93,7 +92,7 @@ const DetailStudentReport: React.FC<IDetailStudentReportProps> = ({
                                             </Typography>
 
                                             <Typography sx={{ fontWeight: 700 }}>
-                                                {formatDateTimeThai(item.checkin_at)}
+                                                {formatDateTimeThai(item.check_detail.checkin.checkin_at) || "-"}
                                             </Typography>
                                         </Grid>
 
@@ -101,17 +100,39 @@ const DetailStudentReport: React.FC<IDetailStudentReportProps> = ({
                                             <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
                                                 เช็คเอาท์
                                             </Typography>
-                                           <Typography sx={{ fontWeight: 700 }}>
-                                                {formatDateTimeThai(item.checkout_at)}
+
+                                            <Typography sx={{ fontWeight: 700 }}>
+                                                {formatDateTimeThai(item.check_detail.checkout.checkout_at) || "-"}
                                             </Typography>
                                         </Grid>
 
                                         <Grid size={6}>
                                             <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
-                                                ชั่วโมงที่ได้
+                                                ชั่วโมงกิจกรรมทั้งหมด
                                             </Typography>
-                                             <Typography sx={{ fontWeight: 700 }}>
-                                                {isJoined ? `${item.hours} ชม.` : "-"}
+
+                                            <Typography sx={{ fontWeight: 700 }}>
+                                                {item.hours} ชม.
+                                            </Typography>
+                                        </Grid>
+
+                                        <Grid size={6}>
+                                            <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
+                                                ชั่วโมงจิตอาสารวม
+                                            </Typography>
+
+                                            <Typography sx={{ fontWeight: 700 }}>
+                                                {item.check_detail.volunteer_hours} ชม.
+                                            </Typography>
+                                        </Grid>
+
+                                        <Grid size={6}>
+                                            <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
+                                                ชั่วโมงจิตอาสาที่ได้จริง
+                                            </Typography>
+
+                                            <Typography sx={{ fontWeight: 700, color: "#16a34a" }}>
+                                                {item.check_detail.earned_hours} ชม.
                                             </Typography>
                                         </Grid>
 
@@ -119,7 +140,8 @@ const DetailStudentReport: React.FC<IDetailStudentReportProps> = ({
                                             <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
                                                 ประเภทเช็ค
                                             </Typography>
-                                             <Typography sx={{ fontWeight: 700 }}>
+
+                                            <Typography sx={{ fontWeight: 700 }}>
                                                 {getCheckTypeText(item.check_type)}
                                             </Typography>
                                         </Grid>

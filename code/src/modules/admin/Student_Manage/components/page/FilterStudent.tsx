@@ -23,9 +23,6 @@ const FilterStudent: React.FunctionComponent<IFilterStudentProps> = ({
         <>
             <Grid container spacing={2} >
                 <Grid size={12}>
-                    <Stack direction="row" spacing={1} >
-
-                    </Stack>
                     <Stack direction="row" spacing={2} sx={{ mt: 1 }} >
                         <Box sx={{ flex: 1 }}>
                             <TextField

@@ -75,3 +75,76 @@ export interface IDeleteEventRegistrantsRequest {
     student_activity_id: number;
     updated_by_name: string;
 }
+
+//new-interface
+export interface IStudentActivityJoinResponse {
+  detail: string;
+  total_all: number;
+  page: number;
+  limit: number;
+  data: IStudentActivityJoinItem[];
+}
+
+export interface IStudentActivityJoinItem {
+  student_activity_id: number;
+  student_id: number;
+  activity_id: number;
+
+  student_code: string;
+  full_name: string;
+
+  activity_name: string;
+  activity_date: string;
+  activity_time_text: string;
+  location: string;
+
+  faculty_name: string;
+  major_name: string;
+  year_status: string;
+  prefix: string | null;
+
+  check_type: string;
+
+  require_registration: boolean;
+  max_participants: number;
+
+  hours: number;
+  volunteer_hours: number;
+
+  check_detail: IStudentActivityCheckDetail;
+
+  created_by_id: number;
+  created_by_name: string;
+  updated_by_id: number;
+  updated_by_name: string;
+
+  created_at: number;
+  updated_at: number;
+}
+
+export interface IStudentActivityCheckDetail {
+  attendance_status: string;
+  registered_at: number | null;
+
+  earned_hours: number;
+  volunteer_hours: number;
+
+  checkin: IStudentActivityCheckin;
+  checkout: IStudentActivityCheckout;
+}
+
+export interface IStudentActivityCheckin {
+  checkin_at: number | null;
+  checkin_status: "valid" | "manual" | null;
+  checkin_status_text: string | null;
+  checkin_lat: number | null;
+  checkin_lng: number | null;
+}
+
+export interface IStudentActivityCheckout {
+  checkout_at: number | null;
+  checkout_status: "valid" | "manual" | null;
+  checkout_status_text: string | null;
+  checkout_lat: number | null;
+  checkout_lng: number | null;
+}

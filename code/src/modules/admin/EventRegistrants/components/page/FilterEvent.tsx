@@ -26,7 +26,34 @@ const FilterEvent: React.FunctionComponent<IFilterEventProps> = ({
         <Grid container spacing={2} >
             <Grid size={12}>
                 <Stack direction="row" spacing={1} >
-
+                    <Box sx={{ flex: 1 }}>
+                        <TextField
+                            label="ค้นหา ชื่อ-นามสกุล"
+                            variant="outlined"
+                            autoComplete="off"
+                            fullWidth
+                            value={mastercontroller.searchInput}
+                            onChange={(e) => {
+                                const sear = e.target.value;
+                                console.log('SearchOrder', sear)
+                                mastercontroller.handleChangeSearch(sear);
+                            }}
+                        />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                        <TextField
+                            label="ค้นหา รหัสนิสิต"
+                            variant="outlined"
+                            autoComplete="off"
+                            fullWidth
+                            value={mastercontroller.searchInputCode}
+                            onChange={(e) => {
+                                const sear = e.target.value;
+                                console.log('SearchOrder', sear)
+                                mastercontroller.handleChangeSearchCode(sear);
+                            }}
+                        />
+                    </Box>
                 </Stack>
                 <Stack direction="row" spacing={2} sx={{ mt: 1 }} >
                     <Box sx={{ flex: 1 }}>
@@ -36,14 +63,20 @@ const FilterEvent: React.FunctionComponent<IFilterEventProps> = ({
                             options={activity_filter}
                             getOptionLabel={(option) => option.name}
                             value={
-                                activity_filter.find(
-                                    (item) => String(item.id) === mastercontroller.searchState.activity_id
-                                ) ?? null
+                                mastercontroller.searchState.activity_id === ""
+                                    ? activity_filter[0] ?? null
+                                    : activity_filter.find(
+                                        (item) =>
+                                            String(item.id) === mastercontroller.searchState.activity_id
+                                    ) ?? null
                             }
                             onChange={(_, v) => {
                                 mastercontroller.setSearchStateEventRegistrants((prev) => ({
                                     ...prev,
-                                    activity_id: String(v?.id) ?? '',
+                                    activity_id:
+                                        !v || String(v.id) === "0"
+                                            ? ""
+                                            : String(v.id),
                                     page: 1,
                                 }));
                             }}
@@ -66,8 +99,8 @@ const FilterEvent: React.FunctionComponent<IFilterEventProps> = ({
                             onChange={(_, v) => {
                                 mastercontroller.setSearchStateEventRegistrants((prev) => ({
                                     ...prev,
-                                    faculty_id: String(v?.faculty_id) ?? '',
-                                    major_id: '', // เปลี่ยนคณะแล้วล้างสาขา
+                                    faculty_id: v ? String(v.faculty_id) : "",
+                                    major_id: "",
                                     page: 1,
                                 }));
                             }}
@@ -90,7 +123,7 @@ const FilterEvent: React.FunctionComponent<IFilterEventProps> = ({
                             onChange={(_, v) => {
                                 mastercontroller.setSearchStateEventRegistrants((prev) => ({
                                     ...prev,
-                                    major_id: String(v?.major_id) ?? '',
+                                    major_id: v ? String(v.major_id) : "",
                                     page: 1,
                                 }));
                             }}

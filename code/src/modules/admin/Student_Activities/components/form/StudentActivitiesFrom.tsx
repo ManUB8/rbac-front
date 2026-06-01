@@ -59,6 +59,33 @@ const StudentActivitiesFrom: React.FC = () => {
         return activity_filter?.find((item: IActivityFilter) => item.id === activityId) ?? null;
     }, [activity_filter, activityId]);
 
+    const speakMessage = (message: string) => {
+        if (!message) return;
+        if (!("speechSynthesis" in window)) return;
+
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(message);
+        utterance.lang = "th-TH";
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        window.speechSynthesis.speak(utterance);
+    };
+
+    const handleResultMessage = (type: "success" | "error", message: string) => {
+        if (type === "success") {
+            setSuccessMessage(message);
+            setErrorMessage("");
+        } else {
+            setErrorMessage(message);
+            setSuccessMessage("");
+        }
+
+        speakMessage(message);
+    };
+
     const parseQR = (value: string): QRPayload => {
         const text = value.trim();
 
@@ -143,8 +170,10 @@ const StudentActivitiesFrom: React.FC = () => {
                     checkin_lng: lng,
                 });
 
+                const message = res.detail || "เช็คอินสำเร็จ";
+
                 setLatestStudent(res.data);
-                setSuccessMessage(res.detail || "เช็คอินสำเร็จ");
+                handleResultMessage("success", message);
             } else {
                 const res = await CheckOutStudentActivities({
                     student_code: payload.student_code,
@@ -154,15 +183,19 @@ const StudentActivitiesFrom: React.FC = () => {
                     checkout_lng: lng,
                 });
 
+                const message = res.detail || "เช็คเอาท์สำเร็จ";
+
                 setLatestStudent(res.data);
-                setSuccessMessage(res.detail || "เช็คเอาท์สำเร็จ");
+                handleResultMessage("success", message);
             }
 
             setLastLat(lat);
             setLastLng(lng);
             setQrText("");
         } catch (error: any) {
-            setErrorMessage(error?.response?.data?.detail || "เกิดข้อผิดพลาด");
+            const message = error?.response?.data?.detail || "เกิดข้อผิดพลาด";
+
+            handleResultMessage("error", message);
             setQrText("");
         } finally {
             setLoadingSubmit(false);
@@ -280,15 +313,6 @@ const StudentActivitiesFrom: React.FC = () => {
                                         ? `|${lastLat.toFixed(5)}|${lastLng.toFixed(5)}`
                                         : "-"}
                                 </Typography>
-
-                                {/* <Button
-                                    variant="outlined"
-                                    startIcon={<QrCodeScannerIcon />}
-                                    onClick={() => setOpenScanner(true)}
-                                    sx={{ height: 36, borderRadius: "10px" }}
-                                >
-                                    สแกน QR
-                                </Button> */}
 
                             </Stack>
                             <Stack
