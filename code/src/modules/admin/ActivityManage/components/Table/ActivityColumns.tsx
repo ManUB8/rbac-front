@@ -1,18 +1,10 @@
-import { useAtom, useSetAtom, type SetStateAction } from 'jotai';
 import React from 'react';
-import { useNavigate, type NavigateFunction } from 'react-router';
-import { confirmPopupAtom, flashAlertAtom } from '../../../../../shared/components/constants/OptionsAtom';
-import { Box, Chip, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography } from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { Box, Chip, IconButton, Stack, Typography } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
-import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import type { IuseActivityFetch, IuseMasterFunctionActivityFromFetch } from '../../hook/useFetchActivity';
 import type { IActivityItem } from '../../interface/ActivityManage.interface';
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { formatDateThai, formatTimeRange } from '../../../../../shared/components/Date-Time/DateAndTime';
 import { Check_type } from '../../utils/activity_option';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
@@ -64,7 +56,11 @@ function RowActions({
                 <IconButton
                     onClick={() => MasterActivity.handleOpenEdit(row.activity_id)}
                     sx={{
-                        color: 'primary.main'
+                        transition: "0.2s",
+                        color: 'primary.main',
+                        "&:hover": {
+                            transform: "scale(1.08)",
+                        },
                     }}
                 >
                     <EditOutlinedIcon />
@@ -73,9 +69,10 @@ function RowActions({
                 <IconButton
                     onClick={() => MasterController.onClickDeleteMaster(row.activity_id)}
                     sx={{
+                        transition: "0.2s",
                         color: "error.main",
                         "&:hover": {
-                            bgcolor: "error.dark",
+                            transform: "scale(1.08)",
                         },
                     }}
                 >

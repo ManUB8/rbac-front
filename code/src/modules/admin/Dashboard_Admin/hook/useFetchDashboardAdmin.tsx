@@ -1,8 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAtom, useSetAtom } from "jotai";
 import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { confirmPopupAtom } from "../../../../shared/components/constants/OptionsAtom";
 import { getAllDashboardAdmin } from "../service/DashboardAdminApi";
 import type { IActivityDashboardResponse } from "../interface/DashboardAdmin.interface";
 import { useFetchActivityFilter } from "../../ActivityManage/hook/useFetchActivity";

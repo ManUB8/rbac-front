@@ -10,17 +10,17 @@ export const iconButtonSx = {
 export const inputSx = {
     "& .MuiOutlinedInput-root": {
         borderRadius: "16px",
-        backgroundColor: "#f8fafc",
+        backgroundColor: "text.text",
         fontSize: 18,
         height: 58,
         "& fieldset": {
-            borderColor: "#cbd5e1",
+            borderColor: "text.primary",
         },
         "&:hover fieldset": {
-            borderColor: "#94a3b8",
+            borderColor: "text.primary",
         },
         "&.Mui-focused fieldset": {
-            borderColor: "#0f172a",
+            borderColor: "text.text",
             borderWidth: "1px",
         },
     },

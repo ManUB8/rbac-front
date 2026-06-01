@@ -44,7 +44,7 @@ const CreateFaculty: React.FunctionComponent<ICreateFacultyProps> = ({ open, onC
                                 sx={{
                                     fontSize: 24,
                                     fontWeight: 800,
-                                    color: "#111827",
+                                    color: "text.primary",
                                 }}
                             >
                                 เพิ่มคณะใหม่
@@ -70,7 +70,7 @@ const CreateFaculty: React.FunctionComponent<ICreateFacultyProps> = ({ open, onC
                 </DialogTitle>
 
                 <DialogContent sx={{ pt: 4 }}>
-                    <Typography sx={{ mb: 1.2, fontWeight: 700 }}>
+                    <Typography sx={{ mb: 1.2, fontWeight: 700  , mt: 2 }}>
                         ชื่อคณะ *
                     </Typography>
 
@@ -97,7 +97,7 @@ const CreateFaculty: React.FunctionComponent<ICreateFacultyProps> = ({ open, onC
                             justifyContent: "flex-end",
                         }}
                     >
-                        <Button variant="outlined" onClick={onClose}>
+                        <Button variant="outlined" onClick={onClose} color='error'>
                             ยกเลิก
                         </Button>
 

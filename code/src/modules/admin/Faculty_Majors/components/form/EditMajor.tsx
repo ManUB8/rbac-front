@@ -87,7 +87,7 @@ const EditMajor: React.FC<IEditMajorProps> = ({
                         justifyContent: "flex-end",
                     }}
                 >
-                    <Button variant="outlined" onClick={onClose}>
+                    <Button variant="outlined" onClick={onClose} color="error">
                         ยกเลิก
                     </Button>
 

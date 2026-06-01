@@ -1,7 +1,6 @@
 import React from 'react';
 import type { IuseMasterFunctionStudent } from '../../hook/useFetchStudent';
-import { Autocomplete, Box, Button, Chip, Grid, Stack, TextField, Typography } from '@mui/material';
-import { NumericFormat } from 'react-number-format';
+import { Autocomplete, Box, Grid, TextField, } from '@mui/material';
 import { Year_type } from '../../utils/student_option';
 
 export interface IFilterStudentProps {
@@ -21,49 +20,42 @@ const FilterStudent: React.FunctionComponent<IFilterStudentProps> = ({
 
     return (
         <>
-            <Grid container spacing={2} >
+            <Grid container spacing={2} sx={{  mt: 2, }}>
                 <Grid size={{ xs: 6, md: 2 }}>
-                    <Box sx={{ flex: 1 , mt: 2}}>
-                        <TextField
-                            label="รหัส"
-                            variant="outlined"
-                            autoComplete="off"
-                            fullWidth
-                            value={masterController.searchInput}
-                            onChange={(e) => {
-                                const sear = e.target.value;
-                                console.log('SearchOrder', sear)
-                                masterController.handleChangeSearch(sear);
-                            }}
-                        />
-                    </Box>
+                    <TextField
+                        fullWidth
+                        label="รหัสนิสิต"
+                        value={masterController.searchState.search}
+                        onChange={(e) => {
+                            masterController.handleChangeSearch(e.target.value);
+                        }}
+                    />
                 </Grid>
                 <Grid size={{ xs: 6, md: 2 }}>
-                    <Box sx={{ flex: 1 , mt: 2}}>
-                        <Autocomplete
-                            fullWidth
-                            options={Year_type}
-                            getOptionLabel={(option) => option.label}
-                            value={
-                                Year_type.find(
-                                    (item) => item.id === masterController.searchState.year_status
-                                ) ?? null
-                            }
-                            onChange={(_, v) => {
-                                masterController.setSearchStateStudent((prev) => ({
-                                    ...prev,
-                                    year_status: v?.id ?? "",
-                                    page: 1,
-                                }));
-                            }}
-                            renderInput={(p) => (
-                                <TextField {...p} label="ชั้นปี" variant="outlined" />
-                            )}
-                        />
-                    </Box>
+                    <Autocomplete
+                        fullWidth
+                        options={Year_type}
+                        getOptionLabel={(option) => option.label}
+                        value={
+                            Year_type.find(
+                                (item) => item.id === masterController.searchState.year_status
+                            ) ?? null
+                        }
+                        onChange={(_, v) => {
+                            masterController.setSearchStateStudent((prev) => ({
+                                ...prev,
+                                year_status: v?.id ?? "",
+                                page: 1,
+                            }));
+                        }}
+                        renderInput={(params) => (
+                            <TextField {...params} label="ชั้นปี" />
+                        )}
+                    />
                 </Grid>
-                <Grid size={{ xs: 12, md: 2 }}>
-                    <Box sx={{ flex: 1, mt: 2 }}>
+
+                <Grid size={{ xs: 12, md: 4 }}>
+                    <Box sx={{ flex: 1}}>
                         <Autocomplete
                             fullWidth
                             options={facultyOptions}
@@ -87,8 +79,8 @@ const FilterStudent: React.FunctionComponent<IFilterStudentProps> = ({
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, md: 2 }}>
-                    <Box sx={{ flex: 1, mt: 2 }}>
+                <Grid size={{ xs: 12, md: 4 }}>
+                    <Box sx={{ flex: 1 }}>
                         <Autocomplete
                             fullWidth
                             options={majorOptions}

@@ -22,6 +22,7 @@ import { useFetchFacultyMajors } from "../../../Faculty_Majors/hook/useFetchFacu
 import { useFetchPosition } from "../../../Position/hook/useFetchPosition";
 import { Year_type } from "../../utils/student_option";
 import PositionStudent from "./PositionStudent";
+import { red } from "@mui/material/colors";
 
 export interface IDateilStudentProps {
     MasterStudent: IuseMasterFunctionStudentFromFetch;
@@ -57,17 +58,15 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
             fullWidth
             maxWidth="md"
         >
-            <DialogTitle sx={{ fontWeight: 800, pr: 6 }}>
+            <DialogTitle sx={{ fontWeight: 1000, pr: 6 }}>
                 {actype === "create" ? "เพิ่มนิสิต" : "แก้ไขข้อมูลนิสิต"}
-
-                <IconButton
-                    onClick={() => setOpenStudentModal(false)}
-                    sx={{ position: "absolute", right: 12, top: 12 }}
-                >
-                    <CloseIcon />
-                </IconButton>
+            <IconButton
+                        onClick={() => setOpenStudentModal(false)}
+                        sx={{ position: "absolute", right: 12, top: 12 }}
+                    >
+                        <CloseIcon  />
+                    </IconButton>
             </DialogTitle>
-
             <DialogContent>
                 <Stack spacing={2} sx={{ pt: 1 }}>
                     <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
