@@ -11,6 +11,7 @@ import {
 import type {
   ILoginAdminBody,
   ILoginAdminItem,
+  ILoginResponse,
   ILoginStudentBody,
   IStudentItem,
 } from "../interface/Login.interface";
@@ -44,14 +45,16 @@ export const useAuth = () => {
     role: UserRole,
     accountName: string,
     userId: string | number,
-    code:string | number
+    code: string | number
   ) => {
     const fakeToken = `mock-token-${role}-${Date.now()}`;
 
     Cookies.set("accessToken", fakeToken, { expires: 30 });
     Cookies.set("accountName", accountName, { expires: 30 });
     Cookies.set("accountType", role, { expires: 30 });
+    Cookies.set("account_type", role, { expires: 30 });
     Cookies.set("userId", String(userId), { expires: 30 });
+    Cookies.set("user_id", String(userId), { expires: 30 });
     Cookies.set("user_code", String(code), { expires: 30 });
 
     localStorage.setItem("access_token", fakeToken);
@@ -64,36 +67,54 @@ export const useAuth = () => {
   };
 
   const authroizedAdmin = (data: ILoginAdminItem) => {
-    setAuthSession("admin", data.name, data.user_id, data.username);
+    setAuthSession(data.role, data.name, data.user_id, data.username);
   };
 
   const authroizedStudent = (data: IStudentItem) => {
-    setAuthSession("student", data.first_name, data.student_id,data.student_code);
+    setAuthSession("student", data.first_name, data.student_id, data.student_code);
   };
 
   const handleLoginAdmin = async (
     payload: ILoginAdminBody
-  ): Promise<boolean> => {
+  ): Promise<ILoginResponse> => {
     try {
       const res = await getLoginAdmin(payload);
       authroizedAdmin(res);
-      return true;
-    } catch (err) {
+
+      return {
+        success: true,
+      };
+    } catch (err: any) {
       console.error("login admin error:", err);
-      return false;
+
+      return {
+        success: false,
+        detail:
+          err?.response?.data?.detail ||
+          "เข้าสู่ระบบไม่สำเร็จ",
+      };
     }
   };
 
   const handleLoginStudent = async (
     payload: ILoginStudentBody
-  ): Promise<boolean> => {
+  ): Promise<ILoginResponse> => {
     try {
       const res = await getLoginStudent(payload);
       authroizedStudent(res);
-      return true;
-    } catch (err) {
+
+      return {
+        success: true,
+      };
+    } catch (err: any) {
       console.error("login student error:", err);
-      return false;
+
+      return {
+        success: false,
+        detail:
+          err?.response?.data?.detail ||
+          "เข้าสู่ระบบไม่สำเร็จ",
+      };
     }
   };
 
@@ -101,7 +122,9 @@ export const useAuth = () => {
     Cookies.remove("accessToken");
     Cookies.remove("accountName");
     Cookies.remove("accountType");
+    Cookies.remove("account_type");
     Cookies.remove("userId");
+    Cookies.remove("user_id");
 
     localStorage.removeItem("access_token");
     localStorage.removeItem("account_type");

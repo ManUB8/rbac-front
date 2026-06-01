@@ -25,6 +25,7 @@ export interface IActivityItem {
   hour_type: IHourType;
 
   hours: number;
+  volunteer_hours: number | null;
 
   location: string;
   description: string;
@@ -34,6 +35,10 @@ export interface IActivityItem {
   activity_status: boolean;
 
   check_type: string;
+  checkin_open_time: string | null;
+  checkin_close_time: string | null;
+  checkout_open_time: string | null;
+  checkout_close_time: string | null;
 
   require_registration: boolean;
 
@@ -75,11 +80,16 @@ export const IActivityDataDefault: IActivityItem = {
   start_time: "",
   end_time: "",
   hours: 0,
+  volunteer_hours: 0,
   location: "",
   description: "",
   activity_img: "",
   activity_status: false,
   check_type: "",
+  checkin_open_time: "",
+  checkin_close_time: "",
+  checkout_open_time: "",
+  checkout_close_time: "",
   require_registration: false,
   max_participants: 0,
   activity_lat: 0,

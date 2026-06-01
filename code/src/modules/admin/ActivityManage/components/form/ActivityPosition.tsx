@@ -11,9 +11,9 @@ import {
     Typography,
 } from "@mui/material";
 import MyLocationOutlinedIcon from "@mui/icons-material/MyLocationOutlined";
-import { Check_type } from "../../utils/activity_option";
 import { NumericFormat } from "react-number-format";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { Controller } from "react-hook-form";
 
 export interface IActivityPositionProps {
     MasterController: IuseMasterFunctionActivityFromFetch;
@@ -22,9 +22,15 @@ export interface IActivityPositionProps {
 const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
     MasterController,
 }) => {
-    const { errors, getValues, setValue } = MasterController;
+    const { control, errors, getValues, setValue, watch } = MasterController;
     const [mapsUrl, setMapsUrl] = useState("");
-    const { hour_type, check_type, activity_status, require_registration, activity_all_Loading } = useFetchActivityFilterAll()
+    const { hour_type, check_type } = useFetchActivityFilterAll()
+    const selectedCheckType = watch("check_type");
+    const showCheckinWindow =
+        selectedCheckType === "checkin_only" || selectedCheckType === "checkin_checkout";
+    const showCheckoutWindow =
+        selectedCheckType === "checkout_only" || selectedCheckType === "checkin_checkout";
+
     return (
         <>
             <Stack
@@ -50,6 +56,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                         <TextField
                             {...p}
                             label="ประเภทการเช็ค"
+                            id="check_type"
                             variant="outlined"
                             error={!!errors?.check_type}
                             helperText={errors?.check_type?.message || ""}
@@ -59,6 +66,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
 
                 <NumericFormat
                     label="จำนวนรับผู้เข้าร่วมกิจกรรม"
+                    id="max_participants"
                     customInput={TextField}
                     fullWidth
                     allowNegative={false}
@@ -76,6 +84,86 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                     }}
                 />
             </Stack>
+
+            {(showCheckinWindow || showCheckoutWindow) && (
+                <Box sx={{ mt: 2 }}>
+                    <Typography
+                        sx={{
+                            fontWeight: 600,
+                            mb: 2,
+                        }}
+                    >
+                        ช่วงเวลาสแกน
+                    </Typography>
+                    {showCheckinWindow && (
+                        <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 2 }}>
+                            <Controller
+                                name="checkin_open_time"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        fullWidth
+                                        id="checkin_open_time"
+                                        label="เปิดเช็คอิน"
+                                        error={!!errors?.checkin_open_time}
+                                        helperText={errors?.checkin_open_time?.message as string }
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="checkin_close_time"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        fullWidth
+                                        id="checkin_close_time"
+                                        label="ปิดเช็คอิน"
+                                        error={!!errors?.checkin_close_time}
+                                        helperText={errors?.checkin_close_time?.message  as string }
+                                    />
+                                )}
+                            />
+                        </Stack>
+                    )}
+
+                    {showCheckoutWindow && (
+                        <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+                            <Controller
+                                name="checkout_open_time"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        fullWidth
+                                        id="checkout_open_time"
+                                        label="เปิดเช็คเอาท์"
+                                        error={!!errors?.checkout_open_time}
+                                        helperText={errors?.checkout_open_time?.message as string }
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="checkout_close_time"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        fullWidth
+                                        id="checkout_close_time"
+                                        label="ปิดเช็คเอาท์"
+                                        error={!!errors?.checkout_close_time}
+                                        helperText={errors?.checkout_close_time?.message as string }
+                                    />
+                                )}
+                            />
+                        </Stack>
+                    )}
+                </Box>
+            )}
 
             <Stack
                 direction={{ xs: "column", md: "row" }}
@@ -157,7 +245,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                                 label="ประเภทชั่วโมง"
                                 variant="outlined"
                                 error={!!errors?.hour_type_id}
-                                helperText={errors?.hour_type_id?.message || ""}
+                                helperText={errors?.hour_type_id?.message as string }
                             />
                         )}
                     />
@@ -239,7 +327,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                             setValue("activity_lat", values.floatValue ?? 0);
                         }}
                         error={!!errors?.activity_lat}
-                        helperText={errors?.activity_lat?.message || ""}
+                        helperText={errors?.activity_lat?.message as string  }
                     />
 
                     <NumericFormat
@@ -253,7 +341,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                             setValue("activity_lng", values.floatValue ?? 0);
                         }}
                         error={!!errors?.activity_lng}
-                        helperText={errors?.activity_lng?.message || ""}
+                        helperText={errors?.activity_lng?.message as string  }
                     />
 
                     <NumericFormat
@@ -267,7 +355,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                             setValue("activity_radius_meter", values.floatValue ?? 0);
                         }}
                         error={!!errors?.activity_radius_meter}
-                        helperText={errors?.activity_radius_meter?.message || ""}
+                        helperText={errors?.activity_radius_meter?.message as string  }
                     />
                 </Stack>
 

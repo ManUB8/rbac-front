@@ -8,12 +8,18 @@ export interface ILoginStudentBody {
   password: string;
 }
 
-export type UserRole = "admin" | "student";
+export interface ILoginResponse {
+  success: boolean;
+  detail?: string;
+}
+
+export type UserRole = "admin" | "temporary_admin" | "student";
 
 export interface ILoginAdminItem {
   user_id: string;
   username: string;
   name:string;
+  role: "admin" | "temporary_admin";
 }
 
 export interface IMajor {
@@ -30,6 +36,7 @@ export interface IFaculty {
 export interface IUserCredential {
   username: string;
   password: string;
+  confirm_password: string;
 }
 
 export interface IStudentItem {

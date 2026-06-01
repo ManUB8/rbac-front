@@ -1,7 +1,8 @@
 import { ApiConfig } from "../../../../shared/service/ApiConfig";
 import { api } from "../../../../shared/service/axiosInstance";
-import type { IActivityItem, IActivityListResponse, IStudentActivityRegister, IStudentActivityResponse } from "../interface/Activity.interface";
+import type { IActivityItem, IActivityListResponse, IStudentActivityRegister, IStudentActivityResponse, IStudentAvailableActivitiesResponse } from "../interface/Activity.interface";
 import Cookies from "js-cookie";
+
 export const getAllActivity = async (): Promise<IActivityListResponse> => {
     const res = await api.get<IActivityListResponse>(
         ApiConfig.ACTIVITY_API + `/get-all`
@@ -9,9 +10,9 @@ export const getAllActivity = async (): Promise<IActivityListResponse> => {
     return res;
 };
 
-export const getAllActivityCode = async (code:number): Promise<IStudentActivityResponse> => {
+export const getAllActivityCode = async (code:number): Promise<IStudentAvailableActivitiesResponse> => {
    
-    const res = await api.get<IStudentActivityResponse>(
+    const res = await api.get<IStudentAvailableActivitiesResponse>(
         ApiConfig.STUDENT_ACTIVITY_API + `/student/available/${code}`
     );
 

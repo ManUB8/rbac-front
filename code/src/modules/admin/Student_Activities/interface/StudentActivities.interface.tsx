@@ -33,6 +33,11 @@ export interface IStudentActivityCheckItem {
   max_participants: number | null;
 
   attendance_status: string;
+  checkin_status: string | null;
+  checkin_status_text: string | null;
+  checkout_status: string | null;
+  checkout_status_text: string | null;
+  earned_hours: number | null;
 
   registered_at: number | null;
 

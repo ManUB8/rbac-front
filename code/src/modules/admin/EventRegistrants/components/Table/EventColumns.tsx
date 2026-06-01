@@ -1,4 +1,3 @@
-import { useAtom, useSetAtom, type SetStateAction } from 'jotai';
 import React from 'react';
 import { Box, Chip, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
@@ -6,7 +5,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { formatDateThai, formatDateTimeThai } from '../../../../../shared/components/Date-Time/DateAndTime';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import type { IuseFetchEventRegistrants } from '../../hook/useFetchEventRegistrants';
-import type { IEventRegistrantsItem } from '../../interface/EventRegistrants.interface';
+import type { IEventRegistrantsItem, IStudentActivityJoinItem, IUpdateEventRegistrantsRequest } from '../../interface/EventRegistrants.interface';
 import { Check_type } from '../../../ActivityManage/utils/activity_option';
 
 // ===== Generic Column =====
@@ -19,22 +18,6 @@ export interface Column<T> {
     render: (row: T, index: number) => React.ReactNode;
 }
 // ===== Badge
-//  สถานะ =====
-export function activeAvatar(status: boolean) {
-    let bgcolor = "#8C8C8C";
-    let letter = "";
-    let textColor = "#000";
-    switch (status) {
-        case true: bgcolor = "successVariant80"; textColor = 'successVariant0'; letter = "เปิดใช้งาน"; break;
-        case false: bgcolor = "errorTones.98"; textColor = "errorTones.40"; letter = "ปิดใช้งาน"; break;
-    }
-
-    return (
-        <Box sx={{ backgroundColor: bgcolor, borderRadius: "4px", px: 2, py: 0.5 }}>
-            <Typography sx={{ color: textColor }}>{letter}</Typography>
-        </Box>
-    );
-}
 
 const getCheckTypeLabel = (checkType: string) => {
     return Check_type.find((item) => item.id === checkType)?.label;
@@ -44,7 +27,7 @@ function RowActions({
     row,
     mastercontroller
 }: {
-    row: IEventRegistrantsItem;
+    row: IStudentActivityJoinItem;
     mastercontroller: IuseFetchEventRegistrants
 }) {
 
@@ -52,7 +35,14 @@ function RowActions({
         <>
             <Stack direction='row' spacing={1} sx={{ justifyContent: 'center', }}>
                 <IconButton
-                    onClick={() => mastercontroller.handleOpenEdit(row)}
+                    onClick={() => {
+                        const pdate: any = {
+                            student_activity_id: row?.student_activity_id || 0,
+                            activity_id: row?.activity_id || 0,
+                            attendance_status: row?.check_detail.attendance_status || "เข้าร่วม",
+                        };
+                        mastercontroller.handleOpenEdit(pdate);
+                    }}
                     sx={{
                         color: 'primary.main'
                     }}
@@ -64,9 +54,6 @@ function RowActions({
                     onClick={() => mastercontroller.onClickDeleteMaster(row.student_activity_id)}
                     sx={{
                         color: "error.main",
-                        "&:hover": {
-                            bgcolor: "error.dark",
-                        },
                     }}
                 >
                     <DeleteForeverOutlinedIcon />
@@ -77,9 +64,9 @@ function RowActions({
 }
 
 // เปลี่ยนชื่อให้เป็น useMasterEventColumns จะได้ตาม rule hook ด้วย
-export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrants): Column<IEventRegistrantsItem>[] {
+export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrants): Column<IStudentActivityJoinItem>[] {
 
-    return React.useMemo<Column<IEventRegistrantsItem>[]>(() => [
+    return React.useMemo<Column<IStudentActivityJoinItem>[]>(() => [
         {
             id: "student_code",
             label: "รหัสนิสิต",
@@ -143,7 +130,7 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
                 <Typography variant="subtitle2">{row.activity_time_text || "-"}</Typography>
             ),
         },
-        
+
         {
             id: "location",
             label: "สถานที่",
@@ -159,7 +146,24 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
             minWidth: 200,
             align: "left",
             render: (row) => (
-                <Typography variant="subtitle2">{formatDateTimeThai(row.checkin_at) || "-"}</Typography>
+                <Box>
+                    <Typography variant="subtitle2">
+                        {formatDateTimeThai(row.check_detail.checkin.checkin_at) || "-"}
+                    </Typography>
+
+                    <Typography
+                        variant="caption"
+                        sx={{
+                            color:
+                                row.check_detail.checkin.checkin_status === "valid"
+                                    ? "success.main"
+                                    : "warning.main",
+                            fontWeight: 600,
+                        }}
+                    >
+                        {row.check_detail.checkin.checkin_status_text || "-"}
+                    </Typography>
+                </Box>
             ),
         },
         {
@@ -168,7 +172,24 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
             minWidth: 200,
             align: "left",
             render: (row) => (
-                <Typography variant="subtitle2">{formatDateTimeThai(row.checkout_at) || "-"}</Typography>
+                <Box>
+                    <Typography variant="subtitle2">
+                        {formatDateTimeThai(row.check_detail.checkout.checkout_at) || "-"}
+                    </Typography>
+
+                    <Typography
+                        variant="caption"
+                        sx={{
+                            color:
+                                row.check_detail.checkout.checkout_status === "valid"
+                                    ? "success.main"
+                                    : "error.main",
+                            fontWeight: 600,
+                        }}
+                    >
+                        {row.check_detail.checkout.checkout_status_text || "-"}
+                    </Typography>
+                </Box>
             ),
         },
         {

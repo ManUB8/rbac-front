@@ -10,4 +10,5 @@ export const ApiConfig = {
     POSITION_API:  "/position/v1",
     UPLOAD_IMG_API:  "/upload/v1/image-activities",
     DASHBOARD_API:  "/dashboard/v1",
+    USER_API:"/user/v1",
 }

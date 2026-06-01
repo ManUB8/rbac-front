@@ -10,7 +10,7 @@ const EventRegistrantsPage: React.FunctionComponent<IEventRegistrantsPageProps> 
     const mastercontroller = useFetchEventRegistrants()
     return (
         <>
-            <HeadEvent />
+            <HeadEvent total={mastercontroller.total_all} />
             <FilterEvent mastercontroller={mastercontroller} />
             <EventTable mastercontroller={mastercontroller} />
         </>

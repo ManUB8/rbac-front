@@ -3,7 +3,6 @@ import { Stack, TextField } from "@mui/material";
 import { Controller } from "react-hook-form";
 
 import type { IuseMasterFunctionActivityFromFetch } from "../../hook/useFetchActivity";
-import { inputSx } from "../../utils/themw.sx";
 import dayjs from "dayjs";
 import "dayjs/locale/th";
 
@@ -79,10 +78,36 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                             type="number"
                             value={field.value ?? ""}
                             error={!!errors?.hours}
-                            helperText={errors?.hours?.message || ""}
+                            helperText={errors?.hours?.message as string }
                             onChange={(e) => {
                                 const val = e.target.value;
                                 field.onChange(val === "" ? "" : Number(val));
+                            }}
+                            slotProps={{
+                                htmlInput: {
+                                    min: 0,
+                                    step: 0.5,
+                                },
+                            }}
+                        />
+                    )}
+                />
+                <Controller
+                    name="volunteer_hours"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            fullWidth
+                            id="volunteer_hours"
+                            label="ชั่วโมงจิตอาสา"
+                            type="number"
+                            value={field.value ?? ""}
+                            error={!!errors?.volunteer_hours}
+                            helperText={errors?.volunteer_hours?.message  as string}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                field.onChange(val === "" ? null : Number(val));
                             }}
                             slotProps={{
                                 htmlInput: {

@@ -1,10 +1,10 @@
 import { ApiConfig } from "../../../../shared/service/ApiConfig";
 import { api } from "../../../../shared/service/axiosInstance";
-import type { IDeleteEventRegistrantsRequest, IEventRegistrantsAllInOneResponse, IEventRegistrantsRequest, IUpdateEventRegistrantsRequest } from "../interface/EventRegistrants.interface";
+import type { IDeleteEventRegistrantsRequest, IEventRegistrantsAllInOneResponse, IEventRegistrantsRequest, IStudentActivityJoinResponse, IUpdateEventRegistrantsRequest } from "../interface/EventRegistrants.interface";
 
 
-export const getAllEventRegistrants = async (body: IEventRegistrantsRequest): Promise<IEventRegistrantsAllInOneResponse> => {
-    const res = await api.post<IEventRegistrantsAllInOneResponse>(
+export const getAllEventRegistrants = async (body: IEventRegistrantsRequest): Promise<IStudentActivityJoinResponse> => {
+    const res = await api.post<IStudentActivityJoinResponse>(
         ApiConfig.STUDENT_ACTIVITY_API + `/admin/get-all`, body
     );
     return res;
