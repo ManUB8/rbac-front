@@ -11,6 +11,7 @@ import {
 import type {
   ILoginAdminBody,
   ILoginAdminItem,
+  ILoginResponse,
   ILoginStudentBody,
   IStudentItem,
 } from "../interface/Login.interface";
@@ -44,7 +45,7 @@ export const useAuth = () => {
     role: UserRole,
     accountName: string,
     userId: string | number,
-    code:string | number
+    code: string | number
   ) => {
     const fakeToken = `mock-token-${role}-${Date.now()}`;
 
@@ -70,32 +71,50 @@ export const useAuth = () => {
   };
 
   const authroizedStudent = (data: IStudentItem) => {
-    setAuthSession("student", data.first_name, data.student_id,data.student_code);
+    setAuthSession("student", data.first_name, data.student_id, data.student_code);
   };
 
   const handleLoginAdmin = async (
     payload: ILoginAdminBody
-  ): Promise<boolean> => {
+  ): Promise<ILoginResponse> => {
     try {
       const res = await getLoginAdmin(payload);
       authroizedAdmin(res);
-      return true;
-    } catch (err) {
+
+      return {
+        success: true,
+      };
+    } catch (err: any) {
       console.error("login admin error:", err);
-      return false;
+
+      return {
+        success: false,
+        detail:
+          err?.response?.data?.detail ||
+          "เข้าสู่ระบบไม่สำเร็จ",
+      };
     }
   };
 
   const handleLoginStudent = async (
     payload: ILoginStudentBody
-  ): Promise<boolean> => {
+  ): Promise<ILoginResponse> => {
     try {
       const res = await getLoginStudent(payload);
       authroizedStudent(res);
-      return true;
-    } catch (err) {
+
+      return {
+        success: true,
+      };
+    } catch (err: any) {
       console.error("login student error:", err);
-      return false;
+
+      return {
+        success: false,
+        detail:
+          err?.response?.data?.detail ||
+          "เข้าสู่ระบบไม่สำเร็จ",
+      };
     }
   };
 
