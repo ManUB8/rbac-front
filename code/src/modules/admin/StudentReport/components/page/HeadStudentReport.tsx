@@ -1,36 +1,52 @@
-import React from 'react';
+import React from "react";
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Stack,
-    Typography,
+  Button,
+  Grid,
+  Stack,
+  Typography,
 } from "@mui/material";
-export interface IHeadStudentReportProps { };
+import PictureAsPdfOutlinedIcon from "@mui/icons-material/PictureAsPdfOutlined";
 
-const HeadStudentReport: React.FunctionComponent<IHeadStudentReportProps> = props => {
-    return (
-        <>
-            <Typography
-                sx={{
-                    fontSize: 24,
-                    fontWeight: 800,
-                }}
-            >
-                {"รายงานกิจกรรมของนิสิต"}
+export interface IHeadStudentReportProps {
+  onPrintPdf: () => void;
+}
+
+const HeadStudentReport: React.FC<IHeadStudentReportProps> = ({ onPrintPdf }) => {
+  return (
+    <Grid container>
+      <Grid size={12}>
+        <Stack spacing={1}>
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography sx={{ fontSize: 24, fontWeight: 800 }}>
+              รายงานกิจกรรมของนิสิต
             </Typography>
 
-            <Typography
-                sx={{
-                    color: "text.secondary",
-                    mb: 3,
-                }}
+            <Button
+              variant="contained"
+              startIcon={<PictureAsPdfOutlinedIcon />}
+              onClick={onPrintPdf}
+              sx={{
+                textTransform: "none",
+                fontWeight: 700,
+              }}
             >
-                {"ค้นหาและดูประวัติกิจกรรมของนิสิตรายบุคคล"}
-            </Typography>
-        </>
-    )
+              Print กยศ.
+            </Button>
+          </Stack>
+
+          <Typography sx={{ color: "text.secondary" }}>
+            ค้นหาและดูประวัติกิจกรรมของนิสิตรายบุคคล
+          </Typography>
+        </Stack>
+      </Grid>
+    </Grid>
+  );
 };
 
 export default HeadStudentReport;

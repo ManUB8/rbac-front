@@ -78,7 +78,7 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                             type="number"
                             value={field.value ?? ""}
                             error={!!errors?.hours}
-                            helperText={errors?.hours?.message || ""}
+                            helperText={errors?.hours?.message as string }
                             onChange={(e) => {
                                 const val = e.target.value;
                                 field.onChange(val === "" ? "" : Number(val));
@@ -104,7 +104,7 @@ const ActivityDetail: React.FC<IActivityDetailProps> = ({
                             type="number"
                             value={field.value ?? ""}
                             error={!!errors?.volunteer_hours}
-                            helperText={errors?.volunteer_hours?.message || ""}
+                            helperText={errors?.volunteer_hours?.message  as string}
                             onChange={(e) => {
                                 const val = e.target.value;
                                 field.onChange(val === "" ? null : Number(val));

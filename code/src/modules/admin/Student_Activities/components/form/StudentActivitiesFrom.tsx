@@ -9,6 +9,7 @@ import {
     CardContent,
     Chip,
     CircularProgress,
+    Grid,
     Stack,
     TextField,
     Typography,
@@ -24,7 +25,7 @@ import {
     CheckOutStudentActivities,
 } from "../../service/StudentActivitiesApi";
 import type { IActivityFilter } from "../../../ActivityManage/interface/ActivityManage.interface";
-import DetailStuActivity from "./DetailStuActivity";
+import DetailStuActivity from "./DetailStuActivites";
 import type { IStudentActivityCheckItem } from "../../interface/StudentActivities.interface";
 import QrScannerDialog from "../../../Qr_Scanner/components/page/QrScannerDialog";
 
@@ -58,6 +59,33 @@ const StudentActivitiesFrom: React.FC = () => {
     const selectedActivity = useMemo(() => {
         return activity_filter?.find((item: IActivityFilter) => item.id === activityId) ?? null;
     }, [activity_filter, activityId]);
+
+    const speakMessage = (message: string) => {
+        if (!message) return;
+        if (!("speechSynthesis" in window)) return;
+
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(message);
+        utterance.lang = "th-TH";
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        window.speechSynthesis.speak(utterance);
+    };
+
+    const handleResultMessage = (type: "success" | "error", message: string) => {
+        if (type === "success") {
+            setSuccessMessage(message);
+            setErrorMessage("");
+        } else {
+            setErrorMessage(message);
+            setSuccessMessage("");
+        }
+
+        speakMessage(message);
+    };
 
     const parseQR = (value: string): QRPayload => {
         const text = value.trim();
@@ -104,6 +132,33 @@ const StudentActivitiesFrom: React.FC = () => {
         });
     };
 
+    const speakMessage = (message: string) => {
+        if (!message) return;
+        if (!("speechSynthesis" in window)) return;
+
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(message);
+        utterance.lang = "th-TH";
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        window.speechSynthesis.speak(utterance);
+    };
+
+    const handleResultMessage = (type: "success" | "error", message: string) => {
+        if (type === "success") {
+            setSuccessMessage(message);
+            setErrorMessage("");
+        } else {
+            setErrorMessage(message);
+            setSuccessMessage("");
+        }
+
+        speakMessage(message);
+    };
+
     const handleSubmit = async (rawValue = qrText) => {
         if (loadingSubmit) return;
 
@@ -143,8 +198,10 @@ const StudentActivitiesFrom: React.FC = () => {
                     checkin_lng: lng,
                 });
 
+                const message = res.detail || "เช็คอินสำเร็จ";
+
                 setLatestStudent(res.data);
-                setSuccessMessage(res.detail || "เช็คอินสำเร็จ");
+                handleResultMessage("success", message);
             } else {
                 const res = await CheckOutStudentActivities({
                     student_code: payload.student_code,
@@ -154,21 +211,24 @@ const StudentActivitiesFrom: React.FC = () => {
                     checkout_lng: lng,
                 });
 
+                const message = res.detail || "เช็คเอาท์สำเร็จ";
+
                 setLatestStudent(res.data);
-                setSuccessMessage(res.detail || "เช็คเอาท์สำเร็จ");
+                handleResultMessage("success", message);
             }
 
             setLastLat(lat);
             setLastLng(lng);
             setQrText("");
         } catch (error: any) {
-            setErrorMessage(error?.response?.data?.detail || "เกิดข้อผิดพลาด");
+            const message = error?.response?.data?.detail || "เกิดข้อผิดพลาด";
+
+            handleResultMessage("error", message);
             setQrText("");
         } finally {
             setLoadingSubmit(false);
         }
     };
-
 
     return (
         <>
@@ -182,34 +242,51 @@ const StudentActivitiesFrom: React.FC = () => {
                     }
                 }}
             />
+
             <Box
                 sx={{
                     display: "grid",
-                    gridTemplateColumns: { xs: "1fr", md: "1.2fr 0.8fr" },
-                    gap: 2,
+                    gridTemplateColumns: {
+                        xs: "1fr",
+                        md: "minmax(0, 1.2fr) minmax(320px, 0.8fr)",
+                    },
+                    gap: {
+                        xs: 2,
+                        md: 3,
+                    },
+                    alignItems: "start",
                 }}
             >
                 <Card
                     elevation={0}
                     sx={{
-                        borderRadius: "12px",
+                        borderRadius: 3,
                         border: "1px solid",
                         borderColor: "divider",
                         bgcolor: "background.paper",
                     }}
                 >
-                    <CardContent sx={{ p: 2 }}>
-                        <Stack spacing={2}>
-                            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-                            {successMessage && <Alert severity="success">{successMessage}</Alert>}
+                    <CardContent sx={{ p: { xs: 2, md: 3 } }}>
+                        <Stack spacing={2.25}>
+                            {errorMessage && (
+                                <Alert severity="error">{errorMessage}</Alert>
+                            )}
+
+                            {successMessage && (
+                                <Alert severity="success">{successMessage}</Alert>
+                            )}
 
                             <Autocomplete
                                 fullWidth
                                 loading={activity_filter_Loading}
                                 options={activity_filter ?? []}
                                 value={selectedActivity}
-                                getOptionLabel={(option: IActivityFilter) => option.name ?? ""}
-                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                getOptionLabel={(option: IActivityFilter) =>
+                                    option.name ?? ""
+                                }
+                                isOptionEqualToValue={(option, value) =>
+                                    option.id === value.id
+                                }
                                 onChange={(_, newValue) => {
                                     setActivityId(newValue?.id ?? null);
                                     if (newValue?.id) setErrorMessage("");
@@ -225,7 +302,7 @@ const StudentActivitiesFrom: React.FC = () => {
                                     gridTemplateColumns: "1fr 1fr",
                                     border: "1px solid",
                                     borderColor: "divider",
-                                    borderRadius: "10px",
+                                    borderRadius: 2.5,
                                     overflow: "hidden",
                                 }}
                             >
@@ -233,15 +310,19 @@ const StudentActivitiesFrom: React.FC = () => {
                                     startIcon={<LoginIcon />}
                                     onClick={() => setMode("checkin")}
                                     sx={{
-                                        height: 48,
+                                        height: { xs: 48, md: 52 },
                                         borderRadius: 0,
                                         bgcolor: (theme) =>
                                             mode === "checkin"
                                                 ? alpha(theme.palette.primary.main, 0.1)
                                                 : "transparent",
-                                        color: mode === "checkin" ? "primary.main" : "text.secondary",
+                                        color:
+                                            mode === "checkin"
+                                                ? "primary.main"
+                                                : "text.secondary",
                                         borderRight: "1px solid",
                                         borderColor: "divider",
+                                        fontWeight: 700,
                                     }}
                                 >
                                     เช็คอิน
@@ -251,60 +332,71 @@ const StudentActivitiesFrom: React.FC = () => {
                                     startIcon={<LogoutIcon />}
                                     onClick={() => setMode("checkout")}
                                     sx={{
-                                        height: 48,
+                                        height: { xs: 48, md: 52 },
                                         borderRadius: 0,
                                         bgcolor: (theme) =>
                                             mode === "checkout"
                                                 ? alpha(theme.palette.primary.main, 0.1)
                                                 : "transparent",
-                                        color: mode === "checkout" ? "primary.main" : "text.secondary",
+                                        color:
+                                            mode === "checkout"
+                                                ? "primary.main"
+                                                : "text.secondary",
+                                        fontWeight: 700,
                                     }}
                                 >
                                     เช็คเอาท์
                                 </Button>
                             </Box>
 
-                            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+                            <Box
+                                sx={{
+                                    display: "grid",
+                                    gridTemplateColumns: {
+                                    px: 1.5,
+                                    py: 1,
+                                    },
+                                    gap: 1.5,
+                                }}
+                            >
                                 <Button
+                                    fullWidth
                                     variant="outlined"
                                     startIcon={<MyLocationIcon />}
                                     onClick={handleGetLocation}
-                                    sx={{ height: 36, borderRadius: "10px" }}
+                                    sx={{
+                                        height: 46,
+                                        borderRadius: 2.5,
+                                        fontWeight: 700,
+                                    }}
                                 >
                                     ขอตำแหน่ง
                                 </Button>
+                            </Box>
 
-                                <Typography variant="body2" color="text.secondary">
-                                    {"พิกัดล่าสุด:"}{" "}
+                            <Box
+                                sx={{
+                                    px: 1.5,
+                                    py: 1,
+                                    borderRadius: 2,
+                                    bgcolor: "action.hover",
+                                }}
+                            >
+                                <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                    sx={{
+                                        wordBreak: "break-word",
+                                        lineHeight: 1.6,
+                                    }}
+                                >
+                                    พิกัดล่าสุด:{" "}
                                     {lastLat && lastLng
                                         ? `|${lastLat.toFixed(5)}|${lastLng.toFixed(5)}`
                                         : "-"}
                                 </Typography>
+                            </Box>
 
-                                {/* <Button
-                                    variant="outlined"
-                                    startIcon={<QrCodeScannerIcon />}
-                                    onClick={() => setOpenScanner(true)}
-                                    sx={{ height: 36, borderRadius: "10px" }}
-                                >
-                                    สแกน QR
-                                </Button> */}
-
-                            </Stack>
-                            <Stack
-                                direction="row"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
-                                <Button
-                                    variant="outlined"
-                                    startIcon={<QrCodeScannerIcon />}
-                                    onClick={() => setOpenScanner(true)}
-                                    sx={{ height: 46, borderRadius: "10px" }}
-                                >
-                                    สแกน QR
-                                </Button>
-                            </Stack>
                             <Box>
                                 <TextField
                                     fullWidth
@@ -331,7 +423,11 @@ const StudentActivitiesFrom: React.FC = () => {
                                 <Typography
                                     variant="caption"
                                     color="text.secondary"
-                                    sx={{ mt: 0.5, display: "block" }}
+                                    sx={{
+                                        mt: 0.75,
+                                        display: "block",
+                                        lineHeight: 1.6,
+                                    }}
                                 >
                                     รองรับ QR แบบ 67016908|13.752141|100.652970 หรือ JSON เดิม
                                 </Typography>
@@ -343,9 +439,9 @@ const StudentActivitiesFrom: React.FC = () => {
                                 disabled={loadingSubmit}
                                 onClick={() => handleSubmit()}
                                 sx={{
-                                    height: 42,
-                                    borderRadius: "10px",
-                                    fontWeight: 700,
+                                    height: { xs: 46, md: 48 },
+                                    borderRadius: 2.5,
+                                    fontWeight: 800,
                                 }}
                             >
                                 {loadingSubmit
@@ -358,10 +454,22 @@ const StudentActivitiesFrom: React.FC = () => {
                     </CardContent>
                 </Card>
 
-                <DetailStuActivity student={latestStudent} />
+                <Box
+                    sx={{
+                        minWidth: 0,
+                        position: {
+                            xs: "static",
+                            md: "sticky",
+                        },
+                        top: {
+                            md: 16,
+                        },
+                    }}
+                >
+                    <DetailStuActivity student={latestStudent} />
+                </Box>
             </Box>
         </>
-
     );
 };
 

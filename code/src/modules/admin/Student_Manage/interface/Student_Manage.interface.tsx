@@ -58,6 +58,7 @@ export interface IStudentPosition {
 export interface IStudentUser {
     username: string;
     password: string;
+    confirm_password: string;
 }
 
 export interface IYearType {
@@ -88,7 +89,8 @@ export const IStudenItemDefule:IStudentItem={
     updated_at: 0,
     user: {
         username: "",
-        password: ""
+        password: "",
+        confirm_password: ""
     }
 }
 

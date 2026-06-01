@@ -27,8 +27,8 @@ const StatBox = ({
 }) => (
     <Box
         sx={{
-            width: 110,
-            height: 110,
+            width: 140,
+            height: 120,
             borderRadius: "16px",
             border: "1px solid",
             borderColor: "divider",
@@ -36,7 +36,7 @@ const StatBox = ({
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            bgcolor: "#fff",
+            bgcolor: "background.paper",
         }}
     >
         <Typography sx={{ fontSize: 16, color: "text.secondary" }}>
@@ -69,7 +69,6 @@ const StudentReport: React.FC<IStudentReportProps> = ({ mastercontroller }) => {
                 borderRadius: "18px",
                 border: "1px solid",
                 borderColor: "divider",
-                bgcolor: "#fff",
                 mt: 3,
             }}
         >
@@ -99,7 +98,8 @@ const StudentReport: React.FC<IStudentReportProps> = ({ mastercontroller }) => {
                             sx={{
                                 width: 80,
                                 height: 80,
-                                border: "3px solid #f3f4f6",
+                                border: "3px solid",
+                                borderColor: "divider",
                                 flexShrink: 0,
                             }}
                         />
@@ -173,20 +173,41 @@ const StudentReport: React.FC<IStudentReportProps> = ({ mastercontroller }) => {
                             </Stack>
                         </Box>
                     </Stack>
+                </Stack>
 
-                    {/* RIGHT */}
-                    <Stack direction="row" spacing={2}>
-                        <StatBox
-                            label="กิจกรรม"
-                            value={student.total_activity}
-                        />
+                <Stack
+                    direction="row"
+                    sx={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 3,
+                        mt: 2,
+                        flexWrap: "wrap",
+                    }}
+                >
+                    <StatBox
+                        label="กิจกรรม"
+                        value={student.total_activity}
+                        color="#2563eb" // blue
+                    />
 
-                        <StatBox
-                            label="ชั่วโมงรวม"
-                            value={student.total_hours}
-                            color="#16a34a"
-                        />
-                    </Stack>
+                    <StatBox
+                        label="ชั่วโมงรวม"
+                        value={student.total_hours}
+                        color="#16a34a" // green
+                    />
+
+                    <StatBox
+                        label="จิตอาสารวม"
+                        value={student.total_volunteer_hours}
+                        color="#9333ea" // purple
+                    />
+
+                    <StatBox
+                        label="จิตอาสาที่ได้จริง"
+                        value={student.total_earned_hours}
+                        color="#f59e0b" // amber
+                    />
                 </Stack>
             </CardContent>
         </Card>

@@ -10,7 +10,7 @@ import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { searchStateStudentReport } from "./useContext";
 import { getAllStudentReport } from "../service/StudentReportApi";
-import type { IStudentReportResponse } from "../interface/StudentReport.interface";
+import type { IStudentActivityAllData, IStudentActivityAllResponse, IStudentReportResponse } from "../interface/StudentReport.interface";
 
 
 export const useFetchStudentReport = () => {
@@ -28,7 +28,7 @@ export const useFetchStudentReport = () => {
         setVersion((v) => v + 1);
     }, []);
 
-    const query = useQuery<IStudentReportResponse, Error>({
+    const query = useQuery<IStudentActivityAllResponse, Error>({
         queryKey: ["student-report", searchState],
         staleTime: 0,
         refetchOnMount: "always",
@@ -38,7 +38,7 @@ export const useFetchStudentReport = () => {
 
             if (res.detail) {
                 setFlash({
-                    type_severity: res.total_all > 0 ? "success" : "warning",
+                    type_severity: res.detail.length > 0 ? "success" : "warning",
                     title: "",
                     content: res.detail,
                 });
@@ -85,7 +85,6 @@ export const useFetchStudentReport = () => {
 
 
     const report_data = query.data?.data
-    const total_all = query.data?.total_all ?? 0;
     const report_loading = query.isLoading
     const report_fetch = query.isFetched
 
@@ -102,7 +101,6 @@ export const useFetchStudentReport = () => {
         report_data,
         report_fetch,
         report_loading,
-        total_all,
         searchInputCode,
         setSearchInputCode,
         handleChangeSearchCode

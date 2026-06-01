@@ -2,13 +2,12 @@ import { useAtom, useSetAtom, type SetStateAction } from 'jotai';
 import React from 'react';
 import { useNavigate, type NavigateFunction } from 'react-router';
 import { confirmPopupAtom, flashAlertAtom } from '../../../../../shared/components/constants/OptionsAtom';
-import { Box, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import type { IStudentItem } from '../../interface/Student_Manage.interface';
 import type { IuseMasterFunctionStudent } from '../../hook/useFetchStudent';
-import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
-import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
 // ===== Generic Column =====
 export interface Column<T> {
@@ -50,46 +49,48 @@ function RowActions({
     const handleClose = () => setAnchorEl(null);
 
     return (
-        <>
-            <IconButton size="small" onClick={handleOpen} aria-haspopup="true" aria-controls={`row-${row.student_id}`}>
-                <MoreHorizIcon sx={{ color: "secondary.100" }} />
+        <Stack
+            direction="row"
+            spacing={1.5}
+            sx={{
+                justifyContent: "center",
+                alignItems: "center",
+            }}
+        >
+            <IconButton
+                size="small"
+                onClick={() => {
+                    masterController.setSelectedStudentId(row.student_id);
+                    masterController.setOpenStudentModal(true);
+                }}
+                sx={{
+                    transition: "0.2s",
+                    color: 'primary.main',
+                    "&:hover": {
+                        transform: "scale(1.08)",
+                    },
+                }}
+            >
+                <EditOutlinedIcon fontSize="small" />
             </IconButton>
 
-            <Menu
-                id={`row-${row.student_id}`}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            <IconButton
+                size="small"
+                onClick={() => {
+                    masterController.setSelectedStudentId(row.student_id);
+                    masterController.onClickDeleteMaster();
+                }}
+                sx={{
+                    transition: "0.2s",
+                    color: "error.main",
+                    "&:hover": {
+                        transform: "scale(1.08)",
+                    },
+                }}
             >
-                <MenuItem
-                    onClick={() => {
-                        handleClose();
-                        masterController.setSelectedStudentId(row.student_id);
-                        masterController.setOpenStudentModal(true)
-                    }}
-                >
-                    <ListItemIcon>
-                        <DriveFileRenameOutlineOutlinedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="แก้ไข" />
-                </MenuItem>
-
-                <MenuItem
-                   onClick={() => {
-                        handleClose();
-                        masterController.setSelectedStudentId(row.student_id);
-                        masterController.onClickDeleteMaster();
-                    }}
-                >
-                    <ListItemIcon>
-                        <DeleteSweepOutlinedIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="ลบ" />
-                </MenuItem>
-            </Menu>
-        </>
+                <DeleteForeverOutlinedIcon fontSize="small" />
+            </IconButton>
+        </Stack>
     );
 }
 
@@ -171,6 +172,7 @@ export function useMasterStudentColumns(masterController: IuseMasterFunctionStud
             render: (row) => (
                 <Typography variant="subtitle2">{row?.position?.position_name || "-"}</Typography>
             ),
+
         },
         {
             id: "management",

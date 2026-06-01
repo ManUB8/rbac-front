@@ -89,3 +89,56 @@ export interface IStudentActivityItem {
     | "registered"
     | "closed";
 }
+
+
+
+// new
+
+export interface IStudentAvailableActivitiesResponse {
+  detail: string;
+  student_code: string;
+  data: IStudentAvailableActivity[];
+}
+
+export interface IStudentAvailableActivity {
+  activity_id: number;
+  activity_name: string;
+  activity_date: string;
+  activity_time_text: string;
+  location: string;
+  activity_img: string;
+  check_type: string;
+  require_registration: boolean;
+  max_participants: number;
+  hours: number;
+  volunteer_hours: number;
+  check_detail: IStudentActivityCheckDetail | null;
+  checkin_open_time: string | null;
+  checkin_close_time: string | null;
+  checkout_open_time: string | null;
+  checkout_close_time: string | null;
+  registered_count: number;
+  register_text: string | null;
+  is_registered: boolean;
+  is_full: boolean;
+  button_text: string;
+  button_status: TActivityButtonStatus;
+}
+
+export interface IStudentActivityCheckDetail {
+  attendance_status: string;
+  checkin_time?: string | null;
+  checkout_time?: string | null;
+  checkin_lat?: number | null;
+  checkin_lng?: number | null;
+  checkout_lat?: number | null;
+  checkout_lng?: number | null;
+}
+
+export type TActivityButtonStatus =
+  | "can_join"
+  | "registered"
+  | "full"
+  | "closed"
+  | "checked_in"
+  | "checked_out";

@@ -87,7 +87,7 @@ const EditFaculty: React.FunctionComponent<IEditFacultyProps> = ({ open, onClose
                         justifyContent: "flex-end",
                     }}
                 >
-                    <Button variant="outlined" onClick={onClose}>
+                    <Button variant="outlined" onClick={onClose} color='error' >
                         ยกเลิก
                     </Button>
 

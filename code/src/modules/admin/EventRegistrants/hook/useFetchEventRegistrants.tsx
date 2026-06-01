@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { searchStateEventRegistrants } from "./useContext";
-import type { IDeleteEventRegistrantsRequest, IEventRegistrantsAllInOneResponse, IUpdateEventRegistrantsRequest } from "../interface/EventRegistrants.interface";
+import type { IDeleteEventRegistrantsRequest, IEventRegistrantsAllInOneResponse, IStudentActivityJoinResponse, IUpdateEventRegistrantsRequest } from "../interface/EventRegistrants.interface";
 import { DeleteEventRegistrants, getAllEventRegistrants, UpdateEventRegistrants } from "../service/EventRegistrantsApi";
 
 
@@ -20,6 +20,7 @@ export const useFetchEventRegistrants = () => {
     const [, setFlash] = useAtom(flashAlertAtom);
 
     const [searchInput, setSearchInput] = useState(searchState.search ?? "");
+    const [searchInputCode, setSearchInputCode] = useState(searchState.student_code ?? "");
     const debounceRef = useRef<number | null>(null);
 
     const [version, setVersion] = useState(0);
@@ -29,7 +30,7 @@ export const useFetchEventRegistrants = () => {
         setVersion((v) => v + 1);
     }, []);
 
-    const query = useQuery<IEventRegistrantsAllInOneResponse, Error>({
+    const query = useQuery<IStudentActivityJoinResponse, Error>({
         queryKey: ["event-registran", version, searchState],
         staleTime: 0,
         refetchOnMount: "always",
@@ -56,6 +57,26 @@ export const useFetchEventRegistrants = () => {
     useEffect(() => {
         setSearchInput(searchState.search ?? "");
     }, [searchState.search]);
+
+    const handleChangeSearchCode = useCallback((text: string) => {
+        setSearchInputCode(text);
+
+        if (debounceRef.current) window.clearTimeout(debounceRef.current);
+
+        debounceRef.current = window.setTimeout(() => {
+            setSearchStateEventRegistrants((prev) => ({
+                ...prev,
+                student_code: text || "",
+                page: 1,
+            }));
+        }, 800);
+    }, [setSearchStateEventRegistrants]);
+
+    useEffect(() => {
+        setSearchInputCode(searchState.student_code ?? "");
+    }, [searchState.student_code]);
+
+
 
     const handleOpenEdit = useCallback((body: IUpdateEventRegistrantsRequest) => {
         setSelected_Data(body);
@@ -151,7 +172,7 @@ export const useFetchEventRegistrants = () => {
         },
         [setFlash, reload]
     );
-    
+
     const onClickDeleteMaster = useCallback((student_activity_id?: number) => {
         setConfirmPopup({
             type: "warning",
@@ -198,9 +219,10 @@ export const useFetchEventRegistrants = () => {
         event_loading,
         total_all,
         onSubmitMaster,
-        onClickDeleteMaster
-
+        onClickDeleteMaster,
+        searchInputCode,
+        setSearchInputCode,
+        handleChangeSearchCode
     };
 };
-
 export type IuseFetchEventRegistrants = ReturnType<typeof useFetchEventRegistrants>;

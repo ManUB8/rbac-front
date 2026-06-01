@@ -251,7 +251,7 @@ const LoginForm: React.FC = () => {
                   variant="filled"
                   placeholder={
                     roleTab === "student"
-                      ? "63017609"
+                      ? "69010001"
                       : "Username"
                   }
                   autoComplete="username"
@@ -319,7 +319,7 @@ const LoginForm: React.FC = () => {
                   fullWidth
                   variant="filled"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••"
+                  // placeholder="••••"
                   autoComplete="current-password"
                   {...register("password", { required: "กรุณากรอกรหัสผ่าน" })}
                   error={!!errors.password}
@@ -407,6 +407,36 @@ const LoginForm: React.FC = () => {
               </Typography>
             </Button>
 
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => navigate("/register")}
+              sx={{
+                mt: 2,
+                height: 62,
+                borderRadius: "16px",
+                textTransform: "none",
+                borderColor: "#2952D9",
+                color: "#2952D9",
+                fontWeight: 800,
+                backgroundColor: "#FFFFFF",
+
+                "&:hover": {
+                  borderColor: "#2348BF",
+                  backgroundColor: "#F5F8FF",
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: 18,
+                  fontWeight: 800,
+                }}
+              >
+                สมัครข้อมูล
+              </Typography>
+            </Button>
+
             <Box
               sx={{
                 mt: 2.5,
@@ -452,7 +482,7 @@ const LoginForm: React.FC = () => {
                 ลืมรหัสผ่านใช่ไหม?
               </Link> */}
 
-              <Link
+              {/* <Link
                 component="button"
                 type="button"
                 underline="hover"
@@ -464,13 +494,13 @@ const LoginForm: React.FC = () => {
                 }}
               >
                 สมัครข้อมูล
-              </Link>
+              </Link> */}
             </Box>
             {banner && (
               <Alert
                 severity="error"
                 variant="filled"
-                sx={{ mt: 2.5, borderRadius: 2 }}
+                sx={{ mt: 2.5, borderRadius: 3 }}
               >
                 {banner}
               </Alert>

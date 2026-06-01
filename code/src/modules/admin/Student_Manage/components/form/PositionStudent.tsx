@@ -30,15 +30,11 @@ const PositionStudent: React.FunctionComponent<IPositionStudentProps> = ({
     MasterStudent
 }) => {
     const {
-        control,
         errors,
-        openStudentModal,
-        setOpenStudentModal,
-        actype,
         getValues,
         setValue
     } = MasterStudent;
-    const { position_data, loading_position } = useFetchPosition()
+    const { position_data} = useFetchPosition()
 
     return (
         <>

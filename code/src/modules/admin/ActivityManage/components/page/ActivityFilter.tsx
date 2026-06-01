@@ -14,14 +14,10 @@ const ActivityFilter: React.FunctionComponent<IActivityFilterProps> = ({
     return (
         <>
             <Grid container spacing={2} >
-                <Grid size={12}>
-                    <Stack direction="row" spacing={1} >
-
-                    </Stack>
-                    <Stack direction="row" spacing={2} sx={{ mt: 1 }} >
-                        <Box sx={{ flex: 1 }}>
+                <Grid size={{ xs: 12, md: 2  }}>
+                        <Box sx={{ flex: 1 , mt : 2}}>
                             <TextField
-                                label="ค้นหา ชื่อกิจกรรม"
+                                label="ชื่อกิจกรรม"
                                 variant="outlined"
                                 autoComplete="off"
                                 fullWidth
@@ -32,8 +28,10 @@ const ActivityFilter: React.FunctionComponent<IActivityFilterProps> = ({
                                     MasterActivity.handleChangeSearch(sear);
                                 }}
                             />
-                        </Box>
-                        <Box sx={{ flex: 1 }}>
+                            </Box>
+                            </Grid>
+                    <Grid size={{ xs: 6, md: 2 }}>
+                        <Box sx={{ flex: 1 , mt : 2 }}>
                             <Autocomplete
                                 fullWidth
                                 loading={activity_all_Loading}
@@ -56,53 +54,9 @@ const ActivityFilter: React.FunctionComponent<IActivityFilterProps> = ({
                                 )}
                             />
                         </Box>
-                        <Box sx={{ flex: 1 }}>
-                            <Autocomplete
-                                fullWidth
-                                loading={activity_all_Loading}
-                                options={check_type}
-                                getOptionLabel={(option) => option.label}
-                                value={
-                                    check_type.find(
-                                        (item) => item.id === MasterActivity.searchState.check_type
-                                    ) ?? null
-                                }
-                                onChange={(_, v) => {
-                                    MasterActivity.setSearchStateActivity((prev) => ({
-                                        ...prev,
-                                        check_type: v?.id ?? '',
-                                        page: 1,
-                                    }));
-                                }}
-                                renderInput={(p) => (
-                                    <TextField {...p} label="ประเภท" variant="outlined" />
-                                )}
-                            />
-                        </Box>
-                        <Box sx={{ flex: 1 }}>
-                            <Autocomplete
-                                fullWidth
-                                loading={activity_all_Loading}
-                                options={require_registration}
-                                getOptionLabel={(option) => option.label}
-                                value={
-                                    require_registration.find(
-                                        (item) => item.id === MasterActivity.searchState.require_registration
-                                    ) ?? null
-                                }
-                                onChange={(_, v) => {
-                                    MasterActivity.setSearchStateActivity((prev) => ({
-                                        ...prev,
-                                        require_registration: v?.id ?? "",
-                                        page: 1,
-                                    }));
-                                }}
-                                renderInput={(p) => (
-                                    <TextField {...p} label="ลงทะเบียน" variant="outlined" />
-                                )}
-                            />
-                        </Box>
-                        <Box sx={{ flex: 1 }}>
+                        </Grid>
+                    <Grid size={{ xs: 6, md: 2 }}>
+                        <Box sx={{ flex: 1 , mt : 2  }}>
                             <Autocomplete
                                 fullWidth
                                 loading={activity_all_Loading}
@@ -125,9 +79,58 @@ const ActivityFilter: React.FunctionComponent<IActivityFilterProps> = ({
                                 )}
                             />
                         </Box>
-                    </Stack>
+                    </Grid>
+                        <Grid size={{ xs: 12, md: 2 }}>
+                        <Box sx={{ flex: 1 , mt : 2  }}>
+                            <Autocomplete
+                                fullWidth
+                                loading={activity_all_Loading}
+                                options={check_type}
+                                getOptionLabel={(option) => option.label}
+                                value={
+                                    check_type.find(
+                                        (item) => item.id === MasterActivity.searchState.check_type
+                                    ) ?? null
+                                }
+                                onChange={(_, v) => {
+                                    MasterActivity.setSearchStateActivity((prev) => ({
+                                        ...prev,
+                                        check_type: v?.id ?? '',
+                                        page: 1,
+                                    }));
+                                }}
+                                renderInput={(p) => (
+                                    <TextField {...p} label="ประเภท" variant="outlined" />
+                                )}
+                            />
+                        </Box>
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 2 }}>
+                        <Box sx={{ flex: 1  , mt : 2  }}>
+                            <Autocomplete
+                                fullWidth
+                                loading={activity_all_Loading}
+                                options={require_registration}
+                                getOptionLabel={(option) => option.label}
+                                value={
+                                    require_registration.find(
+                                        (item) => item.id === MasterActivity.searchState.require_registration
+                                    ) ?? null
+                                }
+                                onChange={(_, v) => {
+                                    MasterActivity.setSearchStateActivity((prev) => ({
+                                        ...prev,
+                                        require_registration: v?.id ?? "",
+                                        page: 1,
+                                    }));
+                                }}
+                                renderInput={(p) => (
+                                    <TextField {...p} label="ลงทะเบียน" variant="outlined" />
+                                )}
+                            />
+                        </Box>
+                        </Grid>
                 </Grid>
-            </Grid >
         </>
     )
 };

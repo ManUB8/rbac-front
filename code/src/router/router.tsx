@@ -17,10 +17,9 @@ import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
 import StudentCardPage from "../modules/student/StudentMaster/page/StudentCardPage";
 import StudentActivityPage from "../modules/student/StudentActivity/page/StudentActivityPage";
 import StudentSummaryPage from "../modules/student/Dashboard/ActivitySummary/page/StudentSummaryPage";
-import StudentManagePage from "../modules/admin/StudentManage/page/StudentManagePage";
 import ActivityManagePage from "../modules/admin/ActivityManage/page/ActivityManagePage";
 import FacultyBranchPage from "../modules/admin/Faculty_Majors/page/FacultyBranchPage";
-import StudentActivitiesPage from "../modules/admin/Student_Activities/page/StudentActivitiesPage";
+import StudentActivitiesPhonePage from "../modules/admin/Student_Activities_Phone/page/StudentActivitiesPhonePage";
 import Student_ManagePage from "../modules/admin/Student_Manage/page/Student_ManagePage";
 import StudentReportPage from "../modules/admin/StudentReport/page/StudentReportPage";
 import EventRegistrantsPage from "../modules/admin/EventRegistrants/page/EventRegistrantsPage";
@@ -29,12 +28,27 @@ import QrScannerPage from "../modules/admin/Qr_Scanner/page/QrScannerPage";
 
 
 // icon
+import DocumentScannerOutlinedIcon from '@mui/icons-material/DocumentScannerOutlined';
+import InstallMobileOutlinedIcon from '@mui/icons-material/InstallMobileOutlined';
+import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined';
+import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import QrCodeOutlinedIcon from '@mui/icons-material/QrCodeOutlined';
+import PhonelinkSetupOutlinedIcon from '@mui/icons-material/PhonelinkSetupOutlined';
+import ComputerIcon from '@mui/icons-material/Computer';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import SmartphoneIcon from '@mui/icons-material/Smartphone';
+import BuildIcon from '@mui/icons-material/Build';
 import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
 import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
 import AddToHomeScreenOutlinedIcon from '@mui/icons-material/AddToHomeScreenOutlined';
+import GenerateQr from "../modules/admin/GenerateQr/page/GenerateQr";
+import StudentActivitiesManualPage from "../modules/admin/Student_Activities_Manual/page/StudentActivitiesManualPage";
+import StudentActivitiesComputerPage from "../modules/admin/Student_Activities_Computer/page/StudentActivitiesComputerPage";
+import User_ManagePage from "../modules/admin/User_Manage/page/User_ManagePage";
 export type UserRole = "admin" | "temporary_admin" | "student";
 export type RouteRole = "admin" | "student";
 
@@ -72,10 +86,14 @@ export const AppRoutes = {
   adminPermissions: "/admin/permissions",
   adminBranchFaculty: "/admin/branchfaculty",
   adminStudentActivities: "/admin/student-activities",
-  adminQrScanner: "/admin/qr-scanner",
+  adminStudentActivitiesComputer: "/admin/student-activities/computer",
+  adminStudentActivitiesPhone: "/admin/student-activities/phone",
+  adminStudentActivitiesManual: "/admin/student-activities/manual",
   adminEventRegistrants: "/admin/student-event",
   adminStudentReport: "/admin/student-report",
   adminEvent: "/admin/event",
+  adminGenerateQr: "/admin/generate-qr",
+  adminUser: "/admin/User",
 } as const;
 
 export const getDefaultRouteByRole = (role: UserRole | "") => {
@@ -83,7 +101,7 @@ export const getDefaultRouteByRole = (role: UserRole | "") => {
     case "admin":
       return AppRoutes.dashboard;
     case "temporary_admin":
-      return AppRoutes.adminStudentActivities;
+      return AppRoutes.adminStudentActivitiesComputer;
     case "student":
       return AppRoutes.studentCard;
     default:
@@ -165,25 +183,68 @@ export const routesConfig: {
       withLayout: true,
     },
     {
+      path: AppRoutes.adminUser,
+      element: <User_ManagePage />,
+      code: "admin-activities",
+      name: "จัดการแอดมิน",
+      icon: <AdminPanelSettingsOutlinedIcon />,
+      roles: ["admin"],
+      key: "admin-user",
+      withLayout: true,
+    },
+    {
       path: AppRoutes.adminBranchFaculty,
       element: <FacultyBranchPage />,
       code: "admin-branchfaculty",
       name: "จัดการคณะสาขา",
-      icon: <ApartmentOutlinedIcon />,
+      icon: <AccountTreeOutlinedIcon />,
       roles: ["admin"],
       key: "admin-branchfaculty",
       withLayout: true,
     },
     {
       path: AppRoutes.adminStudentActivities,
-      element: <StudentActivitiesPage />,
+      element: null,
       code: "admin-studentactivities",
       name: "ลงทะเบียนกิจกรรม",
       icon: <QrCodeScannerOutlinedIcon />,
       roles: ["admin", "temporary_admin"],
       key: "admin-studentactivities",
       withLayout: true,
+      children: [
+        {
+          path: AppRoutes.adminStudentActivitiesComputer,
+          element: <StudentActivitiesComputerPage />,
+          code: "admin-studentactivitiesComputer",
+          name: "คอมพิวเตอร์",
+          icon: <DocumentScannerOutlinedIcon />,
+          roles: ["admin", "temporary_admin"],
+          key: "admin-studentactivitiesComputer",
+          withLayout: true,
+        },
+        {
+          path: AppRoutes.adminStudentActivitiesPhone,
+          element: <StudentActivitiesPhonePage />,
+          code: "admin-studentactivitiesPhone",
+          name: "โทรศัพท์",
+          icon: <InstallMobileOutlinedIcon />,
+          roles: ["admin", "temporary_admin"],
+          key: "admin-studentactivitiesPhone",
+          withLayout: true,
+        },
+        {
+          path: AppRoutes.adminStudentActivitiesManual,
+          element: <StudentActivitiesManualPage />,
+          code: "admin-studentactivitiesManual",
+          name: "เกิดปัญหา",
+          icon: <SettingsSuggestOutlinedIcon />,
+          roles: ["admin", "temporary_admin"],
+          key: "admin-studentactivitiesManual",
+          withLayout: true,
+        },
+      ],
     },
+    
     {
       path: AppRoutes.adminEvent,
       element: null,
@@ -215,6 +276,16 @@ export const routesConfig: {
           withLayout: true,
         },
       ],
+    },
+    {
+      path: AppRoutes.adminGenerateQr,
+      element: < GenerateQr/>,
+      code: "admin-generate-qr",
+      name: "Generate QR Code",
+      icon: <QrCodeOutlinedIcon/>,
+      roles: ["admin"],
+      key: "admin-generate-qr",
+      withLayout: true,
     }
   ],
   publicRoutes: [
