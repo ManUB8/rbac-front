@@ -16,6 +16,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import {
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useFetchFaculty } from "../hook/useFaculty";
@@ -81,9 +87,13 @@ const RegisterPage: React.FC = () => {
       user: {
         username: "",
         password: "",
+        confirm_password: "",
       },
     },
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onSubmit = async (body: IStudentItem) => {
     try {
@@ -119,6 +129,7 @@ const RegisterPage: React.FC = () => {
   useEffect(() => {
     console.log("Value set", getValues());
   }, [watch(), getValues]);
+
 
   return (
     <Box
@@ -409,13 +420,69 @@ const RegisterPage: React.FC = () => {
 
                 <TextField
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   fullWidth
                   {...register("user.password", {
                     required: "กรุณากรอก password",
                   })}
                   error={!!errors.user?.password}
                   helperText={errors.user?.password?.message}
+
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                  sx={{
+                    "& .MuiInputBase-input": {
+                      py: 2,
+                      fontSize: 17,
+                      color: "#475569",
+                    },
+                  }}
+
+                />
+
+                <TextField
+                  label="ยืนยัน Password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  fullWidth
+                  {...register("user.confirm_password")}
+                  error={!!errors.user?.confirm_password}
+                  helperText={errors.user?.confirm_password?.message}
+
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowConfirmPassword((prev) => !prev)}
+                            edge="end"
+                          >
+                            {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                  sx={{
+                    mt: 2,
+
+                    "& .MuiInputBase-input": {
+                      py: 2,
+                      fontSize: 17,
+                      color: "#475569",
+                    },
+                  }}
                 />
 
                 <Button
