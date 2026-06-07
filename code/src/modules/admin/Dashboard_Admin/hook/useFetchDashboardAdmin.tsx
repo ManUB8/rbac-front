@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllDashboardAdmin } from "../service/DashboardAdminApi";
-import type { IActivityDashboardResponse } from "../interface/DashboardAdmin.interface";
+import { getAllDashboardAdmin, getAllYear } from "../service/DashboardAdminApi";
+import type { IActivityDashboardResponse, IStudentSummaryResponse } from "../interface/DashboardAdmin.interface";
 import { useFetchActivityFilter } from "../../ActivityManage/hook/useFetchActivity";
 
 export const useFetchDashboardAdmin = () => {
@@ -39,3 +39,37 @@ export const useFetchDashboardAdmin = () => {
 };
 
 export type IuseuseFetchDashboardAdmin = ReturnType<typeof useFetchDashboardAdmin>;
+
+
+
+export const useFetchYear = () => {
+    const navigate = useNavigate();
+    const [version, setVersion] = useState(0);
+    const [selectedId, setSelectedId] = useState<number | 0>(0);
+    const reload = useCallback(() => {
+        setVersion((v) => v + 1);
+    }, []);
+
+    const query = useQuery<IStudentSummaryResponse, Error>({
+        queryKey: ["year-admin", version],
+        retry: 1,
+        queryFn: async () => {
+            return await getAllYear();
+        },
+    });
+    const year_data = query.data?.faculty ?? []
+    const total_stu = query.data?.count_student ?? 0
+    const year_Loading = query.isLoading
+    console.log("year_data",year_data)
+    console.log("total_stu",total_stu)
+
+    return {
+        navigate,
+        reload,
+        selectedId,
+        setSelectedId,
+        year_data,
+        total_stu,
+        year_Loading
+    };
+};

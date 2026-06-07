@@ -8,6 +8,7 @@ import ActivityTop from "../modal/ActivityTop";
 import YearDashboard from "../modal/YearDashboard";
 import FacultyDetail from "../modal/FacultyDetail";
 import ActivityDetail from "../modal/ActivityDetail";
+import Year from "../modal/Yesr";
 
 export interface IDetailDashboardProps {
     mastercontroller: IuseuseFetchDashboardAdmin;
@@ -31,6 +32,7 @@ const DetailDashboard: React.FC<IDetailDashboardProps> = ({
             <FacultyDetail dashboard_data={dashboard_data} />
             <FacultyDashboard dashboard_data={dashboard_data} />
             <ActivityDetail dashboard_data={dashboard_data} />
+            {/* <Year /> */}
         </>
     );
 };
@@ -82,7 +84,7 @@ const DashboardSkeleton = () => {
                     </Box>
                 ))}
             </Card>
-            
+
             <Card sx={{ p: 3, borderRadius: 3 }}>
                 <Skeleton width="40%" height={32} />
                 {Array.from({ length: 5 }).map((_, index) => (
