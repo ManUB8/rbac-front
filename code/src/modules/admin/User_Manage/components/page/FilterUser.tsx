@@ -17,7 +17,7 @@ const FilterUser: React.FunctionComponent<IFilterUserProps> = ({
                 <Grid size={{ xs: 12, md: 4 }}>
                     <Box sx={{ mt: 2 }}>
                         <TextField
-                            label="Name"
+                            label="ชื่อแอดมิน"
                             fullWidth
                             value={masterController.searchInput}
                             onChange={(e) => {

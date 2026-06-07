@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { getAllErrorPaths } from "../../../../shared/components/error/FunctionError";
-import { IActivityDataDefault, type IActivityDelete, type IActivityFilter, type IActivityFilterAll, type IActivityItem, type IActivityListResponse } from "../interface/ActivityManage.interface";
+import { IActivityDataDefault, type IActivityDelete, type IActivityFilter, type IActivityFilterAll, type IActivityItem, type IActivityListResponse, type IActivitySearch } from "../interface/ActivityManage.interface";
 import {
     getAllActivity,
     getOneActivity,
@@ -25,7 +25,7 @@ import { searchStateActivity } from "./useContext";
 
 export const useActivityFetch = () => {
     const navigate = useNavigate();
-    const [searchState, setSearchStateActivity] = useAtom(searchStateActivity);
+    const [searchState, setSearchStateActivity,] = useAtom(searchStateActivity);
     const [, setConfirmPopup] = useAtom(confirmPopupAtom);
 
     const [searchInput, setSearchInput] = useState(searchState.search ?? "");
@@ -49,13 +49,24 @@ export const useActivityFetch = () => {
         },
     });
 
+    const handleChangeTargetGroup = useCallback(
+    (target_group: string) => {
+        setSearchStateActivity((prev: IActivitySearch) => ({
+            ...prev,
+            target_group,
+            page: 1,
+        }));
+    },
+    [setSearchStateActivity]
+);
+
     const handleChangeSearch = useCallback((text: string) => {
         setSearchInput(text);
 
         if (debounceRef.current) window.clearTimeout(debounceRef.current);
 
         debounceRef.current = window.setTimeout(() => {
-            setSearchStateActivity((prev) => ({
+            setSearchStateActivity((prev: IActivitySearch) => ({
                 ...prev,
                 search: text || "",
                 page: 1,
@@ -78,6 +89,23 @@ export const useActivityFetch = () => {
         setSelectedId(id);
         setOpenModal(true);
     }, [setFormMode, setSelectedId, setOpenModal]);
+
+
+    const getTargetGroupLabel = (targetGroup?: string) => {
+        switch (targetGroup) {
+            case "all":
+                return "ทั้งหมด";
+
+            case "freshman":
+                return "นิสิตใหม่";
+
+            case "senior":
+                return "รุ่นพี่";
+
+            default:
+                return "-";
+        }
+    };
 
 
     const activity_data = Activityquery.data?.activity ?? []
@@ -112,7 +140,9 @@ export const useActivityFetch = () => {
         setSearchInput,
         handleChangeSearch,
         setConfirmPopup,
-        setSearchStateActivity
+        setSearchStateActivity,
+        getTargetGroupLabel,
+        handleChangeTargetGroup
     };
 };
 
@@ -159,7 +189,6 @@ export const useMasterFunctionActivityFromFetch = ({
         setError,
         clearErrors,
         formState: { errors },
-        setFocus,
     } = methods;
 
 
@@ -497,6 +526,7 @@ export const useFetchActivityFilterAll = () => {
 
     const hour_type = query.data?.hour_type ?? [];
     const check_type = query.data?.check_type ?? [];
+    const target_group = query.data?.target_group ?? [];
     const activity_status = query.data?.activity_status ?? [];
     const require_registration = query.data?.require_registration ?? [];
     return {
@@ -504,6 +534,7 @@ export const useFetchActivityFilterAll = () => {
         reload,
         hour_type,
         check_type,
+        target_group,
         activity_status,
         require_registration,
         activity_all_Loading: query.isLoading,

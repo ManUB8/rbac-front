@@ -18,3 +18,19 @@ export const Year_type: IYearType[] = [
         id: "ปี 4"
     },
 ]
+
+export interface IStudentOption {
+    id: string;
+    label: string;
+}
+
+export const Prefix_type: IStudentOption[] = [
+    { id: "นาย", label: "นาย" },
+    { id: "นางสาว", label: "นางสาว" },
+];
+
+export const Gender_type: IStudentOption[] = [
+    { id: "ชาย", label: "ชาย" },
+    { id: "หญิง", label: "หญิง" },
+    { id: "LGBTQ+", label: "LGBTQ+" },
+];

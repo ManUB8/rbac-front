@@ -115,12 +115,14 @@ export interface IStudentActivityJoinItem {
 
   created_by_id: number;
   created_by_name: string;
-  updated_by_id: number;
-  updated_by_name: string;
+  updated_by_name:string;
+  updated_by_id:number;
 
   created_at: number;
   updated_at: number;
 }
+
+
 
 export interface IStudentActivityCheckDetail {
   attendance_status: string;

@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import type { IuseActivityFetch, IuseMasterFunctionActivityFromFetch } from "../../hook/useFetchActivity";
 import { useMasterActivityColumns } from "../Table/ActivityColumns";
+import type { IActivitySearch } from "../../interface/ActivityManage.interface";
 
 export interface IActivityTableProps {
     MasterActivity: IuseActivityFetch
@@ -27,14 +28,14 @@ const ActivityTable: React.FunctionComponent<IActivityTableProps> = ({
     const columns = useMasterActivityColumns(MasterActivity, MasterController);
 
     const handleChangePage = (_event: unknown, newPage: number) => {
-        MasterActivity.setSearchStateActivity((prev) => ({
+        MasterActivity.setSearchStateActivity((prev: IActivitySearch) => ({
             ...prev,
             page: newPage + 1,
         }));
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        MasterActivity.setSearchStateActivity((prev) => ({
+        MasterActivity.setSearchStateActivity((prev: IActivitySearch) => ({
             ...prev,
             page: 1,
             limit: +event.target.value,

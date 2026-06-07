@@ -1,4 +1,4 @@
-import type { IActivityType, ICheckType } from "../interface/ActivityManage.interface";
+import type { IActivityType, ICheckType, IGroupType } from "../interface/ActivityManage.interface";
 
 
 export const Check_type: ICheckType[] = [
@@ -36,3 +36,19 @@ export const Require_registration: IActivityType[] = [
         id: "false"
     },
 ]
+
+export const target_group: IGroupType [] = [
+        {
+            label: "ทั้งหมด",
+            id: "all",
+        },
+        {
+            label: "นิสิตใหม่",
+            id: "freshman",
+        },
+        {
+            label: "รุ่นพี่",
+            id: "senior",
+        },
+    ];
+
