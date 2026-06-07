@@ -44,6 +44,8 @@ const EventTable: React.FunctionComponent<IEventTableProps> = ({
         }));
     };
 
+    
+
     return (
         <Grid
             container
@@ -72,7 +74,7 @@ const EventTable: React.FunctionComponent<IEventTableProps> = ({
                                     top: 0,
                                     bgcolor: "background.paper",
                                     zIndex: 1,
-                                    backgroundColor:'##e8f4fd'
+                                    backgroundColor: '##e8f4fd'
                                 },
                             }}
                         >
@@ -136,12 +138,16 @@ const EventTable: React.FunctionComponent<IEventTableProps> = ({
                                         tabIndex={0}
                                     >
                                         {columns.map((column) => (
-                                            <TableCell
-                                                key={column.id}
-                                                align={column.align}
-                                            >
-                                                {column.render(row, index)}
-                                            </TableCell>
+                                            <>
+                                               
+                                                <TableCell
+                                                    key={column.id}
+                                                    align={column.align}
+                                                >
+                                                    {column.render(row, index)}
+                                                </TableCell>
+                                            </>
+
                                         ))}
                                     </TableRow>
                                 ))

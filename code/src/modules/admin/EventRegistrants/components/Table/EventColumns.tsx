@@ -5,7 +5,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { formatDateThai, formatDateTimeThai } from '../../../../../shared/components/Date-Time/DateAndTime';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import type { IuseFetchEventRegistrants } from '../../hook/useFetchEventRegistrants';
-import type { IEventRegistrantsItem, IStudentActivityJoinItem, IUpdateEventRegistrantsRequest } from '../../interface/EventRegistrants.interface';
+import type { IStudentActivityJoinItem, } from '../../interface/EventRegistrants.interface';
 import { Check_type } from '../../../ActivityManage/utils/activity_option';
 
 // ===== Generic Column =====
@@ -166,6 +166,19 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
                 </Box>
             ),
         },
+                {
+            id: "created_by_name",
+            label: "เช็คอินโดย",
+            minWidth: 200,
+            align: "left",
+            render: (row) => (
+                <Box>
+                    <Typography variant="subtitle2">
+                        {row.created_by_name|| "-"}
+                    </Typography>
+                </Box>
+            ),
+        },
         {
             id: "checkout_at",
             label: "เช็คเอาท์",
@@ -181,8 +194,8 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
                         variant="caption"
                         sx={{
                             color:
-                                row.check_detail.checkout.checkout_status === "valid"
-                                    ? "success.main"
+                            row.check_detail.checkout.checkout_status === "valid"
+                            ? "success.main"
                                     : "error.main",
                             fontWeight: 600,
                         }}
@@ -190,6 +203,21 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
                         {row.check_detail.checkout.checkout_status_text || "-"}
                     </Typography>
                 </Box>
+            ),
+        },
+        {
+            id: "update_by_name",
+            label: "เช็คเอาท์โดย",
+            minWidth: 200,
+            align: "left",
+            render: (row) => (
+            <>
+            <Box>
+                    <Typography variant="subtitle2">
+                        {row.updated_by_name|| "-"}
+                    </Typography>
+                </Box>
+            </>
             ),
         },
         {

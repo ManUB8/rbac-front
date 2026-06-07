@@ -154,6 +154,11 @@ export const useFacultyFormFetch = ({
         defaultValues: IFacultyDataDefule,
         shouldFocusError: true,
     });
+    // const methods = useForm<IMajorsBody>({
+    //     resolver: zodResolver(MasterFacultyZod as any) as Resolver<IFacultyBody>,
+    //     defaultValues: IFacultyDataDefule,
+    //     shouldFocusError: true,
+    // });
 
     const {
         register,

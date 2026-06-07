@@ -6,12 +6,19 @@ export interface IActivitySearch {
   check_type: string
   require_registration: string;
   hour_type_id: string;
+  target_group: string;
 }
 
 export interface IHourType {
   hour_type_id: string;
   hour_type_name: string;
 }
+
+export interface IGroupType {
+    id: string;
+    label: string;
+}
+
 
 export interface IActivityItem {
   activity_id: number;
@@ -48,6 +55,7 @@ export interface IActivityItem {
   activity_lng: number | null;
 
   activity_radius_meter: number;
+  target_group : string ; 
 
   created_by_id: number;
   created_by_name: string;
@@ -99,6 +107,7 @@ export const IActivityDataDefault: IActivityItem = {
   created_by_name: "",
   updated_by_id: 0,
   updated_by_name: "",
+  target_group:"",
   created_at: 0,
   updated_at: 0,
   registered_count: 0,
@@ -138,4 +147,5 @@ export interface IActivityFilterAll {
   check_type: IActivityType[];
   activity_status: IActivityType[];
   require_registration: IActivityType[];
+  target_group:IActivityType[];
 }

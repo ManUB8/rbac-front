@@ -1,6 +1,5 @@
 import React from "react";
-import { Button, Chip, Grid, Stack, Typography } from "@mui/material";
-import { NumericFormat } from "react-number-format";
+import { Box, Button, Chip, Grid, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import type { IuseMasterFunctionStudent } from "../../hook/useFetchStudent";
@@ -10,105 +9,95 @@ export interface IHeadStudentProps {
 }
 
 const HeadStudent: React.FC<IHeadStudentProps> = ({ masterController }) => {
-    return (
-        <Grid
-            container
-            spacing={1.5}
+    const renderYearChip = (
+        year: string,
+        value: number,
+        color: string
+    ) => (
+        <Chip
+            label={
+                <>
+                    {year}{" "}
+                    <Box component="span" sx={{ color, fontWeight: 800 }}>
+                        {value.toLocaleString()}
+                    </Box>{" "}
+                    รายการ
+                </>
+            }
             sx={{
-                alignItems: "center",
+                width: { xs: "100%", md: "auto" },
+                fontWeight: 700,
             }}
-        >
-            <Grid
-                size={{ xs: 12, sm: 12, md: 6 }}
-                sx={{
-                    display: "flex",
-                    justifyContent: {
-                        xs: "center",
-                        md: "flex-start",
-                    },
-                }}
-            >
+        />
+    );
+
+    return (
+        <Grid container spacing={2} sx={{ alignItems: "flex-start" }}>
+            <Grid size={{ xs: 12, md: 9 }}>
                 <Stack
-                    direction="row"
-                    spacing={1.25}
+                    spacing={{ xs: 1.5, md: 1 }}
                     sx={{
-                        alignItems: "center",
-                        textAlign: {
-                            xs: "center",
-                            md: "left",
-                        },
-                        flexWrap: "wrap",
-                        justifyContent: {
-                            xs: "center",
-                            md: "flex-start",
-                        },
+                        alignItems: { xs: "center", md: "flex-start" },
+                        textAlign: { xs: "center", md: "left" },
                     }}
                 >
-                    <Typography
-                        variant="h5"
+                    <Stack
+                        direction={{ xs: "column", md: "row" }}
+                        spacing={1.5}
+                        sx={{ alignItems: "center" }}
+                    >
+                        <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                            จัดการนิสิต
+                        </Typography>
+
+                        <Chip
+                            label={`ทั้งหมด ${masterController.total_student_all.toLocaleString()} รายการ`}
+                            sx={{ fontWeight: 700 }}
+                        />
+                    </Stack>
+
+                    <Grid
+                        container
+                        spacing={1.5}
                         sx={{
-                            flexShrink: 0,
-                            fontWeight: 800,
+                            width: { xs: 320, md: "auto" },
+                            justifyContent: "center",
                         }}
                     >
-                        จัดการนิสิต
-                    </Typography>
+                        <Grid size={{ xs: 6, md: "auto" }}>
+                            {renderYearChip("ปี 1", masterController.total_student.student_1, "primary.main")}
+                        </Grid>
 
-                    <Chip
-                        label={
-                            <span>
-                                {"ทั้งหมด "}
-                                <NumericFormat
-                                    value={masterController.total_student}
-                                    displayType="text"
-                                    thousandSeparator=","
-                                />
-                                {" รายการ"}
-                            </span>
-                        }
-                        sx={{
-                            fontWeight: 700,
-                        }}
-                    />
+                        <Grid size={{ xs: 6, md: "auto" }}>
+                            {renderYearChip("ปี 2", masterController.total_student.student_2, "primary.main")}
+                        </Grid>
+
+                        <Grid size={{ xs: 6, md: "auto" }}>
+                            {renderYearChip("ปี 3", masterController.total_student.student_3, "primary.main")}
+                        </Grid>
+
+                        <Grid size={{ xs: 6, md: "auto" }}>
+                            {renderYearChip("ปี 4", masterController.total_student.student_4, "primary.main")}
+                        </Grid>
+                    </Grid>
                 </Stack>
             </Grid>
 
             <Grid
-                size={{ xs: 12, sm: 12, md: 6 }}
+                size={{ xs: 12, md: 3 }}
                 sx={{
                     display: "flex",
-                    justifyContent: {
-                        xs: "center",
-                        md: "flex-end",
-                    },
+                    justifyContent: { xs: "center", md: "flex-end" },
                 }}
             >
-                <Stack
-                    direction="row"
-                    spacing={1.5}
-                    sx={{
-                        alignItems: "center",
-                        ml: {
-                            md: "auto",
-                        },
-                        mt: {
-                            xs: 1,
-                            md: 0,
-                        },
-                    }}
+                <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={masterController.handleCreateStudent}
+                    sx={{ textTransform: "none", fontWeight: 700 }}
                 >
-                    <Button
-                        variant="contained"
-                        startIcon={<AddIcon />}
-                        onClick={masterController.handleCreateStudent}
-                        sx={{
-                            textTransform: "none",
-                            fontWeight: 700,
-                        }}
-                    >
-                        เพิ่มนิสิต
-                    </Button>
-                </Stack>
+                    เพิ่มนิสิต
+                </Button>
             </Grid>
         </Grid>
     );

@@ -19,10 +19,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { NumericFormat } from "react-number-format";
 import type { IuseMasterFunctionStudentFromFetch } from "../../hook/useFetchStudent";
 import { useFetchFacultyMajors } from "../../../Faculty_Majors/hook/useFetchFaculty_Majors";
-import { useFetchPosition } from "../../../Position/hook/useFetchPosition";
-import { Year_type } from "../../utils/student_option";
 import PositionStudent from "./PositionStudent";
-import { red } from "@mui/material/colors";
+import {
+    Year_type,
+    Prefix_type,
+    Gender_type,
+} from "../../utils/student_option";
 
 export interface IDateilStudentProps {
     MasterStudent: IuseMasterFunctionStudentFromFetch;
@@ -42,7 +44,7 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
     } = MasterStudent;
 
     const [showPassword, setShowPassword] = useState(false);
-    const { faculty_majors, faculty_loading } = useFetchFacultyMajors()
+    const { faculty_majors } = useFetchFacultyMajors()
 
 
     const selectedFaculty = faculty_majors.find(
@@ -60,12 +62,12 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
         >
             <DialogTitle sx={{ fontWeight: 1000, pr: 6 }}>
                 {actype === "create" ? "เพิ่มนิสิต" : "แก้ไขข้อมูลนิสิต"}
-            <IconButton
-                        onClick={() => setOpenStudentModal(false)}
-                        sx={{ position: "absolute", right: 12, top: 12 }}
-                    >
-                        <CloseIcon  />
-                    </IconButton>
+                <IconButton
+                    onClick={() => setOpenStudentModal(false)}
+                    sx={{ position: "absolute", right: 12, top: 12 }}
+                >
+                    <CloseIcon />
+                </IconButton>
             </DialogTitle>
             <DialogContent>
                 <Stack spacing={2} sx={{ pt: 1 }}>
@@ -108,20 +110,23 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                             name="year_status"
                             control={control}
                             render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    select
+                                <Autocomplete
                                     fullWidth
-                                    id="year_status"
-                                    label="ชั้นปี"
-                                    error={!!errors.year_status}
-                                    helperText={errors.year_status?.message as string}
-                                >
-                                    <MenuItem value="ปี 1">ปี1</MenuItem>
-                                    <MenuItem value="ปี 2">ปี2</MenuItem>
-                                    <MenuItem value="ปี 3">ปี3</MenuItem>
-                                    <MenuItem value="ปี 4">ปี4</MenuItem>
-                                </TextField>
+                                    options={Year_type}
+                                    getOptionLabel={(option) => option.label}
+                                    value={Year_type.find((item) => item.id === field.value) ?? null}
+                                    onChange={(_, value) => {
+                                        field.onChange(value?.id ?? "");
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="ชั้นปี"
+                                            error={!!errors.year_status}
+                                            helperText={errors.year_status?.message as string}
+                                        />
+                                    )}
+                                />
                             )}
                         />
                     </Stack>
@@ -131,18 +136,25 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                             name="prefix"
                             control={control}
                             render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    select
+                                <Autocomplete
                                     fullWidth
-                                    id="prefix"
-                                    label="คำนำหน้า"
-                                    error={!!errors.prefix}
-                                    helperText={errors.prefix?.message as string}
-                                >
-                                    <MenuItem value="นาย">นาย</MenuItem>
-                                    <MenuItem value="นางสาว">นางสาว</MenuItem>
-                                </TextField>
+                                    options={Prefix_type}
+                                    getOptionLabel={(option) => option.label}
+                                    value={
+                                        Prefix_type.find((item) => item.id === field.value) ?? null
+                                    }
+                                    onChange={(_, value) => {
+                                        field.onChange(value?.id ?? "");
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="คำนำหน้า"
+                                            error={!!errors.prefix}
+                                            helperText={errors.prefix?.message as string}
+                                        />
+                                    )}
+                                />
                             )}
                         />
 
@@ -150,20 +162,25 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                             name="gender"
                             control={control}
                             render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    select
+                                <Autocomplete
                                     fullWidth
-                                    id="gender"
-                                    label="เพศ"
-                                    error={!!errors.gender}
-                                    helperText={errors.gender?.message as string}
-                                >
-                                    <MenuItem value="ชาย">ชาย</MenuItem>
-                                    <MenuItem value="หญิง">หญิง</MenuItem>
-                                    <MenuItem value="LGBTQ+">LGBTQ+</MenuItem>
-
-                                </TextField>
+                                    options={Gender_type}
+                                    getOptionLabel={(option) => option.label}
+                                    value={
+                                        Gender_type.find((item) => item.id === field.value) ?? null
+                                    }
+                                    onChange={(_, value) => {
+                                        field.onChange(value?.id ?? "");
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="เพศ"
+                                            error={!!errors.gender}
+                                            helperText={errors.gender?.message as string}
+                                        />
+                                    )}
+                                />
                             )}
                         />
                     </Stack>

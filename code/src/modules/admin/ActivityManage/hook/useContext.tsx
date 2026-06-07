@@ -9,6 +9,7 @@ export const searchStateActivity = atom<IActivitySearch>({
     check_type: "",
     require_registration: "",
     hour_type_id: "",
+    target_group: "",
 });
 
 
