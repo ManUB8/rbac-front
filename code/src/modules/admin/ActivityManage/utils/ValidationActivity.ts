@@ -11,6 +11,7 @@ export const ActivityZod = z.object({
     check_type: z.string().min(1, { message: "กรุณาใส่ประเภทการเช็ค" }),
     max_participants: z.number().min(1, { message: "กรุณากรอกจำนวนรับผู้เข้าร่วมกิจกรรม" }),
     hour_type_id: z.string().min(1, { message: "กรุณากรอกจำนวนรับผู้เข้าร่วมกิจกรรม" }),
+    target_group: z.string().min(1, { message: "กรุณาเลือกกลุ่มผู้เข้าร่วม" }),
     activity_lat: z.number().min(1, { message: "กรุณากรอกจ Latitude" }),
     activity_lng: z.number().min(1, { message: "กรุณากรอก Longitude" }),
     activity_radius_meter: z.number().min(1, { message: "กรุณากรอกรัศมีกิจกรรม" }),

@@ -249,3 +249,24 @@ export interface ICardItem {
     color: string;
     icon: React.ReactNode;
 }
+
+
+export interface IStudentSummaryResponse {
+  detail: string;
+  year_status: string;
+  count_student: number;
+  faculty: IFacultyStudentSummary[];
+}
+
+export interface IFacultyStudentSummary {
+  faculty_id: number;
+  faculty_name: string;
+  count_student: number;
+  majors: IMajorStudentSummary[];
+}
+
+export interface IMajorStudentSummary {
+  major_id: number;
+  major_name: string;
+  count_student: number;
+}

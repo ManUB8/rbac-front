@@ -28,7 +28,7 @@ export interface IUser {
 
 export interface IUserTotalRole {
     temporary_admin: number;
-    student: number;
+    student:number;
     admin: number;
 }
 

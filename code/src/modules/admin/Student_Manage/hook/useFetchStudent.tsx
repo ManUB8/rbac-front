@@ -48,11 +48,32 @@ export const useMasterFunctionStudent = () => {
     });
 
     const student_data = data?.data ?? [];
-    const total_student = data?.total_all ?? 0;
+    const total_student_all = data?.total_all ?? 0;
+    const total_student = {
+        student_1:
+            data?.year_status_summary?.find(
+                (item) => item.year_status === "ปี 1"
+            )?.count_student ?? 0,
+
+        student_2:
+            data?.year_status_summary?.find(
+                (item) => item.year_status === "ปี 2"
+            )?.count_student ?? 0,
+
+        student_3:
+            data?.year_status_summary?.find(
+                (item) => item.year_status === "ปี 3"
+            )?.count_student ?? 0,
+
+        student_4:
+            data?.year_status_summary?.find(
+                (item) => item.year_status === "ปี 4"
+            )?.count_student ?? 0,
+    };
     const loading_student = isLoading || isFetching;
 
     const reload = useCallback(() => {
-        queryClient.invalidateQueries({ queryKey: ["students"] });
+        queryClient.invalidateQueries({ queryKey: ["students-list"] });
     }, [queryClient]);
 
     const handleChangeSearch = useCallback((text: string) => {
@@ -97,6 +118,7 @@ export const useMasterFunctionStudent = () => {
                 });
                 return;
             }
+            queryClient.invalidateQueries({ queryKey: ["students-list"] });
             await DeleteStudent(data_delete);
 
             setFlash({
@@ -134,7 +156,9 @@ export const useMasterFunctionStudent = () => {
     return {
         student_data,
         loading_student,
+        total_student_all,
         total_student,
+
 
         setConfirmPopup,
         handleChangeSearch,
@@ -339,13 +363,62 @@ export const useMasterFunctionStudentFromFetch = ({
             });
 
             setOpenStudentModal(false);
-        } catch (error) {
+        }
+        catch (error: any) {
             console.error(error);
-            setFlash({
-                type_severity: "error",
-                title: "",
-                content: "เกิดข้อผิดพลาด ไม่สามารถบันทึกข้อมูลได้",
-            });
+
+            const status = error?.response?.status;
+            const detail = error?.response?.data?.detail;
+
+            if (status === 500) {
+                setFlash({
+                    type_severity: "warning",
+                    title: "",
+                    content: detail || "ข้อมูลไม่ถูกต้อง",
+                });
+            } else if (status === 500) {
+                setFlash({
+                    type_severity: "warning",
+                    title: "",
+                    content: "กรุณาเข้าสู่ระบบใหม่",
+                });
+            } else if (status === 500) {
+                setFlash({
+                    type_severity: "warning",
+                    title: "",
+                    content: "คุณไม่มีสิทธิ์ทำรายการนี้",
+                });
+            } else if (status === 500) {
+                setFlash({
+                    type_severity: "error",
+                    title: "",
+                    content: "ไม่พบข้อมูลที่ต้องการ",
+                });
+            } else if (status === 500) {
+                setFlash({
+                    type_severity: "warning",
+                    title: "",
+                    content: detail || "ข้อมูลซ้ำในระบบ",
+                });
+            } else if (status === 500) {
+                setFlash({
+                    type_severity: "warning",
+                    title: "",
+                    content: detail || "ข้อมูลไม่ครบถ้วน",
+                });
+            } else if (status >= 500) {
+                setFlash({
+                    type_severity: "error",
+                    title: "",
+                    content: "เซิร์ฟเวอร์ขัดข้อง กรุณาลองใหม่อีกครั้ง",
+                });
+            } else {
+                setFlash({
+                    type_severity: "error",
+                    title: "",
+                    content: detail || "เกิดข้อผิดพลาด ไม่สามารถบันทึกข้อมูลได้",
+                });
+            }
         }
     }, [getValues, isCreate, reset, setFlash, setOpenStudentModal]);
 

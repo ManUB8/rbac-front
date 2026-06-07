@@ -197,7 +197,7 @@ export const useFetchEventRegistrants = () => {
     const total_all = query.data?.total_all ?? 0;
     const event_loading = query.isLoading
     const event_fetch = query.isFetched
-
+    console.log(event_data)
 
     return {
         navigate,
