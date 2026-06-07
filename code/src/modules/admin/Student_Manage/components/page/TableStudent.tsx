@@ -144,7 +144,7 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                 <TablePagination
                     rowsPerPageOptions={[20, 50, 100]}
                     component="div"
-                    count={masterController.total_student}
+                    count={masterController.total_student_all}
                     rowsPerPage={masterController.searchState.limit}
                     page={masterController.searchState.page - 1}
                     onPageChange={handleChangePage}

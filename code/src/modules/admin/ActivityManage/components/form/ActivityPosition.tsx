@@ -14,6 +14,7 @@ import MyLocationOutlinedIcon from "@mui/icons-material/MyLocationOutlined";
 import { NumericFormat } from "react-number-format";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Controller } from "react-hook-form";
+import { target_group } from "../../utils/activity_option";
 
 export interface IActivityPositionProps {
     MasterController: IuseMasterFunctionActivityFromFetch;
@@ -223,7 +224,7 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
 
                 <Box
                     sx={{
-                        minWidth: 240,
+                        minWidth: 100,
                         flex: 1,
                     }}
                 >
@@ -242,10 +243,39 @@ const ActivityPosition: React.FunctionComponent<IActivityPositionProps> = ({
                         renderInput={(p) => (
                             <TextField
                                 {...p}
-                                label="ประเภทชั่วโมง"
+                                label="ประเภท"
                                 variant="outlined"
                                 error={!!errors?.hour_type_id}
                                 helperText={errors?.hour_type_id?.message as string }
+                            />
+                        )}
+                    />
+                </Box>
+                <Box 
+                    sx={{
+                        minWidth: 100,
+                        flex: 1,
+                    }}>
+                    
+                <Autocomplete
+                        fullWidth
+                        options={target_group}
+                        getOptionLabel={(option) => option.label}
+                        value={
+                            target_group.find(
+                                (item) => item.id === getValues("target_group")
+                            ) ?? null
+                        }
+                        onChange={(_, v) => {
+                            setValue("target_group", v?.id ?? "");
+                        }}
+                        renderInput={(p) => (
+                            <TextField
+                                {...p}
+                                label="กลุ่มนิสิต"
+                                variant="outlined"
+                                error={!!errors?.target_group}
+                                helperText={errors?.target_group?.message as string }
                             />
                         )}
                     />

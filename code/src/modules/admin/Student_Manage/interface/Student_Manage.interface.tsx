@@ -9,11 +9,18 @@ export interface IStudentSearch {
 
 }
 
+export interface IYearStatusSummary {
+    year_status: string;
+    count_student: number;
+}
+
+
 export interface IStudentListResponse {
     detail: string;
     page: number;
     limit: number;
-    total_all: number;
+    total_all:number;
+    year_status_summary: IYearStatusSummary[];
     total_page: number;
     data: IStudentItem[];
 }
@@ -35,7 +42,7 @@ export interface IStudentItem {
     img_stu: string | null;
 
     position: IStudentPosition | null;
-    year_status: string | null;
+    year_status: string ;
 
     created_by_id: number;
     created_by_name: string;
@@ -80,7 +87,7 @@ export const IStudenItemDefule:IStudentItem={
     major_name: "",
     img_stu: null,
     position: null,
-    year_status: null,
+    year_status: "",
     created_by_id: 0,
     created_by_name: "",
     updated_by_id: 0,

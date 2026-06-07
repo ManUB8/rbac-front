@@ -22,7 +22,7 @@ const FilterStudent: React.FC<IFilterStudentProps> = ({ masterController }) => {
                 <Grid container spacing={2} sx={{ mt: 1 }}>
                     <Grid size={{ xs: 12, md: 3 }}>
                         <TextField
-                            label="ค้นหา (รหัส/ชื่อ/คณะ/สาขา)"
+                            label="รหัสนิสิต / ชื่อนิสิต"
                             variant="outlined"
                             autoComplete="off"
                             fullWidth

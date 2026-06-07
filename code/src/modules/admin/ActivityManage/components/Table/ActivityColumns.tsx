@@ -197,11 +197,25 @@ export function useMasterActivityColumns(MasterActivity: IuseActivityFetch, Mast
         {
             id: "location",
             label: "สถานที่",
-            minWidth: 200,
+            minWidth: 150,
             align: "left",
             render: (row) => (
                 <Typography variant="subtitle2">{row.location || "-"}</Typography>
             ),
+        },
+        {
+            id: "target_group",
+            label: "นิสิต",
+            minWidth: 100,
+            align: "center",
+            render: (row) => 
+                <Chip
+                    label={MasterActivity.getTargetGroupLabel(row.target_group)}
+                    size="small"
+                    sx={{
+                        fontWeight: 700,
+                    }}
+                />
         },
         {
             id: "register_text",
