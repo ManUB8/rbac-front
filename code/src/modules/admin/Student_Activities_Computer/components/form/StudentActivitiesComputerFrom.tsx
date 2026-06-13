@@ -1,235 +1,40 @@
-import React, { useMemo, useRef, useState } from "react";
+import React from "react";
 import {
     Alert,
     Autocomplete,
-    Avatar,
     Box,
     Button,
     Card,
     CardContent,
-    Chip,
-    CircularProgress,
     Grid,
     Stack,
     TextField,
     Typography,
     alpha,
 } from "@mui/material";
-import LoginIcon from "@mui/icons-material/Login";
-import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
-import { useFetchActivityFilter } from "../../../ActivityManage/hook/useFetchActivity";
-import {
-    CheckInStudentActivitiesComputer,
-    CheckOutStudentActivitiesComputer,
-} from "../../service/StudentActivitiesComputerApi";
-import type { IActivityFilter } from "../../../ActivityManage/interface/ActivityManage.interface";
+import GroupsIcon from "@mui/icons-material/Groups";
+import SchoolIcon from "@mui/icons-material/School";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+
 import DetailStuActivity from "./DetailStuActivityComputer";
-import type { IStudentActivityCheckItem } from "../../interface/StudentActivitiesComputer.interface";
 import QrScannerDialog from "../../../Qr_Scanner/components/page/QrScannerDialog";
-
-type Mode = "checkin" | "checkout";
-
-interface QRPayload {
-    student_code: string;
-    lat?: number;
-    lng?: number;
-}
-
+import { useStudentActivitiesComputerForm } from "../../hook/useFetchStudentActivitiesComputer";
+import type { IActivityFilter } from "../../interface/StudentActivitiesComputer.interface";
 const StudentActivitiesComputerFrom: React.FC = () => {
-    const { activity_filter, activity_filter_Loading } = useFetchActivityFilter();
-    const [openScanner, setOpenScanner] = useState(false);
-    const scanTimerRef = useRef<number | null>(null);
-
-    const [mode, setMode] = useState<Mode>("checkin");
-    const [activityId, setActivityId] = useState<number | null>(null);
-    const [qrText, setQrText] = useState("");
-
-    const [lastLat, setLastLat] = useState<number | null>(13.7521);
-    const [lastLng, setLastLng] = useState<number | null>(100.65289);
-
-    const [loadingSubmit, setLoadingSubmit] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-
-    const [latestStudent, setLatestStudent] =
-        useState<IStudentActivityCheckItem | null>(null);
-
-    const selectedActivity = useMemo(() => {
-        return activity_filter?.find((item: IActivityFilter) => item.id === activityId) ?? null;
-    }, [activity_filter, activityId]);
-
-    const parseQR = (value: string): QRPayload => {
-        const text = value.trim();
-
-        if (text.includes("|")) {
-            const [student_code, lat, lng] = text.split("|");
-
-            return {
-                student_code: student_code.trim(),
-                lat: Number(lat),
-                lng: Number(lng),
-            };
-        }
-
-        try {
-            const parsed = JSON.parse(text);
-
-            return {
-                student_code: parsed.student_code ?? "",
-                lat: Number(parsed.lat),
-                lng: Number(parsed.lng ?? parsed.ng),
-            };
-        } catch {
-            return {
-                student_code: text,
-            };
-        }
-    };
-
-    const isReadyToSubmit = (value: string) => {
-        const text = value.trim();
-
-        const isShortQR = text.split("|").length === 3;
-        const isJsonComplete = text.startsWith("{") && text.endsWith("}");
-        const isStudentCode = /^[0-9]{8}$/.test(text);
-
-        return isShortQR || isJsonComplete || isStudentCode;
-    };
-
-    const handleGetLocation = () => {
-        navigator.geolocation.getCurrentPosition((position) => {
-            setLastLat(position.coords.latitude);
-            setLastLng(position.coords.longitude);
-        });
-    };
-
-    const speechUnlockedRef = useRef(false);
-
-    const unlockSpeech = () => {
-        if (!("speechSynthesis" in window)) return;
-
-        speechUnlockedRef.current = true;
-
-        const utterance = new SpeechSynthesisUtterance(" ");
-        utterance.lang = "th-TH";
-        utterance.volume = 0;
-
-        window.speechSynthesis.speak(utterance);
-    };
-
-    const speakMessage = (message: string) => {
-        if (!message) return;
-        if (!("speechSynthesis" in window)) return;
-
-        if (!speechUnlockedRef.current) return;
-
-        window.speechSynthesis.cancel();
-
-        setTimeout(() => {
-            const utterance = new SpeechSynthesisUtterance(message);
-            utterance.lang = "th-TH";
-            utterance.rate = 1;
-            utterance.pitch = 1;
-            utterance.volume = 1;
-
-            window.speechSynthesis.speak(utterance);
-        }, 150);
-    };
-
-    const handleResultMessage = (type: "success" | "error", message: string) => {
-        if (type === "success") {
-            setSuccessMessage(message);
-            setErrorMessage("");
-        } else {
-            setErrorMessage(message);
-            setSuccessMessage("");
-        }
-
-        speakMessage(message);
-    };
-
-    const handleSubmit = async (rawValue = qrText) => {
-        if (loadingSubmit) return;
-
-        setErrorMessage("");
-        setSuccessMessage("");
-
-        if (!activityId) {
-            setErrorMessage("กรุณาเลือกกิจกรรมก่อน");
-            return;
-        }
-
-        const payload = parseQR(rawValue);
-
-        if (!payload.student_code) {
-            setErrorMessage("กรุณาสแกน QR หรือกรอกรหัสนิสิต");
-            return;
-        }
-
-        const lat = payload.lat ?? lastLat;
-        const lng = payload.lng ?? lastLng;
-
-        if (!lat || !lng) {
-            setErrorMessage("ไม่พบพิกัด กรุณากดขอตำแหน่งก่อน");
-            setQrText("");
-            return;
-        }
-
-        try {
-            setLoadingSubmit(true);
-
-            if (mode === "checkin") {
-                const res = await CheckInStudentActivitiesComputer({
-                    student_code: payload.student_code,
-                    activity_id: activityId,
-                    created_by_name: localStorage.getItem("account_name") || "admin",
-                    checkin_lat: lat,
-                    checkin_lng: lng,
-                });
-
-                const message = res.detail || "เช็คอินสำเร็จ";
-
-                setLatestStudent(res.data);
-                handleResultMessage("success", message);
-            } else {
-                const res = await CheckOutStudentActivitiesComputer({
-                    student_code: payload.student_code,
-                    activity_id: activityId,
-                    updated_by_name: localStorage.getItem("account_name") || "admin",
-                    checkout_lat: lat,
-                    checkout_lng: lng,
-                });
-
-                const message = res.detail || "เช็คเอาท์สำเร็จ";
-
-                setLatestStudent(res.data);
-                handleResultMessage("success", message);
-            }
-
-            setLastLat(lat);
-            setLastLng(lng);
-            setQrText("");
-        } catch (error: any) {
-            const message = error?.response?.data?.detail || "เกิดข้อผิดพลาด";
-
-            handleResultMessage("error", message);
-            setQrText("");
-        } finally {
-            setLoadingSubmit(false);
-        }
-    };
+    const controller = useStudentActivitiesComputerForm();
 
     return (
         <>
             <QrScannerDialog
-                open={openScanner}
-                onClose={() => setOpenScanner(false)}
+                open={controller.openScanner}
+                onClose={() => controller.setOpenScanner(false)}
                 onScanSuccess={(value) => {
-                    setQrText(value);
-                    if (isReadyToSubmit(value)) {
-                        handleSubmit(value);
+                    controller.handleQrChange(value);
+
+                    if (controller.isReadyToSubmit(value)) {
+                        controller.handleSubmit(value);
                     }
                 }}
             />
@@ -241,10 +46,7 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                         xs: "1fr",
                         md: "minmax(0, 1.2fr) minmax(320px, 0.8fr)",
                     },
-                    gap: {
-                        xs: 2,
-                        md: 3,
-                    },
+                    gap: { xs: 2, md: 3 },
                     alignItems: "start",
                 }}
             >
@@ -257,124 +59,204 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                         bgcolor: "background.paper",
                     }}
                 >
-                    <CardContent sx={{ p: { xs: 2, md: 3 } }}>
-                        <Stack spacing={2.25}>
-                            {errorMessage && (
-                                <Alert severity="error">{errorMessage}</Alert>
-                            )}
+                    <Box
+                        sx={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            border: "1px solid",
+                            borderColor: "divider",
+                            borderRadius: 2.5,
+                            overflow: "hidden",
+                            mt: 2,
+                            mx: 2,
+                        }}
+                    >
+                        <Button
+                            startIcon={<GroupsIcon />}
+                            onClick={() => {
+                                controller.unlockSpeech();
+                                controller.setMode("checkin");
+                            }}
+                            sx={{
+                                height: { xs: 48, md: 52 },
+                                borderRadius: 0,
+                                bgcolor: (theme) =>
+                                    controller.mode === "checkin"
+                                        ? alpha(theme.palette.primary.main, 0.1)
+                                        : "transparent",
+                                color:
+                                    controller.mode === "checkin"
+                                        ? "primary.main"
+                                        : "text.secondary",
+                                borderRight: "1px solid",
+                                borderColor: "divider",
+                                fontWeight: 700,
+                            }}
+                        >
+                            เช็คอิน
+                        </Button>
 
-                            {successMessage && (
-                                <Alert severity="success">{successMessage}</Alert>
-                            )}
+                        <Button
+                            startIcon={<LogoutIcon />}
+                            onClick={() => {
+                                controller.unlockSpeech();
+                                controller.setMode("checkout");
+                            }}
+                            sx={{
+                                height: { xs: 48, md: 52 },
+                                borderRadius: 0,
+                                bgcolor: (theme) =>
+                                    controller.mode === "checkout"
+                                        ? alpha(theme.palette.primary.main, 0.1)
+                                        : "transparent",
+                                color:
+                                    controller.mode === "checkout"
+                                        ? "primary.main"
+                                        : "text.secondary",
+                                fontWeight: 700,
+                            }}
+                        >
+                            เช็คเอาท์
+                        </Button>
+                    </Box>
+
+                    <CardContent sx={{ p: { xs: 2, md: 3 } }}>
+                        <Stack spacing={2}>
+                            <Grid container direction="row" spacing={2}>
+                                <Grid size={{ xs: 4, md: 4 }}>
+                                    <Button
+                                        fullWidth
+                                        startIcon={<SchoolIcon />}
+                                        variant={
+                                            controller.targetGroup === "freshman"
+                                                ? "contained"
+                                                : "outlined"
+                                        }
+                                        onClick={() =>
+                                            controller.handleChangeTargetGroup("freshman")
+                                        }
+                                        sx={{
+                                            ...(controller.targetGroup === "freshman"
+                                                ? {
+                                                    bgcolor: "info.main",
+                                                    color: "primary.contrastText",
+
+                                                    "&:hover": {
+                                                        bgcolor: "primary.light",
+                                                    },
+                                                }
+                                                : {
+                                                    borderColor: "action.selected",
+                                                    color: "primary.light",
+                                                }),
+                                        }}
+                                    >
+                                        รุ่นน้อง
+                                    </Button>
+                                </Grid>
+
+                                <Grid size={{ xs: 4, md: 4 }}>
+                                    <Button
+                                        fullWidth
+                                        startIcon={<WorkspacePremiumIcon />}
+                                        variant={
+                                            controller.targetGroup === "senior"
+                                                ? "contained"
+                                                : "outlined"
+                                        }
+                                        onClick={() =>
+                                            controller.handleChangeTargetGroup("senior")
+                                        }
+                                        sx={{
+                                            ...(controller.targetGroup === "senior"
+                                                ? {
+                                                    bgcolor: "info.main",
+                                                    color: "primary.contrastText",
+
+                                                    "&:hover": {
+                                                        bgcolor: "primary.light",
+                                                    },
+                                                }
+                                                : {
+                                                    borderColor: "action.selected",
+                                                    color: "primary.light",
+                                                }),
+                                        }}
+                                    >
+                                        รุ่นพี่
+                                    </Button>
+                                </Grid>
+
+                                <Grid size={{ xs: 4, md: 4 }}>
+                                    <Button
+                                        fullWidth
+                                        startIcon={<GroupsIcon />}
+                                        variant={
+                                            controller.targetGroup === "all"
+                                                ? "contained"
+                                                : "outlined"
+                                        }
+                                        onClick={() =>
+                                            controller.handleChangeTargetGroup("all")
+                                        }
+                                        sx={{
+                                            ...(controller.targetGroup === "all"
+                                                ? {
+                                                    bgcolor: "info.main",
+                                                    color: "primary.contrastText",
+
+                                                    "&:hover": {
+                                                        bgcolor: "primary.light",
+                                                    },
+                                                }
+                                                : {
+                                                    borderColor: "action.selected",
+                                                    color: "primary.light",
+                                                }),
+                                        }}
+                                    >
+                                        ทั้งหมด
+                                    </Button>
+                                </Grid>
+                            </Grid>
 
                             <Autocomplete
                                 fullWidth
-                                loading={activity_filter_Loading}
-                                options={activity_filter ?? []}
-                                value={selectedActivity}
-                                getOptionLabel={(option: IActivityFilter) =>
-                                    option.name ?? ""
-                                }
+                                loading={controller.activity_filter_Loading}
+                                options={controller.filteredActivities}
+                                value={controller.selectedActivity}
+                                getOptionLabel={(option) => option.activity_name ?? ""}
                                 isOptionEqualToValue={(option, value) =>
-                                    option.id === value.id
+                                    option.activity_id === value.activity_id
                                 }
                                 onChange={(_, newValue) => {
-                                    setActivityId(newValue?.id ?? null);
-                                    if (newValue?.id) setErrorMessage("");
+                                    controller.setActivityId(newValue?.activity_id ?? null);
                                 }}
                                 renderInput={(params) => (
-                                    <TextField {...params} label="เลือกกิจกรรม" />
+                                    <TextField
+                                        {...params}
+                                        label="เลือกกิจกรรมของวันนี้"
+                                        helperText="แสดงเฉพาะกิจกรรมของวันนี้ตามกลุ่มที่เลือก"
+                                    />
                                 )}
                             />
 
-                            <Box
+                            <Button
+                                fullWidth
+                                variant="outlined"
+                                startIcon={<MyLocationIcon />}
+                                onClick={() => {
+                                    controller.unlockSpeech();
+                                    controller.handleGetLocation();
+                                }}
                                 sx={{
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr 1fr",
-                                    border: "1px solid",
-                                    borderColor: "divider",
+                                    height: 46,
                                     borderRadius: 2.5,
-                                    overflow: "hidden",
+                                    fontWeight: 700,
                                 }}
                             >
-                                <Button
-                                    startIcon={<LoginIcon />}
-                                    onClick={() => {
-                                        unlockSpeech();
-                                        setMode("checkin");
-                                    }}
-                                    sx={{
-                                        height: { xs: 48, md: 52 },
-                                        borderRadius: 0,
-                                        bgcolor: (theme) =>
-                                            mode === "checkin"
-                                                ? alpha(theme.palette.primary.main, 0.1)
-                                                : "transparent",
-                                        color:
-                                            mode === "checkin"
-                                                ? "primary.main"
-                                                : "text.secondary",
-                                        borderRight: "1px solid",
-                                        borderColor: "divider",
-                                        fontWeight: 700,
-                                    }}
-                                >
-                                    เช็คอิน
-                                </Button>
-
-                                <Button
-                                    startIcon={<LogoutIcon />}
-                                    onClick={() => {
-                                        unlockSpeech();
-                                        setMode("checkout");
-                                    }}
-                                    // onClick={() => setMode("checkout")}
-                                    sx={{
-                                        height: { xs: 48, md: 52 },
-                                        borderRadius: 0,
-                                        bgcolor: (theme) =>
-                                            mode === "checkout"
-                                                ? alpha(theme.palette.primary.main, 0.1)
-                                                : "transparent",
-                                        color:
-                                            mode === "checkout"
-                                                ? "primary.main"
-                                                : "text.secondary",
-                                        fontWeight: 700,
-                                    }}
-                                >
-                                    เช็คเอาท์
-                                </Button>
-                            </Box>
-
-                            <Box
-                                sx={{
-                                    display: "grid",
-                                    gridTemplateColumns: {
-                                        px: 1.5,
-                                        py: 1,
-                                    },
-                                    gap: 1.5,
-                                }}
-                            >
-                                <Button
-                                    fullWidth
-                                    variant="outlined"
-                                    startIcon={<MyLocationIcon />}
-                                    // onClick={handleGetLocation}
-                                    onClick={() => {
-                                        unlockSpeech();
-                                        handleGetLocation();
-                                    }}
-                                    sx={{
-                                        height: 46,
-                                        borderRadius: 2.5,
-                                        fontWeight: 700,
-                                    }}
-                                >
-                                    ขอตำแหน่ง
-                                </Button>
-                            </Box>
+                                ขอตำแหน่ง
+                            </Button>
 
                             <Box
                                 sx={{
@@ -393,8 +275,10 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                                     }}
                                 >
                                     พิกัดล่าสุด:{" "}
-                                    {lastLat && lastLng
-                                        ? `|${lastLat.toFixed(5)}|${lastLng.toFixed(5)}`
+                                    {controller.lastLat && controller.lastLng
+                                        ? `|${controller.lastLat.toFixed(
+                                            5
+                                        )}|${controller.lastLng.toFixed(5)}`
                                         : "-"}
                                 </Typography>
                             </Box>
@@ -403,23 +287,10 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                                 <TextField
                                     fullWidth
                                     label="รหัสนิสิต (สแกน QR หรือพิมพ์)"
-                                    value={qrText}
-                                    onChange={(e) => {
-                                        const value = e.target.value;
-                                        setQrText(value);
-
-                                        if (scanTimerRef.current) {
-                                            window.clearTimeout(scanTimerRef.current);
-                                        }
-
-                                        scanTimerRef.current = window.setTimeout(() => {
-                                            const trimmed = value.trim();
-
-                                            if (trimmed && isReadyToSubmit(trimmed)) {
-                                                handleSubmit(trimmed);
-                                            }
-                                        }, 500);
-                                    }}
+                                    value={controller.qrText}
+                                    onChange={(e) =>
+                                        controller.handleQrChange(e.target.value)
+                                    }
                                 />
 
                                 <Typography
@@ -438,11 +309,10 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                             <Button
                                 fullWidth
                                 variant="contained"
-                                disabled={loadingSubmit}
-                                // onClick={() => handleSubmit()}
+                                disabled={controller.loadingSubmit}
                                 onClick={() => {
-                                    unlockSpeech();
-                                    handleSubmit();
+                                    controller.unlockSpeech();
+                                    controller.handleSubmit();
                                 }}
                                 sx={{
                                     height: { xs: 46, md: 48 },
@@ -450,9 +320,9 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                                     fontWeight: 800,
                                 }}
                             >
-                                {loadingSubmit
+                                {controller.loadingSubmit
                                     ? "กำลังบันทึก..."
-                                    : mode === "checkin"
+                                    : controller.mode === "checkin"
                                         ? "บันทึกเช็คอิน"
                                         : "บันทึกเช็คเอาท์"}
                             </Button>
@@ -463,16 +333,11 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                 <Box
                     sx={{
                         minWidth: 0,
-                        position: {
-                            xs: "static",
-                            md: "sticky",
-                        },
-                        top: {
-                            md: 16,
-                        },
+                        position: { xs: "static", md: "sticky" },
+                        top: { md: 16 },
                     }}
                 >
-                    <DetailStuActivity student={latestStudent} />
+                    <DetailStuActivity student={controller.latestStudent} />
                 </Box>
             </Box>
         </>

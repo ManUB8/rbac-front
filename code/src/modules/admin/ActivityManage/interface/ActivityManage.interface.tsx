@@ -9,6 +9,9 @@ export interface IActivitySearch {
   target_group: string;
 }
 
+
+export type TargetGroupFilter = "freshman" | "senior" | "all";
+
 export interface IHourType {
   hour_type_id: string;
   hour_type_name: string;
@@ -140,6 +143,9 @@ export interface IActivityFilter {
   id: number;
   name: string;
   code: string;
+      target_group:TargetGroupFilter;
+      start_date: string;
+      end_date: string;
 }
 
 export interface IActivityFilterAll {
@@ -148,4 +154,26 @@ export interface IActivityFilterAll {
   activity_status: IActivityType[];
   require_registration: IActivityType[];
   target_group:IActivityType[];
+}
+
+export interface IActivityFilterByDate {
+    activity_id: number;
+    activity_name: string;
+    activity_date: string;
+    start_time: string;
+    end_time: string;
+    location: string;
+
+    check_type: "checkin_only" | "checkout_only" | "checkin_checkout";
+    target_group: "freshman" | "senior" | "all";
+
+    activity_lat: number;
+    activity_lng: number;
+    activity_radius_meter: number;
+
+    require_registration: boolean;
+    max_participants: number | null;
+    registered_count: number;
+    register_text: string | null;
+    is_full: boolean;
 }
