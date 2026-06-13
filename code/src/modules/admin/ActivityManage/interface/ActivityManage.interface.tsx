@@ -136,10 +136,16 @@ export interface IActivityType {
   label: string;
 }
 
+// export interface IActivityFilter {
+//   id: number;
+//   name: string;
+//   code: string;
+// }
 export interface IActivityFilter {
-  id: number;
-  name: string;
-  code: string;
+    id: number;
+    name: string;
+    check_type?: string;
+    activity_radius_meter?: number;
 }
 
 export interface IActivityFilterAll {

@@ -206,8 +206,30 @@ export const useMasterFunctionStudentFromFetch = ({
     const [, setConfirmPopup] = useAtom(confirmPopupAtom);
     const [, setFlash] = useAtom(flashAlertAtom);
 
+    // const methods = useForm<IStudentItem>({
+    //     resolver: zodResolver(MasterStudentZod as any) as Resolver<IStudentItem>,
+    //     defaultValues: IStudenItemDefule,
+    //     shouldFocusError: true,
+    // });
     const methods = useForm<IStudentItem>({
-        resolver: zodResolver(MasterStudentZod as any) as Resolver<IStudentItem>,
+        resolver: async (values, context, options) => {
+            const data = {
+                ...values,
+                user: {
+                    ...values.user,
+                    confirm_password:
+                        Id === 0
+                            ? values.user?.confirm_password
+                            : values.user?.password,
+                },
+            };
+
+            return zodResolver(MasterStudentZod as any)(
+                data,
+                context,
+                options
+            );
+        },
         defaultValues: IStudenItemDefule,
         shouldFocusError: true,
     });

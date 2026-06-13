@@ -221,6 +221,13 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
         }
     };
 
+    const getCheckTypeText = (checkType?: string) => {
+        if (checkType === "checkin_checkout") return "เช็คอินและเช็คเอาท์";
+        if (checkType === "checkin_only") return "เช็คอินอย่างเดียว";
+        if (checkType === "checkout_only") return "เช็คเอาท์อย่างเดียว";
+        return "-";
+    };
+
     return (
         <>
             <QrScannerDialog
@@ -272,18 +279,22 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
                                 loading={activity_filter_Loading}
                                 options={activity_filter ?? []}
                                 value={selectedActivity}
-                                getOptionLabel={(option: IActivityFilter) =>
-                                    option.name ?? ""
-                                }
-                                isOptionEqualToValue={(option, value) =>
-                                    option.id === value.id
-                                }
+                                getOptionLabel={(option: IActivityFilter) => option.name ?? ""}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
                                 onChange={(_, newValue) => {
                                     setActivityId(newValue?.id ?? null);
                                     if (newValue?.id) setErrorMessage("");
                                 }}
                                 renderInput={(params) => (
-                                    <TextField {...params} label="เลือกกิจกรรม" />
+                                    <TextField
+                                        {...params}
+                                        label="เลือกกิจกรรม"
+                                        helperText={
+                                            selectedActivity
+                                                ? `รัศมี ${selectedActivity.activity_radius_meter ?? "-"} เมตร • ประเภท ${getCheckTypeText(selectedActivity.check_type)}`
+                                                : "เลือกกิจกรรมเพื่อดูรัศมีและประเภทการลงทะเบียน"
+                                        }
+                                    />
                                 )}
                             />
 
