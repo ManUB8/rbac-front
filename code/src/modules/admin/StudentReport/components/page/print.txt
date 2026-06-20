@@ -1,0 +1,247 @@
+import React from "react";
+import type { IStudentActivityAllData, IStudentActivitySummaryResponse } from "../../interface/StudentReport.interface";
+import "../../utils/print.css";
+import { formatDateTH, formatDateThai, formatTimeRange } from "../../../../../shared/components/Date-Time/DateAndTime";
+
+interface StudentReportPrintProps {
+    student?: IStudentActivitySummaryResponse;
+}
+
+const StudentReportPrint: React.FC<StudentReportPrintProps> = ({ student }) => {
+    const activityList = student?.activity ?? [];
+
+    return (
+        <div id="student-report-print" className="print-area">
+            <div className="print-page">
+                <h4 className="print-title">
+                    บันทึก การเข้าร่วมโครงการ/กิจกรรม ที่ทำประโยชน์ต่อสังคมหรือสาธารณะ
+                    <br />
+                    ภาคเรียนที่............. ปีการศึกษา.............
+                </h4>
+
+                <table className="print-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                ชื่อโครงการ /กิจกรรม
+                                <br />
+                                ที่ทำประโยชน์ต่อสังคมหรือ
+                                <br />
+                                สาธารณะ
+                            </th>
+
+                            <th>
+                                สถานที่
+                                <br />
+                                ดำเนินโครงการ /กิจกรรม
+                            </th>
+
+                            <th>วัน / เดือน / ปี</th>
+
+                            <th>เวลา</th>
+
+                            <th>
+                                จำนวนชั่วโมง
+                                <br />
+                                (รวม) /วัน
+                            </th>
+
+                            <th>
+                                ลักษณะของกิจกรรม
+                                <br />
+                                (โดยละเอียด)
+                            </th>
+
+                            <th>
+                                ลายมือชื่อผู้รับรอง
+                                <br />
+                                (หัวหน้าหน่วยงานหรือ
+                                <br />
+                                ผู้ที่ได้รับมอบหมาย)
+                            </th>
+
+                            <th>
+                                ลายมือชื่อผู้รับรอง
+                                <br />
+                                (ผู้บริหารสถานศึกษาหรือ
+                                <br />
+                                ผู้ที่ได้รับมอบหมาย)
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {activityList.map((item) => (
+                            <tr key={item.student_activity_id}>
+                                <td>{item.activity_name ?? ""}</td>
+
+                                <td>{item.location ?? ""}</td>
+
+                                <td style={{ textAlign: "center" }}>
+                                    {item.activity_date
+                                        ? formatDateTH(item.activity_date)
+                                        : ""}
+                                </td>
+
+                                <td>{formatTimeRange(item.start_time, item.end_time) ?? ""}</td>
+
+                                <td style={{ textAlign: "center" }}>
+                                    {item.check_detail?.earned_hours ?? ""}
+                                </td>
+
+                                <td>{item.description ?? ""}</td>
+
+                                <td></td>
+
+                                <td></td>
+                            </tr>
+                        ))}
+
+                        {Array.from({
+                            length: Math.max(0, 4 - activityList.length),
+                        }).map((_, index) => (
+                            <tr key={`empty-${index}`}>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
+
+export default StudentReportPrint;
+
+
+.print-area {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    overflow: visible !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+
+  .print-area {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .print-page {
+    width: 100%;
+    padding: 0;
+    color: #000;
+    font-family: "TH SarabunPSK", sans-serif;
+  }
+
+  .print-title {
+    font-family: "TH SarabunPSK", sans-serif;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 6px 0 12px;
+    line-height: 1.25;
+  }
+
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .print-table th,
+  .print-table td {
+    font-family: "TH SarabunPSK", sans-serif;
+    border: 1px solid #000;
+    padding: 3px 5px;
+    font-size: 15px;
+    line-height: 1.05;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .print-table th {
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    height: 54px;
+  }
+
+  .print-table td {
+    vertical-align: top;
+    height: 78px;
+    font-weight: normal;
+  }
+
+  .print-table th:nth-child(1),
+  .print-table td:nth-child(1) {
+    width: 17%;
+  }
+
+  .print-table th:nth-child(2),
+  .print-table td:nth-child(2) {
+    width: 15%;
+  }
+
+  .print-table th:nth-child(3),
+  .print-table td:nth-child(3) {
+    width: 10%;
+  }
+
+  .print-table th:nth-child(4),
+  .print-table td:nth-child(4) {
+    width: 6%;
+    text-align: center;
+  }
+
+  .print-table th:nth-child(5),
+  .print-table td:nth-child(5) {
+    width: 9%;
+    text-align: center;
+  }
+
+  .print-table th:nth-child(6),
+  .print-table td:nth-child(6) {
+    width: 16%;
+  }
+
+  .print-table th:nth-child(7),
+  .print-table td:nth-child(7) {
+    width: 13.5%;
+  }
+
+  .print-table th:nth-child(8),
+  .print-table td:nth-child(8) {
+    width: 13.5%;
+  }
+}
+

@@ -5,6 +5,7 @@ export interface IStudentReportRequest {
   faculty_id: string;
   major_id: string;
   hour_type: string;
+  attendance_status: string;
 }
 
 export interface IStudentReportActivity {
@@ -130,4 +131,89 @@ export interface IStudentActivityCheckout {
   checkout_status_text: string | null;
   checkout_lat: number | null;
   checkout_lng: number | null;
+}
+
+export interface IStudentActivitySummaryApiResponse {
+    detail: string;
+    data: IStudentActivitySummaryResponse;
+}
+
+export interface IStudentActivitySummaryResponse {
+    student_id: number;
+    student_code: string;
+    prefix: string;
+
+    position_id: number;
+    position_name: string;
+    student_position_id: number;
+    position_start_date: string;
+    position_end_date: string;
+
+    full_name: string;
+    first_name: string;
+    last_name: string;
+
+    faculty_id: number;
+    faculty_name: string;
+
+    major_id: number;
+    major_name: string;
+
+    year_status: string;
+
+    total_activity: number;
+    total_hours: number;
+    total_volunteer_hours: number;
+    total_earned_hours: number;
+
+    activity: {
+        student_activity_id: number;
+
+        activity_id: number;
+        activity_name: string;
+        activity_date: string;
+        activity_time_text: string;
+
+        location: string;
+        activity_img: string;
+        description: string;
+
+        start_time: string;
+        end_time: string;
+
+        hours: number;
+        volunteer_hours: number;
+
+        hour_type_id: string;
+
+        check_type: string;
+        target_group: string;
+
+        require_registration: boolean;
+        max_participants: number;
+
+        check_detail: {
+            attendance_status: string;
+            registered_at: number;
+
+            earned_hours: number;
+            volunteer_hours: number;
+
+            checkin: {
+                checkin_at: number;
+                checkin_status: string;
+                checkin_status_text: string;
+                checkin_lat: number;
+                checkin_lng: number;
+            };
+
+            checkout: {
+                checkout_at: number;
+                checkout_status: string;
+                checkout_status_text: string;
+                checkout_lat: number;
+                checkout_lng: number;
+            };
+        };
+    }[];
 }

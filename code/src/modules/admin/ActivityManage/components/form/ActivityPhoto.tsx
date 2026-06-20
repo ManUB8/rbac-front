@@ -7,7 +7,7 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Swal from 'sweetalert2';
 import { CircularProgress } from '@mui/material';
-import { UploadImage } from '../../../../../shared/components/UploadImg/service/UploadImgApi';
+import { UploadImageActivity } from '../../../../../shared/components/UploadImg/service/UploadImgApi';
 
 type ActivityPhotoProps = {
     value: string;                 // URL หรือ base64 ของรูป
@@ -42,7 +42,7 @@ export const ActivityPhoto: React.FC<ActivityPhotoProps> = ({
         formData.append("file", file);
 
         try {
-            const uploadedUrl = await UploadImage(formData);
+            const uploadedUrl = await UploadImageActivity(formData);
             console.log("uploadedUrl", uploadedUrl);
 
             onChange(uploadedUrl.data.file_url);

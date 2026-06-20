@@ -1,4 +1,10 @@
+export const formatDateTH = (dateString?: string | null): string => {
+    if (!dateString) return "-";
 
+    const [year, month, day] = dateString.split("-");
+
+    return `${day}/${month}/${year}`;
+};
 
 export const formatDateThai = (dateString: string) => {
   if (!dateString) return "-";

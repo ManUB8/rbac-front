@@ -10,7 +10,7 @@ import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { searchStateStudentReport } from "./useContext";
 import { getAllStudentReport } from "../service/StudentReportApi";
-import type { IStudentActivityAllData, IStudentActivityAllResponse, IStudentReportResponse } from "../interface/StudentReport.interface";
+import type { IStudentActivityAllData, IStudentActivityAllResponse, IStudentActivitySummaryApiResponse, IStudentReportResponse } from "../interface/StudentReport.interface";
 
 
 export const useFetchStudentReport = () => {
@@ -28,7 +28,7 @@ export const useFetchStudentReport = () => {
         setVersion((v) => v + 1);
     }, []);
 
-    const query = useQuery<IStudentActivityAllResponse, Error>({
+    const query = useQuery<IStudentActivitySummaryApiResponse, Error>({
         queryKey: ["student-report", searchState],
         staleTime: 0,
         refetchOnMount: "always",
