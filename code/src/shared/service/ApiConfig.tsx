@@ -8,7 +8,8 @@ export const ApiConfig = {
     STUDENT_ACTIVITY_API: '/student_activities/v1',
     STUDENT_API_V2:  "/student/v2",
     POSITION_API:  "/position/v1",
-    UPLOAD_IMG_API:  "/upload/v1/image-activities",
+    UPLOAD_IMG_API:  "/upload/v1",
     DASHBOARD_API:  "/dashboard/v1",
     USER_API:"/user/v1",
+    MASETR_SHOP_API:"/shop/v1",
 }

@@ -28,6 +28,11 @@ import QrScannerPage from "../modules/admin/Qr_Scanner/page/QrScannerPage";
 
 
 // icon
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import FolderSharedOutlinedIcon from '@mui/icons-material/FolderSharedOutlined';
+import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import DocumentScannerOutlinedIcon from '@mui/icons-material/DocumentScannerOutlined';
 import InstallMobileOutlinedIcon from '@mui/icons-material/InstallMobileOutlined';
 import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined';
@@ -49,6 +54,9 @@ import GenerateQr from "../modules/admin/GenerateQr/page/GenerateQr";
 import StudentActivitiesManualPage from "../modules/admin/Student_Activities_Manual/page/StudentActivitiesManualPage";
 import StudentActivitiesComputerPage from "../modules/admin/Student_Activities_Computer/page/StudentActivitiesComputerPage";
 import User_ManagePage from "../modules/admin/User_Manage/page/User_ManagePage";
+import MasterCategoriesPage from "../modules/admin/Master_Sale/master_categories/page/MasterCategoriesPage";
+import MasterProductPage from "../modules/admin/Master_Sale/master_product/page/MasterProductPage";
+import StudentYearReportPage from "../modules/admin/ReportDashboard/page/StudentYearReportPage";
 export type UserRole = "admin" | "temporary_admin" | "student";
 export type RouteRole = "admin" | "student";
 
@@ -80,6 +88,7 @@ export const AppRoutes = {
   studentSummary: "/student/summary",
 
   // admin
+  adminStudentYearReport: "/admin/students-report",
   adminStudents: "/admin/students",
   adminStudents_last: "/admin/students-last",
   adminActivities: "/admin/activities",
@@ -94,6 +103,7 @@ export const AppRoutes = {
   adminEvent: "/admin/event",
   adminGenerateQr: "/admin/generate-qr",
   adminUser: "/admin/User",
+  adminShop: "/admin/shop",
 } as const;
 
 export const getDefaultRouteByRole = (role: UserRole | "") => {
@@ -160,6 +170,16 @@ export const routesConfig: {
       roles: ["student"],
       key: "student-summary",
       permissionKey: "student_summary",
+      withLayout: true,
+    },
+    {
+      path: AppRoutes.adminStudentYearReport,
+      element: <StudentYearReportPage />,
+      code: "admin-students-report",
+      name: "รายงานนิสิตในระบบ",
+      icon: <FolderSharedOutlinedIcon />,
+      roles: ["admin"],
+      key: "admin-students-report",
       withLayout: true,
     },
     {
@@ -244,7 +264,6 @@ export const routesConfig: {
         },
       ],
     },
-    
     {
       path: AppRoutes.adminEvent,
       element: null,
@@ -273,6 +292,38 @@ export const routesConfig: {
           icon: <PersonSearchOutlinedIcon />,
           roles: ["admin"],
           key: "student-report",
+          withLayout: true,
+        },
+      ],
+    },
+    {
+      path: AppRoutes.adminShop,
+      element: null,
+      code: "admin-shop-management",
+      name: "จัดการร้านค้า",
+      icon: <ShoppingBagOutlinedIcon />,
+      roles: ["admin"],
+      key: "admin-shop-management",
+      withLayout: true,
+      children: [
+        {
+          path: `${AppRoutes.adminShop}/categories`,
+          element: <MasterCategoriesPage />,
+          code: "shop-categories",
+          name: "หมวดหมู่สินค้า",
+          icon: <SellOutlinedIcon />,
+          roles: ["admin"],
+          key: "shop-categories",
+          withLayout: true,
+        },
+        {
+          path: `${AppRoutes.adminShop}/product`,
+          element: <MasterProductPage />,
+          code: "shop-product",
+          name: "จัดการสินค้า",
+          icon: <InventoryOutlinedIcon />,
+          roles: ["admin"],
+          key: "shop-product",
           withLayout: true,
         },
       ],
