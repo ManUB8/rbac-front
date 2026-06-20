@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Button, Chip, Grid, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-
 import type { IuseMasterFunctionStudent } from "../../hook/useFetchStudent";
 
 export interface IHeadStudentProps {
