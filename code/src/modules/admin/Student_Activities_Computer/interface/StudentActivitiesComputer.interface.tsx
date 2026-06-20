@@ -99,7 +99,12 @@ export interface IStudentActivityCheckOut {
   checkout_lng: number | null;
 }
 
-export type TargetGroupFilter = "freshman" | "senior" | "all";
+export type TargetGroupFilter = "freshman" | "senior" | "all" | null ;
+
+export interface IActivityFilterByDateResponse {
+  detail : string;
+  data: IActivityFilterByDate[];
+}
 
 export interface IActivityFilterByDate {
     activity_id: number;

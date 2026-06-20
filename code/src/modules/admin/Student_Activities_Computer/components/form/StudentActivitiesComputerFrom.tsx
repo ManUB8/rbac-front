@@ -16,14 +16,32 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import GroupsIcon from "@mui/icons-material/Groups";
 import SchoolIcon from "@mui/icons-material/School";
-import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+import LoginIcon from "@mui/icons-material/Login";
+import BoyIcon from '@mui/icons-material/Boy';
 
 import DetailStuActivity from "./DetailStuActivityComputer";
 import QrScannerDialog from "../../../Qr_Scanner/components/page/QrScannerDialog";
 import { useStudentActivitiesComputerForm } from "../../hook/useFetchStudentActivitiesComputer";
-import type { IActivityFilter } from "../../interface/StudentActivitiesComputer.interface";
+
+
+
+type Mode = "checkin" | "checkout";
+
+interface QRPayload {
+    student_code: string;
+    lat?: number;
+    lng?: number;
+}
+
 const StudentActivitiesComputerFrom: React.FC = () => {
     const controller = useStudentActivitiesComputerForm();
+
+    const getCheckTypeText = (checkType?: string) => {
+        if (checkType === "checkin_checkout") return "เช็คอินและเช็คเอาท์";
+        if (checkType === "checkin_only") return "เช็คอินอย่างเดียว";
+        if (checkType === "checkout_only") return "เช็คเอาท์อย่างเดียว";
+        return "-";
+    };
 
     return (
         <>
@@ -72,7 +90,7 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                         }}
                     >
                         <Button
-                            startIcon={<GroupsIcon />}
+                            startIcon={<LoginIcon />}
                             onClick={() => {
                                 controller.unlockSpeech();
                                 controller.setMode("checkin");
@@ -126,7 +144,7 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                                 <Grid size={{ xs: 4, md: 4 }}>
                                     <Button
                                         fullWidth
-                                        startIcon={<SchoolIcon />}
+                                        startIcon={<BoyIcon />}
                                         variant={
                                             controller.targetGroup === "freshman"
                                                 ? "contained"
@@ -158,7 +176,7 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                                 <Grid size={{ xs: 4, md: 4 }}>
                                     <Button
                                         fullWidth
-                                        startIcon={<WorkspacePremiumIcon />}
+                                        startIcon={<SchoolIcon />}
                                         variant={
                                             controller.targetGroup === "senior"
                                                 ? "contained"
@@ -225,6 +243,7 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                                 loading={controller.activity_filter_Loading}
                                 options={controller.filteredActivities}
                                 value={controller.selectedActivity}
+                                disabled={!controller.targetGroup}
                                 getOptionLabel={(option) => option.activity_name ?? ""}
                                 isOptionEqualToValue={(option, value) =>
                                     option.activity_id === value.activity_id
@@ -235,8 +254,12 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="เลือกกิจกรรมของวันนี้"
-                                        helperText="แสดงเฉพาะกิจกรรมของวันนี้ตามกลุ่มที่เลือก"
+                                        label="เลือกกิจกรรม"
+                                        helperText={
+                                            controller.selectedActivity
+                                                ? `รัศมี ${controller.selectedActivity.activity_radius_meter ?? "-"} เมตร • ประเภท ${getCheckTypeText(controller.selectedActivity.check_type)}`
+                                                : "เลือกกิจกรรมเพื่อดูรัศมีและประเภทการลงทะเบียน"
+                                        }
                                     />
                                 )}
                             />

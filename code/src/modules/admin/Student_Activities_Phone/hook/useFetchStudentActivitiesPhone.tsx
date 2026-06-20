@@ -26,7 +26,7 @@ export const useStudentActivitiesPhoneForm = () => {
     const scanTimerRef = useRef<number | null>(null);
 
     const [mode, setMode] = useState<ScanMode>("checkin");
-    const [targetGroup, setTargetGroup] = useState<TargetGroupFilter>("all");
+    const [targetGroup, setTargetGroup] = useState<TargetGroupFilter>(null);
     const [activityId, setActivityId] = useState<number | null>(null);
 
     const [qrText, setQrText] = useState("");

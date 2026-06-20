@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Chip, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Chip, IconButton, Stack, Switch, Typography } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import type { IuseActivityFetch, IuseMasterFunctionActivityFromFetch } from '../../hook/useFetchActivity';
 import type { IActivityItem } from '../../interface/ActivityManage.interface';
@@ -146,6 +146,31 @@ export function useMasterActivityColumns(MasterActivity: IuseActivityFetch, Mast
             ),
         },
         {
+            id: "activity_status",
+            label: "สถานะ",
+            minWidth: 120,
+            align: "left",
+            render: (row) => (
+                <Switch
+                    checked={Boolean(row.activity_status)}
+                    onChange={(e) =>
+                        MasterController.handleToggleActivityStatus(
+                            row.activity_id,
+                            e.target.checked
+                        )
+                    }
+                    sx={{
+                        "& .MuiSwitch-switchBase.Mui-checked": {
+                            color: "success.main",
+                        },
+                        "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                            backgroundColor: "success.main",
+                        },
+                    }}
+                />
+            ),
+        },
+        {
             id: "activity_date",
             label: "วันที่",
             minWidth: 180,
@@ -208,7 +233,7 @@ export function useMasterActivityColumns(MasterActivity: IuseActivityFetch, Mast
             label: "นิสิต",
             minWidth: 100,
             align: "center",
-            render: (row) => 
+            render: (row) =>
                 <Chip
                     label={MasterActivity.getTargetGroupLabel(row.target_group)}
                     size="small"
@@ -363,23 +388,6 @@ export function useMasterActivityColumns(MasterActivity: IuseActivityFetch, Mast
                 ) : (
                     <Typography variant="subtitle2">{"—"}</Typography>
                 ),
-        },
-        {
-            id: "activity_status",
-            label: "สถานะ",
-            minWidth: 120,
-            align: "left",
-            render: (row) => (
-                <Chip
-                    label={row.activity_status ? "เปิด" : "ปิด"}
-                    size="small"
-                    sx={{
-                        bgcolor: row.activity_status ? "success.main" : "grey.200",
-                        color: row.activity_status ? "#fff" : "text.secondary",
-                        fontWeight: 600,
-                    }}
-                />
-            ),
         },
         {
             id: "management",

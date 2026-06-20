@@ -12,7 +12,13 @@ export interface ICheckOutStudentActivityBody {
   checkout_lng: number ;
   checkout_lat: number ;
 }
-export type TargetGroupFilter = "freshman" | "senior" | "all";
+
+export interface IActivityFilterByDateResponse {
+  detail : string;
+  data: IActivityFilterByDate[];
+}
+
+export type TargetGroupFilter = "freshman" | "senior" | "all" | null ;
 
 export interface IActivityFilterByDate {
     activity_id: number;

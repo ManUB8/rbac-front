@@ -19,6 +19,7 @@ import {
     getActivityStatusTrue,
     getActivityFilter,
     getActivityFilterAll,
+    UpdateActivityStatus,
 } from "../service/ActivityManageApi";
 import { ActivityZod } from "../utils/ValidationActivity";
 import { searchStateActivity } from "./useContext";
@@ -50,15 +51,15 @@ export const useActivityFetch = () => {
     });
 
     const handleChangeTargetGroup = useCallback(
-    (target_group: string) => {
-        setSearchStateActivity((prev: IActivitySearch) => ({
-            ...prev,
-            target_group,
-            page: 1,
-        }));
-    },
-    [setSearchStateActivity]
-);
+        (target_group: string) => {
+            setSearchStateActivity((prev: IActivitySearch) => ({
+                ...prev,
+                target_group,
+                page: 1,
+            }));
+        },
+        [setSearchStateActivity]
+    );
 
     const handleChangeSearch = useCallback((text: string) => {
         setSearchInput(text);
@@ -359,8 +360,39 @@ export const useMasterFunctionActivityFromFetch = ({
         });
     }, [saveHandler, setConfirmPopup]);
 
+    const handleToggleActivityStatus = useCallback(
+        async (activityId: number, status: boolean) => {
+            try {
+                const body = {
+                    activity_id: activityId,
+                    activity_status: status,
+                    updated_by_name:
+                        localStorage.getItem("account_name") || "admin",
+                };
 
+                await UpdateActivityStatus(body);
 
+                setFlash({
+                    type_severity: "success",
+                    title: "",
+                    content: status
+                        ? "เปิดกิจกรรมสำเร็จ"
+                        : "ปิดกิจกรรมสำเร็จ",
+                });
+
+                reload();
+            } catch (error) {
+                console.error(error);
+
+                setFlash({
+                    type_severity: "error",
+                    title: "",
+                    content: "ไม่สามารถเปลี่ยนสถานะกิจกรรมได้",
+                });
+            }
+        },
+        [reload, setFlash]
+    );
     const handleDelete = useCallback(
         async (activityId?: number) => {
             try {
@@ -432,6 +464,7 @@ export const useMasterFunctionActivityFromFetch = ({
         theme,
         methods,
         onClickDeleteMaster,
+        handleToggleActivityStatus,
         onSubmitMaster,
         handleErrorSubmit,
         handleDelete,

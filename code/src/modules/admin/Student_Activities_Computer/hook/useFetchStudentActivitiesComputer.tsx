@@ -26,7 +26,7 @@ export const useStudentActivitiesComputerForm = () => {
     const scanTimerRef = useRef<number | null>(null);
 
     const [mode, setMode] = useState<ScanMode>("checkin");
-    const [targetGroup, setTargetGroup] = useState<TargetGroupFilter>("all");
+    const [targetGroup, setTargetGroup] = useState<TargetGroupFilter>(null);
     const [activityId, setActivityId] = useState<number | null>(null);
 
     const [qrText, setQrText] = useState("");
@@ -46,8 +46,9 @@ export const useStudentActivitiesComputerForm = () => {
         queryKey: ["activity-filter-by-date"],
         queryFn: getActivityFilter_BY_Date,
     });
-
+    
     const activityFilter = activityQuery.data ?? [];
+    console.log(activityQuery.data);
     const activityFilterLoading = activityQuery.isLoading;
 
     const filteredActivities = useMemo<IActivityFilterByDate[]>(() => {

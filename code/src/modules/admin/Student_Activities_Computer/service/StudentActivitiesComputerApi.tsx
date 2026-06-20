@@ -1,6 +1,6 @@
 import { ApiConfig } from "../../../../shared/service/ApiConfig";
 import { api } from "../../../../shared/service/axiosInstance";
-import type { IActivityFilterByDate, IActivityOption, ICheckInStudentActivityBody, ICheckOutStudentActivityBody, IStudentActivityCheckResponse } from "../interface/StudentActivitiesComputer.interface";
+import type { IActivityFilterByDate, IActivityFilterByDateResponse, IActivityOption, ICheckInStudentActivityBody, ICheckOutStudentActivityBody, IStudentActivityCheckResponse } from "../interface/StudentActivitiesComputer.interface";
 
 
 export const CheckInStudentActivitiesComputer = async (
@@ -40,9 +40,9 @@ export const getActivityFilterInfo = async (): Promise<IActivityOption[]> => {
 };
 
 export const getActivityFilter_BY_Date = async (): Promise<IActivityFilterByDate[]> => {
-    const res = await api.get<IActivityFilterByDate[]>(
-        ApiConfig.ACTIVITY_API + `/filter-info-by-date`
+    const res = await api.get<IActivityFilterByDateResponse>(
+        ApiConfig.ACTIVITY_API + `/filter-by-date`
     );
 
-    return res;
+    return res.data;
 };

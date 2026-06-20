@@ -34,6 +34,7 @@ import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
 import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
 import GenerateQr from "../modules/admin/GenerateQr/page/GenerateQr";
 import StudentActivitiesManualPage from "../modules/admin/Student_Activities_Manual/page/StudentActivitiesManualPage";
 import StudentActivitiesComputerPage from "../modules/admin/Student_Activities_Computer/page/StudentActivitiesComputerPage";
@@ -83,6 +84,7 @@ export const AppRoutes = {
   adminEvent: "/admin/event",
   adminGenerateQr: "/admin/generate-qr",
   adminUser: "/admin/User",
+  adminSummary: "admin/summary"
 } as const;
 
 export const getDefaultRouteByRole = (role: UserRole | "") => {
@@ -111,7 +113,7 @@ export const routesConfig: {
     {
       path: AppRoutes.dashboard,
       element: <DashboardAdminPage />,
-      code: "dashboard",
+      code: "adminSummary",
       name: "Dashboard",
       icon: <SpaceDashboardOutlinedIcon />,
       roles: ["admin"],

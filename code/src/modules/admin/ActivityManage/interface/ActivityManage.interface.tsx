@@ -18,10 +18,15 @@ export interface IHourType {
 }
 
 export interface IGroupType {
-    id: string;
-    label: string;
+  id: string;
+  label: string;
 }
 
+export interface IActivityStatusUpdate {
+    activity_id: number;
+    activity_status: boolean;
+    updated_by_name: string;
+}
 
 export interface IActivityItem {
   activity_id: number;
@@ -58,7 +63,7 @@ export interface IActivityItem {
   activity_lng: number | null;
 
   activity_radius_meter: number;
-  target_group : string ; 
+  target_group: string;
 
   created_by_id: number;
   created_by_name: string;
@@ -110,7 +115,7 @@ export const IActivityDataDefault: IActivityItem = {
   created_by_name: "",
   updated_by_id: 0,
   updated_by_name: "",
-  target_group:"",
+  target_group: "",
   created_at: 0,
   updated_at: 0,
   registered_count: 0,
@@ -143,9 +148,11 @@ export interface IActivityFilter {
   id: number;
   name: string;
   code: string;
-      target_group:TargetGroupFilter;
-      start_date: string;
-      end_date: string;
+  target_group: TargetGroupFilter;
+  start_date: string;
+  end_date: string;
+  check_type?: string;
+  activity_radius_meter?: number;
 }
 
 export interface IActivityFilterAll {
@@ -153,27 +160,32 @@ export interface IActivityFilterAll {
   check_type: IActivityType[];
   activity_status: IActivityType[];
   require_registration: IActivityType[];
-  target_group:IActivityType[];
+  target_group: IActivityType[];
+}
+
+export interface IActivityFilterByDateResponse {
+  detail : string;
+  data: IActivityFilterByDate[];
 }
 
 export interface IActivityFilterByDate {
-    activity_id: number;
-    activity_name: string;
-    activity_date: string;
-    start_time: string;
-    end_time: string;
-    location: string;
+  activity_id: number;
+  activity_name: string;
+  activity_date: string;
+  start_time: string;
+  end_time: string;
+  location: string;
 
-    check_type: "checkin_only" | "checkout_only" | "checkin_checkout";
-    target_group: "freshman" | "senior" | "all";
+  check_type: "checkin_only" | "checkout_only" | "checkin_checkout";
+  target_group: "freshman" | "senior" | "all";
 
-    activity_lat: number;
-    activity_lng: number;
-    activity_radius_meter: number;
+  activity_lat: number;
+  activity_lng: number;
+  activity_radius_meter: number;
 
-    require_registration: boolean;
-    max_participants: number | null;
-    registered_count: number;
-    register_text: string | null;
-    is_full: boolean;
+  require_registration: boolean;
+  max_participants: number | null;
+  registered_count: number;
+  register_text: string | null;
+  is_full: boolean;
 }
