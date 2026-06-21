@@ -14,8 +14,9 @@ export interface ICategoryResponse {
     data: ICategoryItem[];
 }
 
-export const ICategoryItemDefule:ICategoryItem={
-    category_id: "0",
+
+export const ICategoryItemDefule: ICategoryItem = {
+    category_id: "",
     category_name: "",
     is_active: true,
     created_at: 0,
@@ -24,5 +25,8 @@ export const ICategoryItemDefule:ICategoryItem={
     updated_by_name: ""
 }
 
-
+export interface ICategoryDeletePayload {
+    category_id: string,
+    updated_by_name: string,
+}
 

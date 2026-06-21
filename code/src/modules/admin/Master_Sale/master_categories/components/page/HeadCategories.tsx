@@ -28,7 +28,7 @@ const HeadCategories: React.FunctionComponent<IHeadCategoriesProps> = ({ master 
                                 {"จัดการหมวดหมู่สินค้า"}
                             </Typography>
 
-                           
+
                         </Stack>
 
                     </Stack>
@@ -44,7 +44,7 @@ const HeadCategories: React.FunctionComponent<IHeadCategoriesProps> = ({ master 
                     <Button
                         variant="contained"
                         startIcon={<AddIcon />}
-                        onClick={master.handleOpenCreatePage}
+                        onClick={master.handleCreate}
                         sx={{ textTransform: "none", fontWeight: 700 }}
                     >
                         {"เพิ่มหมวดหมู่"}

@@ -174,7 +174,7 @@ export function useMasterProductColumns(
                 minWidth: 140,
                 align: "left",
                 render: (row) => (
-                   <Typography variant="body2">
+                    <Typography variant="body2">
                         {row.has_variant
                             ? (row.active_variant_count ?? 0)
                             : "-"}
@@ -204,9 +204,33 @@ export function useMasterProductColumns(
             {
                 id: "is_active",
                 label: "สถานะ",
-                minWidth: 120,
-                align: "center",
-                render: (row) => activeAvatar(row.is_active),
+                minWidth: 100,
+                align: "left",
+                render: (row) => (
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box
+                            sx={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: "50%",
+                                bgcolor: row.is_active ? "#22c55e" : "#9ca3af",
+                                boxShadow: row.is_active
+                                    ? "0 0 10px rgba(34,197,94,0.7)"
+                                    : "0 0 8px rgba(156,163,175,0.5)",
+                            }}
+                        />
+
+                        <Typography
+                            variant="subtitle2"
+                            sx={{
+                                color: row.is_active ? "#22c55e" : "#e5312b",
+                                fontWeight: 700,
+                            }}
+                        >
+                            {row.is_active ? "เปิดใช้งาน" : "ปิดใช้งาน"}
+                        </Typography>
+                    </Box>
+                ),
             },
             {
                 id: "management",

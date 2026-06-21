@@ -1,11 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import * as R from 'ramda';
-import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import { useAtom, useSetAtom } from 'jotai';
 import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react';
-import { useForm, type FieldErrors, type Path, type Resolver, type UseFormSetFocus } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { confirmPopupAtom, flashAlertAtom } from '../../../../shared/components/constants/OptionsAtom';
 import type { IStudentYearSummaryBody } from '../interface/StudentYearSummary.interface';
 import { getAllStudentYearReport } from '../service/StudentYearSummaryApi';

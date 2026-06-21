@@ -14,22 +14,35 @@ const FilterStudentYearReport: React.FC<IFilterStudentYearReportProps> = ({
         <Grid container spacing={2}>
             <Grid size={12}>
                 <Grid container spacing={2} sx={{ mt: 1 }}>
-                    <Grid size={{ xs: 12, md: 4 }}>
+                    <Grid size={{ xs: 6, md: 4 }}>
                         <TextField
                             label="รหัสนิสิต"
                             variant="outlined"
+                            placeholder="67010001"
                             autoComplete="off"
                             fullWidth
                             value={mastercontroller.studentCodeInput}
+                            error={
+                                mastercontroller.studentCodeInput.length > 0 &&
+                                mastercontroller.studentCodeInput.length < 4
+                            }
+                            helperText={
+                                    mastercontroller.studentCodeInput.length > 0 &&
+                                    mastercontroller.studentCodeInput.length < 4
+                                    ? "กรุณากรอกรหัสนิสิตอย่างน้อย 4 หลัก"
+                                    : ""
+                            }
                             onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, "");
+
                                 mastercontroller.handleChangeStudentCodePrefix(
-                                    e.target.value
+                                    value
                                 );
                             }}
                         />
                     </Grid>
 
-                    <Grid size={{ xs: 12, md: 4 }}>
+                    <Grid size={{ xs: 6, md: 4 }}>
                         <Autocomplete
                             fullWidth
                             options={Year_type}
