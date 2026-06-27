@@ -1,26 +1,26 @@
 import React from 'react';
-import type { IuseFetchMasterFunctionProduct } from '../../hook/useFetchMasterProduct';
-import { Autocomplete, Grid, TextField } from '@mui/material';
+import type { IuseFetchMasterFunctionOrder } from '../../hook/useFetchMasterOrder';
+import { Grid, TextField } from '@mui/material';
 
-export interface IFilterMasterProductProps {
-    master_product: IuseFetchMasterFunctionProduct
+export interface IFilterMasterOrderProps {
+    mastercontroller:IuseFetchMasterFunctionOrder
 };
 
-const FilterMasterProduct: React.FunctionComponent<IFilterMasterProductProps> = ({ master_product }) => {
+const FilterMasterOrder: React.FunctionComponent<IFilterMasterOrderProps> = ({mastercontroller}) => {
     return (
-        <>
+         <>
             <Grid container spacing={2}>
                 <Grid size={12}>
                     <Grid container spacing={2} sx={{ mt: 1 }}>
                         <Grid size={{ xs: 12, md: 3 }}>
                             <TextField
-                                label="ชื่อสินค้า"
+                                label="ค้นหาเลขออเดอร์ / รหัสนิสิต"
                                 variant="outlined"
                                 autoComplete="off"
                                 fullWidth
-                                value={master_product.searchInput}
+                                value={mastercontroller.searchInput}
                                 onChange={(e) => {
-                                    master_product.handleChangeSearch(e.target.value);
+                                    mastercontroller.handleChangeSearch(e.target.value);
                                 }}
                             />
                         </Grid>
@@ -59,4 +59,4 @@ const FilterMasterProduct: React.FunctionComponent<IFilterMasterProductProps> = 
     )
 };
 
-export default FilterMasterProduct;
+export default FilterMasterOrder;

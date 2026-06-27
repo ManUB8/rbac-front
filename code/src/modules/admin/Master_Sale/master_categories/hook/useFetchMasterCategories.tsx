@@ -9,7 +9,7 @@ import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { confirmPopupAtom, flashAlertAtom } from "../../../../../shared/components/constants/OptionsAtom";
 import { ICategoryItemDefule, type ICategoryItem } from "../interface/MasterCategories.interface";
-import { CreateCategories, getAllCategories, UpdateCategories } from "../service/MasterCategoriesApi";
+import { CreateCategories, getAllCategories, getAllCategoriesStatus, UpdateCategories } from "../service/MasterCategoriesApi";
 import { MasterCategoryZod } from "../utils/ValidationMasterCategories";
 import { getAllErrorPaths } from "../../../../../shared/components/error/FunctionError";
 
@@ -342,3 +342,36 @@ export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setope
     };
 };
 export type IuseFetchMasterCategoryFrom = ReturnType<typeof useFetchMasterCategoryFrom>;
+
+
+export const useFetchMasterCategoryListActive = () => {
+    const queryClient = useQueryClient();
+
+    const query = useQuery<ICategoryItem[]>({
+        queryKey: ["category-list-active"],
+        queryFn: async () => {
+            const res = await getAllCategoriesStatus();
+            console.log('cate-res', res)
+            return res;
+        },
+        staleTime: 0,
+        refetchOnMount: "always",
+        retry: 1,
+    });
+
+    const category_data = query.data ?? [];
+    const loading_category = query.isLoading || query.isFetching;
+
+    const reload = useCallback(() => {
+        queryClient.invalidateQueries({ queryKey: ["category-list-active"] });
+    }, [queryClient]);
+
+   
+
+    return {
+        reload,
+        refetch: query.isFetched,
+        category_data,
+        loading_category
+    };
+};

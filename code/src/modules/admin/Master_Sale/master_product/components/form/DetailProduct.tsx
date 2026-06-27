@@ -24,18 +24,6 @@ import ProductInventorySection from './ProductInventorySection';
 import ProductVariantSection from './ProductVariantSection';
 import ProductSaleConditionSection from './ProductSaleConditionSection';
 
-const defaultVariants = [
-    {
-        variant_name: "",
-        color_name: "",
-        variant_image: "",
-        sku_code: "",
-        price: 0,
-        stock: 0,
-        is_active: true,
-    },
-];
-
 export interface IDetailProductProps {
     controller: IuseFetchProductFrom
     master_product: IuseFetchMasterFunctionProduct;
