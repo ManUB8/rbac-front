@@ -18,23 +18,12 @@ import {
 } from "@mui/material";
 
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import ProductBasicInfoSection from './ProductBasicInfoSection';
-import ProductImageSection from './ProductImageSection';
-import ProductInventorySection from './ProductInventorySection';
-import ProductVariantSection from './ProductVariantSection';
-import ProductSaleConditionSection from './ProductSaleConditionSection';
-
-const defaultVariants = [
-    {
-        variant_name: "",
-        color_name: "",
-        variant_image: "",
-        sku_code: "",
-        price: 0,
-        stock: 0,
-        is_active: true,
-    },
-];
+import ProductBasicInfoSection from './formDetail/ProductBasicInfoSection';
+import ProductImageSection from './formDetail/ProductImageSection';
+import ProductInventorySection from './formDetail/ProductInventorySection';
+import ProductVariantSection from './formDetail/ProductVariantSection';
+import ProductSaleConditionSection from './formDetail/ProductSaleConditionSection';
+import ProductPreorderSection from './formDetail/ProductPreorderSection';
 
 export interface IDetailProductProps {
     controller: IuseFetchProductFrom
@@ -71,7 +60,8 @@ const DetailProduct: React.FunctionComponent<IDetailProductProps> = ({ controlle
                                 <ProductBasicInfoSection controller={controller} />
                                 <ProductImageSection controller={controller} />
                                 <ProductInventorySection controller={controller} />
-                                <ProductVariantSection controller={controller} />
+                                <ProductVariantSection controller={controller} /> 
+                                <ProductPreorderSection controller={controller} />
                                 <ProductSaleConditionSection controller={controller} />
                             </Stack>
                         </Box>

@@ -7,16 +7,17 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import type { IuseFetchProductFrom } from "../../hook/useFetchMasterProduct";
-import { useFetchMasterCategoryList } from "../../../master_categories/hook/useFetchMasterCategories";
-import { useFetchFacultyMajors } from "../../../../Faculty_Majors/hook/useFetchFaculty_Majors";
+import type { IuseFetchProductFrom } from "../../../hook/useFetchMasterProduct";
+import { useFetchMasterCategoryList, useFetchMasterCategoryListActive } from "../../../../master_categories/hook/useFetchMasterCategories";
+import { useFetchFacultyMajors } from "../../../../../Faculty_Majors/hook/useFetchFaculty_Majors";
 
 interface Props {
     controller: IuseFetchProductFrom;
 }
 
 const ProductBasicInfoSection: React.FC<Props> = ({ controller }) => {
-    const master_categories = useFetchMasterCategoryList()
+    // const master_categories = useFetchMasterCategoryList()
+    const { category_data, loading_category } = useFetchMasterCategoryListActive()
     const { faculty_majors, faculty_loading, } = useFetchFacultyMajors()
     const ownerType = controller.watch("owner_type");
     const facultyOptions = faculty_majors ?? [];
@@ -45,11 +46,11 @@ const ProductBasicInfoSection: React.FC<Props> = ({ controller }) => {
 
                 <Autocomplete
                     fullWidth
-                    loading={master_categories.loading_category}
-                    options={master_categories.category_data}
+                    loading={loading_category}
+                    options={category_data}
                     getOptionLabel={(option) => option.category_name}
                     value={
-                        master_categories.category_data.find(
+                        category_data.find(
                             (item) => item.category_id === controller.getValues('category_id')
                         ) ?? null
                     }

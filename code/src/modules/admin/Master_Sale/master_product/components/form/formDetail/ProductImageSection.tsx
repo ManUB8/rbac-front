@@ -10,9 +10,9 @@ import {
 
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+import type { IuseFetchProductFrom } from "../../../hook/useFetchMasterProduct";
+import { ImageUploader } from "../../../../../../../shared/components/UploadImg/ImageUploader";
 
-import type { IuseFetchProductFrom } from "../../hook/useFetchMasterProduct";
-import { ImageUploader } from "../../../../../../shared/components/UploadImg/ImageUploader";
 
 interface Props {
     controller: IuseFetchProductFrom;

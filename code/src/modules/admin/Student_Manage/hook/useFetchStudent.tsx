@@ -99,60 +99,67 @@ export const useMasterFunctionStudent = () => {
         setOpenStudentModal(true)
     }, [navigate]);
 
-    const handleDelete = useCallback(async () => {
-        try {
-            const idToDelete = selectedStudentId;
-            const name_by = localStorage.getItem("account_name") || "";
+    const handleDelete = useCallback(
+        async (studentId: number) => {
+            try {
+                const name_by = localStorage.getItem("account_name") || "";
 
-            console.log("deleteactivity", selectedStudentId)
-            const data_delete: IStudentDeleteItem = {
-                student_id: Number(selectedStudentId),
-                updated_by_name: name_by,
-            };
+                if (!studentId) {
+                    setFlash({
+                        type_severity: "error",
+                        title: "",
+                        content: "ไม่พบรหัสนักศึกษาที่ต้องการลบ",
+                    });
+                    return;
+                }
 
-            if (!idToDelete) {
+                const data_delete: IStudentDeleteItem = {
+                    student_id: Number(studentId),
+                    updated_by_name: name_by,
+                };
+
+                await DeleteStudent(data_delete);
+
+                queryClient.invalidateQueries({ queryKey: ["students-list"] });
+
+                setFlash({
+                    type_severity: "success",
+                    title: "",
+                    content: "ลบข้อมูลนักศึกษาสำเร็จ",
+                });
+
+                reload();
+            } catch (error) {
+                console.error(error);
+
                 setFlash({
                     type_severity: "error",
                     title: "",
-                    content: "ไม่พบรหัสนักศึกษาที่ต้องการลบ",
+                    content: "เกิดข้อผิดพลาด ไม่สามารถลบข้อมูลได้",
                 });
-                return;
             }
-            queryClient.invalidateQueries({ queryKey: ["students-list"] });
-            await DeleteStudent(data_delete);
+        },
+        [setFlash, reload, queryClient]
+    );
 
-            setFlash({
-                type_severity: "success",
-                title: "",
-                content: "ลบข้อมูลนักศึกษาสำเร็จ",
+    const onClickDeleteMaster = useCallback(
+        (studentId: number) => {
+            setConfirmPopup({
+                type: "warning",
+                title: "ท่านต้องการลบข้อมูลนักศึกษา !!",
+                content:
+                    "ยืนยันหากต้องการลบข้อมูลนักศึกษา ข้อมูลนักศึกษาที่ลบไม่สามารถนำกลับมาได้",
+                onClose: () => setConfirmPopup(null),
+                onConfirm: async () => {
+                    await handleDelete(studentId);
+                    setConfirmPopup(null);
+                },
+                confirmText: "ยืนยัน",
+                cancelText: "ยกเลิก",
             });
-
-            reload();
-        } catch (error) {
-            console.error(error);
-            setFlash({
-                type_severity: "error",
-                title: "",
-                content: "เกิดข้อผิดพลาด ไม่สามารถลบข้อมูลได้",
-            });
-        }
-    }, [selectedStudentId, setFlash, reload]);
-
-    const onClickDeleteMaster = useCallback(() => {
-        setConfirmPopup({
-            type: "warning",
-            title: "ท่านต้องการลบข้อมูลนักศึกษา !!",
-            content: "ยืนยันหากต้องการลบข้อมูลนักศึกษา ข้อมูลนักศึกษาที่ลบไม่สามารถนำกลับมาได้",
-            onClose: () => setConfirmPopup(null),
-            onConfirm: async () => {
-                await handleDelete();
-                setConfirmPopup(null);
-            },
-            confirmText: "ยืนยัน",
-            cancelText: "ยกเลิก",
-        });
-    }, [handleDelete, setConfirmPopup]);
-
+        },
+        [handleDelete, setConfirmPopup]
+    );
     return {
         student_data,
         loading_student,
@@ -206,8 +213,30 @@ export const useMasterFunctionStudentFromFetch = ({
     const [, setConfirmPopup] = useAtom(confirmPopupAtom);
     const [, setFlash] = useAtom(flashAlertAtom);
 
+    // const methods = useForm<IStudentItem>({
+    //     resolver: zodResolver(MasterStudentZod as any) as Resolver<IStudentItem>,
+    //     defaultValues: IStudenItemDefule,
+    //     shouldFocusError: true,
+    // });
     const methods = useForm<IStudentItem>({
-        resolver: zodResolver(MasterStudentZod as any) as Resolver<IStudentItem>,
+        resolver: async (values, context, options) => {
+            const data = {
+                ...values,
+                user: {
+                    ...values.user,
+                    confirm_password:
+                        Id === 0
+                            ? values.user?.confirm_password
+                            : values.user?.password,
+                },
+            };
+
+            return zodResolver(MasterStudentZod as any)(
+                data,
+                context,
+                options
+            );
+        },
         defaultValues: IStudenItemDefule,
         shouldFocusError: true,
     });

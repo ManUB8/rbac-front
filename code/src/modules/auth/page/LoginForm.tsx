@@ -281,14 +281,26 @@ const LoginForm: React.FC = () => {
                       : "Username"
                   }
                   autoComplete="username"
-                  {...register("username", { required: "กรุณากรอกบัญชี" })}
+                  {...register("username", {
+                    required: "กรุณากรอกบัญชี",
+                  })}
                   error={!!errors.username}
+                  onInput={(e) => {
+                    if (roleTab === "student") {
+                      const target = e.target as HTMLInputElement;
+
+                      target.value = target.value
+                        .replace(/\D/g, "")
+                        .slice(0, 8);
+                    }
+                  }}
                   sx={{
                     "& .MuiFilledInput-root": {
                       minHeight: 62,
                       borderRadius: "16px",
                       backgroundColor: "#F8FAFC",
-                      border: `1px solid ${errors.username ? "#D32F2F" : "#D6DCE5"}`,
+                      border: `1px solid ${errors.username ? "#D32F2F" : "#D6DCE5"
+                        }`,
                       fontSize: 17,
                       px: 1,
                       transition: "all 0.2s ease",
@@ -306,8 +318,7 @@ const LoginForm: React.FC = () => {
                       backgroundColor: "#F8FAFC",
                       border: "1px solid #D32F2F",
                     },
-                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after":
-                    {
+                    "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
                       display: "none",
                     },
                     "& .MuiInputBase-input": {
@@ -317,6 +328,10 @@ const LoginForm: React.FC = () => {
                     },
                   }}
                   slotProps={{
+                    htmlInput: {
+                      maxLength: roleTab === "student" ? 8 : undefined,
+                      inputMode: roleTab === "student" ? "numeric" : "text",
+                    },
                     input: {
                       disableUnderline: true,
                       endAdornment: errors.username ? (

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Box, Chip, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography } from '@mui/material';
+import { Box, Chip, IconButton, Stack, Typography } from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { formatDateThai, formatDateTimeThai } from '../../../../../shared/components/Date-Time/DateAndTime';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import type { IuseFetchEventRegistrants } from '../../hook/useFetchEventRegistrants';
-import type { IStudentActivityJoinItem, } from '../../interface/EventRegistrants.interface';
+import type { IStudentActivityJoinItem } from '../../interface/EventRegistrants.interface';
 import { Check_type } from '../../../ActivityManage/utils/activity_option';
 
 // ===== Generic Column =====
@@ -28,37 +28,34 @@ function RowActions({
     mastercontroller
 }: {
     row: IStudentActivityJoinItem;
-    mastercontroller: IuseFetchEventRegistrants
+    mastercontroller: IuseFetchEventRegistrants;
 }) {
 
     return (
         <>
-            <Stack direction='row' spacing={1} sx={{ justifyContent: 'center', }}>
+            <Stack direction="row" spacing={1} sx={{ justifyContent: "center" }}>
                 <IconButton
                     onClick={() => {
-                        const pdate: any = {
-                            student_activity_id: row?.student_activity_id || 0,
-                            activity_id: row?.activity_id || 0,
-                            attendance_status: row?.check_detail.attendance_status || "เข้าร่วม",
-                        };
-                        mastercontroller.handleOpenEdit(pdate);
+                        console.log("click edit row", row);
+                        mastercontroller.handleOpenEdit(row);
                     }}
                     sx={{
-                        color: 'primary.main'
+                        color: "primary.main",
                     }}
                 >
                     <EditOutlinedIcon />
                 </IconButton>
-
                 <IconButton
-                    onClick={() => mastercontroller.onClickDeleteMaster(row.student_activity_id)}
+                    onClick={() => {
+                        mastercontroller.onClickDeleteMaster(row?.student_activity_id);
+                    }}
                     sx={{
                         color: "error.main",
                     }}
                 >
                     <DeleteForeverOutlinedIcon />
                 </IconButton>
-            </Stack>
+            </Stack >
         </>
     );
 }
@@ -166,7 +163,7 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
                 </Box>
             ),
         },
-                {
+        {
             id: "created_by_name",
             label: "เช็คอินโดย",
             minWidth: 200,
@@ -174,7 +171,7 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
             render: (row) => (
                 <Box>
                     <Typography variant="subtitle2">
-                        {row.created_by_name|| "-"}
+                        {row.created_by_name || "-"}
                     </Typography>
                 </Box>
             ),
@@ -194,8 +191,8 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
                         variant="caption"
                         sx={{
                             color:
-                            row.check_detail.checkout.checkout_status === "valid"
-                            ? "success.main"
+                                row.check_detail.checkout.checkout_status === "valid"
+                                    ? "success.main"
                                     : "error.main",
                             fontWeight: 600,
                         }}
@@ -211,13 +208,13 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
             minWidth: 200,
             align: "left",
             render: (row) => (
-            <>
-            <Box>
-                    <Typography variant="subtitle2">
-                        {row.updated_by_name|| "-"}
-                    </Typography>
-                </Box>
-            </>
+                <>
+                    <Box>
+                        <Typography variant="subtitle2">
+                            {row.updated_by_name || "-"}
+                        </Typography>
+                    </Box>
+                </>
             ),
         },
         {
@@ -228,17 +225,11 @@ export function useMasterEventColumns(mastercontroller: IuseFetchEventRegistrant
             render: (row) =>
                 row.check_type ? (
                     <Chip
-                        label={getCheckTypeLabel(row.check_type)}
+                        label={getCheckTypeLabel(row.check_type) || row.check_type || "-"}
                         size="small"
                         sx={{
-                            bgcolor:
-                                row.check_type === "checkin_checkout"
-                                    ? "primary.main"
-                                    : "grey.200",
-                            color:
-                                row.check_type === "checkin_checkout"
-                                    ? "#fff"
-                                    : "text.primary",
+                            bgcolor: "success.main",
+                            color: "background.paper",
                             fontWeight: 600,
                         }}
                     />

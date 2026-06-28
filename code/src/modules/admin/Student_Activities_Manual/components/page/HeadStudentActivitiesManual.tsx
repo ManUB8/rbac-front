@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Stack,
-    Typography,
-} from "@mui/material";
+import React, {} from "react";
+import {Typography, } from "@mui/material";
 
 export interface IHeadStudentActivitiesProps { };
 
@@ -28,7 +21,7 @@ const HeadStudentActivities: React.FunctionComponent<IHeadStudentActivitiesProps
                     mb: 3,
                 }}
             >
-                {"สแกน QR หรือกรอกรหัสนิสิต"}
+                {"กรอกรหัสนิสิต"}
             </Typography>
 
         </>

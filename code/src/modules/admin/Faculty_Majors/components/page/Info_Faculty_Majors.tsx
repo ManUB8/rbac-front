@@ -4,6 +4,7 @@ import {
     Button,
     Card,
     CardContent,
+    Chip,
     Collapse,
     IconButton,
     Stack,
@@ -13,7 +14,6 @@ import {
 import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -24,7 +24,6 @@ import type {
     IuseFacultyFormFetch,
 } from "../../hook/useFetchFaculty_Majors";
 
-import { iconButtonSx } from "../../utils/faculty_major_sx";
 
 export interface IInfo_Faculty_MajorsProps {
     Master_Faculty_Majors: IuseFaculty_MajorsFetch;
@@ -84,7 +83,7 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                     fontWeight: 700,
                                 }}
                             >
-                                {"คณะทั้งหมด"}
+                                {"คณะสาขาทั้งหมด"}
                             </Typography>
                         </Stack>
                     </Stack>
@@ -127,21 +126,16 @@ const Info_Faculty_Majors: React.FC<IInfo_Faculty_MajorsProps> = ({
                                                         mr: 2,
                                                     }}
                                                 >
-                                                    #{facultyIndex + 1}
+                                                    {facultyIndex + 1}
                                                 </Box>
 
                                                 {faculty.faculty_name}
 
-                                                <Box
-                                                    component="span"
-                                                    sx={{
-                                                        color: "#46658f",
-                                                        fontWeight: 500,
-                                                        ml: 1.5,
-                                                    }}
-                                                >
-                                                    ({faculty.majors_count} สาขา)
-                                                </Box>
+                                                <Chip
+                                                    sx={{ color: "primary.contrastText", fontWeight: 500, ml: 1.5,backgroundColor : "primary.light" }}
+                                                    label={<span>{faculty.majors_count} {"สาขา"} </span>}
+                                                />
+                                                    
                                             </Typography>
 
                                             <Stack

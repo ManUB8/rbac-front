@@ -1,14 +1,12 @@
-import { useAtom, useSetAtom, type SetStateAction } from 'jotai';
-import React from 'react';
-import { useNavigate, type NavigateFunction } from 'react-router';
-import { Box, IconButton, Stack, Typography } from '@mui/material';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import React from "react";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
-import type { ICategoryItem } from '../../interface/MasterCategories.interface';
-import type { IuseFetchMasterCategoryList } from '../../hook/useFetchMasterCategories';
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
-// ===== Generic Column =====
+import type { ICategoryItem } from "../../interface/MasterCategories.interface";
+import type { IuseFetchMasterCategoryList } from "../../hook/useFetchMasterCategories";
+
 export interface Column<T> {
     id: string;
     label: string;
@@ -17,16 +15,11 @@ export interface Column<T> {
     minWidth: number;
     render: (row: T) => React.ReactNode;
 }
-// ===== Badge
-//  สถานะ =====
+
 export function activeAvatar(status: boolean) {
-    let bgcolor = "#8C8C8C";
-    let letter = "";
-    let textColor = "#000";
-    switch (status) {
-        case true: bgcolor = "successVariant80"; textColor = 'successVariant0'; letter = "เปิดใช้งาน"; break;
-        case false: bgcolor = "errorTones.98"; textColor = "errorTones.40"; letter = "ปิดใช้งาน"; break;
-    }
+    const bgcolor = status ? "successVariant80" : "errorTones.98";
+    const textColor = status ? "successVariant0" : "errorTones.40";
+    const letter = status ? "เปิดใช้งาน" : "ปิดใช้งาน";
 
     return (
         <Box sx={{ backgroundColor: bgcolor, borderRadius: "4px", px: 2, py: 0.5 }}>
@@ -37,16 +30,11 @@ export function activeAvatar(status: boolean) {
 
 function RowActions({
     row,
-    masterController
+    masterController,
 }: {
     row: ICategoryItem;
-    masterController: IuseFetchMasterCategoryList
+    masterController: IuseFetchMasterCategoryList;
 }) {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-    const handleOpen = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget);
-    const handleClose = () => setAnchorEl(null);
-
     return (
         <Stack
             direction="row"
@@ -58,13 +46,10 @@ function RowActions({
         >
             <IconButton
                 size="small"
-                onClick={() => {
-                    masterController.setSelectedId(row);
-                    masterController.setopenViewPage(true);
-                }}
+                onClick={() => masterController.handleEdit(row)}
                 sx={{
                     transition: "0.2s",
-                    color: 'primary.main',
+                    color: "primary.main",
                     "&:hover": {
                         transform: "scale(1.08)",
                     },
@@ -76,8 +61,8 @@ function RowActions({
             <IconButton
                 size="small"
                 onClick={() => {
-                    // masterController.setSelectedStudentId(row.student_id);
-                    // masterController.onClickDeleteMaster();
+                    masterController.setSelectedId(row);
+                    masterController.onClickDeleteMaster(row.category_id);
                 }}
                 sx={{
                     transition: "0.2s",
@@ -93,42 +78,67 @@ function RowActions({
     );
 }
 
-// เปลี่ยนชื่อให้เป็น useMasterCategoryColumns จะได้ตาม rule hook ด้วย
-export function useMasterCategoryColumns(masterController: IuseFetchMasterCategoryList): Column<ICategoryItem>[] {
-    const navigate = useNavigate();
+export function useMasterCategoryColumns(
+    masterController: IuseFetchMasterCategoryList
+): Column<ICategoryItem>[] {
+    return React.useMemo<Column<ICategoryItem>[]>(
+        () => [
+            {
+                id: "category_name",
+                label: "ชื่อหมวดหมู่",
+                minWidth: 120,
+                align: "left",
+                render: (row) => (
+                    <Typography variant="subtitle2">
+                        {row?.category_name || "-"}
+                    </Typography>
+                ),
+            },
+            {
+                id: "is_active",
+                label: "สถานะ",
+                minWidth: 100,
+                align: "left",
+                render: (row) => (
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box
+                            sx={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: "50%",
+                                bgcolor: row.is_active ? "#22c55e" : "#9ca3af",
+                                boxShadow: row.is_active
+                                    ? "0 0 10px rgba(34,197,94,0.7)"
+                                    : "0 0 8px rgba(156,163,175,0.5)",
+                            }}
+                        />
 
-    return React.useMemo<Column<ICategoryItem>[]>(() => [
-        {
-            id: "category_name",
-            label: "ชื่อหมวดหมู่",
-            minWidth: 120,
-            align: "left",
-            render: (row) => (
-                <Typography variant="subtitle2">{row?.category_name || "-"}</Typography>
-            ),
-        },
-        {
-            id: "is_active",
-            label: "สถานะ",
-            minWidth: 100,
-            align: "left",
-            render: (row) => (
-                <Typography variant="subtitle2">{activeAvatar(row?.is_active) || "-"}</Typography>
-            ),
-        },
-
-        {
-            id: "management",
-            label: "",
-            headerRender: () => <AddBoxOutlinedIcon />,
-            minWidth: 80,
-            align: "center",
-            render: (row) => (
-                <RowActions
-                    row={row}
-                    masterController={masterController}
-                />
-            ),
-        },
-    ], [navigate, masterController]);
+                        <Typography
+                            variant="subtitle2"
+                            sx={{
+                                color: row.is_active ? "#22c55e" : "#e5312b",
+                                fontWeight: 700,
+                            }}
+                        >
+                            {row.is_active ? "เปิดใช้งาน" : "ปิดใช้งาน"}
+                        </Typography>
+                    </Box>
+                ),
+            },
+            {
+                id: "management",
+                label: "",
+                headerRender: () => <AddBoxOutlinedIcon />,
+                minWidth: 80,
+                align: "center",
+                render: (row) => (
+                    <RowActions
+                        row={row}
+                        masterController={masterController}
+                    />
+                ),
+            },
+        ],
+        [masterController]
+    );
 }

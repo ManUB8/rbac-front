@@ -6,27 +6,27 @@ export interface IFilterMasterProductProps {
     master_product: IuseFetchMasterFunctionProduct
 };
 
-const FilterMasterProduct: React.FunctionComponent<IFilterMasterProductProps> = ({master_product}) => {
+const FilterMasterProduct: React.FunctionComponent<IFilterMasterProductProps> = ({ master_product }) => {
     return (
         <>
-        <Grid container spacing={2}>
-            <Grid size={12}>
-                <Grid container spacing={2} sx={{ mt: 1 }}>
-                    <Grid size={{ xs: 12, md: 3 }}>
-                        <TextField
-                            label="ชื่อสินค้า"
-                            variant="outlined"
-                            autoComplete="off"
-                            fullWidth
-                            value={master_product.searchInput}
-                            onChange={(e) => {
-                                master_product.handleChangeSearch(e.target.value);
-                            }}
-                        />
-                    </Grid>
+            <Grid container spacing={2}>
+                <Grid size={12}>
+                    <Grid container spacing={2} sx={{ mt: 1 }}>
+                        <Grid size={{ xs: 12, md: 3 }}>
+                            <TextField
+                                label="ชื่อสินค้า"
+                                variant="outlined"
+                                autoComplete="off"
+                                fullWidth
+                                value={master_product.searchInput}
+                                onChange={(e) => {
+                                    master_product.handleChangeSearch(e.target.value);
+                                }}
+                            />
+                        </Grid>
 
-                    <Grid size={{ xs: 12, md: 3 }}>
-                        {/* <Autocomplete
+                        <Grid size={{ xs: 12, md: 3 }}>
+                            {/* <Autocomplete
                             fullWidth
                             options={facultyOptions}
                             getOptionLabel={(option) => option.faculty_name}
@@ -49,12 +49,12 @@ const FilterMasterProduct: React.FunctionComponent<IFilterMasterProductProps> = 
                                 <TextField {...p} label="คณะ" variant="outlined" />
                             )}
                         /> */}
-                    </Grid>
+                        </Grid>
 
-                    
+
+                    </Grid>
                 </Grid>
             </Grid>
-        </Grid>
         </>
     )
 };

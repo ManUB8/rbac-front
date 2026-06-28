@@ -6,14 +6,10 @@ import LoginPage from "../modules/auth/page/LoginPage";
 import LoginForm from "../modules/auth/page/LoginForm";
 import RegisterPage from "../modules/auth/page/Register";
 
-import DashBoardPage from "../modules/dashboard/DashBoardPage";
-import StadiumOutlinedIcon from '@mui/icons-material/StadiumOutlined';
 import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
-import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
-import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
 import StudentCardPage from "../modules/student/StudentMaster/page/StudentCardPage";
 import StudentActivityPage from "../modules/student/StudentActivity/page/StudentActivityPage";
 import StudentSummaryPage from "../modules/student/Dashboard/ActivitySummary/page/StudentSummaryPage";
@@ -24,14 +20,18 @@ import Student_ManagePage from "../modules/admin/Student_Manage/page/Student_Man
 import StudentReportPage from "../modules/admin/StudentReport/page/StudentReportPage";
 import EventRegistrantsPage from "../modules/admin/EventRegistrants/page/EventRegistrantsPage";
 import DashboardAdminPage from "../modules/admin/Dashboard_Admin/page/DashboardAdminPage";
-import QrScannerPage from "../modules/admin/Qr_Scanner/page/QrScannerPage";
 
 
 // icon
+
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import ShoppingBasketOutlinedIcon from '@mui/icons-material/ShoppingBasketOutlined';
+import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import FolderSharedOutlinedIcon from '@mui/icons-material/FolderSharedOutlined';
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import DocumentScannerOutlinedIcon from '@mui/icons-material/DocumentScannerOutlined';
 import InstallMobileOutlinedIcon from '@mui/icons-material/InstallMobileOutlined';
@@ -39,17 +39,11 @@ import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined';
 import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import QrCodeOutlinedIcon from '@mui/icons-material/QrCodeOutlined';
-import PhonelinkSetupOutlinedIcon from '@mui/icons-material/PhonelinkSetupOutlined';
-import ComputerIcon from '@mui/icons-material/Computer';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import SmartphoneIcon from '@mui/icons-material/Smartphone';
-import BuildIcon from '@mui/icons-material/Build';
 import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
 import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
-import AddToHomeScreenOutlinedIcon from '@mui/icons-material/AddToHomeScreenOutlined';
 import GenerateQr from "../modules/admin/GenerateQr/page/GenerateQr";
 import StudentActivitiesManualPage from "../modules/admin/Student_Activities_Manual/page/StudentActivitiesManualPage";
 import StudentActivitiesComputerPage from "../modules/admin/Student_Activities_Computer/page/StudentActivitiesComputerPage";
@@ -57,6 +51,11 @@ import User_ManagePage from "../modules/admin/User_Manage/page/User_ManagePage";
 import MasterCategoriesPage from "../modules/admin/Master_Sale/master_categories/page/MasterCategoriesPage";
 import MasterProductPage from "../modules/admin/Master_Sale/master_product/page/MasterProductPage";
 import StudentYearReportPage from "../modules/admin/ReportDashboard/page/StudentYearReportPage";
+import ShopStudentPage from "../modules/student/Shop/product/page/ShopStudentPage";
+import CartStudentPage from "../modules/student/Shop/cart/page/CartStudentPage";
+import OrderShopPage from "../modules/student/Shop/order/page/OrderShopPage";
+import PaymentShopPage from "../modules/student/Shop/payment/components/page/PaymentShopPage.tsx";
+import MasterOrderPage from "../modules/admin/MasterOrder/page/MasterOrderPage.tsx";
 export type UserRole = "admin" | "temporary_admin" | "student";
 export type RouteRole = "admin" | "student";
 
@@ -71,6 +70,7 @@ export interface IRouterConfig {
   permissionKey?: string;
   withLayout?: boolean;
   children?: IRouterConfig[];
+  hideInMenu?: boolean;
 }
 
 export const AppRoutes = {
@@ -79,13 +79,13 @@ export const AppRoutes = {
   login: "/login",
   register: "/register",
   notFoundPage: "*",
-
   dashboard: "/dashboard",
 
   // student
   studentCard: "/student/card",
   studentActivity: "/student/activity",
   studentSummary: "/student/summary",
+  studentShop: "/student/shop",
 
   // admin
   adminStudentYearReport: "/admin/students-report",
@@ -132,7 +132,7 @@ export const routesConfig: {
     {
       path: AppRoutes.dashboard,
       element: <DashboardAdminPage />,
-      code: "dashboard",
+      code: "adminSummary",
       name: "Dashboard",
       icon: <SpaceDashboardOutlinedIcon />,
       roles: ["admin"],
@@ -171,6 +171,72 @@ export const routesConfig: {
       key: "student-summary",
       permissionKey: "student_summary",
       withLayout: true,
+    },
+    {
+      path: AppRoutes.studentShop,
+      element: null,
+      code: "student-shop-management",
+      name: "ร้านค้า",
+      icon: <StorefrontOutlinedIcon />,
+      roles: ["student"],
+      key: "student-shop-management",
+      withLayout: true,
+      children: [
+        {
+          path: `${AppRoutes.studentShop}/product`,
+          element: <ShopStudentPage />,
+          code: "student-shop-product",
+          name: "สินค้า",
+          icon: <LocalMallOutlinedIcon />,
+          roles: ["student"],
+          key: "student-shop-product",
+          withLayout: true,
+
+        },
+        // {
+        //   path: `${AppRoutes.studentShop}/payment`,
+        //   element: <PaymentShopPage />,
+        //   code: "student-shop-payment",
+        //   name: "ชำระเงิน",
+        //   icon: <ShoppingCartOutlinedIcon />,
+        //   roles: ["student"],
+        //   key: "student-shop-payment",
+        //   withLayout: true,
+        //   hideInMenu: true,
+        // },
+        {
+          path: `${AppRoutes.studentShop}/cart`,
+          element: <CartStudentPage />,
+          code: "student-shop-cart",
+          name: "ตะกร้าสินค้า",
+          icon: <ShoppingCartOutlinedIcon />,
+          roles: ["student"],
+          key: "student-shop-cart",
+          withLayout: true,
+          children: [
+            {
+              path: `${AppRoutes.studentShop}/cart/payment`,
+              element: <PaymentShopPage />,
+              code: "student-shop-payment",
+              name: "",
+              icon: <ShoppingCartOutlinedIcon />,
+              roles: ["student"],
+              key: "student-shop-payment",
+              withLayout: true,
+            },
+          ]
+        },
+        {
+          path: `${AppRoutes.studentShop}/order`,
+          element: <OrderShopPage />,
+          code: "shop-order",
+          name: "คำสั่งซื้อของฉัน",
+          icon: <ReceiptLongOutlinedIcon />,
+          roles: ["student"],
+          key: "shop-order",
+          withLayout: true,
+        },
+      ],
     },
     {
       path: AppRoutes.adminStudentYearReport,
@@ -326,14 +392,24 @@ export const routesConfig: {
           key: "shop-product",
           withLayout: true,
         },
+        {
+          path: `${AppRoutes.adminShop}/order`,
+          element: <MasterOrderPage />,
+          code: "shop-order",
+          name: "จัดการคำสั่งซื้อ",
+          icon: <ReceiptLongOutlinedIcon />,
+          roles: ["admin"],
+          key: "shop-order",
+          withLayout: true,
+        },
       ],
     },
     {
       path: AppRoutes.adminGenerateQr,
-      element: < GenerateQr/>,
+      element: < GenerateQr />,
       code: "admin-generate-qr",
       name: "Generate QR Code",
-      icon: <QrCodeOutlinedIcon/>,
+      icon: <QrCodeOutlinedIcon />,
       roles: ["admin"],
       key: "admin-generate-qr",
       withLayout: true,

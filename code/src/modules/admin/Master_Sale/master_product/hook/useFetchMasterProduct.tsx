@@ -69,6 +69,11 @@ export const useFetchMasterFunctionProduct = () => {
         setOpenModal(true)
     }, [selectedId]);
 
+    const handleEdit = useCallback((id: string) => {
+        console.log("open product id", id);
+        setSelectedId(id);
+        setOpenModal(true);
+    }, []);
 
     return {
         setConfirmPopup,
@@ -83,6 +88,7 @@ export const useFetchMasterFunctionProduct = () => {
         setSelectedId,
         selectedId,
         openModal,
+        handleEdit,
         setOpenModal,
         setopenViewPage,
         openViewPage,

@@ -90,7 +90,6 @@ const TableStudent: React.FC<ITableStudentProps> = ({
                                 ))}
                             </TableRow>
                         </TableHead>
-
                         <TableBody>
                             {masterController.loading_student ? (
                                 <TableRow>

@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useTheme } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { useForm, type FieldErrors, type Path, type Resolver, type UseFormSetFocus } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as R from 'ramda';
 import Swal from "sweetalert2";
 import { confirmPopupAtom, flashAlertAtom } from "../../../../../shared/components/constants/OptionsAtom";
-import { ICategoryItemDefule, type ICategoryItem } from "../interface/MasterCategories.interface";
-import { CreateCategories, getAllCategories, UpdateCategories } from "../service/MasterCategoriesApi";
+import { ICategoryItemDefule, type ICategoryDeletePayload, type ICategoryItem } from "../interface/MasterCategories.interface";
+import { CreateCategories, DeleteCategories, getAllCategories, getAllCategoriesStatus, UpdateCategories } from "../service/MasterCategoriesApi";
 import { MasterCategoryZod } from "../utils/ValidationMasterCategories";
 import { getAllErrorPaths } from "../../../../../shared/components/error/FunctionError";
 
@@ -21,8 +19,7 @@ export const useFetchMasterCategoryList = () => {
     const showCard = view === "card";
     const showTable = view === "table";
     const setFlash = useSetAtom(flashAlertAtom);
-    const [openCreatePage, setopenCreatePage] = useState<boolean>(false);
-    const [openViewPage, setopenViewPage] = useState<boolean>(false);
+    const [openModel, setOpenModel] = useState<boolean>(false);
     const queryClient = useQueryClient();
     const [selectedId, setSelectedId] = useState<ICategoryItem>(ICategoryItemDefule);
     const [openSearch, setopenSearch] = useState<boolean>(false);
@@ -44,49 +41,99 @@ export const useFetchMasterCategoryList = () => {
     const loading_category = query.isLoading || query.isFetching;
 
     const reload = useCallback(() => {
-        queryClient.invalidateQueries({ queryKey: ["category-list"] });
+        queryClient.invalidateQueries({
+            queryKey: ["category-list"]
+        });
     }, [queryClient]);
 
-    const handleOpenCreatePage = () => {
-        setSelectedId(ICategoryItemDefule);
-        setopenCreatePage(true);
-    };
+    const handleCreate = useCallback(() => {
+        console.log("String")
+        setSelectedId(ICategoryItemDefule)
+        setOpenModel(true)
+    }, []);
 
-    const handleCloseCreatePage = () => {
-        setopenCreatePage(false);
-        setSelectedId(ICategoryItemDefule);
-    };
-
-    const handleOpenViewPage = (data: ICategoryItem) => {
+    const handleEdit = useCallback((data: ICategoryItem) => {
+        console.log("open product id", data);
         setSelectedId(data);
-        setopenViewPage(true);
+        setOpenModel(true);
+    }, []);
+
+    const handleDelete = useCallback(
+        async (category_id: string) => {
+            console.log("handleDelete", category_id);
+
+            try {
+                if (!category_id) {
+                    setFlash({
+                        type_severity: "error",
+                        title: "",
+                        content: "ไม่พบรหัสหมวดหมู่ที่ต้องการลบ",
+                    });
+                    return;
+                }
+
+                const name_by = localStorage.getItem("account_name") || "";
+                const data_delete: ICategoryDeletePayload = {
+                    category_id: "",
+                    updated_by_name: ""
+                };
+
+                await DeleteCategories(data_delete);
+
+                setFlash({
+                    type_severity: "success",
+                    title: "",
+                    content: "ลบข้อมูลหมวดหมู่สำเร็จ",
+                });
+
+                queryClient.invalidateQueries({ queryKey: ["category-list"] });
+            } catch (error) {
+                console.error(error);
+                setFlash({
+                    type_severity: "error",
+                    title: "",
+                    content: "เกิดข้อผิดพลาด ไม่สามารถลบข้อมูลได้",
+                });
+            }
+        },
+        [setFlash, queryClient]
+    );
+
+    const onClickDeleteMaster = (category_id: string) => {
+        setConfirmPopup({
+            type: "warning",
+            title: "ท่านต้องการลบข้อมูลหมวดหมู่ !!",
+            content: "ยืนยันหากต้องการลบข้อมูลหมวดหมู่",
+            onClose: () => setConfirmPopup(null),
+            onConfirm: async () => {
+                await handleDelete(category_id);
+                setConfirmPopup(null);
+            },
+            confirmText: "ยืนยัน",
+            cancelText: "ยกเลิก",
+        });
     };
 
-    const handleCloseViewPage = () => {
-        setopenViewPage(false);
-    };
+
 
     return {
         setConfirmPopup,
         navigate,
-        openCreatePage,
-        setopenCreatePage,
-        handleCloseCreatePage,
-        handleOpenCreatePage,
-        openViewPage,
-        setopenViewPage,
-        handleOpenViewPage,
-        handleCloseViewPage,
-
+        selectedId,
+        setSelectedId,
+        handleEdit,
         reload,
         refetch: query.isFetched,
         setFlash,
-        selectedId,
-        setSelectedId,
         category_data,
         loading_category,
+        handleDelete,
+        onClickDeleteMaster,
         openSearch,
+        openModel,
+        setOpenModel,
         setopenSearch,
+        handleCreate,
 
         // view
         view,
@@ -98,10 +145,9 @@ export const useFetchMasterCategoryList = () => {
 export type IuseFetchMasterCategoryList = ReturnType<typeof useFetchMasterCategoryList>;
 
 
-export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setopenCreatePage: Dispatch<SetStateAction<boolean>>, setopenViewPage: Dispatch<SetStateAction<boolean>>) => {
-    const [openModeProduct, setopenModeProduct] = useState<boolean>(false);
-    const category_id = getOneCategory.category_id ?? "0";
-    const isCreate = getOneCategory.category_id === "0";
+export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setOpenModel: Dispatch<SetStateAction<boolean>>, openModel: boolean) => {
+    const category_id = getOneCategory.category_id ?? "";
+    const isCreate = getOneCategory.category_id === "";
     const [actype, setActype] = useState<"create" | "edit">("create");
     const setFlash = useSetAtom(flashAlertAtom);
     const [, setConfirmPopup] = useAtom(confirmPopupAtom);
@@ -125,16 +171,9 @@ export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setope
         setError,
         clearErrors,
         formState: { errors },
-        setFocus,
     } = methods;
 
 
-    const handleOpenModeProduct = () => {
-        setopenModeProduct(true);
-    };
-    const handleCloseModeProduct = () => {
-        setopenModeProduct(false);
-    };
 
     // ✅ handle create mode
     useEffect(() => {
@@ -225,7 +264,7 @@ export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setope
         try {
             if (isCreate) {
 
-                
+
                 const data_create = { ...form, created_by_name: name_by };
                 console.log("Create-form", data_create);
 
@@ -236,7 +275,7 @@ export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setope
                     title: "",
                     content: "การสร้างหมวดหมู่เมนูสำเร็จ",
                 });
-                setopenCreatePage(false)
+                setOpenModel(false)
                 // navigate(AppRoutes.owner_management);
                 return;
             }
@@ -251,7 +290,7 @@ export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setope
                 title: "",
                 content: "แก้ไขบันทึกหมวดหมู่เมนูสำเร็จ",
             });
-            setopenCreatePage(false)
+            setOpenModel(false)
             // navigate(AppRoutes.owner_management);
         } catch (error) {
             console.error(error);
@@ -261,7 +300,7 @@ export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setope
                 content: "เกิดข้อผิดพลาด ไม่สามารถบันทึกข้อมูลได้",
             });
         }
-    }, [getValues, isCreate, navigate, setFlash, setopenCreatePage]);
+    }, [getValues, isCreate, navigate, setFlash, setOpenModel]);
 
     const onSubmitMaster = useCallback(() => {
         setConfirmPopup({
@@ -278,52 +317,12 @@ export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setope
         });
     }, [saveHandler, setConfirmPopup]);
 
-    const handleDelete = useCallback(async () => {
-        try {
-            const idToDelete = isCreate ? getValues("category_id") : category_id;
-            // const idDelete = {
-            //     "category_id": category_id || getValues("category_id"),
-            // }
-            // await DeleteCategoryByOne(idDelete);
-            queryClient.invalidateQueries({ queryKey: ["category-list"] });
-            setFlash({
-                type_severity: "success",
-                title: "",
-                content: "ลบข้อมูลหมวดหมู่เมนูสำเร็จ",
-            });
-            setopenViewPage(false)
-            // navigate(AppRoutes.owner_management);
-        } catch (error) {
-            console.error(error);
-            setFlash({
-                type_severity: "error",
-                title: "",
-                content: "เกิดข้อผิดพลาด ไม่สามารถลบข้อมูลได้",
-            });
-        }
-    }, [getValues, isCreate, category_id, navigate, setFlash]);
-
-    const onClickDeleteMaster = useCallback(() => {
-        setConfirmPopup({
-            type: "warning",
-            title: "ท่านต้องการลบหมวดหมู่เมนู !!",
-            content: "ยืนยันหากต้องการลบหมวดหมู่เมนู หมวดหมู่เมนูที่ลบไม่สามารถนำกลับมาได้",
-            onClose: () => setConfirmPopup(null),
-            onConfirm: async () => {
-                await handleDelete();
-                setConfirmPopup(null);
-            },
-            confirmText: "ยืนยัน",
-            cancelText: "ยกเลิก",
-        });
-    }, [handleDelete, setConfirmPopup]);
 
     return {
         methods,
         actype,
         navigate,
         onSubmitMaster,
-        onClickDeleteMaster,
         handleErrorSubmit,
         register,
         handleSubmit,
@@ -335,10 +334,39 @@ export const useFetchMasterCategoryFrom = (getOneCategory: ICategoryItem, setope
         setError,
         clearErrors,
         errors,
-        openModeProduct,
-        setopenModeProduct,
-        handleOpenModeProduct,
-        handleCloseModeProduct
     };
 };
 export type IuseFetchMasterCategoryFrom = ReturnType<typeof useFetchMasterCategoryFrom>;
+
+
+export const useFetchMasterCategoryListActive = () => {
+    const queryClient = useQueryClient();
+
+    const query = useQuery<ICategoryItem[]>({
+        queryKey: ["category-list-active"],
+        queryFn: async () => {
+            const res = await getAllCategoriesStatus();
+            console.log('cate-res', res)
+            return res;
+        },
+        staleTime: 0,
+        refetchOnMount: "always",
+        retry: 1,
+    });
+
+    const category_data = query.data ?? [];
+    const loading_category = query.isLoading || query.isFetching;
+
+    const reload = useCallback(() => {
+        queryClient.invalidateQueries({ queryKey: ["category-list-active"] });
+    }, [queryClient]);
+
+   
+
+    return {
+        reload,
+        refetch: query.isFetched,
+        category_data,
+        loading_category
+    };
+};

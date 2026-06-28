@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import type { IuseFetchProductFrom } from "../../hook/useFetchMasterProduct";
+import type { IuseFetchProductFrom } from "../../../hook/useFetchMasterProduct";
 
 const defaultVariants = [
   {

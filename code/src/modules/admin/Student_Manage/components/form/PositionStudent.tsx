@@ -83,8 +83,6 @@ const PositionStudent: React.FunctionComponent<IPositionStudentProps> = ({
                             slotProps={{
                                 textField: {
                                     fullWidth: true,
-                                    error: !!errors.position?.start_date,
-                                    helperText: errors.position?.start_date?.message as string,
                                 },
                             }}
                         />
@@ -115,8 +113,6 @@ const PositionStudent: React.FunctionComponent<IPositionStudentProps> = ({
                             slotProps={{
                                 textField: {
                                     fullWidth: true,
-                                    error: !!errors.position?.end_date,
-                                    helperText: errors.position?.end_date?.message as string,
                                 },
                             }}
                         />

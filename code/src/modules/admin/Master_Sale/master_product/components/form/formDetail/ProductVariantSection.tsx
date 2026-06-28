@@ -7,7 +7,8 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import type { IuseFetchProductFrom } from "../../hook/useFetchMasterProduct";
+import type { IuseFetchProductFrom } from "../../../hook/useFetchMasterProduct";
+import { ImageUploader } from "../../../../../../../shared/components/UploadImg/ImageUploader";
 
 interface Props {
     controller: IuseFetchProductFrom;
@@ -36,7 +37,14 @@ const ProductVariantSection: React.FC<Props> = ({ controller }) => {
                 borderColor: "divider",
             }}
         >
-            <Typography sx={{ fontWeight: 700, mb: 2 }}>ตัวเลือกสินค้า</Typography>
+            <Typography
+                sx={{
+                    fontWeight: 700,
+                    mb: 2,
+                }}
+            >
+                ตัวเลือกสินค้า
+            </Typography>
 
             <Stack spacing={2}>
                 {variants.map((variant: any, index: number) => (
@@ -49,6 +57,7 @@ const ProductVariantSection: React.FC<Props> = ({ controller }) => {
                             borderColor: "divider",
                         }}
                     >
+                        {/* Header */}
                         <Stack
                             direction="row"
                             sx={{
@@ -60,7 +69,7 @@ const ProductVariantSection: React.FC<Props> = ({ controller }) => {
                             <Typography
                                 sx={{
                                     fontWeight: 700,
-                                    fontSize: "16px",
+                                    fontSize: 16,
                                 }}
                             >
                                 Variant #{index + 1}
@@ -70,7 +79,7 @@ const ProductVariantSection: React.FC<Props> = ({ controller }) => {
                                 sx={{
                                     mr: 0,
                                     "& .MuiFormControlLabel-label": {
-                                        fontSize: "14px",
+                                        fontSize: 14,
                                         fontWeight: 500,
                                     },
                                 }}
@@ -89,13 +98,55 @@ const ProductVariantSection: React.FC<Props> = ({ controller }) => {
                                 label="เปิดใช้งาน"
                             />
                         </Stack>
-                        <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+
+                        {/* Upload Image */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                mb: 3,
+                            }}
+                        >
+                            <Box sx={{ width: 220 }}>
+                                <Typography
+                                    sx={{
+                                        fontWeight: 700,
+                                        mb: 1,
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    รูป Variant
+                                </Typography>
+
+                                <ImageUploader
+                                    type="product"
+                                    value={variant?.variant_image ?? ""}
+                                    onChange={(url: any) =>
+                                        setVariantValue(
+                                            index,
+                                            "variant_image",
+                                            url ?? ""
+                                        )
+                                    }
+                                />
+                            </Box>
+                        </Box>
+
+                        {/* Variant Name + Color */}
+                        <Stack
+                            direction={{ xs: "column", md: "row" }}
+                            spacing={2}
+                        >
                             <TextField
                                 label="Size / Variant"
                                 fullWidth
                                 value={variant?.variant_name ?? ""}
                                 onChange={(e) =>
-                                    setVariantValue(index, "variant_name", e.target.value)
+                                    setVariantValue(
+                                        index,
+                                        "variant_name",
+                                        e.target.value
+                                    )
                                 }
                             />
 
@@ -104,35 +155,31 @@ const ProductVariantSection: React.FC<Props> = ({ controller }) => {
                                 fullWidth
                                 value={variant?.color_name ?? ""}
                                 onChange={(e) =>
-                                    setVariantValue(index, "color_name", e.target.value)
+                                    setVariantValue(
+                                        index,
+                                        "color_name",
+                                        e.target.value
+                                    )
                                 }
                             />
                         </Stack>
 
-                        <Stack
-                            direction={{ xs: "column", md: "row" }}
-                            spacing={2}
+                        {/* SKU */}
+                        <TextField
                             sx={{ mt: 2 }}
-                        >
-                            <TextField
-                                label="SKU"
-                                fullWidth
-                                value={variant?.sku_code ?? ""}
-                                onChange={(e) =>
-                                    setVariantValue(index, "sku_code", e.target.value)
-                                }
-                            />
+                            label="SKU"
+                            fullWidth
+                            value={variant?.sku_code ?? ""}
+                            onChange={(e) =>
+                                setVariantValue(
+                                    index,
+                                    "sku_code",
+                                    e.target.value
+                                )
+                            }
+                        />
 
-                            <TextField
-                                label="รูป Variant"
-                                fullWidth
-                                value={variant?.variant_image ?? ""}
-                                onChange={(e) =>
-                                    setVariantValue(index, "variant_image", e.target.value)
-                                }
-                            />
-                        </Stack>
-
+                        {/* Price + Stock */}
                         <Stack
                             direction={{ xs: "column", md: "row" }}
                             spacing={2}
