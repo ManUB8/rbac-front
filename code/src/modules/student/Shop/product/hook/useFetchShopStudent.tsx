@@ -141,6 +141,7 @@ export const useFetchShopStudentProductFrom = (
         }) => {
             // const student_code = localStorage.getItem("student_code") || "";
             const student_code = localStorage.getItem("user_code") || "";
+            console.log('student_code',student_code)
             try {
                 setSaving(true);
 

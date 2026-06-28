@@ -1,10 +1,5 @@
-import React, { useState } from "react";
+import React, {  } from "react";
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Stack,
     Typography,
 } from "@mui/material";
 
@@ -28,7 +23,7 @@ const HeadStudentActivitiesComputer: React.FunctionComponent<IHeadStudentActivit
                     mb: 3,
                 }}
             >
-                {"สแกน QR หรือกรอกรหัสนิสิต"}
+                {"สแกน QR "}
             </Typography>
 
         </>

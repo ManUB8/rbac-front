@@ -9,6 +9,24 @@ export interface IStudentProductSearchRequest {
     page: number;
     limit: number;
 }
+export interface IPreorderRoundItem {
+    preorder_round_id: string;
+    product_id: string;
+    round_name: string;
+    start_at: number;
+    end_at: number;
+    expected_ship_at: number;
+    limit_qty: number;
+    sold_count: number;
+    remaining_qty: number;
+    is_active: boolean;
+    created_by_id: number;
+    created_by_name: string;
+    updated_by_id: number;
+    updated_by_name: string;
+    created_at: number;
+    updated_at: number;
+}
 
 export interface IProductItem {
     product_id: string;
@@ -16,25 +34,42 @@ export interface IProductItem {
     description: string;
     category_id: string;
     category_name: string;
+
     total_stock: number;
-    min_price: number;
-    max_price: number;
     active_variant_count: number;
+    min_price: string;
+    max_price: string;
+
     base_price: string | number;
     base_stock: number;
-    owner_type: string; //"club" | "faculty" | "major" | "external";
+
+    owner_type: string;
     faculty_id: number;
     major_id: number;
     external_name: string;
     club_name: string;
+
     main_image: string;
     product_images: string[];
+
     has_variant: boolean;
     is_active: boolean;
     is_limited: boolean;
+    pickup_only: boolean;
+
     limit_per_student: number;
+
+    is_preorder: boolean;
+    preorder_note: string;
+    preorder_start_at: number;
+    preorder_end_at: number;
+    preorder_expected_ship_at: number;
+    preorder_limit_qty: string | number;
+    active_preorder_round: IPreorderRoundItem;
+
     weight_gram: number;
     sold_count: number;
+
     created_by_id: number;
     created_by_name: string;
     updated_by_id: number;
@@ -61,25 +96,62 @@ export interface IProductOneData {
     product_name: string;
     description: string;
     category_id: string;
+
     base_price: number | string;
     base_stock: number;
-    owner_type:string; //"club" | "faculty" | "major" | "external";
+
+    owner_type: string;
     faculty_id: number;
     major_id: number;
     external_name: string;
     club_name: string;
+
     main_image: string;
     product_images: string[];
+
     has_variant: boolean;
     is_active: boolean;
     is_limited: boolean;
+    pickup_only: boolean;
+
     limit_per_student: number;
+
+    is_preorder: boolean;
+    preorder_note: string;
+    preorder_start_at: number;
+    preorder_end_at: number;
+    preorder_expected_ship_at: number;
+    preorder_limit_qty: number | string;
+    active_preorder_round: IPreorderRoundItem;
+
     weight_gram: number;
     sold_count: number;
+
     min_price: string;
     max_price: string;
     total_stock: number;
+
     variants: IProductVariant[];
+
+    created_at: number;
+    updated_at: number;
+}
+
+export interface IPreorderRoundItem {
+    preorder_round_id: string;
+    product_id: string;
+    round_name: string;
+    start_at: number;
+    end_at: number;
+    expected_ship_at: number;
+    limit_qty: number;
+    sold_count: number;
+    remaining_qty: number;
+    is_active: boolean;
+    created_by_id: number;
+    created_by_name: string;
+    updated_by_id: number;
+    updated_by_name: string;
     created_at: number;
     updated_at: number;
 }
@@ -120,7 +192,32 @@ export const ShopProductItemDefault: IProductOneData = {
     total_stock: 0,
     variants: [],
     created_at: 0,
-    updated_at: 0
+    updated_at: 0,
+    pickup_only: false,
+    is_preorder: false,
+    preorder_note: "",
+    preorder_start_at: 0,
+    preorder_end_at: 0,
+    preorder_expected_ship_at: 0,
+    preorder_limit_qty: "",
+    active_preorder_round:{
+        preorder_round_id: "",
+        product_id: "",
+        round_name: "",
+        start_at: 0,
+        end_at: 0,
+        expected_ship_at: 0,
+        limit_qty: 0,
+        sold_count: 0,
+        remaining_qty: 0,
+        is_active: false,
+        created_by_id: 0,
+        created_by_name: "",
+        updated_by_id: 0,
+        updated_by_name: "",
+        created_at: 0,
+        updated_at: 0
+    }
 };
 
 export interface IAddToCartRequest {

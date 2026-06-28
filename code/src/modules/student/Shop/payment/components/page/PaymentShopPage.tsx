@@ -8,8 +8,11 @@ import PaymentProductSummary from "./PaymentProductSummary";
 import PaymentSlipSection from "./PaymentSlipSection";
 import { CreateOrderShop } from "../../../order/service/OrderShopApi";
 import { UpdatePaymentSlip } from "../../../payment/page/PaymentApi";
+import { AppRoutes } from "../../../../../../router/router";
+import { useNavigate } from "react-router-dom";
 
 const PaymentShopPage: React.FC = () => {
+    const navigate = useNavigate();
     const [step, setStep] = React.useState<1 | 2>(1);
     const [paymentMethod, setPaymentMethod] = React.useState<"promptpay" | "bank_transfer">("promptpay");
 
@@ -90,6 +93,7 @@ const PaymentShopPage: React.FC = () => {
                 order_no: orderNo,
                 slip_image: slipUrl,
             });
+            navigate(`${AppRoutes.studentShop}/order`)
         } catch (error) {
             console.error(error);
         } finally {
@@ -97,15 +101,21 @@ const PaymentShopPage: React.FC = () => {
         }
     };
 
+    React.useEffect(() => {
+        if (summary?.student_name) {
+            setReceiverName(summary.student_name);
+        }
+    }, [summary?.student_name]);
+
     return (
         <Container maxWidth="md" sx={{ py: 4 }}>
             <Stack spacing={3}>
                 <Box>
-                    <Typography sx={{ fontSize: 44, fontWeight: 900 }}>
+                    <Typography sx={{ fontSize: 24, fontWeight: 900 }}>
                         ชำระเงิน
                     </Typography>
 
-                    <Typography sx={{ color: "text.secondary", fontSize: 18 }}>
+                    <Typography sx={{ color: "text.secondary", fontSize: 16 }}>
                         {step === 1
                             ? "ขั้นตอนที่ 1/2 — กรอกข้อมูลผู้รับ"
                             : "ขั้นตอนที่ 2/2 — ชำระเงินและแนบสลิป"}
@@ -128,12 +138,12 @@ const PaymentShopPage: React.FC = () => {
                             setNote={setNote}
                         />
 
-                        <PaymentMethodSection
+                        {/* <PaymentMethodSection
                             summary={summary}
                             paymentMethod={paymentMethod}
                             setPaymentMethod={setPaymentMethod}
                             previewOnly
-                        />
+                        /> */}
 
                         <PaymentProductSummary summary={summary} />
 
@@ -144,8 +154,6 @@ const PaymentShopPage: React.FC = () => {
                             disabled={!canNext || creatingOrder}
                             onClick={handleCreateOrder}
                             sx={{
-                                height: 56,
-                                borderRadius: 2,
                                 fontSize: 20,
                                 fontWeight: 700,
                             }}
@@ -166,7 +174,7 @@ const PaymentShopPage: React.FC = () => {
                         <PaymentSlipSection
                             slipUrl={slipUrl}
                             setSlipUrl={setSlipUrl}
-                            onBack={() => setStep(1)}
+                            onBack={() => navigate(`${AppRoutes.studentShop}/order`)}
                             onConfirm={handleConfirmPaymentSlip}
                             canConfirm={canConfirmSlip && !uploadingSlip}
                         />

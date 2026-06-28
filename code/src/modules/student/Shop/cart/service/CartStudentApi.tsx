@@ -4,6 +4,7 @@ import type { ICartResponse, IDeleteCartItem, IUpdateCartQuantityItem } from "..
 const user_code = localStorage.getItem("user_code");
 
 export const getOneCartStudent = async (): Promise<ICartResponse> => {
+    console.log(user_code)
     const res = await api.get<ICartResponse>(
         ApiConfig.MASETR_SHOP_API + `/cart/${Number(user_code)}`
     );

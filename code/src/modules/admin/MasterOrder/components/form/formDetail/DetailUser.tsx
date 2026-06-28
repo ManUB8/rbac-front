@@ -51,7 +51,6 @@ const DetailUser: React.FC<Props> = ({ controller }) => {
             elevation={0}
             sx={{
                 p: 2.5,
-                borderRadius: 2,
                 border: "1px solid",
                 borderColor: "divider",
             }}
@@ -70,12 +69,12 @@ const DetailUser: React.FC<Props> = ({ controller }) => {
                     variant="outlined"
                     color={
                         orderStatusColor[
-                            order?.order_status as keyof typeof orderStatusColor
+                        order?.order_status as keyof typeof orderStatusColor
                         ] ?? "default"
                     }
                     label={
                         orderStatusText[
-                            order?.order_status as keyof typeof orderStatusText
+                        order?.order_status as keyof typeof orderStatusText
                         ] ?? "-"
                     }
                 />
@@ -85,12 +84,12 @@ const DetailUser: React.FC<Props> = ({ controller }) => {
                     variant="outlined"
                     color={
                         paymentStatusColor[
-                            order?.payment_status as keyof typeof paymentStatusColor
+                        order?.payment_status as keyof typeof paymentStatusColor
                         ] ?? "default"
                     }
                     label={
                         paymentStatusText[
-                            order?.payment_status as keyof typeof paymentStatusText
+                        order?.payment_status as keyof typeof paymentStatusText
                         ] ?? "-"
                     }
                 />
@@ -102,7 +101,7 @@ const DetailUser: React.FC<Props> = ({ controller }) => {
                 <Grid size={6}>
                     <Typography color="text.secondary">นิสิต</Typography>
                     <Typography sx={{ fontWeight: 700 }}>
-                        {order?.student_id || "-"}
+                        {order?.student_code || "-"}
                     </Typography>
                 </Grid>
 
@@ -138,7 +137,7 @@ const DetailUser: React.FC<Props> = ({ controller }) => {
                 <Grid size={6}>
                     <Typography color="text.secondary">ยอดรวม</Typography>
                     <Typography sx={{ fontWeight: 800 }}>
-                        ฿{formatPrice(order?.total_amount)}
+                        {formatPrice(order?.total_amount)} ฿
                     </Typography>
                 </Grid>
             </Grid>

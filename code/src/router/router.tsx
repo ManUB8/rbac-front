@@ -6,14 +6,10 @@ import LoginPage from "../modules/auth/page/LoginPage";
 import LoginForm from "../modules/auth/page/LoginForm";
 import RegisterPage from "../modules/auth/page/Register";
 
-import DashBoardPage from "../modules/dashboard/DashBoardPage";
-import StadiumOutlinedIcon from '@mui/icons-material/StadiumOutlined';
 import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
-import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
-import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
 import StudentCardPage from "../modules/student/StudentMaster/page/StudentCardPage";
 import StudentActivityPage from "../modules/student/StudentActivity/page/StudentActivityPage";
 import StudentSummaryPage from "../modules/student/Dashboard/ActivitySummary/page/StudentSummaryPage";
@@ -24,7 +20,6 @@ import Student_ManagePage from "../modules/admin/Student_Manage/page/Student_Man
 import StudentReportPage from "../modules/admin/StudentReport/page/StudentReportPage";
 import EventRegistrantsPage from "../modules/admin/EventRegistrants/page/EventRegistrantsPage";
 import DashboardAdminPage from "../modules/admin/Dashboard_Admin/page/DashboardAdminPage";
-import QrScannerPage from "../modules/admin/Qr_Scanner/page/QrScannerPage";
 
 
 // icon
@@ -37,7 +32,6 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import FolderSharedOutlinedIcon from '@mui/icons-material/FolderSharedOutlined';
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import DocumentScannerOutlinedIcon from '@mui/icons-material/DocumentScannerOutlined';
 import InstallMobileOutlinedIcon from '@mui/icons-material/InstallMobileOutlined';
@@ -45,17 +39,11 @@ import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined';
 import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import QrCodeOutlinedIcon from '@mui/icons-material/QrCodeOutlined';
-import PhonelinkSetupOutlinedIcon from '@mui/icons-material/PhonelinkSetupOutlined';
-import ComputerIcon from '@mui/icons-material/Computer';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import SmartphoneIcon from '@mui/icons-material/Smartphone';
-import BuildIcon from '@mui/icons-material/Build';
 import PersonPinOutlinedIcon from '@mui/icons-material/PersonPinOutlined';
 import QrCodeScannerOutlinedIcon from '@mui/icons-material/QrCodeScannerOutlined';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
-import AddToHomeScreenOutlinedIcon from '@mui/icons-material/AddToHomeScreenOutlined';
 import GenerateQr from "../modules/admin/GenerateQr/page/GenerateQr";
 import StudentActivitiesManualPage from "../modules/admin/Student_Activities_Manual/page/StudentActivitiesManualPage";
 import StudentActivitiesComputerPage from "../modules/admin/Student_Activities_Computer/page/StudentActivitiesComputerPage";
@@ -144,7 +132,7 @@ export const routesConfig: {
     {
       path: AppRoutes.dashboard,
       element: <DashboardAdminPage />,
-      code: "dashboard",
+      code: "adminSummary",
       name: "Dashboard",
       icon: <SpaceDashboardOutlinedIcon />,
       roles: ["admin"],

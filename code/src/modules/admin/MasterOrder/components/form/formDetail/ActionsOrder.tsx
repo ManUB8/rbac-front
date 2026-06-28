@@ -36,35 +36,31 @@ const ActionsOrder: React.FC<Props> = ({ controller }) => {
     const isShipping = order?.delivery_type === "shipping";
 
     const handleConfirmPayment = () => {
-        console.log("confirm payment", order?.order_id);
+        controller.handleConfirmPayment();
     };
 
     const handleRejectPayment = () => {
-        console.log("reject payment", order?.order_id);
+        controller.handleRejectPayment("สลิปไม่ผ่านการตรวจสอบ");
     };
 
     const handlePreparing = () => {
-        console.log("change to preparing", order?.order_id);
+        controller.handleChangeOrderStatus("preparing");
     };
 
     const handleReadyForPickup = () => {
-        console.log("change to ready_for_pickup", order?.order_id);
+        controller.handleChangeOrderStatus("ready_for_pickup");
     };
 
     const handleShipping = () => {
-        console.log("change to shipping", {
-            order_id: order?.order_id,
-            carrier,
-            tracking_no: trackingNo,
-        });
+        controller.handleShipping(carrier, trackingNo);
     };
 
     const handleCompleted = () => {
-        console.log("change to completed", order?.order_id);
+        controller.handleChangeOrderStatus("completed");
     };
 
     const handleCancelOrder = () => {
-        console.log("cancel order", order?.order_id);
+        controller.handleCancelOrder("ยกเลิกโดยผู้ดูแลระบบ");
     };
 
     const renderAction = () => {

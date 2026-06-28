@@ -11,8 +11,8 @@ const PaymentProductSummary: React.FC<Props> = ({ summary }) => {
         Number(value || 0).toLocaleString("th-TH");
 
     return (
-        <Card sx={{ p: 3, borderRadius: 2 }}>
-            <Typography sx={{ fontSize: 24, fontWeight: 900, mb: 2 }}>
+        <Card sx={{ p: 3}}>
+            <Typography sx={{ fontSize: 18, fontWeight: 900, mb: 2 }}>
                 รายการสินค้า
             </Typography>
 
@@ -49,14 +49,14 @@ const PaymentProductSummary: React.FC<Props> = ({ summary }) => {
                         justifyContent: "space-between",
                     }}
                 >
-                    <Typography sx={{ fontWeight: 900, fontSize: 22 }}>
+                    <Typography sx={{ fontWeight: 900, fontSize: 20 }}>
                         ยอดชำระ
                     </Typography>
 
                     <Typography
                         sx={{
                             fontWeight: 900,
-                            fontSize: 24,
+                            fontSize: 20,
                             color: "primary.main",
                         }}
                     >

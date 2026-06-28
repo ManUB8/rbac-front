@@ -23,38 +23,76 @@ export interface IProductVariant {
     is_active: boolean;
 }
 
-export interface IProductItem {
+export interface IPreorderRoundItem {
+    preorder_round_id: string;
     product_id: string;
-    product_name: string;
-    description: string;
-    category_id: string;
-    category_name: string;
-    base_price: number;
-    base_stock: number;
-    total_stock: number;
-    active_variant_count: number;
-    owner_type: string; //club | faculty | major | external
-    faculty_id: string;
-    major_id: string;
-    external_name: string ;
-    club_name: string ;
-    main_image: string;
-    product_images: string[];
-    variants: IVariantItem[];
-    has_variant: boolean;
-    is_active: boolean;
-    is_limited: boolean;
-    limit_per_student: number;
-    weight_gram: number;
+    round_name: string;
+    start_at: number;
+    end_at: number;
+    expected_ship_at: number;
+    limit_qty: number;
     sold_count: number;
-    min_price?: string;
-    max_price?: string;
+    remaining_qty: number;
+    is_active: boolean;
     created_by_id: number;
     created_by_name: string;
     updated_by_id: number;
     updated_by_name: string;
     created_at: number;
     updated_at: number;
+}
+
+export interface IProductItem {
+    product_id: string;
+    product_name: string;
+    description: string;
+    category_id: string;
+    category_name: string;
+
+    base_price: string | number;
+    base_stock: number;
+    total_stock: number;
+    active_variant_count: number;
+
+    owner_type: string;
+    faculty_id: string | number;
+    major_id: string | number;
+    external_name: string;
+    club_name: string;
+
+    main_image: string;
+    product_images: string[];
+    variants?: IVariantItem[];
+
+    has_variant: boolean;
+    is_active: boolean;
+    is_limited: boolean;
+    pickup_only: boolean;
+
+    limit_per_student: number;
+
+    is_preorder: boolean;
+    preorder_note: string;
+    preorder_start_at: number;
+    preorder_end_at: number;
+    preorder_expected_ship_at: number;
+    preorder_limit_qty: string | number;
+    active_preorder_round: IPreorderRoundItem;
+
+    weight_gram: number;
+    sold_count: number;
+
+    min_price?: string;
+    max_price?: string;
+
+    created_by_id: number;
+    created_by_name: string;
+    updated_by_id: number;
+    updated_by_name: string;
+
+    created_at: number;
+    updated_at: number;
+
     actype?: string;
 }
 
@@ -95,7 +133,32 @@ export const IProductItemmDefule: IProductItem = {
     club_name: "",
     category_name: "",
     active_variant_count: 0,
-    total_stock: 0
+    total_stock: 0,
+    pickup_only: false,
+    is_preorder: false,
+    preorder_note: "",
+    preorder_start_at: 0,
+    preorder_end_at: 0,
+    preorder_expected_ship_at: 0,
+    preorder_limit_qty: "",
+    active_preorder_round: {
+        preorder_round_id: "",
+        product_id: "",
+        round_name: "",
+        start_at: 0,
+        end_at: 0,
+        expected_ship_at: 0,
+        limit_qty: 0,
+        sold_count: 0,
+        remaining_qty: 0,
+        is_active: false,
+        created_by_id: 0,
+        created_by_name: "",
+        updated_by_id: 0,
+        updated_by_name: "",
+        created_at: 0,
+        updated_at: 0
+    }
 }
 
 

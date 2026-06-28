@@ -305,7 +305,7 @@ export const getTheme = (mode: "light" | "dark") => {
 
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
-            borderRadius: 14,
+            borderRadius: 4,
             fontWeight: 700,
             boxShadow: "none",
             outline: "none",

@@ -11,8 +11,9 @@ import {
 } from "@mui/material";
 import { motion } from "framer-motion";
 
-import NoImg from "../../../../../../assets/image/NoImg.png";
+import NoImg from "../../../../../../assets/image/no-img.jpg";
 import type { IuseFetchMasterFunctionShopStudent } from "../../hook/useFetchShopStudent";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 export interface ICardShopStudentProps {
     mastercontroller: IuseFetchMasterFunctionShopStudent;
@@ -178,17 +179,16 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
                                                 }}
                                             />
                                         </motion.div>
-
-                                        {item.has_variant && (
+                                        {item.is_limited && (
                                             <Chip
-                                                label={`${item.active_variant_count} ตัวเลือก`}
-                                                color="primary"
+                                                label={`จำกัด ${item.limit_per_student} ชิ้น/คน`}
+                                                color="warning"
                                                 size="small"
                                                 sx={{
                                                     position: "absolute",
                                                     top: 10,
                                                     right: 10,
-                                                    fontWeight: 700,
+                                                    fontWeight: 600,
                                                     zIndex: 2,
                                                 }}
                                             />
@@ -199,12 +199,12 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
                                                 inset: 0,
                                                 background: hasImage
                                                     ? "linear-gradient(to top, rgba(0,0,0,.92), rgba(0,0,0,.3), transparent)"
-                                                    : "rgba(255,255,255,.96)",
+                                                    : "rgba(255, 255, 255, 0.72)",
                                                 display: "flex",
                                                 flexDirection: "column",
                                                 justifyContent: "flex-end",
                                                 p: 1.5,
-                                                gap: 0.15, 
+                                                gap: 0.15,
                                             }}
                                         >
                                             <Typography

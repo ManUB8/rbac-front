@@ -34,24 +34,24 @@ const PaymentReceiverSection: React.FC<Props> = ({
 }) => {
     const isShipping = summary.delivery_type === "shipping";
     const isPickup = summary.delivery_type === "pickup";
-
+    
     return (
-        <Card sx={{ p: 3, borderRadius: 2 }}>
-            <Typography sx={{ fontSize: 26, fontWeight: 900, mb: 2 }}>
+        <Card sx={{ p: 3 }}>
+            <Typography sx={{ fontSize: 18, fontWeight: 900, mb: 2 }}>
                 วิธีรับสินค้า
             </Typography>
 
             <Stack spacing={1}>
                 <Stack direction="row" sx={{ alignItems: "center" }}>
                     <Radio checked={isShipping} />
-                    <Typography sx={{ fontSize: 20 }}>
+                    <Typography sx={{ fontSize: 16 }}>
                         จัดส่งสินค้าตามที่อยู่
                     </Typography>
                 </Stack>
 
                 <Stack direction="row" sx={{ alignItems: "center" }}>
                     <Radio checked={isPickup} />
-                    <Typography sx={{ fontSize: 20 }}>
+                    <Typography sx={{ fontSize: 16 }}>
                         รับเองที่จุดนัดรับ
                     </Typography>
                 </Stack>
@@ -62,7 +62,7 @@ const PaymentReceiverSection: React.FC<Props> = ({
                     label="ชื่อผู้รับ *"
                     fullWidth
                     value={receiverName}
-                    onChange={(e) => setReceiverName(e.target.value)}
+                    // onChange={(e) => setReceiverName(e.target.value)}
                 />
 
                 <TextField

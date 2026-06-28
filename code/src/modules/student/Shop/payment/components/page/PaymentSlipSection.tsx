@@ -9,8 +9,7 @@ import {
 
 import UploadOutlinedIcon from "@mui/icons-material/UploadOutlined";
 import { ImageUploader } from "../../../../../../shared/components/UploadImg/ImageUploader";
-
-
+import NoImg from "../../../../../../assets/image/slip.jpg";
 interface Props {
     slipUrl: string;
     setSlipUrl: (v: string) => void;
@@ -76,25 +75,29 @@ const PaymentSlipSection: React.FC<Props> = ({
 
             <ImageUploader
                 type="payment"
-                value={slipUrl}
-                onChange={( url: any) => setSlipUrl(url ?? "")}
+                value={slipUrl || NoImg}
+                onChange={(url: any) => setSlipUrl(url ?? "")}
             />
 
             <Divider sx={{ my: 3 }} />
 
             <Stack
-                direction="row"
+                direction={{ xs: "column", sm: "row" }}
                 spacing={2}
             >
                 <Button
+                    fullWidth
                     variant="outlined"
                     size="large"
                     onClick={onBack}
                     sx={{
-                        minWidth: 160,
+                        minHeight: 48,
+                        whiteSpace: "normal",
+                        lineHeight: 1.3,
+                        fontWeight: 700,
                     }}
                 >
-                    ย้อนกลับ
+                    ข้ามไปก่อน (อัปสลิปที่หลัง)
                 </Button>
 
                 <Button
@@ -104,6 +107,12 @@ const PaymentSlipSection: React.FC<Props> = ({
                     disabled={!canConfirm}
                     onClick={onConfirm}
                     startIcon={<UploadOutlinedIcon />}
+                    sx={{
+                        minHeight: 48,
+                        whiteSpace: "normal",
+                        lineHeight: 1.3,
+                        fontWeight: 700,
+                    }}
                 >
                     ส่งหลักฐานและยืนยันคำสั่งซื้อ
                 </Button>

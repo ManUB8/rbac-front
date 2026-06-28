@@ -20,6 +20,29 @@ export type IDeliveryType =
     | "pickup"
     | "shipping";
 
+
+export interface ICancelOrderRequest {
+    order_id: string;
+    cancel_note: string;
+    updated_by_name: string;
+}
+export interface IOrderRejectPaymentRequest {
+    order_id: string;
+    cancel_note: string;
+    updated_by_name: string;
+}
+export interface IOrderShippingRequest {
+    order_id: string;
+    carrier: string;
+    tracking_no: string;
+    updated_by_name: string;
+}
+export interface IOrderStatusRequest {
+    order_id: string;
+    order_status: IOrderStatus;
+    updated_by_name: string;
+}
+
 export interface IOrderFilterRequest {
     search: string;
     student_code: string;
@@ -40,6 +63,7 @@ export interface IOrderListResponse {
 export interface IOrderItem {
     order_id: string;
     order_no: string;
+    student_code: string;
 
     student_id: number;
 
@@ -119,6 +143,7 @@ export interface IOrderDetail {
     order_id: string;
     order_no: string;
 
+    student_code: string;
     student_id: number;
 
     total_amount: string;

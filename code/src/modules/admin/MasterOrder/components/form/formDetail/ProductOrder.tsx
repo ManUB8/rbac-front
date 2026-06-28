@@ -10,7 +10,7 @@ import {
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 
 import type { IuseFetcOrderFrom } from "../../../hook/useFetchMasterOrder";
-import NoImg from "../../../../../../assets/image/NoImg.png";
+import NoImg from "../../../../../../assets/image/no-img.jpg";
 
 interface Props {
     controller: IuseFetcOrderFrom;

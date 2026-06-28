@@ -47,9 +47,9 @@ const DetailOrder: React.FC<IDetailOrderProps> = ({
     return (
         <Dialog
             open={mastercontroller.openModal}
-            onClose={handleClose}
+            // onClose={handleClose}
             fullWidth
-            maxWidth="lg"
+            maxWidth="sm"
         >
             <DialogTitle sx={{ pr: 6 }}>
                 คำสั่งซื้อ {order?.order_no || "-"}
@@ -60,12 +60,12 @@ const DetailOrder: React.FC<IDetailOrderProps> = ({
                         variant="outlined"
                         color={
                             orderStatusColor[
-                                order?.order_status as keyof typeof orderStatusColor
+                            order?.order_status as keyof typeof orderStatusColor
                             ] ?? "default"
                         }
                         label={
                             orderStatusText[
-                                order?.order_status as keyof typeof orderStatusText
+                            order?.order_status as keyof typeof orderStatusText
                             ] ?? "-"
                         }
                     />
@@ -75,12 +75,12 @@ const DetailOrder: React.FC<IDetailOrderProps> = ({
                         variant="outlined"
                         color={
                             paymentStatusColor[
-                                order?.payment_status as keyof typeof paymentStatusColor
+                            order?.payment_status as keyof typeof paymentStatusColor
                             ] ?? "default"
                         }
                         label={
                             paymentStatusText[
-                                order?.payment_status as keyof typeof paymentStatusText
+                            order?.payment_status as keyof typeof paymentStatusText
                             ] ?? "-"
                         }
                     />
@@ -101,18 +101,13 @@ const DetailOrder: React.FC<IDetailOrderProps> = ({
                     onSubmit={controller.handleSubmit(controller.onSubmitMaster)}
                 >
                     <Stack
-                        direction={{ xs: "column", md: "row" }}
-                        spacing={2}
+                        direction={{ xs: "column", md: "column" }}
+                        spacing={1}
                     >
-                        <Stack spacing={2} sx={{ flex: 1 }}>
-                            <DetailUser controller={controller} />
-                            <SlipPayment controller={controller} />
-                        </Stack>
-
-                        <Stack spacing={2} sx={{ flex: 1 }}>
-                            <ProductOrder controller={controller} />
-                            <ActionsOrder controller={controller} />
-                        </Stack>
+                        <DetailUser controller={controller} />
+                        <SlipPayment controller={controller} />
+                        <ProductOrder controller={controller} />
+                        <ActionsOrder controller={controller} />
                     </Stack>
                 </Box>
             </DialogContent>

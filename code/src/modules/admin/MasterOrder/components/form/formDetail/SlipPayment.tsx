@@ -16,7 +16,7 @@ import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import OpenInFullOutlinedIcon from "@mui/icons-material/OpenInFullOutlined";
 
 import type { IuseFetcOrderFrom } from "../../../hook/useFetchMasterOrder";
-import NoImg from "../../../../../../assets/image/NoImg.png";
+import NoImg from "../../../../../../assets/image/slip.jpg";
 
 interface Props {
     controller: IuseFetcOrderFrom;

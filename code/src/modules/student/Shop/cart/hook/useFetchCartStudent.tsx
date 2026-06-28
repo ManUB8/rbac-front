@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { AppRoutes } from "../../../../../router/router";
 
 export const useCartStudentFetch = () => {
-     const navigate = useNavigate();
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [openCheckoutDialog, setOpenCheckoutDialog] = useState(false);
     const [receiverName, setReceiverName] = useState("");

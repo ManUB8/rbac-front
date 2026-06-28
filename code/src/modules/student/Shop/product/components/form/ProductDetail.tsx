@@ -20,7 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
-import NoImg from "../../../../../../assets/image/NoImg.png";
+import NoImg from "../../../../../../assets/image/no-img.jpg";
 
 import type {
     IuseFetchMasterFunctionShopStudent,
@@ -52,33 +52,50 @@ const ProductDetail: React.FC<IProductDetailProps> = ({
         (item) => item.variant_id === selectedVariantId
     );
 
+    const isPreorder = !!product?.is_preorder;
+
+    const normalStock = product?.has_variant
+        ? Number(selectedVariant?.stock ?? 0)
+        : Number(product?.base_stock ?? 0);
+
+    const preorderRemainingQty =
+        typeof product?.active_preorder_round === "object" &&
+        product?.active_preorder_round
+            ? Number(product.active_preorder_round.remaining_qty ?? 0)
+            : Number(product?.preorder_limit_qty || 0);
+
+    const availableQty = isPreorder ? preorderRemainingQty : normalStock;
+
+    const stockLabel = isPreorder
+        ? `พรีออเดอร์คงเหลือ ${availableQty}`
+        : `คงเหลือ ${availableQty}`;
+
     const galleryImages = React.useMemo(() => {
         if (!product) return [];
 
-        return [
+        const images = [
             product.main_image,
             ...(product.product_images ?? []),
+            ...variants.map((variant) => variant.variant_image),
         ].filter((img): img is string => Boolean(img?.trim()));
-    }, [product]);
+
+        return Array.from(new Set(images));
+    }, [product, variants]);
 
     const displayImage = getImage(
         selectedImage ||
-        selectedVariant?.variant_image ||
-        product?.main_image
+            selectedVariant?.variant_image ||
+            product?.main_image
     );
 
     const price = product?.has_variant
         ? selectedVariant?.price ?? product?.min_price ?? 0
         : product?.base_price ?? 0;
 
-    const stock = product?.has_variant
-        ? selectedVariant?.stock ?? 0
-        : product?.base_stock ?? 0;
-
     const canSubmit =
         Boolean(product) &&
-        stock > 0 &&
         quantity > 0 &&
+        availableQty > 0 &&
         (!product?.has_variant || Boolean(selectedVariantId));
 
     React.useEffect(() => {
@@ -99,6 +116,15 @@ const ProductDetail: React.FC<IProductDetailProps> = ({
         }
     }, [product?.product_id, variants.length]);
 
+    React.useEffect(() => {
+        if (availableQty <= 0) {
+            setQuantity(1);
+            return;
+        }
+
+        setQuantity((prev) => Math.min(Math.max(prev, 1), availableQty));
+    }, [availableQty]);
+
     const handleClose = () => {
         if (controller.saving) return;
         mastercontroller.setOpenModal(false);
@@ -109,7 +135,7 @@ const ProductDetail: React.FC<IProductDetailProps> = ({
     };
 
     const handlePlus = () => {
-        setQuantity((prev) => Math.min(stock, prev + 1));
+        setQuantity((prev) => Math.min(availableQty, prev + 1));
     };
 
     const handleAddToCart = () => {
@@ -157,6 +183,7 @@ const ProductDetail: React.FC<IProductDetailProps> = ({
                         }}
                     >
                         <CircularProgress />
+
                         <Typography sx={{ mt: 2 }}>
                             กำลังโหลดข้อมูลสินค้า...
                         </Typography>
@@ -244,12 +271,28 @@ const ProductDetail: React.FC<IProductDetailProps> = ({
                                 ฿{price}
                             </Typography>
 
-                            <Chip
-                                label={`คงเหลือ ${stock}`}
-                                color={stock > 0 ? "success" : "error"}
-                                size="small"
-                                sx={{ mb: 2 }}
-                            />
+                            <Stack
+                                direction="row"
+                                spacing={1}
+                                sx={{
+                                    flexWrap: "wrap",
+                                    mb: 2,
+                                }}
+                            >
+                                {isPreorder && (
+                                    <Chip
+                                        label="พรีออเดอร์"
+                                        color="warning"
+                                        size="small"
+                                    />
+                                )}
+
+                                <Chip
+                                    label={stockLabel}
+                                    color={availableQty > 0 ? "success" : "error"}
+                                    size="small"
+                                />
+                            </Stack>
 
                             <Typography
                                 sx={{
@@ -260,6 +303,18 @@ const ProductDetail: React.FC<IProductDetailProps> = ({
                             >
                                 {product.description || "ไม่มีรายละเอียดสินค้า"}
                             </Typography>
+
+                            {product.is_preorder && product.preorder_note && (
+                                <Typography
+                                    sx={{
+                                        color: "warning.dark",
+                                        mb: 2,
+                                        fontWeight: 700,
+                                    }}
+                                >
+                                    หมายเหตุพรีออเดอร์: {product.preorder_note}
+                                </Typography>
+                            )}
 
                             {product.has_variant && (
                                 <>
@@ -283,10 +338,11 @@ const ProductDetail: React.FC<IProductDetailProps> = ({
                                             return (
                                                 <Chip
                                                     key={variant.variant_id}
-                                                    label={`${variant.variant_name}${variant.color_name
+                                                    label={`${variant.variant_name}${
+                                                        variant.color_name
                                                             ? ` / ${variant.color_name}`
                                                             : ""
-                                                        }`}
+                                                    }`}
                                                     variant={
                                                         isSelected
                                                             ? "filled"
@@ -301,11 +357,13 @@ const ProductDetail: React.FC<IProductDetailProps> = ({
                                                         setSelectedVariantId(
                                                             variant.variant_id
                                                         );
+
                                                         setSelectedImage(
                                                             variant.variant_image ||
-                                                            product.main_image ||
-                                                            ""
+                                                                product.main_image ||
+                                                                ""
                                                         );
+
                                                         setQuantity(1);
                                                     }}
                                                 />
@@ -349,8 +407,8 @@ const ProductDetail: React.FC<IProductDetailProps> = ({
 
                                 <IconButton
                                     disabled={
-                                        quantity >= stock ||
-                                        stock <= 0 ||
+                                        quantity >= availableQty ||
+                                        availableQty <= 0 ||
                                         controller.saving
                                     }
                                     onClick={handlePlus}

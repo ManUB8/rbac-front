@@ -11,8 +11,8 @@ const PaymentStepper: React.FC<Props> = ({ step }) => {
         <Stack direction="row" sx={{ alignItems: "center", gap: 2 }}>
             <Box
                 sx={{
-                    width: 46,
-                    height: 46,
+                    width: 36,
+                    height: 36,
                     borderRadius: "50%",
                     bgcolor: step === 1 ? "primary.main" : "primary.light",
                     color: "#fff",
@@ -24,7 +24,7 @@ const PaymentStepper: React.FC<Props> = ({ step }) => {
                 {step === 1 ? "1" : <CheckIcon />}
             </Box>
 
-            <Typography sx={{ fontWeight: 800, fontSize: 20 }}>
+            <Typography sx={{ fontWeight: 800, fontSize: 16 }}>
                 ข้อมูลผู้รับ
             </Typography>
 
@@ -32,8 +32,8 @@ const PaymentStepper: React.FC<Props> = ({ step }) => {
 
             <Box
                 sx={{
-                    width: 46,
-                    height: 46,
+                    width: 36,
+                    height: 36,
                     borderRadius: "50%",
                     bgcolor: step === 2 ? "primary.main" : "action.hover",
                     color: step === 2 ? "#fff" : "text.secondary",
@@ -48,7 +48,7 @@ const PaymentStepper: React.FC<Props> = ({ step }) => {
             <Typography
                 sx={{
                     fontWeight: 800,
-                    fontSize: 20,
+                    fontSize: 16,
                     color: step === 2 ? "text.primary" : "text.secondary",
                 }}
             >

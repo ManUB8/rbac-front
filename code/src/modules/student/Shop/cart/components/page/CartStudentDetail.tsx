@@ -13,7 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-import NoImg from "../../../../../../assets/image/NoImg.png";
+import NoImg from "../../../../../../assets/image/no-img.jpg";
 
 import type { IuseCartStudentFetch } from "../../hook/useFetchCartStudent";
 
