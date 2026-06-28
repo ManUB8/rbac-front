@@ -6,8 +6,8 @@ type RequestConfig = AxiosRequestConfig & {
   skipSwal?: boolean;
 };
 
-// export const HOST_SERVER = `https://api.rbac-activity.com`;
-export const HOST_SERVER = `http://127.0.0.1:8000`;
+export const HOST_SERVER = `https://api.rbac-activity.com`;
+// export const HOST_SERVER = `http://127.0.0.1:8000`;
 console.log("[ENV] VITE_IMAGE_VERSION ENUM_VERSION=", ENUM_VERSION);
 console.log("[ENV] VITE_API_DOMAIN HOST_SERVER=", HOST_SERVER);
 
