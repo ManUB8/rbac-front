@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React from "react";
 import {
     Alert,
     Autocomplete,
@@ -6,347 +6,272 @@ import {
     Button,
     Card,
     CardContent,
+    Grid,
     Stack,
     TextField,
     Typography,
     alpha,
 } from "@mui/material";
 
+import GroupsIcon from "@mui/icons-material/Groups";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import SchoolIcon from "@mui/icons-material/School";
+import BoyIcon from "@mui/icons-material/Boy";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 
-import { useFetchActivityFilter } from "../../../ActivityManage/hook/useFetchActivity";
-import {
-    CheckInStudentActivitiesManual,
-    CheckOutStudentActivitiesManual,
-} from "../../service/StudentActivitiesManualApi";
-
-import type { IActivityFilter } from "../../../ActivityManage/interface/ActivityManage.interface";
 import DetailStuActivity from "./DetailStuActivityManual";
-import type { IStudentActivityCheckItem } from "../../interface/StudentActivitiesManual.interface";
-
-type Mode = "checkin" | "checkout";
+import { useStudentActivitiesManualForm } from "../../hook/useFetchStudentActivitiesManual";
 
 const StudentActivitiesManualFrom: React.FC = () => {
-    const { activity_filter, activity_filter_Loading } = useFetchActivityFilter();
-
-    const [mode, setMode] = useState<Mode>("checkin");
-    const [activityId, setActivityId] = useState<number | null>(null);
-    const [studentCode, setStudentCode] = useState("");
-
-    const [lastLat, setLastLat] = useState<number | null>(null);
-    const [lastLng, setLastLng] = useState<number | null>(null);
-
-    const [loadingLocation, setLoadingLocation] = useState(false);
-    const [loadingSubmit, setLoadingSubmit] = useState(false);
-
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-
-    const [latestStudent, setLatestStudent] =
-        useState<IStudentActivityCheckItem | null>(null);
-
-    const selectedActivity = useMemo(() => {
-        return (
-            activity_filter?.find(
-                (item: IActivityFilter) => item.id === activityId
-            ) ?? null
-        );
-    }, [activity_filter, activityId]);
-
-    const speechUnlockedRef = useRef(false);
-
-    const unlockSpeech = () => {
-        if (!("speechSynthesis" in window)) return;
-
-        speechUnlockedRef.current = true;
-
-        const utterance = new SpeechSynthesisUtterance(" ");
-        utterance.lang = "th-TH";
-        utterance.volume = 0;
-
-        window.speechSynthesis.speak(utterance);
-    };
-
-    const speakMessage = (message: string) => {
-        if (!message) return;
-        if (!("speechSynthesis" in window)) return;
-
-        if (!speechUnlockedRef.current) return;
-
-        window.speechSynthesis.cancel();
-
-        setTimeout(() => {
-            const utterance = new SpeechSynthesisUtterance(message);
-            utterance.lang = "th-TH";
-            utterance.rate = 1;
-            utterance.pitch = 1;
-            utterance.volume = 1;
-
-            window.speechSynthesis.speak(utterance);
-        }, 150);
-    };
-
-    const handleResultMessage = (type: "success" | "error", message: string) => {
-        if (type === "success") {
-            setSuccessMessage(message);
-            setErrorMessage("");
-        } else {
-            setErrorMessage(message);
-            setSuccessMessage("");
-        }
-
-        speakMessage(message);
-    };
-
-    const handleGetLocation = () => {
-        setErrorMessage("");
-        setSuccessMessage("");
-
-        if (!navigator.geolocation) {
-            handleResultMessage("error", "อุปกรณ์นี้ไม่รองรับการขอตำแหน่ง");
-            return;
-        }
-
-        setLoadingLocation(true);
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-
-                setLastLat(lat);
-                setLastLng(lng);
-
-                setLoadingLocation(false);
-                handleResultMessage("success", "ดึงตำแหน่งสำเร็จ");
-            },
-            () => {
-                setLoadingLocation(false);
-                handleResultMessage(
-                    "error",
-                    "ไม่สามารถดึงตำแหน่งได้ กรุณาอนุญาต GPS"
-                );
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0,
-            }
-        );
-    };
-
-    const handleSubmit = async () => {
-        if (loadingSubmit) return;
-
-        setErrorMessage("");
-        setSuccessMessage("");
-
-        const code = studentCode.trim();
-
-        if (!activityId) {
-            handleResultMessage("error", "กรุณาเลือกกิจกรรมก่อน");
-            return;
-        }
-
-        if (!code) {
-            handleResultMessage("error", "กรุณากรอกรหัสนิสิต");
-            return;
-        }
-
-        if (!lastLat || !lastLng) {
-            handleResultMessage("error", "กรุณากดขอตำแหน่งก่อน");
-            return;
-        }
-
-        try {
-            setLoadingSubmit(true);
-
-            if (mode === "checkin") {
-                const res = await CheckInStudentActivitiesManual({
-                    student_code: code,
-                    activity_id: activityId,
-                    created_by_name:
-                        localStorage.getItem("account_name") || "admin",
-                    checkin_lat: lastLat,
-                    checkin_lng: lastLng,
-                });
-
-                setLatestStudent(res.data);
-                handleResultMessage("success", res.detail || "เช็คอินสำเร็จ");
-            } else {
-                const res = await CheckOutStudentActivitiesManual({
-                    student_code: code,
-                    activity_id: activityId,
-                    updated_by_name:
-                        localStorage.getItem("account_name") || "admin",
-                    checkout_lat: lastLat,
-                    checkout_lng: lastLng,
-                });
-
-                setLatestStudent(res.data);
-                handleResultMessage("success", res.detail || "เช็คเอาท์สำเร็จ");
-            }
-
-            setStudentCode("");
-        } catch (error: any) {
-            const message = error?.response?.data?.detail || "เกิดข้อผิดพลาด";
-            handleResultMessage("error", message);
-        } finally {
-            setLoadingSubmit(false);
-        }
-    };
+    const controller = useStudentActivitiesManualForm();
 
     return (
-        <Box
-            sx={{
-                display: "grid",
-                gridTemplateColumns: {
-                    xs: "1fr",
-                    md: "minmax(0, 1.2fr) minmax(320px, 0.8fr)",
-                },
-                gap: { xs: 2, md: 3 },
-                alignItems: "start",
-            }}
-        >
-            <Card
-                elevation={0}
+                <>
+            <Box
                 sx={{
-                    borderRadius: 3,
-                    border: "1px solid",
-                    borderColor: "divider",
-                    bgcolor: "background.paper",
+                    display: "grid",
+                    gridTemplateColumns: {
+                        xs: "1fr",
+                        md: "minmax(0, 1.2fr) minmax(320px, 0.8fr)",
+                    },
+                    gap: { xs: 2, md: 3 },
+                    alignItems: "start",
                 }}
             >
-                <CardContent sx={{ p: { xs: 2, md: 3 } }}>
-                    <Stack spacing={2.25}>
-                        {errorMessage && (
-                            <Alert severity="error">{errorMessage}</Alert>
-                        )}
+                <Card
+                    elevation={0}
+                    sx={{
+                        borderRadius: 3,
+                        border: "1px solid",
+                        borderColor: "divider",
+                        bgcolor: "background.paper",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            border: "1px solid",
+                            borderColor: "divider",
+                            borderRadius: 2.5,
+                            overflow: "hidden",
+                            mt: 2,
+                            mx: 2,
+                        }}
+                    >
+                        <Button
+                            startIcon={<LoginIcon />}
+                            onClick={() => {
+                                controller.unlockSpeech();
+                                controller.setMode("checkin");
+                            }}
+                            sx={{
+                                height: { xs: 48, md: 52 },
+                                borderRadius: 0,
+                                bgcolor: (theme) =>
+                                    controller.mode === "checkin"
+                                        ? alpha(theme.palette.primary.main, 0.1)
+                                        : "transparent",
+                                color:
+                                    controller.mode === "checkin"
+                                        ? "primary.main"
+                                        : "text.secondary",
+                                borderRight: "1px solid",
+                                borderColor: "divider",
+                                fontWeight: 700,
+                            }}
+                        >
+                            เช็คอิน
+                        </Button>
 
-                        {successMessage && (
-                            <Alert severity="success">{successMessage}</Alert>
-                        )}
+                        <Button
+                            startIcon={<LogoutIcon />}
+                            onClick={() => {
+                                controller.unlockSpeech();
+                                controller.setMode("checkout");
+                            }}
+                            sx={{
+                                height: { xs: 48, md: 52 },
+                                borderRadius: 0,
+                                bgcolor: (theme) =>
+                                    controller.mode === "checkout"
+                                        ? alpha(theme.palette.primary.main, 0.1)
+                                        : "transparent",
+                                color:
+                                    controller.mode === "checkout"
+                                        ? "primary.main"
+                                        : "text.secondary",
+                                fontWeight: 700,
+                            }}
+                        >
+                            เช็คเอาท์
+                        </Button>
+                    </Box>
+
+                    <CardContent sx={{ p: { xs: 2, md: 3 } }}>
+                        <Stack spacing={2}>
+                            <Grid container direction="row" spacing={2}>
+                                <Grid size={{ xs: 4, md: 4 }}>
+                                    <Button
+                                        fullWidth
+                                        startIcon={<BoyIcon />}
+                                        variant={
+                                            controller.targetGroup === "freshman"
+                                                ? "contained"
+                                                : "outlined"
+                                        }
+                                        onClick={() =>
+                                            controller.handleChangeTargetGroup("freshman")
+                                        }
+                                        sx={{
+                                            ...(controller.targetGroup === "freshman"
+                                                ? {
+                                                    bgcolor: "info.main",
+                                                    color: "primary.contrastText",
+
+                                                    "&:hover": {
+                                                        bgcolor: "primary.light",
+                                                    },
+                                                }
+                                                : {
+                                                    borderColor: "action.selected",
+                                                    color: "primary.light",
+                                                }),
+                                        }}
+                                    >
+                                        รุ่นน้อง
+                                    </Button>
+                                </Grid>
+
+                                <Grid size={{ xs: 4, md: 4 }}>
+                                    <Button
+                                        fullWidth
+                                        startIcon={<SchoolIcon />}
+                                        variant={
+                                            controller.targetGroup === "senior"
+                                                ? "contained"
+                                                : "outlined"
+                                        }
+                                        onClick={() =>
+                                            controller.handleChangeTargetGroup("senior")
+                                        }
+                                        sx={{
+                                            ...(controller.targetGroup === "senior"
+                                                ? {
+                                                    bgcolor: "info.main",
+                                                    color: "primary.contrastText",
+
+                                                    "&:hover": {
+                                                        bgcolor: "primary.light",
+                                                    },
+                                                }
+                                                : {
+                                                    borderColor: "action.selected",
+                                                    color: "primary.light",
+                                                }),
+                                        }}
+                                    >
+                                        รุ่นพี่
+                                    </Button>
+                                </Grid>
+
+                                <Grid size={{ xs: 4, md: 4 }}>
+                                    <Button
+                                        fullWidth
+                                        startIcon={<GroupsIcon />}
+                                        variant={
+                                            controller.targetGroup === "all"
+                                                ? "contained"
+                                                : "outlined"
+                                        }
+                                        onClick={() =>
+                                            controller.handleChangeTargetGroup("all")
+                                        }
+                                        sx={{
+                                            ...(controller.targetGroup === "all"
+                                                ? {
+                                                    bgcolor: "info.main",
+                                                    color: "primary.contrastText",
+
+                                                    "&:hover": {
+                                                        bgcolor: "primary.light",
+                                                    },
+                                                }
+                                                : {
+                                                    borderColor: "action.selected",
+                                                    color: "primary.light",
+                                                }),
+                                        }}
+                                    >
+                                        ทั้งหมด
+                                    </Button>
+                                </Grid>
+                            </Grid>
 
                         <Autocomplete
                             fullWidth
-                            loading={activity_filter_Loading}
-                            options={activity_filter ?? []}
-                            value={selectedActivity}
-                            getOptionLabel={(option: IActivityFilter) =>
-                                option.name ?? ""
+                            loading={controller.activity_filter_Loading}
+                            options={controller.filteredActivities}
+                            value={controller.selectedActivity}
+                            disabled={!controller.targetGroup}
+                            getOptionLabel={(option) =>
+                                option.activity_name ?? ""
                             }
                             isOptionEqualToValue={(option, value) =>
-                                option.id === value.id
+                                option.activity_id === value.activity_id
                             }
                             onChange={(_, newValue) => {
-                                setActivityId(newValue?.id ?? null);
-                                setErrorMessage("");
-                                setSuccessMessage("");
+                                controller.setActivityId(
+                                    newValue?.activity_id ?? null
+                                );
                             }}
                             renderInput={(params) => (
-                                <TextField {...params} label="เลือกกิจกรรม" />
+                                <TextField
+                                    {...params}
+                                    label="เลือกกิจกรรมของวันนี้"
+                                    helperText="แสดงเฉพาะกิจกรรมของวันนี้ตามกลุ่มที่เลือก"
+                                />
                             )}
                         />
 
-                        <Box
-                            sx={{
-                                display: "grid",
-                                gridTemplateColumns: "1fr 1fr",
-                                border: "1px solid",
-                                borderColor: "divider",
-                                borderRadius: 2.5,
-                                overflow: "hidden",
-                            }}
-                        >
-                            <Button
-                                startIcon={<LoginIcon />}
-                                onClick={() => {
-                                    unlockSpeech();
-                                    setMode("checkin");
-                                }}
-                                // onClick={() => setMode("checkin")}
-                                sx={{
-                                    height: 48,
-                                    borderRadius: 0,
-                                    bgcolor: (theme) =>
-                                        mode === "checkin"
-                                            ? alpha(theme.palette.primary.main, 0.1)
-                                            : "transparent",
-                                    color:
-                                        mode === "checkin"
-                                            ? "primary.main"
-                                            : "text.secondary",
-                                    borderRight: "1px solid",
-                                    borderColor: "divider",
-                                    fontWeight: 700,
-                                }}
-                            >
-                                เช็คอิน
-                            </Button>
+                        {controller.errorMessage && (
+                            <Alert severity="error">
+                                {controller.errorMessage}
+                            </Alert>
+                        )}
 
-                            <Button
-                                startIcon={<LogoutIcon />}
-                                onClick={() => {
-                                    unlockSpeech();
-                                    setMode("checkout");
-                                }}
-                                // onClick={() => setMode("checkout")}
-                                sx={{
-                                    height: 48,
-                                    borderRadius: 0,
-                                    bgcolor: (theme) =>
-                                        mode === "checkout"
-                                            ? alpha(theme.palette.primary.main, 0.1)
-                                            : "transparent",
-                                    color:
-                                        mode === "checkout"
-                                            ? "primary.main"
-                                            : "text.secondary",
-                                    fontWeight: 700,
-                                }}
-                            >
-                                เช็คเอาท์
-                            </Button>
-                        </Box>
-
-                        <TextField
-                            fullWidth
-                            label="รหัสนิสิต"
-                            value={studentCode}
-                            onChange={(e) => setStudentCode(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    handleSubmit();
-                                }
-                            }}
-                        />
+                        {controller.successMessage && (
+                            <Alert severity="success">
+                                {controller.successMessage}
+                            </Alert>
+                        )}
 
                         <Button
                             fullWidth
                             variant="outlined"
                             startIcon={<MyLocationIcon />}
-                            // onClick={handleGetLocation}
+                            disabled={controller.loadingLocation}
                             onClick={() => {
-                                unlockSpeech();
-                                handleGetLocation();
+                                controller.unlockSpeech();
+                                controller.handleGetLocation();
                             }}
-                            disabled={loadingLocation}
                             sx={{
                                 height: 46,
-                                borderRadius: 2.5,
-                                fontWeight: 700,
+                                borderRadius: 999,
+                                fontWeight: 800,
                             }}
                         >
-                            {loadingLocation ? "กำลังขอตำแหน่ง..." : "ขอตำแหน่ง"}
+                            {controller.loadingLocation
+                                ? "กำลังดึงตำแหน่ง..."
+                                : "ขอตำแหน่ง"}
                         </Button>
 
                         <Box
                             sx={{
                                 px: 1.5,
                                 py: 1,
-                                borderRadius: 2,
+                                borderRadius: 999,
                                 bgcolor: "action.hover",
                             }}
                         >
@@ -356,33 +281,51 @@ const StudentActivitiesManualFrom: React.FC = () => {
                                 sx={{
                                     wordBreak: "break-word",
                                     lineHeight: 1.6,
+                                    fontWeight: 700,
                                 }}
                             >
                                 พิกัดล่าสุด:{" "}
-                                {lastLat && lastLng
-                                    ? `Lat: ${lastLat.toFixed(5)} | Lng: ${lastLng.toFixed(5)}`
+                                {controller.lastLat && controller.lastLng
+                                    ? `|${controller.lastLat.toFixed(
+                                        5
+                                    )}|${controller.lastLng.toFixed(5)}`
                                     : "-"}
                             </Typography>
                         </Box>
 
+                        <TextField
+                            fullWidth
+                            label="รหัสนิสิต"
+                            placeholder="67010001"
+                            value={controller.studentCode}
+                            onChange={(e) =>
+                                controller.handleChangeStudentCode(e.target.value)
+                            }
+                            slotProps={{
+                                htmlInput: {
+                                    inputMode: "numeric",
+                                    maxLength: 8,
+                                },
+                            }}
+                        />
+
                         <Button
                             fullWidth
                             variant="contained"
-                            disabled={loadingSubmit || loadingLocation}
-                            // onClick={handleSubmit}
+                            disabled={controller.loadingSubmit}
                             onClick={() => {
-                                unlockSpeech();
-                                handleSubmit();
+                                controller.unlockSpeech();
+                                controller.handleSubmit();
                             }}
                             sx={{
-                                height: 46,
-                                borderRadius: 2.5,
+                                height: 48,
+                                borderRadius: 999,
                                 fontWeight: 800,
                             }}
                         >
-                            {loadingSubmit
+                            {controller.loadingSubmit
                                 ? "กำลังบันทึก..."
-                                : mode === "checkin"
+                                : controller.mode === "checkin"
                                     ? "บันทึกเช็คอิน"
                                     : "บันทึกเช็คเอาท์"}
                         </Button>
@@ -397,9 +340,10 @@ const StudentActivitiesManualFrom: React.FC = () => {
                     top: { md: 16 },
                 }}
             >
-                <DetailStuActivity student={latestStudent} />
+                <DetailStuActivity student={controller.latestStudent} />
             </Box>
         </Box>
+        </>
     );
 };
 

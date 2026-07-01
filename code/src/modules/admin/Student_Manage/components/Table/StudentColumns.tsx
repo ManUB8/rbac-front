@@ -78,7 +78,7 @@ function RowActions({
                 size="small"
                 onClick={() => {
                     masterController.setSelectedStudentId(row.student_id);
-                    masterController.onClickDeleteMaster();
+                    masterController.onClickDeleteMaster(row.student_id);
                 }}
                 sx={{
                     transition: "0.2s",

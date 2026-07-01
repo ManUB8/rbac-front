@@ -32,7 +32,7 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const qrSize = isMobile ? 190 : 240;
+  const qrSize = isMobile ? 160 : 240;
 
   const [qrRefreshKey, setQrRefreshKey] = useState(0);
   const [qrLoading, setQrLoading] = useState(false);
@@ -97,33 +97,41 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
   }, [studentCode]);
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      sx={{
+        px: { xs: 1.5, sm: 2 },
+        py: { xs: 1.5, sm: 3 },
+      }}
+    >
       <Card
         elevation={0}
         sx={{
-          borderRadius: "22px",
+          borderRadius: { xs: "18px", sm: "22px" },
           overflow: "hidden",
-          border: "1px solid #dbe3f0",
-          boxShadow: "0 8px 30px rgba(15, 23, 42, 0.08)",
+          border: (theme) => `1px solid ${theme.palette.custom.cardBorder}`,
+          boxShadow: "0 10px 32px rgba(8, 19, 95, 0.10)",
         }}
       >
         <Box
           sx={{
-            px: 3,
-            py: 3,
-            background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
+            px: { xs: 2, sm: 3 },
+            py: { xs: 2, sm: 3 },
+            background: (theme) =>
+              `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)`,
+            color: "primary.contrastText",
           }}
         >
-          <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-            <SchoolOutlinedIcon sx={{ fontSize: 30 }} />
-            <Typography sx={{ fontSize: 22, fontWeight: 800 }}>
+          <Stack direction="row" spacing={1.2} sx={{ alignItems: "center" }}>
+            <SchoolOutlinedIcon sx={{ fontSize: { xs: 24, sm: 30 } }} />
+            <Typography sx={{ fontSize: { xs: 18, sm: 22 }, fontWeight: 800 }}>
               บัตรข้อมูลนิสิต
             </Typography>
           </Stack>
         </Box>
 
-        <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
-          <Stack spacing={{ xs: 2, sm: 3 }}>
+        <CardContent sx={{ p: { xs: 1.75, sm: 3 } }}>
+          <Stack spacing={{ xs: 1.6, sm: 3 }}>
             <InfoRow
               icon={<PersonOutlineOutlinedIcon sx={iconSx} />}
               label="ชื่อ-นามสกุล"
@@ -153,13 +161,14 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
 
             <Box
               sx={{
-                border: "1px solid #dbe3f0",
-                borderRadius: "18px",
-                px: { xs: 1.5, sm: 3 },
-                py: 3,
+                border: (theme) => `1px solid ${theme.palette.custom.cardBorder}`,
+                borderRadius: { xs: "16px", sm: "18px" },
+                px: { xs: 1, sm: 3 },
+                py: { xs: 1.5, sm: 3 },
                 textAlign: "center",
                 maxWidth: "100%",
                 overflow: "hidden",
+                backgroundColor: "custom.mutedBg",
               }}
             >
               {/* <Stack
@@ -189,9 +198,10 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                   width: "fit-content",
                   maxWidth: "100%",
                   mx: "auto",
-                  p: { xs: 1.2, sm: 2 },
+                  p: { xs: 0.8, sm: 2 },
                   borderRadius: "16px",
-                  border: "1px solid #e5e7eb",
+                  border: (theme) => `1px solid ${theme.palette.custom.cardBorder}`,
+                  backgroundColor: "background.paper",
                   boxShadow: "0 4px 12px rgba(15, 23, 42, 0.05)",
                   overflow: "hidden",
                 }}
@@ -243,7 +253,7 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                           spacing={1}
                           sx={{
                             alignItems: "center",
-                            color: "#1d4ed8",
+                            color: "primary.main",
                           }}
                         >
                           <CircularProgress size={28} thickness={5} />
@@ -251,7 +261,7 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                             sx={{
                               fontSize: 12,
                               fontWeight: 700,
-                              color: "#1d4ed8",
+                              color: "primary.main",
                             }}
                           >
                             {"กำลังดึงตำแหน่ง"}
@@ -293,9 +303,13 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                   }}
                 >
                   <MyLocationOutlinedIcon
-                    sx={{ fontSize: 18, color: "#1d4ed8" }}
+                    sx={{ fontSize: 18, color: "primary.main" }}
                   />
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ fontSize: { xs: 12, sm: 14 }, overflowWrap: "anywhere" }}
+                  >
                     ตำแหน่งล่าสุด: {locationText}
                   </Typography>
                 </Stack>
@@ -304,7 +318,12 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
               <Typography
                 variant="caption"
                 color="text.secondary"
-                sx={{ display: "block", mt: 1.5 }}
+                sx={{
+                  display: "block",
+                  mt: 1.2,
+                  fontSize: { xs: 11, sm: 12 },
+                  overflowWrap: "anywhere",
+                }}
               >
                 รูปแบบ QR: รหัสนิสิต|ละติจูด|ลองจิจูด
               </Typography>
@@ -315,14 +334,12 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                 onClick={handleRefreshQrCode}
                 disabled={!studentCode || qrLoading}
                 sx={{
-                  mt: 2,
+                  mt: { xs: 1.5, sm: 2 },
                   borderRadius: "12px",
                   textTransform: "none",
                   fontWeight: 700,
-                  bgcolor: "#1d4ed8",
-                  "&:hover": {
-                    bgcolor: "#1e40af",
-                  },
+                  fontSize: { xs: 13, sm: 14 },
+                  minHeight: { xs: 40, sm: 44 },
                 }}
               >
                 {qrLoading ? "กำลังอัปเดต QR Code..." : "Refresh QR Code"}
@@ -335,15 +352,15 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
                   justifyContent: "center",
                   alignItems: "center",
                   mb: 1,
-                  mt: 2,
+                  mt: { xs: 1.5, sm: 2 },
                   
                 }}
               >
-                {/* <QrCode2OutlinedIcon sx={{ color: "#1d4ed8" }} /> */}
+                <QrCode2OutlinedIcon sx={{ color: "primary.main", fontSize: { xs: 18, sm: 20 } }} />
                 <Typography
                   sx={{
                    
-                    fontSize: { xs: 16, sm: 18  },
+                    fontSize: { xs: 13, sm: 18  },
                     fontWeight: 800,
                     color: "text.secondary",
                     textAlign: "center",
@@ -365,9 +382,9 @@ const Info_Student: React.FC<IInfo_StudentProps> = ({ Master_Student }) => {
 export default Info_Student;
 
 const iconSx = {
-  color: "#1d4ed8",
+  color: "primary.main",
   mt: "2px",
-  fontSize: 22,
+  fontSize: { xs: 18, sm: 22 },
 };
 
 interface IInfoRowProps {
@@ -378,13 +395,20 @@ interface IInfoRowProps {
 
 const InfoRow: React.FC<IInfoRowProps> = ({ icon, label, value }) => {
   return (
-    <Stack direction="row" spacing={1.5} sx={{ alignItems: "flex-start" }}>
+    <Stack
+      direction="row"
+      spacing={{ xs: 1, sm: 1.5 }}
+      sx={{
+        alignItems: "flex-start",
+        minWidth: 0,
+      }}
+    >
       {icon}
 
-      <Box>
+      <Box sx={{ minWidth: 0, flex: 1 }}>
         <Typography
           sx={{
-            fontSize: 15,
+            fontSize: { xs: 12.5, sm: 15 },
             color: "text.secondary",
           }}
         >
@@ -393,10 +417,12 @@ const InfoRow: React.FC<IInfoRowProps> = ({ icon, label, value }) => {
 
         <Typography
           sx={{
-            fontSize: 18,
+            fontSize: { xs: 14.5, sm: 18 },
             fontWeight: 700,
-            // color: "#0f172a",
-            mt: 0.5,
+            lineHeight: { xs: 1.45, sm: 1.55 },
+            mt: { xs: 0.25, sm: 0.5 },
+            overflowWrap: "anywhere",
+            wordBreak: "break-word",
           }}
         >
           {value}

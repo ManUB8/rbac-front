@@ -327,7 +327,45 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                 />
                             )}
                         />
-                        <Controller
+
+                        {actype === "create" && (
+                            <Controller
+                                name="user.confirm_password"
+                                control={control}
+                                rules={{
+                                    required: "กรุณายืนยันรหัสผ่าน",
+                                    validate: (value) =>
+                                        value === getValues("user.password") || "รหัสผ่านไม่ตรงกัน",
+                                }}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        fullWidth
+                                        id="user.confirm_password"
+                                        label="ยืนยันรหัสผ่าน"
+                                        type={showPassword ? "text" : "password"}
+                                        error={!!errors.user?.confirm_password}
+                                        helperText={errors.user?.confirm_password?.message as string}
+                                        slotProps={{
+                                            input: {
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            onClick={() => setShowPassword((prev) => !prev)}
+                                                            edge="end"
+                                                        >
+                                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                ),
+                                            },
+                                        }}
+                                    />
+                                )}
+                            />
+                        )}
+
+                        {/* <Controller
                             name="user.confirm_password"
                             control={control}
                             rules={{
@@ -360,7 +398,7 @@ const DateilStudent: React.FunctionComponent<IDateilStudentProps> = ({
                                     }}
                                 />
                             )}
-                        />
+                        /> */}
                     </Stack>
                     <Box
                         sx={{

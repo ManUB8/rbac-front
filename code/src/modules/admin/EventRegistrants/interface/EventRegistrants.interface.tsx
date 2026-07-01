@@ -40,6 +40,7 @@ export interface IEventRegistrantsItem {
 
     checkin_lat: number;
     checkin_lng: number;
+    target_group:string;
 
     checkout_lat: number;
     checkout_lng: number;
@@ -66,7 +67,7 @@ export interface IUpdateEventRegistrantsRequest {
     student_activity_id: number;
     activity_id: number;
     attendance_status: string;
-    updated_by_name: string;
+    updated_by_name?: string;
 }
 
 //  attendance_status: "เข้าร่วม" | "ไม่เข้าร่วม";
@@ -102,6 +103,7 @@ export interface IStudentActivityJoinItem {
   major_name: string;
   year_status: string;
   prefix: string | null;
+  target_group:string;
 
   check_type: string;
 
@@ -122,6 +124,11 @@ export interface IStudentActivityJoinItem {
   updated_at: number;
 }
 
+export interface IActivityOption {
+    id: number;
+    name: string;
+    target_group: "freshman" | "senior" | "all";
+}
 
 
 export interface IStudentActivityCheckDetail {

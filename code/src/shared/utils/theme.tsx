@@ -11,6 +11,9 @@ declare module "@mui/material/styles" {
       inputBg: string;
       brand: string;
       brandHover: string;
+      brandContrast: string;
+      brandAccent: string;
+      brandAccentSoft: string;
       brandSoft: string;
       textSoft: string;
     };
@@ -25,11 +28,21 @@ declare module "@mui/material/styles" {
       inputBg?: string;
       brand?: string;
       brandHover?: string;
+      brandContrast?: string;
+      brandAccent?: string;
+      brandAccentSoft?: string;
       brandSoft?: string;
       textSoft?: string;
     };
   }
 }
+
+const RBAC_NAVY = "#08135F";
+const RBAC_NAVY_LIGHT = "#182B8C";
+const RBAC_NAVY_DARK = "#050B34";
+const RBAC_GOLD = "#D9BF5F";
+const RBAC_GOLD_LIGHT = "#F6D76B";
+const RBAC_GOLD_DARK = "#A98624";
 
 export const getTheme = (mode: "light" | "dark") => {
   const isLight = mode === "light";
@@ -41,16 +54,16 @@ export const getTheme = (mode: "light" | "dark") => {
       ...(isLight
         ? {
           primary: {
-            main: "#2952D9",
-            light: "#4F72E5",
-            dark: "#1F43BD",
+            main: RBAC_NAVY,
+            light: RBAC_NAVY_LIGHT,
+            dark: RBAC_NAVY_DARK,
             contrastText: "#FFFFFF",
           },
           secondary: {
-            main: "#F59E0B",
-            light: "#FBBF24",
-            dark: "#D97706",
-            contrastText: "#111827",
+            main: RBAC_GOLD,
+            light: RBAC_GOLD_LIGHT,
+            dark: RBAC_GOLD_DARK,
+            contrastText: RBAC_NAVY_DARK,
           },
           error: {
             main: "#DC2626",
@@ -62,51 +75,54 @@ export const getTheme = (mode: "light" | "dark") => {
             main: "#F59E0B",
           },
           info: {
-            main: "#2563EB",
+            main: RBAC_NAVY_LIGHT,
           },
           success: {
             main: "#16A34A",
           },
           background: {
-            default: "#F4F6FB",
+            default: "#F6F7FC",
             paper: "#FFFFFF",
           },
           text: {
-            primary: "#111827",
+            primary: "#101527",
             secondary: "#64748B",
             disabled: "#9CA3AF",
           },
-          divider: "#E2E8F0",
+          divider: "#E1E5F2",
           action: {
             hover: "rgba(15, 23, 42, 0.04)",
-            selected: "rgba(41, 82, 217, 0.10)",
+            selected: "rgba(8, 19, 95, 0.10)",
             disabledBackground: "#E5E7EB",
             disabled: "#9CA3AF",
           },
           custom: {
-            pageBg: "#F4F6FB",
+            pageBg: "#F6F7FC",
             cardBg: "#FFFFFF",
-            cardBorder: "#E5E7EB",
-            mutedBg: "#F8FAFC",
-            inputBg: "#F8FAFC",
-            brand: "#2952D9",
-            brandHover: "#2348BF",
-            brandSoft: "#E8EEFF",
+            cardBorder: "#E1E5F2",
+            mutedBg: "#F4F6FF",
+            inputBg: "#F8FAFF",
+            brand: RBAC_NAVY,
+            brandHover: RBAC_NAVY_LIGHT,
+            brandContrast: "#FFFFFF",
+            brandAccent: RBAC_GOLD,
+            brandAccentSoft: "rgba(217, 191, 95, 0.18)",
+            brandSoft: "#E9EDFF",
             textSoft: "#64748B",
           },
         }
         : {
           primary: {
-            main: "#7C9BFF",
-            light: "#9CB3FF",
-            dark: "#5E7EF2",
-            contrastText: "#081120",
+            main: RBAC_GOLD_LIGHT,
+            light: "#FFE58A",
+            dark: RBAC_GOLD,
+            contrastText: RBAC_NAVY_DARK,
           },
           secondary: {
-            main: "#FBBF24",
-            light: "#FCD34D",
-            dark: "#D97706",
-            contrastText: "#111827",
+            main: "#8FA2FF",
+            light: "#B6C2FF",
+            dark: RBAC_NAVY_LIGHT,
+            contrastText: "#FFFFFF",
           },
           error: {
             main: "#F87171",
@@ -118,36 +134,39 @@ export const getTheme = (mode: "light" | "dark") => {
             main: "#FBBF24",
           },
           info: {
-            main: "#60A5FA",
+            main: "#8FA2FF",
           },
           success: {
             main: "#4ADE80",
           },
           background: {
-            default: "#0F172A",
-            paper: "#111827",
+            default: RBAC_NAVY_DARK,
+            paper: "#08123F",
           },
           text: {
             primary: "#F8FAFC",
             secondary: "#94A3B8",
             disabled: "#64748B",
           },
-          divider: "#243041",
+          divider: "rgba(217, 191, 95, 0.18)",
           action: {
-            hover: "rgba(148, 163, 184, 0.08)",
-            selected: "rgba(124, 155, 255, 0.16)",
-            disabledBackground: "#1E293B",
+            hover: "rgba(217, 191, 95, 0.08)",
+            selected: "rgba(217, 191, 95, 0.16)",
+            disabledBackground: "#121B4C",
             disabled: "#64748B",
           },
           custom: {
-            pageBg: "#0F172A",
-            cardBg: "#111827",
-            cardBorder: "#243041",
-            mutedBg: "#182233",
-            inputBg: "#182233",
-            brand: "#7C9BFF",
-            brandHover: "#6B8CFF",
-            brandSoft: "#1A2750",
+            pageBg: RBAC_NAVY_DARK,
+            cardBg: "#08123F",
+            cardBorder: "rgba(217, 191, 95, 0.22)",
+            mutedBg: "#0D174A",
+            inputBg: "#0D174A",
+            brand: RBAC_GOLD_LIGHT,
+            brandHover: "#FFE58A",
+            brandContrast: RBAC_NAVY_DARK,
+            brandAccent: RBAC_GOLD,
+            brandAccentSoft: "rgba(217, 191, 95, 0.18)",
+            brandSoft: "rgba(217, 191, 95, 0.14)",
             textSoft: "#94A3B8",
           },
         }),
@@ -281,7 +300,7 @@ export const getTheme = (mode: "light" | "dark") => {
             border: `1px solid ${theme.palette.custom.cardBorder}`,
             boxShadow:
               theme.palette.mode === "light"
-                ? "0 12px 32px rgba(15, 23, 42, 0.08)"
+                ? "0 12px 32px rgba(8, 19, 95, 0.08)"
                 : "0 12px 32px rgba(0, 0, 0, 0.28)",
             borderRadius: 20,
             transition: "all 0.2s ease",
@@ -291,9 +310,9 @@ export const getTheme = (mode: "light" | "dark") => {
 
       MuiPaper: {
         styleOverrides: {
-          root: ({ theme }) => ({
+          root: {
             backgroundImage: "none",
-          }),
+          },
         },
       },
 
@@ -305,7 +324,7 @@ export const getTheme = (mode: "light" | "dark") => {
 
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
-            borderRadius: 14,
+            borderRadius: 4,
             fontWeight: 700,
             boxShadow: "none",
             outline: "none",
@@ -331,9 +350,17 @@ export const getTheme = (mode: "light" | "dark") => {
               ownerState.color === "primary" && {
               backgroundColor: theme.palette.custom.brand,
               color: theme.palette.primary.contrastText,
+              boxShadow:
+                theme.palette.mode === "light"
+                  ? `0 10px 24px ${alpha(theme.palette.primary.main, 0.18)}`
+                  : `0 10px 24px ${alpha(theme.palette.custom.brandAccent, 0.16)}`,
 
               "&:hover": {
                 backgroundColor: theme.palette.custom.brandHover,
+                boxShadow:
+                  theme.palette.mode === "light"
+                    ? `0 12px 28px ${alpha(theme.palette.primary.main, 0.24)}`
+                    : `0 12px 28px ${alpha(theme.palette.custom.brandAccent, 0.22)}`,
               },
             }),
 
@@ -374,7 +401,12 @@ export const getTheme = (mode: "light" | "dark") => {
       },
       MuiIconButton: {
         styleOverrides: {
-          root: {
+          root: ({ theme }) => ({
+            color: theme.palette.primary.main,
+            transition: "all 0.2s ease",
+            "&:hover": {
+              backgroundColor: alpha(theme.palette.primary.main, 0.08),
+            },
             "&.Mui-focusVisible": {
               outline: "none !important",
               boxShadow: "none !important",
@@ -387,7 +419,56 @@ export const getTheme = (mode: "light" | "dark") => {
               outline: "none !important",
               boxShadow: "none !important",
             },
-          },
+          }),
+        },
+      },
+
+      MuiChip: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            fontWeight: 700,
+            borderRadius: 999,
+            borderColor: alpha(theme.palette.custom.brandAccent, 0.32),
+          }),
+          colorPrimary: ({ theme }) => ({
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
+          }),
+          colorSecondary: ({ theme }) => ({
+            backgroundColor: theme.palette.custom.brandAccent,
+            color: theme.palette.secondary.contrastText,
+          }),
+          colorWarning: ({ theme }) => ({
+            backgroundColor: theme.palette.custom.brandAccent,
+            color: theme.palette.secondary.contrastText,
+          }),
+        },
+      },
+
+      MuiFab: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            background:
+              theme.palette.mode === "light"
+                ? `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`
+                : `linear-gradient(135deg, ${theme.palette.custom.brandAccent}, ${theme.palette.primary.main})`,
+            color: theme.palette.primary.contrastText,
+            boxShadow: `0 16px 34px ${alpha(theme.palette.primary.main, 0.28)}`,
+            "&:hover": {
+              boxShadow: `0 20px 42px ${alpha(theme.palette.primary.main, 0.34)}`,
+            },
+          }),
+        },
+      },
+
+      MuiSkeleton: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            backgroundColor:
+              theme.palette.mode === "light"
+                ? alpha(theme.palette.primary.main, 0.08)
+                : alpha(theme.palette.custom.brandAccent, 0.14),
+          }),
         },
       },
 

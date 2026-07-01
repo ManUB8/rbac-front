@@ -48,6 +48,9 @@ export interface IActivityRankItem {
     // จำนวนชั่วโมงกิจกรรม
     hours: number;
 
+    // จำนวนชั่วโมงจิตอาสา
+    volunteer_hours: number;
+
     // สถานที่จัดกิจกรรม
     location: string;
 
@@ -153,6 +156,8 @@ export interface IYearCount extends IStatisticSummary {
     // ชื่อชั้นปี
     // เช่น ปี 1, ปี 2, บัณฑิต
     name: string;
+    prefix_gender_summary: IPrefixGenderSummary;
+    gender_summary: IGenderSummary;
 }
 
 // =========================
@@ -167,6 +172,8 @@ export interface IMajorSummary {
     total_student: number;
     joined_count: number;
     not_joined_count: number;
+    prefix_gender_summary: IPrefixGenderSummary;
+    gender_summary: IGenderSummary;
 
 }
 
@@ -176,6 +183,8 @@ export interface IMajorSummary {
 export interface IFacultySummary extends IStatisticSummary {
     faculty_id: number;
     faculty_name: string;
+    prefix_gender_summary: IPrefixGenderSummary;
+    gender_summary: IGenderSummary;
     major: IMajorSummary[];
     total_student: number;
     joined_count: number;
@@ -207,6 +216,9 @@ export interface IActivityDashboardData {
     // จำนวนชั่วโมงกิจกรรมรวม
     hours_count_all: number;
 
+    // จำนวนชั่วโมงจิตอาสารวม
+    volunteer_hours_count_all: number;
+
     // เปอร์เซ็นต์การเข้าร่วม
     join_rate_percent: number;
 
@@ -217,7 +229,7 @@ export interface IActivityDashboardData {
     top_activity: IActivityRankItem;
 
     // กิจกรรมที่ถูกเลือก
-    selected_activity: IActivityRankItem;
+    selected_activity: IActivityRankItem | "";
 
     // อันดับกิจกรรม
     activity_rank: IActivityRankItem[];
@@ -252,21 +264,36 @@ export interface ICardItem {
 
 
 export interface IStudentSummaryResponse {
-  detail: string;
-  year_status: string;
-  count_student: number;
-  faculty: IFacultyStudentSummary[];
+    detail: string;
+    year_status: string;
+    count_student: number;
+    faculty: IFacultyStudentSummary[];
 }
 
 export interface IFacultyStudentSummary {
-  faculty_id: number;
-  faculty_name: string;
-  count_student: number;
-  majors: IMajorStudentSummary[];
+    faculty_id: number;
+    faculty_name: string;
+    count_student: number;
+    majors: IMajorStudentSummary[];
 }
 
 export interface IMajorStudentSummary {
-  major_id: number;
-  major_name: string;
-  count_student: number;
+    major_id: number;
+    major_name: string;
+    count_student: number;
+}
+
+export interface IPrefixGenderSummary {
+    male_count: number;
+    female_count: number;
+    unknown_count: number;
+    total_count: number;
+}
+
+export interface IGenderSummary {
+    male_count: number;
+    female_count: number;
+    unknown_count: number;
+    total_count: number;
+    lgbtq_count: number;
 }

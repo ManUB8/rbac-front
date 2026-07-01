@@ -6,7 +6,7 @@ import DetailDashboard from '../components/page/DetailDashboard';
 
 export interface IDashboardAdminPageProps {};
 
-const DashboardAdminPage: React.FunctionComponent<IDashboardAdminPageProps> = props => {
+const DashboardAdminPage: React.FunctionComponent<IDashboardAdminPageProps> = () => {
     const mastercontroller = useFetchDashboardAdmin ()
     return (
         <>

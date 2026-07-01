@@ -1,6 +1,15 @@
 import { ApiConfig } from "../../../../shared/service/ApiConfig";
 import { api } from "../../../../shared/service/axiosInstance";
-import type { IActivityDelete, IActivityFilter, IActivityFilterAll, IActivityItem, IActivityListResponse, IActivitySearch } from "../interface/ActivityManage.interface";
+import type { IActivityDelete
+            , IActivityFilter  
+            , IActivityFilterAll
+            , IActivityFilterByDate
+            , IActivityFilterByDateResponse
+            , IActivityItem
+            , IActivityListResponse
+            , IActivitySearch
+            , IActivityStatusUpdate
+} from "../interface/ActivityManage.interface";
 
 
 export const getAllActivity = async (body: IActivitySearch): Promise<IActivityListResponse> => {
@@ -25,8 +34,15 @@ export const getActivityStatusTrue = async (): Promise<IActivityItem[]> => {
 };
 
 
-export const UpdateActivity = async (body: IActivityItem): Promise<IActivityItem> => {
-    const res = await api.patch<IActivityItem>(
+export const UpdateActivityStatus  = async (body: IActivityStatusUpdate): Promise<any> => {
+    const res = await api.patch<any>(
+        ApiConfig.ACTIVITY_API + `/update/${body.activity_id}`,
+        body
+    );
+    return res;
+};
+export const UpdateActivity  = async (body: IActivityItem): Promise<any> => {
+    const res = await api.patch<any>(
         ApiConfig.ACTIVITY_API + `/update/${body.activity_id}`,
         body
     );
@@ -36,6 +52,16 @@ export const UpdateActivity = async (body: IActivityItem): Promise<IActivityItem
 export const DeleteActivity = async (body: IActivityDelete): Promise<any> => {
     const res = await api.delete<any>(
         ApiConfig.ACTIVITY_API + `/delete/${body.activity_id}`,
+        {
+            data: body,
+        }
+    );
+    return res;
+};
+
+export const DeleteHardActivity = async (body: IActivityDelete): Promise<any> => {
+    const res = await api.delete<any>(
+        ApiConfig.ACTIVITY_API + `/hard-delete/${body.activity_id}`,
         {
             data: body,
         }
@@ -57,6 +83,15 @@ export const getActivityFilter = async (): Promise<IActivityFilter[]> => {
         ApiConfig.ACTIVITY_API + `/filter-info`
     );
     return res;
+};
+
+
+export const getActivityFilter_BY_Date = async (): Promise<IActivityFilterByDate[]> => {
+    const res = await api.get<IActivityFilterByDateResponse>(
+        ApiConfig.ACTIVITY_API + `/filter-by-date`
+    );
+
+    return res.data;
 };
 
 export const getActivityFilterAll = async (): Promise<IActivityFilterAll> => {

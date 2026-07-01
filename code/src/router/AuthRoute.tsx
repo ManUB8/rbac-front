@@ -16,6 +16,7 @@ import {
   AppRoutes,
   routesConfig,
   getDefaultRouteByRole,
+  type IRouterConfig,
 } from "./router";
 
 function ScrollToTop() {
@@ -76,16 +77,29 @@ function DefaultRedirect() {
 //   });
 // }
 
-function flattenRoutes(routes: typeof routesConfig.privateRoutes) {
+// function flattenRoutes(routes: typeof routesConfig.privateRoutes) {
+//   return routes.flatMap((route) => {
+//     const children = route.children ?? [];
+
+//     // ถ้า route แม่ไม่มี element ให้เอาเฉพาะ children
+//     if (!route.element) {
+//       return children;
+//     }
+
+//     return [route, ...children];
+//   });
+// }
+
+function flattenRoutes(routes: typeof routesConfig.privateRoutes): IRouterConfig[] {
   return routes.flatMap((route) => {
     const children = route.children ?? [];
 
-    // ถ้า route แม่ไม่มี element ให้เอาเฉพาะ children
-    if (!route.element) {
-      return children;
-    }
+    const current = route.element ? [route] : [];
 
-    return [route, ...children];
+    return [
+      ...current,
+      ...flattenRoutes(children),
+    ];
   });
 }
 

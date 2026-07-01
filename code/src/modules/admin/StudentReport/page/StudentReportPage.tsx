@@ -11,7 +11,24 @@ export interface IStudentReportPageProps { }
 const StudentReportPage: React.FC<IStudentReportPageProps> = () => {
     const mastercontroller = useFetchStudentReport();
 
-    const handlePrintPdf = () => {
+    const waitForPrintReady = async () => {
+        if ("fonts" in document) {
+            await Promise.all([
+                document.fonts.load('400 18px "TH SarabunPSK"'),
+                document.fonts.load('700 18px "TH SarabunPSK"'),
+                document.fonts.ready,
+            ]);
+        }
+
+        await new Promise<void>((resolve) => {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => resolve());
+            });
+        });
+    };
+
+    const handlePrintPdf = async () => {
+        await waitForPrintReady();
         window.print();
     };
 

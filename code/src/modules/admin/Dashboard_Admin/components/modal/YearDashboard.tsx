@@ -11,7 +11,7 @@ import LinearProgress, {
     linearProgressClasses,
 } from "@mui/material/LinearProgress";
 
-import type { IActivityDashboardData } from "../../interface/DashboardAdmin.interface";
+import type { IActivityDashboardData, IGenderSummary, IPrefixGenderSummary } from "../../interface/DashboardAdmin.interface";
 
 export interface IYearDashboardProps {
     dashboard_data: IActivityDashboardData;
@@ -27,7 +27,7 @@ const YearDashboard: React.FC<IYearDashboardProps> = ({ dashboard_data }) => {
                     การเข้าร่วมตามชั้นปี
                 </Typography>
 
-                <Grid container spacing={2}>
+                <Grid container spacing={1}>
                     {yearCount.map((item) => (
                         <Grid key={item.name} size={{ xs: 12, sm: 6, md: 3 }}>
                             <Card variant="outlined" sx={{ height: "100%" }}>
@@ -113,6 +113,11 @@ const YearDashboard: React.FC<IYearDashboardProps> = ({ dashboard_data }) => {
                                             />
                                         </Grid>
                                     </Grid>
+
+                                    <GenderSummary
+                                        genderSummary={item.gender_summary}
+                                        prefixGenderSummary={item.prefix_gender_summary}
+                                    />
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -120,6 +125,56 @@ const YearDashboard: React.FC<IYearDashboardProps> = ({ dashboard_data }) => {
                 </Grid>
             </CardContent>
         </Card>
+    );
+};
+
+interface IGenderSummaryProps {
+    genderSummary?: IGenderSummary;
+    prefixGenderSummary?: IPrefixGenderSummary;
+}
+
+const GenderSummary: React.FC<IGenderSummaryProps> = ({
+    genderSummary,
+    prefixGenderSummary,
+}) => {
+    const prefixMaleCount = prefixGenderSummary?.male_count ?? 0;
+    const prefixFemaleCount = prefixGenderSummary?.female_count ?? 0;
+    const genderMaleCount = genderSummary?.male_count ?? 0;
+    const genderFemaleCount = genderSummary?.female_count ?? 0;
+    const lgbtqCount = genderSummary?.lgbtq_count ?? 0;
+
+    return (
+        <Box sx={{ mt: 1.25 }}>
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                ชาย{" "}
+                <Box component="span" sx={{ color: "#1976d2", fontWeight: 800 }}>
+                    {prefixMaleCount}
+                </Box>
+                {" · "}หญิง{" "}
+                <Box component="span" sx={{ color: "#d81b60", fontWeight: 800 }}>
+                    {prefixFemaleCount}
+                </Box>
+            </Typography>
+
+            <Typography
+                variant="caption"
+                component="div"
+                sx={{ color: "text.secondary", mt: 0.35 }}
+            >
+                เพศ ชาย{" "}
+                <Box component="span" sx={{ color: "#1976d2", fontWeight: 800 }}>
+                    {genderMaleCount}
+                </Box>
+                {" · "}หญิง{" "}
+                <Box component="span" sx={{ color: "#d81b60", fontWeight: 800 }}>
+                    {genderFemaleCount}
+                </Box>
+                {" · "}LGBTQ+{" "}
+                <Box component="span" sx={{ color: "#7c3aed", fontWeight: 800 }}>
+                    {lgbtqCount}
+                </Box>
+            </Typography>
+        </Box>
     );
 };
 

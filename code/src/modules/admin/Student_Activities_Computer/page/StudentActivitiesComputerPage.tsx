@@ -1,5 +1,4 @@
 import React from 'react';
-import { useActivityStatusFetch } from '../../ActivityManage/hook/useFetchActivity';
 import HeadStudentActivities from '../components/page/HeadStudentActivitiesComputer';
 import StudentActivitiesFrom from '../components/form/StudentActivitiesComputerFrom';
 

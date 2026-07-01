@@ -8,7 +8,8 @@ export const searchStateStudentReport = atom<IStudentReportRequest>({
     year_status: "",
     faculty_id: "",
     major_id: "",
-    hour_type: ""
+    hour_type: "",
+    attendance_status: "",
 });
 
 

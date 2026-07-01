@@ -38,16 +38,12 @@ import {
 export const useMasterFunctionUser = () => {
     const setFlash = useSetAtom(flashAlertAtom);
     const queryClient = useQueryClient();
-
     const [openUserModal, setOpenUserModal] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState<number>(0);
-
     const [searchState, setSearchStateUser] = useAtom(searchStateUser);
     const [, setConfirmPopup] = useAtom(confirmPopupAtom);
-
     const [searchInput, setSearchInput] = useState(searchState.search ?? "");
     const debounceRef = useRef<number | null>(null);
-
     const { data, isLoading, isFetching } = useQuery({
         queryKey: [
             "Users-list",
@@ -121,7 +117,6 @@ export const useMasterFunctionUser = () => {
                 }
 
                 const name_by = localStorage.getItem("account_name") || "";
-
                 const data_delete: IUserDeletePayload = {
                     deleted_user_id: user_id,
                     deleted_by_name: name_by,
@@ -134,7 +129,6 @@ export const useMasterFunctionUser = () => {
                     title: "",
                     content: "ลบข้อมูลผู้ใช้งานสำเร็จ",
                 });
-
                 reload();
             } catch (error) {
                 console.error(error);
@@ -151,7 +145,6 @@ export const useMasterFunctionUser = () => {
     const onClickDeleteMaster = useCallback(
         (user_id: number) => {
             setSelectedUserId(user_id);
-
             setConfirmPopup({
                 type: "warning",
                 title: "ท่านต้องการลบข้อมูลผู้ใช้งาน !!",
