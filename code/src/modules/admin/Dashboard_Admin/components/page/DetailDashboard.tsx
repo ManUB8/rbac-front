@@ -8,7 +8,6 @@ import ActivityTop from "../modal/ActivityTop";
 import YearDashboard from "../modal/YearDashboard";
 import FacultyDetail from "../modal/FacultyDetail";
 import ActivityDetail from "../modal/ActivityDetail";
-import Year from "../modal/Yesr";
 
 export interface IDetailDashboardProps {
     mastercontroller: IuseuseFetchDashboardAdmin;
@@ -28,12 +27,53 @@ const DetailDashboard: React.FC<IDetailDashboardProps> = ({
         <>
             <HeadCard dashboard_data={dashboard_data} />
             <ActivityTop dashboard_data={dashboard_data} />
-            <YearDashboard dashboard_data={dashboard_data} />
-            <FacultyDetail dashboard_data={dashboard_data} />
-            <FacultyDashboard dashboard_data={dashboard_data} />
-            <ActivityDetail dashboard_data={dashboard_data} />
+            {mastercontroller.year_count_Loading ? (
+                <CardSkeleton variant="grid" />
+            ) : (
+                <YearDashboard dashboard_data={dashboard_data} />
+            )}
+            {mastercontroller.faculty_summary_Loading ? (
+                <CardSkeleton variant="list" />
+            ) : (
+                <FacultyDetail dashboard_data={dashboard_data} />
+            )}
+            <FacultyDashboard
+                dashboard_data={dashboard_data}
+                facultyRankLoading={mastercontroller.faculty_rank_Loading}
+                majorRankLoading={mastercontroller.major_rank_Loading}
+            />
+            {mastercontroller.activity_rank_Loading ? (
+                <CardSkeleton variant="table" />
+            ) : (
+                <ActivityDetail dashboard_data={dashboard_data} />
+            )}
             {/* <Year /> */}
         </>
+    );
+};
+
+const CardSkeleton = ({ variant }: { variant: "grid" | "list" | "table" }) => {
+    const rowCount = variant === "grid" ? 4 : 5;
+
+    return (
+        <Card sx={{ p: 3, borderRadius: 3, mt: 2 }}>
+            <Skeleton width={variant === "table" ? "30%" : "40%"} height={32} />
+            {variant === "grid" ? (
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                    {Array.from({ length: rowCount }).map((_, index) => (
+                        <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
+                            <Skeleton height={150} sx={{ borderRadius: 3 }} />
+                        </Grid>
+                    ))}
+                </Grid>
+            ) : (
+                Array.from({ length: rowCount }).map((_, index) => (
+                    <Box key={index} sx={{ mt: 1.5 }}>
+                        <Skeleton height={64} sx={{ borderRadius: 2 }} />
+                    </Box>
+                ))
+            )}
+        </Card>
     );
 };
 

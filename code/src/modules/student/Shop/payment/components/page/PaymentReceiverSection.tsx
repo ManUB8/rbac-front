@@ -24,7 +24,6 @@ interface Props {
 const PaymentReceiverSection: React.FC<Props> = ({
     summary,
     receiverName,
-    setReceiverName,
     receiverPhone,
     setReceiverPhone,
     shippingAddress,
@@ -34,43 +33,59 @@ const PaymentReceiverSection: React.FC<Props> = ({
 }) => {
     const isShipping = summary.delivery_type === "shipping";
     const isPickup = summary.delivery_type === "pickup";
-    
+
     return (
-        <Card sx={{ p: 3 }}>
-            <Typography sx={{ fontSize: 18, fontWeight: 900, mb: 2 }}>
+        <Card sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
+            <Typography sx={{ fontSize: { xs: 17, sm: 18 }, fontWeight: 900, mb: { xs: 1.25, sm: 2 } }}>
                 วิธีรับสินค้า
             </Typography>
 
-            <Stack spacing={1}>
+            <Stack spacing={{ xs: 0.5, sm: 1 }}>
                 <Stack direction="row" sx={{ alignItems: "center" }}>
-                    <Radio checked={isShipping} />
-                    <Typography sx={{ fontSize: 16 }}>
+                    <Radio checked={isShipping} size="small" />
+                    <Typography sx={{ fontSize: { xs: 13.5, sm: 16 } }}>
                         จัดส่งสินค้าตามที่อยู่
                     </Typography>
                 </Stack>
 
                 <Stack direction="row" sx={{ alignItems: "center" }}>
-                    <Radio checked={isPickup} />
-                    <Typography sx={{ fontSize: 16 }}>
+                    <Radio checked={isPickup} size="small" />
+                    <Typography sx={{ fontSize: { xs: 13.5, sm: 16 } }}>
                         รับเองที่จุดนัดรับ
                     </Typography>
                 </Stack>
             </Stack>
 
-            <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mt: 2 }}>
+            <Stack direction={{ xs: "column", md: "row" }} spacing={{ xs: 1.5, sm: 2 }} sx={{ mt: { xs: 1.5, sm: 2 } }}>
                 <TextField
                     label="ชื่อผู้รับ *"
                     fullWidth
                     value={receiverName}
-                    // onChange={(e) => setReceiverName(e.target.value)}
+                // onChange={(e) => setReceiverName(e.target.value)}
                 />
 
                 <TextField
                     label="เบอร์โทรติดต่อ *"
-                    placeholder="08x-xxx-xxxx"
+                    placeholder="08xxxxxxxx"
                     fullWidth
                     value={receiverPhone}
-                    onChange={(e) => setReceiverPhone(e.target.value)}
+                    error={receiverPhone.length > 0 && receiverPhone.length !== 10}
+                    helperText={
+                        receiverPhone.length > 0 && receiverPhone.length !== 10
+                            ? "กรุณากรอกเบอร์โทร 10 หลัก"
+                            : ""
+                    }
+                    slotProps={{
+                        htmlInput: {
+                            maxLength: 10,
+                            inputMode: "numeric",
+                            pattern: "[0-9]*",
+                        },
+                    }}
+                    onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        setReceiverPhone(value);
+                    }}
                 />
             </Stack>
 
@@ -86,7 +101,7 @@ const PaymentReceiverSection: React.FC<Props> = ({
                         : "เช่น หน้าคณะ / โรงอาหาร / จุดนัดรับของร้าน"
                 }
                 fullWidth
-                sx={{ mt: 2 }}
+                sx={{ mt: { xs: 1.5, sm: 2 } }}
                 value={shippingAddress}
                 onChange={(e) => setShippingAddress(e.target.value)}
             />
@@ -95,8 +110,8 @@ const PaymentReceiverSection: React.FC<Props> = ({
                 label="หมายเหตุถึงผู้ขาย"
                 fullWidth
                 multiline
-                minRows={4}
-                sx={{ mt: 2 }}
+                minRows={3}
+                sx={{ mt: { xs: 1.5, sm: 2 } }}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
             />

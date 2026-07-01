@@ -13,6 +13,7 @@ import {
 } from "../service/StudentActivitiesManualApi";
 import dayjs from "dayjs";
 import { getActivityFilter_BY_Date } from "../../Student_Activities_Computer/service/StudentActivitiesComputerApi";
+import Swal from "sweetalert2";
 
 type ScanMode = "checkin" | "checkout";
 
@@ -35,7 +36,7 @@ export const useStudentActivitiesManualForm = () => {
         useState<IStudentActivityCheckItem | null>(null);
 
     const speechUnlockedRef = useRef(false);
-    
+
     const today = dayjs().format("YYYY-MM-DD");
     const [startDate, setStartDate] = useState(today);
     const [endDate, setEndDate] = useState(today);
@@ -137,6 +138,17 @@ export const useStudentActivitiesManualForm = () => {
         speakMessage(message);
     };
 
+    const showError = (message: string) => {
+        handleResultMessage("error", message);
+
+        Swal.fire({
+            icon: "error",
+            title: "เกิดข้อผิดพลาด",
+            text: message,
+            confirmButtonText: "ตกลง",
+        });
+    };
+
     const handleGetLocation = () => {
         setErrorMessage("");
         setSuccessMessage("");
@@ -187,18 +199,32 @@ export const useStudentActivitiesManualForm = () => {
 
         const code = studentCode.trim();
 
+        // if (!activityId) {
+        //     handleResultMessage("error", "กรุณาเลือกกิจกรรมก่อน");
+        //     return;
+        // }
+
+        // if (!/^\d{8}$/.test(code)) {
+        //     handleResultMessage("error", "กรุณากรอกรหัสนิสิต 8 หลัก");
+        //     return;
+        // }
+
+        // if (!lastLat || !lastLng) {
+        //     handleResultMessage("error", "กรุณากดขอตำแหน่งก่อน");
+        //     return;
+        // }
         if (!activityId) {
-            handleResultMessage("error", "กรุณาเลือกกิจกรรมก่อน");
+            showError("กรุณาเลือกกิจกรรมก่อน");
             return;
         }
 
         if (!/^\d{8}$/.test(code)) {
-            handleResultMessage("error", "กรุณากรอกรหัสนิสิต 8 หลัก");
+            showError("กรุณากรอกรหัสนิสิต 8 หลัก");
             return;
         }
 
         if (!lastLat || !lastLng) {
-            handleResultMessage("error", "กรุณากดขอตำแหน่งก่อน");
+            showError("กรุณากดขอตำแหน่งก่อน");
             return;
         }
 
@@ -236,10 +262,19 @@ export const useStudentActivitiesManualForm = () => {
             const message =
                 error?.response?.data?.detail || "เกิดข้อผิดพลาด";
 
-            handleResultMessage("error", message);
+            showError(message);
         } finally {
             setLoadingSubmit(false);
         }
+        // } catch (error: any) {
+        //     const message =
+        //         error?.response?.data?.detail || "เกิดข้อผิดพลาด";
+
+        //     handleResultMessage("error", message);
+        // } 
+        // finally {
+        //     setLoadingSubmit(false);
+        // }
     };
 
     return {

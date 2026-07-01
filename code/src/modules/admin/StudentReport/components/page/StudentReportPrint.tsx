@@ -1,7 +1,7 @@
 import React from "react";
 import type { IStudentActivitySummaryResponse } from "../../interface/StudentReport.interface";
 import "../../utils/print.css";
-import { formatDateTH, formatDateThai, formatTimeRange } from "../../../../../shared/components/Date-Time/DateAndTime";
+import { formatDateTH, formatTimeRange } from "../../../../../shared/components/Date-Time/DateAndTime";
 
 interface StudentReportPrintProps {
     student?: IStudentActivitySummaryResponse;

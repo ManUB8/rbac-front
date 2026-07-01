@@ -97,20 +97,20 @@ const PaymentMethodSection: React.FC<Props> = ({
         Number(value || 0).toLocaleString("th-TH");
 
     return (
-        <Card sx={{ p: 3, borderRadius: 2 }}>
-            <Typography sx={{ fontSize: 18, fontWeight: 900, mb: 2 }}>
+        <Card sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
+            <Typography sx={{ fontSize: { xs: 17, sm: 18 }, fontWeight: 900, mb: { xs: 1.25, sm: 2 } }}>
                 วิธีชำระเงิน
             </Typography>
 
-            <Stack spacing={1}>
+            <Stack spacing={{ xs: 0.5, sm: 1 }}>
                 {promptpay.is_active && (
                     <Stack
                         direction="row"
                         sx={{ alignItems: "center", cursor: "pointer" }}
                         onClick={() => setPaymentMethod("promptpay")}
                     >
-                        <Radio checked={paymentMethod === "promptpay"} />
-                        <Typography sx={{ fontSize: 16 }}>
+                        <Radio checked={paymentMethod === "promptpay"} size="small" />
+                        <Typography sx={{ fontSize: { xs: 13.5, sm: 16 }, fontWeight: 700 }}>
                             QR PromptPay
                         </Typography>
                     </Stack>
@@ -122,8 +122,8 @@ const PaymentMethodSection: React.FC<Props> = ({
                         sx={{ alignItems: "center", cursor: "pointer" }}
                         onClick={() => setPaymentMethod("bank_transfer")}
                     >
-                        <Radio checked={paymentMethod === "bank_transfer"} />
-                        <Typography sx={{ fontSize: 16 }}>
+                        <Radio checked={paymentMethod === "bank_transfer"} size="small" />
+                        <Typography sx={{ fontSize: { xs: 13.5, sm: 16 }, fontWeight: 700 }}>
                             โอนผ่านธนาคาร
                         </Typography>
                     </Stack>
@@ -131,9 +131,9 @@ const PaymentMethodSection: React.FC<Props> = ({
             </Stack>
 
             {!previewOnly && paymentMethod === "promptpay" && promptpay.is_active && (
-                <Box sx={{ textAlign: "center", mt: 3 }}>
-                    <Typography sx={{ fontWeight: 900, fontSize: 18, mb: 2 }}>
-                        <QrCode2Icon sx={{ mr: 1 }} />
+                <Box sx={{ textAlign: "center", mt: { xs: 2, sm: 3 } }}>
+                    <Typography sx={{ fontWeight: 900, fontSize: { xs: 15, sm: 18 }, mb: { xs: 1.25, sm: 2 } }}>
+                        <QrCode2Icon sx={{ mr: 1, fontSize: { xs: 20, sm: 24 }, verticalAlign: "middle" }} />
                         สแกน QR PromptPay เพื่อชำระเงิน
                     </Typography>
 
@@ -141,21 +141,23 @@ const PaymentMethodSection: React.FC<Props> = ({
                         sx={{
                             border: "1px solid",
                             borderColor: "divider",
-                            p: 3,
+                            p: { xs: 1.5, sm: 3 },
+                            borderRadius: 2,
+                            backgroundColor: "custom.mutedBg",
                         }}
                     >
                         <Box
                             component="img"
                             src={promptpay.qr_code}
                             sx={{
-                                width: 280,
-                                height: 280,
+                                width: { xs: 210, sm: 280 },
+                                height: { xs: 210, sm: 280 },
                                 objectFit: "contain",
                                 maxWidth: "100%",
                             }}
                         />
 
-                        <Typography sx={{ color: "text.secondary", mt: 2 }}>
+                        <Typography sx={{ color: "text.secondary", mt: { xs: 1.25, sm: 2 }, fontSize: { xs: 12.5, sm: 14 } }}>
                             ร้านค้ามหาวิทยาลัย RBAC
                         </Typography>
 
@@ -163,7 +165,8 @@ const PaymentMethodSection: React.FC<Props> = ({
                             sx={{
                                 color: "primary.main",
                                 fontWeight: 900,
-                                fontSize: 30,
+                                fontSize: { xs: 26, sm: 30 },
+                                lineHeight: 1.1,
                             }}
                         >
                             ฿{formatPrice(promptpay.amount)}
@@ -175,14 +178,15 @@ const PaymentMethodSection: React.FC<Props> = ({
             {!previewOnly && paymentMethod === "bank_transfer" && bank.is_active && (
                 <Box
                     sx={{
-                        mt: 3,
-                        p: 2,
+                        mt: { xs: 2, sm: 3 },
+                        p: { xs: 1.5, sm: 2 },
                         border: "1px solid",
                         borderColor: "divider",
-                        borderRadius: 1,
+                        borderRadius: 2,
+                        backgroundColor: "custom.mutedBg",
                     }}
                 >
-                    <Typography sx={{ fontWeight: 800, mb: 2 }}>
+                    <Typography sx={{ fontWeight: 800, mb: { xs: 1.25, sm: 2 }, fontSize: { xs: 15, sm: 16 } }}>
                         รายละเอียดบัญชีธนาคาร
                     </Typography>
 
@@ -192,7 +196,7 @@ const PaymentMethodSection: React.FC<Props> = ({
                                 sx={{
                                     display: "flex",
                                     justifyContent: "center",
-                                    mb: 2,
+                                    mb: { xs: 1.25, sm: 2 },
                                 }}
                             >
                                 <Box
@@ -200,8 +204,8 @@ const PaymentMethodSection: React.FC<Props> = ({
                                     src={bank.qr_code}
                                     alt="QR Code"
                                     sx={{
-                                        width: 240,
-                                        height: 240,
+                                        width: { xs: 190, sm: 240 },
+                                        height: { xs: 190, sm: 240 },
                                         objectFit: "contain",
                                         borderRadius: 1,
                                         border: "1px solid",
@@ -211,7 +215,7 @@ const PaymentMethodSection: React.FC<Props> = ({
                             </Box>
 
                             <Button
-                                sx={{ mb: 2 }}
+                                sx={{ mb: { xs: 1.5, sm: 2 }, fontSize: { xs: 13, sm: 14 } }}
                                 variant="outlined"
                                 startIcon={<DownloadOutlinedIcon />}
                                 onClick={handleDownloadQR}
@@ -223,7 +227,7 @@ const PaymentMethodSection: React.FC<Props> = ({
 
                     )}
 
-                    <Stack spacing={2}>
+                    <Stack spacing={{ xs: 1.5, sm: 2 }}>
                         <TextField
                             label="ธนาคาร"
                             value={bank.bank_name}
@@ -277,10 +281,10 @@ const PaymentMethodSection: React.FC<Props> = ({
 
                         <Typography
                             sx={{
-                                fontSize: 22,
                                 fontWeight: 900,
                                 color: "primary.main",
                                 textAlign: "center",
+                                fontSize: { xs: 20, sm: 22 },
                             }}
                         >
                             ยอดโอน ฿{formatPrice(bank.amount)}

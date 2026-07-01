@@ -1,11 +1,5 @@
 import React from "react";
-import {
-    Card,
-    CardActionArea,
-    Radio,
-    Stack,
-    Typography,
-} from "@mui/material";
+import { Box, Card, CardActionArea, Radio, Stack, Typography } from "@mui/material";
 
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
@@ -22,19 +16,19 @@ const DeliveryShop: React.FC<IDeliveryShopProps> = ({ masterController }) => {
             value: "shipping",
             title: "จัดส่ง",
             description: "จัดส่งสินค้าตามที่อยู่ / สถานที่ส่ง",
-            icon: <LocalShippingOutlinedIcon color="primary" fontSize="large" />,
+            icon: <LocalShippingOutlinedIcon />,
         },
         {
             value: "pickup",
             title: "รับเอง",
             description: "รับสินค้าเองที่จุดนัดรับภายในมหาวิทยาลัย",
-            icon: <StorefrontOutlinedIcon color="primary" fontSize="large" />,
+            icon: <StorefrontOutlinedIcon />,
         },
     ] as const;
 
     return (
-        <Stack spacing={1.5} sx={{ mt: 2 }}>
-            <Typography sx={{ fontSize: 24, fontWeight: 700 }}>
+        <Stack spacing={{ xs: 1, sm: 1.5 }} sx={{ mt: { xs: 1.5, sm: 2 } }}>
+            <Typography sx={{ fontSize: { xs: 18, sm: 24 }, fontWeight: 800 }}>
                 วิธีรับสินค้า
             </Typography>
 
@@ -47,7 +41,8 @@ const DeliveryShop: React.FC<IDeliveryShopProps> = ({ masterController }) => {
                         sx={{
                             border: active ? "2px solid" : "1px solid",
                             borderColor: active ? "primary.main" : "divider",
-                            borderRadius: 1,
+                            borderRadius: 2,
+                            bgcolor: active ? "custom.brandSoft" : "background.paper",
                         }}
                     >
                         <CardActionArea
@@ -57,24 +52,38 @@ const DeliveryShop: React.FC<IDeliveryShopProps> = ({ masterController }) => {
                         >
                             <Stack
                                 direction="row"
-                                spacing={2}
+                                spacing={{ xs: 1, sm: 2 }}
                                 sx={{
-                                    p: 2,
+                                    p: { xs: 1.25, sm: 2 },
                                     alignItems: "center",
                                 }}
                             >
-                                <Radio checked={active} />
+                                <Radio checked={active} size="small" />
 
-                                {option.icon}
+                                <Box
+                                    sx={{
+                                        color: "primary.main",
+                                        display: "flex",
+                                        "& svg": {
+                                            fontSize: { xs: 28, sm: 36 },
+                                        },
+                                    }}
+                                >
+                                    {option.icon}
+                                </Box>
 
-                                <Stack>
-                                    <Typography sx={{ fontWeight: 700 }}>
+                                <Stack spacing={0.25} sx={{ minWidth: 0 }}>
+                                    <Typography sx={{ fontWeight: 800, fontSize: { xs: 14.5, sm: 16 } }}>
                                         {option.title}
                                     </Typography>
 
                                     <Typography
-                                        variant="body2"
                                         color="text.secondary"
+                                        sx={{
+                                            fontSize: { xs: 12, sm: 14 },
+                                            lineHeight: 1.45,
+                                            overflowWrap: "anywhere",
+                                        }}
                                     >
                                         {option.description}
                                     </Typography>

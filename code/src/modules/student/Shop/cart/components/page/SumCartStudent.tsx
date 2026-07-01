@@ -36,9 +36,9 @@ const SumCartStudent: React.FC<ISumCartStudentProps> = ({
         <Card
             elevation={0}
             sx={{
-                mt: 2,
-                p: 3,
-                borderRadius: 1,
+                mt: { xs: 1.5, sm: 2 },
+                p: { xs: 2, sm: 3 },
+                borderRadius: 2,
                 border: "1px solid",
                 borderColor: "divider",
                 position: {
@@ -49,32 +49,33 @@ const SumCartStudent: React.FC<ISumCartStudentProps> = ({
         >
             <Typography
                 sx={{
-                    fontWeight: 700,
-                    fontSize: 28,
-                    mb: 3,
+                    fontWeight: 800,
+                    fontSize: { xs: 22, sm: 28 },
+                    mb: { xs: 2, sm: 3 },
                 }}
             >
                 สรุปคำสั่งซื้อ
             </Typography>
 
-            <Stack spacing={2}>
+            <Stack spacing={{ xs: 1.5, sm: 2 }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography sx={{ color: "text.secondary" }}>
+                    <Typography sx={{ color: "text.secondary", fontSize: { xs: 13.5, sm: 16 } }}>
                         ยอดรวมสินค้า
                     </Typography>
 
-                    <Typography>
+                    <Typography sx={{ fontSize: { xs: 13.5, sm: 16 } }}>
                         ฿{formatPrice(productTotal)}
                     </Typography>
                 </Box>
 
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography sx={{ color: "text.secondary" }}>
+                    <Typography sx={{ color: "text.secondary", fontSize: { xs: 13.5, sm: 16 } }}>
                         ค่าจัดส่ง
                     </Typography>
 
                     <Typography
                         sx={{
+                            fontSize: { xs: 13.5, sm: 16 },
                             color:
                                 masterController.deliveryType === "shipping"
                                     ? "warning.main"
@@ -97,7 +98,7 @@ const SumCartStudent: React.FC<ISumCartStudentProps> = ({
                         alignItems: "center",
                     }}
                 >
-                    <Typography sx={{ color: "text.secondary" }}>
+                    <Typography sx={{ color: "text.secondary", fontSize: { xs: 14, sm: 16 } }}>
                         ยอดชำระ
                     </Typography>
 
@@ -105,7 +106,8 @@ const SumCartStudent: React.FC<ISumCartStudentProps> = ({
                         sx={{
                             color: "primary.main",
                             fontWeight: 800,
-                            fontSize: 30,
+                            fontSize: { xs: 26, sm: 30 },
+                            lineHeight: 1,
                         }}
                     >
                         ฿{formatPrice(grandTotal)}
@@ -124,11 +126,11 @@ const SumCartStudent: React.FC<ISumCartStudentProps> = ({
                         )
                     }
                     sx={{
-                        mt: 2,
-                        py: 1.5,
+                        mt: { xs: 1.5, sm: 2 },
+                        py: { xs: 1.15, sm: 1.5 },
                         borderRadius: 3,
                         fontWeight: 700,
-                        fontSize: 18,
+                        fontSize: { xs: 14.5, sm: 18 },
                     }}
                     disabled={
                         masterController.total_items <= 0 ||

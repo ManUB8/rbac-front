@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
-import Logo from "../../../assets/svg/logo_rbac.svg";
 import Logo_Samo from "../../../assets/image/logo_samo.jpg";
 import Video from "../../../assets/video/vdo-rbac.mp4";
 import { useNavigate } from "react-router";
@@ -37,7 +36,8 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
         sx={{
           position: "fixed",
           inset: 0,
-          background: "linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35))",
+          background: (theme) =>
+            `radial-gradient(circle at 50% 42%, ${theme.palette.custom.brandAccentSoft} 0, transparent 24%), linear-gradient(135deg, rgba(5,11,52,.88), rgba(8,19,95,.72), rgba(5,11,52,.9))`,
           zIndex: 1,
           pointerEvents: "none",
         }}
@@ -54,21 +54,46 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
           zIndex: 2,
         }}
       >
-        <Stack spacing={2}>
+        <Stack
+          spacing={2.5}
+          sx={{
+            alignItems: "center",
+            textAlign: "center",
+            px: 3,
+            py: 4,
+            // borderRadius: 5,
+            // border: (theme) => `1px solid ${theme.palette.custom.brandAccentSoft}`,
+            // background:
+            //   "linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.04))",
+            // backdropFilter: "blur(10px)",
+            // boxShadow: "0 24px 70px rgba(0,0,0,.28)",
+          }}
+        >
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               gap: 1,
+              justifyContent: "center",
+              flexWrap: "wrap",
             }}
           >
-            <Box component="img" sx={{ width: 100 }} src={Logo_Samo} alt="logo_rbac" />
+            <Box
+              component="img"
+              sx={{
+                width: 104,
+                // borderRadius: 2,
+                boxShadow: "0 14px 34px rgba(0,0,0,.28)",
+              }}
+              src={Logo_Samo}
+              alt="logo_rbac"
+            />
 
             <Typography
               sx={{
                 fontSize: 28,
                 color: "white",
-                fontWeight: 700,
+                fontWeight: 900,
               }}
             >
               {"Web Activity"}
@@ -87,8 +112,14 @@ const LoginPage: React.FC<ILoginPageProps> = () => {
               variant="contained"
               color="primary"
               sx={{
-                width: 160,
-                height: 55,
+                width: 180,
+                height: 56,
+                borderRadius: 1,
+                bgcolor: "secondary.main",
+                color: "secondary.contrastText",
+                "&:hover": {
+                  bgcolor: "secondary.light",
+                },
               }}
             >
               <Typography

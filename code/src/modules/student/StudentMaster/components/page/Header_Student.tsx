@@ -1,7 +1,7 @@
-import { Box, Card, CardContent, Typography, } from '@mui/material';
+import { Typography } from '@mui/material';
 import React from 'react';
 export interface IHeader_StudentProps { };
-const Header_Student: React.FunctionComponent<IHeader_StudentProps> = props => {
+const Header_Student: React.FunctionComponent<IHeader_StudentProps> = () => {
   return (
     <>
       <Typography

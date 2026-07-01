@@ -147,7 +147,7 @@ const ProductPreorderSection: React.FC<Props> = ({ controller }) => {
                     >
                         <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
                             <Controller
-                                name={"preorder_start_at" as any}
+                                name={"active_preorder_round.start_at"}
                                 control={control}
                                 render={({ field }) => (
                                     <DesktopDatePicker
@@ -174,7 +174,7 @@ const ProductPreorderSection: React.FC<Props> = ({ controller }) => {
                             />
 
                             <Controller
-                                name={"preorder_end_at" as any}
+                                name={"active_preorder_round.end_at"}
                                 control={control}
                                 render={({ field }) => (
                                     <DesktopDatePicker
@@ -202,7 +202,7 @@ const ProductPreorderSection: React.FC<Props> = ({ controller }) => {
                         </Stack>
 
                         <Controller
-                            name={"preorder_expected_ship_at" as any}
+                            name={"active_preorder_round.expected_ship_at"}
                             control={control}
                             render={({ field }) => (
                                 <DesktopDatePicker

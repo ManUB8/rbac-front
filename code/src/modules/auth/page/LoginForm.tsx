@@ -8,7 +8,6 @@ import {
   Container,
   IconButton,
   InputAdornment,
-  Link,
   Stack,
   TextField,
   Typography,
@@ -33,7 +32,6 @@ const LoginForm: React.FC = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-    setValue,
   } = useForm<ILoginAdminBody>({
     defaultValues: { username: "", password: "" },
     mode: "onSubmit",
@@ -109,7 +107,8 @@ const LoginForm: React.FC = () => {
         alignItems: "center",
         px: 2,
         py: 2,
-        backgroundColor: "#F3F4F6",
+        background: (theme) =>
+          `radial-gradient(circle at top, ${theme.palette.custom.brandAccentSoft} 0, transparent 34%), ${theme.palette.custom.pageBg}`,
       }}
     >
       <Box
@@ -137,7 +136,7 @@ const LoginForm: React.FC = () => {
             sx={{
               fontSize: { xs: 24, md: 30 },
               fontWeight: 800,
-              color: "#111827",
+              color: "primary.main",
               mb: 0.25,
             }}
           >
@@ -154,10 +153,10 @@ const LoginForm: React.FC = () => {
           sx={{
             width: "100%",
             maxWidth: 640,
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "background.paper",
             borderRadius: "24px",
-            border: "1px solid #E5E7EB",
-            boxShadow: "0 16px 40px rgba(15, 23, 42, 0.08)",
+            border: (theme) => `1px solid ${theme.palette.custom.cardBorder}`,
+            boxShadow: "0 18px 46px rgba(8, 19, 95, 0.12)",
             overflow: "hidden",
           }}
         >
@@ -178,8 +177,8 @@ const LoginForm: React.FC = () => {
                 p: 0.75,
                 mb: 3,
                 borderRadius: "20px",
-                backgroundColor: "#F8FAFC",
-                border: "1px solid #E2E8F0",
+                backgroundColor: "custom.mutedBg",
+                border: (theme) => `1px solid ${theme.palette.custom.cardBorder}`,
               }}
             >
               <Button
@@ -193,22 +192,22 @@ const LoginForm: React.FC = () => {
                   fontSize: 17,
                   fontWeight: 800,
                   backgroundColor:
-                    roleTab === "student" ? "#2952D9" : "transparent",
-                  color: roleTab === "student" ? "#FFFFFF" : "#111827",
+                    roleTab === "student" ? "primary.main" : "transparent",
+                  color: roleTab === "student" ? "primary.contrastText" : "text.primary",
                   border: "none",
                   boxShadow:
                     roleTab === "student"
-                      ? "0 8px 20px rgba(41,82,217,0.22)"
+                      ? "0 8px 20px rgba(8,19,95,0.22)"
                       : "none",
                   "& .MuiButton-startIcon": {
                     mr: 1,
                   },
                   "&:hover": {
                     backgroundColor:
-                      roleTab === "student" ? "#2348BF" : "#EEF2F7",
+                      roleTab === "student" ? "primary.light" : "action.hover",
                     boxShadow:
                       roleTab === "student"
-                        ? "0 8px 20px rgba(41,82,217,0.22)"
+                        ? "0 8px 20px rgba(8,19,95,0.22)"
                         : "none",
                   },
                 }}
@@ -227,22 +226,22 @@ const LoginForm: React.FC = () => {
                   fontSize: 17,
                   fontWeight: 800,
                   backgroundColor:
-                    roleTab === "admin" ? "#2952D9" : "transparent",
-                  color: roleTab === "admin" ? "#FFFFFF" : "#111827",
+                    roleTab === "admin" ? "primary.main" : "transparent",
+                  color: roleTab === "admin" ? "primary.contrastText" : "text.primary",
                   border: "none",
                   boxShadow:
                     roleTab === "admin"
-                      ? "0 8px 20px rgba(41,82,217,0.22)"
+                      ? "0 8px 20px rgba(8,19,95,0.22)"
                       : "none",
                   "& .MuiButton-startIcon": {
                     mr: 1,
                   },
                   "&:hover": {
                     backgroundColor:
-                      roleTab === "admin" ? "#2348BF" : "#EEF2F7",
+                      roleTab === "admin" ? "primary.light" : "action.hover",
                     boxShadow:
                       roleTab === "admin"
-                        ? "0 8px 20px rgba(41,82,217,0.22)"
+                        ? "0 8px 20px rgba(8,19,95,0.22)"
                         : "none",
                   },
                 }}
@@ -266,7 +265,7 @@ const LoginForm: React.FC = () => {
                     mb: 1,
                     fontSize: 15,
                     fontWeight: 800,
-                    color: "#111827",
+                    color: "text.primary",
                   }}
                 >
                   {roleTab === "student" ? "รหัสนิสิต" : "Username"}
@@ -298,25 +297,25 @@ const LoginForm: React.FC = () => {
                     "& .MuiFilledInput-root": {
                       minHeight: 62,
                       borderRadius: "16px",
-                      backgroundColor: "#F8FAFC",
-                      border: `1px solid ${errors.username ? "#D32F2F" : "#D6DCE5"
+                      backgroundColor: "custom.inputBg",
+                      border: (theme) => `1px solid ${errors.username ? theme.palette.error.main : theme.palette.divider
                         }`,
                       fontSize: 17,
                       px: 1,
                       transition: "all 0.2s ease",
                     },
                     "& .MuiFilledInput-root:hover": {
-                      backgroundColor: "#F8FAFC",
-                      borderColor: "#C7D2E0",
+                      backgroundColor: "custom.inputBg",
+                      borderColor: "primary.main",
                     },
                     "& .MuiFilledInput-root.Mui-focused": {
-                      backgroundColor: "#F8FAFC",
-                      border: "1px solid #2952D9",
-                      boxShadow: "0 0 0 3px rgba(41,82,217,0.08)",
+                      backgroundColor: "custom.inputBg",
+                      border: (theme) => `1px solid ${theme.palette.primary.main}`,
+                      boxShadow: "0 0 0 3px rgba(8,19,95,0.08)",
                     },
                     "& .MuiFilledInput-root.Mui-error": {
-                      backgroundColor: "#F8FAFC",
-                      border: "1px solid #D32F2F",
+                      backgroundColor: "custom.inputBg",
+                      border: (theme) => `1px solid ${theme.palette.error.main}`,
                     },
                     "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after": {
                       display: "none",
@@ -324,7 +323,7 @@ const LoginForm: React.FC = () => {
                     "& .MuiInputBase-input": {
                       py: 2,
                       fontSize: 17,
-                      color: "#475569",
+                      color: "text.primary",
                     },
                   }}
                   slotProps={{
@@ -350,7 +349,7 @@ const LoginForm: React.FC = () => {
                     mb: 1,
                     fontSize: 15,
                     fontWeight: 800,
-                    color: "#111827",
+                    color: "text.primary",
                   }}
                 >
                   รหัสผ่าน
@@ -368,24 +367,24 @@ const LoginForm: React.FC = () => {
                     "& .MuiFilledInput-root": {
                       minHeight: 62,
                       borderRadius: "16px",
-                      backgroundColor: "#F8FAFC",
-                      border: `1px solid ${errors.password ? "#D32F2F" : "#D6DCE5"}`,
+                      backgroundColor: "custom.inputBg",
+                      border: (theme) => `1px solid ${errors.password ? theme.palette.error.main : theme.palette.divider}`,
                       fontSize: 17,
                       px: 1,
                       transition: "all 0.2s ease",
                     },
                     "& .MuiFilledInput-root:hover": {
-                      backgroundColor: "#F8FAFC",
-                      borderColor: "#C7D2E0",
+                      backgroundColor: "custom.inputBg",
+                      borderColor: "primary.main",
                     },
                     "& .MuiFilledInput-root.Mui-focused": {
-                      backgroundColor: "#F8FAFC",
-                      border: "1px solid #2952D9",
-                      boxShadow: "0 0 0 3px rgba(41,82,217,0.08)",
+                      backgroundColor: "custom.inputBg",
+                      border: (theme) => `1px solid ${theme.palette.primary.main}`,
+                      boxShadow: "0 0 0 3px rgba(8,19,95,0.08)",
                     },
                     "& .MuiFilledInput-root.Mui-error": {
-                      backgroundColor: "#F8FAFC",
-                      border: "1px solid #D32F2F",
+                      backgroundColor: "custom.inputBg",
+                      border: (theme) => `1px solid ${theme.palette.error.main}`,
                     },
                     "& .MuiFilledInput-root:before, & .MuiFilledInput-root:after":
                     {
@@ -394,7 +393,7 @@ const LoginForm: React.FC = () => {
                     "& .MuiInputBase-input": {
                       py: 2,
                       fontSize: 17,
-                      color: "#475569",
+                      color: "text.primary",
                     },
                   }}
                   slotProps={{
@@ -431,19 +430,17 @@ const LoginForm: React.FC = () => {
                 height: 62,
                 borderRadius: "16px",
                 textTransform: "none",
-                backgroundColor: "#2952D9",
                 boxShadow: "none",
                 "&:hover": {
-                  backgroundColor: "#2348BF",
                   boxShadow: "none",
                 },
                 "&.Mui-disabled": {
-                  backgroundColor: "#AFC0FF",
-                  color: "#FFFFFF",
+                  backgroundColor: "action.disabledBackground",
+                  color: "text.disabled",
                 },
               }}
             >
-              <Typography sx={{ fontSize: 18, fontWeight: 800, color: '#FFFFFF' }}>
+              <Typography sx={{ fontSize: 18, fontWeight: 800 }}>
                 {isSubmitting ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
               </Typography>
             </Button>
@@ -458,14 +455,14 @@ const LoginForm: React.FC = () => {
                   height: 62,
                   borderRadius: "16px",
                   textTransform: "none",
-                  borderColor: "#2952D9",
-                  color: "#2952D9",
+                  borderColor: "primary.main",
+                  color: "primary.main",
                   fontWeight: 800,
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "background.paper",
 
                   "&:hover": {
-                    borderColor: "#2348BF",
-                    backgroundColor: "#F5F8FF",
+                    borderColor: "primary.light",
+                    backgroundColor: "custom.brandSoft",
                   },
                 }}
               >
@@ -484,7 +481,7 @@ const LoginForm: React.FC = () => {
               sx={{
                 mt: 2.5,
                 borderRadius: "16px",
-                backgroundColor: "#F1F5F9",
+                backgroundColor: "custom.mutedBg",
                 px: 2.5,
                 py: 2,
                 textAlign: "center",
@@ -493,7 +490,7 @@ const LoginForm: React.FC = () => {
               <Typography
                 sx={{
                   fontSize: { xs: 14, md: 15 },
-                  color: "#64748B",
+                  color: "text.secondary",
                   lineHeight: 1.5,
                   fontWeight: 500,
                 }}
@@ -501,43 +498,6 @@ const LoginForm: React.FC = () => {
                 คลิก "นิสิต" หรือ "แอดมิน" เพื่อเติมข้อมูลอัตโนมัติ
                 แล้วกดเข้าสู่ระบบ
               </Typography>
-            </Box>
-
-            <Box
-              sx={{
-                mt: 2,
-                display: "flex",
-                justifyContent: "center",
-                gap: 2,
-              }}
-            >
-              {/* <Link
-                component="button"
-                type="button"
-                underline="hover"
-                onClick={() => navigate("/forgot-password")}
-                sx={{
-                  fontSize: 15,
-                  fontWeight: 700,
-                  color: "#111827",
-                }}
-              >
-                ลืมรหัสผ่านใช่ไหม?
-              </Link> */}
-
-              {/* <Link
-                component="button"
-                type="button"
-                underline="hover"
-                onClick={() => navigate("/register")}
-                sx={{
-                  fontSize: 18,
-                  fontWeight: 700,
-                  color: "#111827",
-                }}
-              >
-                สมัครข้อมูล
-              </Link> */}
             </Box>
 
           </CardContent>
