@@ -137,13 +137,18 @@ const RegisterPage: React.FC = () => {
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
+        py: 4,
+        background: (theme) =>
+          `radial-gradient(circle at top, ${theme.palette.custom.brandAccentSoft} 0, transparent 34%), ${theme.palette.custom.pageBg}`,
       }}
     >
       <Container maxWidth="sm">
         <Card
           sx={{
             borderRadius: 4,
-            boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+            border: (theme) => `1px solid ${theme.palette.custom.cardBorder}`,
+            boxShadow: "0 18px 46px rgba(8, 19, 95, 0.12)",
+            overflow: "hidden",
           }}
         >
           <CardContent sx={{ p: 4 }}>
@@ -153,6 +158,7 @@ const RegisterPage: React.FC = () => {
                 fontWeight: 800,
                 textAlign: "center",
                 mb: 1,
+                color: "primary.main",
               }}
             >
               สมัครข้อมูล
@@ -446,7 +452,7 @@ const RegisterPage: React.FC = () => {
                     "& .MuiInputBase-input": {
                       py: 2,
                       fontSize: 17,
-                      color: "#475569",
+                      color: "text.primary",
                     },
                   }}
 
@@ -480,7 +486,7 @@ const RegisterPage: React.FC = () => {
                     "& .MuiInputBase-input": {
                       py: 2,
                       fontSize: 17,
-                      color: "#475569",
+                      color: "text.primary",
                     },
                   }}
                 />

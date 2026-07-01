@@ -9,7 +9,7 @@ import {
     Paper,
     Typography,
 } from "@mui/material";
-import type { IActivityDashboardData } from "../../interface/DashboardAdmin.interface";
+import type { IActivityDashboardData, IGenderSummary, IPrefixGenderSummary } from "../../interface/DashboardAdmin.interface";
 
 export interface IFacultyDetailProps {
     dashboard_data: IActivityDashboardData;
@@ -82,6 +82,18 @@ const FacultyDetail: React.FC<IFacultyDetailProps> = ({ dashboard_data }) => {
                                         color="primary"
                                         label={`${facultyPercent}%`}
                                     />
+                                    <Chip
+                                        size="small"
+                                        label={`ชาย ${getPrefixMaleCount(faculty.prefix_gender_summary)}`}
+                                    />
+                                    <Chip
+                                        size="small"
+                                        label={`หญิง ${getPrefixFemaleCount(faculty.prefix_gender_summary)}`}
+                                    />
+                                    <Chip
+                                        size="small"
+                                        label={`เพศ ชาย ${getGenderMaleCount(faculty.gender_summary)} · หญิง ${getGenderFemaleCount(faculty.gender_summary)} · LGBTQ+ ${getLgbtqCount(faculty.gender_summary)}`}
+                                    />
                                 </Box>
                             </Box>
 
@@ -148,6 +160,56 @@ const FacultyDetail: React.FC<IFacultyDetailProps> = ({ dashboard_data }) => {
                                                 <Box
                                                     sx={{
                                                         display: "flex",
+                                                        alignItems: "center",
+                                                        gap: 0.6,
+                                                        flexWrap: "wrap",
+                                                        mt: 0.4,
+                                                    }}
+                                                >
+                                                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                                        ชาย
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: "info.main", fontWeight: 800 }}>
+                                                        {getPrefixMaleCount(major.prefix_gender_summary)}
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                                        · หญิง
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: "#d81b60", fontWeight: 800 }}>
+                                                        {getPrefixFemaleCount(major.prefix_gender_summary)}
+                                                    </Typography>
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: 0.6,
+                                                        flexWrap: "wrap",
+                                                        mt: 0.2,
+                                                    }}
+                                                >
+                                                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                                        เพศ ชาย
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: "info.main", fontWeight: 800 }}>
+                                                        {getGenderMaleCount(major.gender_summary)}
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                                        · หญิง
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: "#d81b60", fontWeight: 800 }}>
+                                                        {getGenderFemaleCount(major.gender_summary)}
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                                        · LGBTQ+
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ color: "#7c3aed", fontWeight: 800 }}>
+                                                        {getLgbtqCount(major.gender_summary)}
+                                                    </Typography>
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
                                                         justifyContent: "space-between",
                                                         alignItems: "center",
                                                         gap: 1,
@@ -192,3 +254,18 @@ const FacultyDetail: React.FC<IFacultyDetailProps> = ({ dashboard_data }) => {
 };
 
 export default FacultyDetail;
+
+const getPrefixMaleCount = (prefixGenderSummary?: IPrefixGenderSummary) =>
+    prefixGenderSummary?.male_count ?? 0;
+
+const getPrefixFemaleCount = (prefixGenderSummary?: IPrefixGenderSummary) =>
+    prefixGenderSummary?.female_count ?? 0;
+
+const getGenderMaleCount = (genderSummary?: IGenderSummary) =>
+    genderSummary?.male_count ?? 0;
+
+const getGenderFemaleCount = (genderSummary?: IGenderSummary) =>
+    genderSummary?.female_count ?? 0;
+
+const getLgbtqCount = (genderSummary?: IGenderSummary) =>
+    genderSummary?.lgbtq_count ?? 0;

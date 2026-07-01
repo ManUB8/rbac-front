@@ -5,6 +5,7 @@ import {
     CardContent,
     Chip,
     LinearProgress,
+    Skeleton,
     Table,
     TableBody,
     TableCell,
@@ -17,9 +18,10 @@ import type { IFacultyRankItem } from "../../interface/DashboardAdmin.interface"
 
 export interface IFacultyRankCardProps {
     facultyRank: IFacultyRankItem[];
+    loading?: boolean;
 }
 
-const FacultyRankCard: React.FC<IFacultyRankCardProps> = ({ facultyRank }) => {
+const FacultyRankCard: React.FC<IFacultyRankCardProps> = ({ facultyRank, loading = false }) => {
     const columnSx = {
         student: {
             bgcolor: "rgba(124, 155, 255, 0.06)",
@@ -96,93 +98,103 @@ const FacultyRankCard: React.FC<IFacultyRankCardProps> = ({ facultyRank }) => {
                         </TableHead>
 
                         <TableBody>
-                            {facultyRank.map((item, index) => (
-                                <TableRow key={item.faculty_id} hover>
-                                    <TableCell>
-                                        <Chip
-                                            size="small"
-                                            label={index + 1}
-                                            color={
-                                                index === 0 ? "warning" : index < 3 ? "primary" : "default"
-                                            }
-                                            sx={{
-                                                fontWeight: 600,
-                                                borderRadius: "50%",
-                                                width: 34,
-                                                height: 34,
-                                            }}
-                                        />
-                                    </TableCell>
-
-                                    <TableCell>
-                                        <Typography sx={{ fontWeight: 500 }} noWrap>
-                                            {item.faculty_name}
-                                        </Typography>
-                                    </TableCell>
-
-                                    <TableCell
-                                        align="right"
-                                        sx={{
-                                            ...columnSx.student,
-                                            fontWeight: 700,
-                                        }}
-                                    >
-                                        {item.total_student}
-                                    </TableCell>
-
-                                    <TableCell align="right" sx={columnSx.joined}>
-                                        {item.joined_count}
-                                    </TableCell>
-
-                                    <TableCell align="right" sx={columnSx.notJoined}>
-                                        {item.not_joined_count}
-                                    </TableCell>
-
-                                    <TableCell align="right" sx={columnSx.checkin}>
-                                        {item.checkin_count}
-                                    </TableCell>
-
-                                    <TableCell align="right" sx={columnSx.checkout}>
-                                        {item.checkout_count}
-                                    </TableCell>
-
-                                    <TableCell sx={columnSx.percent}>
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 1,
-                                            }}
-                                        >
-                                            <LinearProgress
-                                                variant="determinate"
-                                                value={Math.min(item.join_rate_percent, 100)}
+                            {loading
+                                ? Array.from({ length: 5 }).map((_, index) => (
+                                    <TableRow key={index}>
+                                        {Array.from({ length: 8 }).map((__, cellIndex) => (
+                                            <TableCell key={cellIndex}>
+                                                <Skeleton height={28} />
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))
+                                : facultyRank.map((item, index) => (
+                                    <TableRow key={item.faculty_id} hover>
+                                        <TableCell>
+                                            <Chip
+                                                size="small"
+                                                label={index + 1}
+                                                color={
+                                                    index === 0 ? "warning" : index < 3 ? "primary" : "default"
+                                                }
                                                 sx={{
-                                                    flex: 1,
-                                                    height: 8,
-                                                    borderRadius: 4,
-                                                    bgcolor: "rgba(168, 85, 247, 0.22)",
-
-                                                    "& .MuiLinearProgress-bar": {
-                                                        bgcolor: "error.main",
-                                                    },
+                                                    fontWeight: 600,
+                                                    borderRadius: "50%",
+                                                    width: 34,
+                                                    height: 34,
                                                 }}
                                             />
+                                        </TableCell>
 
-                                            <Typography
-                                                variant="body2"
+                                        <TableCell>
+                                            <Typography sx={{ fontWeight: 500 }} noWrap>
+                                                {item.faculty_name}
+                                            </Typography>
+                                        </TableCell>
+
+                                        <TableCell
+                                            align="right"
+                                            sx={{
+                                                ...columnSx.student,
+                                                fontWeight: 700,
+                                            }}
+                                        >
+                                            {item.total_student}
+                                        </TableCell>
+
+                                        <TableCell align="right" sx={columnSx.joined}>
+                                            {item.joined_count}
+                                        </TableCell>
+
+                                        <TableCell align="right" sx={columnSx.notJoined}>
+                                            {item.not_joined_count}
+                                        </TableCell>
+
+                                        <TableCell align="right" sx={columnSx.checkin}>
+                                            {item.checkin_count}
+                                        </TableCell>
+
+                                        <TableCell align="right" sx={columnSx.checkout}>
+                                            {item.checkout_count}
+                                        </TableCell>
+
+                                        <TableCell sx={columnSx.percent}>
+                                            <Box
                                                 sx={{
-                                                    minWidth: 50,
-                                                    fontWeight: 700,
-                                                    color: "error.main",
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: 1,
                                                 }}
                                             >
-                                                {item.join_rate_percent}%
-                                            </Typography>
-                                        </Box>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                                                <LinearProgress
+                                                    variant="determinate"
+                                                    value={Math.min(item.join_rate_percent, 100)}
+                                                    sx={{
+                                                        flex: 1,
+                                                        height: 8,
+                                                        borderRadius: 4,
+                                                        bgcolor: "rgba(168, 85, 247, 0.22)",
+
+                                                        "& .MuiLinearProgress-bar": {
+                                                            bgcolor: "error.main",
+                                                        },
+                                                    }}
+                                                />
+
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        minWidth: 50,
+                                                        fontWeight: 700,
+                                                        color: "error.main",
+                                                    }}
+                                                >
+                                                    {item.join_rate_percent}%
+                                                </Typography>
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                         </TableBody>
                     </Table>
                 </TableContainer>

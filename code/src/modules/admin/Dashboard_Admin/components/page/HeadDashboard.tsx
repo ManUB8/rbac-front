@@ -6,9 +6,7 @@ export interface IHeadDashboardProps {
     mastercontroller: IuseuseFetchDashboardAdmin;
 }
 
-const HeadDashboard: React.FC<IHeadDashboardProps> = ({
-    mastercontroller,
-}) => {
+const HeadDashboard: React.FC<IHeadDashboardProps> = () => {
     return (
         <Grid
             container

@@ -1,7 +1,6 @@
 import { ApiConfig } from "../../../../../shared/service/ApiConfig";
 import { api } from "../../../../../shared/service/axiosInstance";
 import type { IPaymentSlip } from "../interface/Payment.interface";
-const user_code = localStorage.getItem("user_code");
 
 export const UpdatePaymentSlip = async (body: IPaymentSlip, order_id: string): Promise<any> => {
     const res = await api.patch<any>(
@@ -42,4 +41,3 @@ export const UpdatePaymentSlip = async (body: IPaymentSlip, order_id: string): P
 //     );
 //     return res;
 // };
-

@@ -24,7 +24,7 @@ const FilterDashboard: React.FC<IFilterDashboardProps> = ({
     const activity_filter = mastercontroller.activity_filter;
 
     const selectedActivity =
-        mastercontroller.dashboard_data?.selected_activity ?? null;
+        mastercontroller.dashboard_data?.selected_activity || null;
 
     return (
         <Grid container spacing={2}>

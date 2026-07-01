@@ -8,7 +8,7 @@ import DetailCartShop from '../components/form/DetailCartShop';
 
 export interface ICartStudentPageProps { };
 
-const CartStudentPage: React.FunctionComponent<ICartStudentPageProps> = props => {
+const CartStudentPage: React.FunctionComponent<ICartStudentPageProps> = () => {
     const masterController = useCartStudentFetch()
     return (
         <>

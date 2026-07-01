@@ -32,7 +32,7 @@ const CartStudentDetail: React.FC<ICartStudentDetailProps> = ({
     };
 
     return (
-        <Grid container spacing={2} sx={{ marginTop: 2 }}>
+        <Grid container spacing={{ xs: 1.25, sm: 2 }} sx={{ marginTop: { xs: 1.25, sm: 2 } }}>
             {cartItems.map((item) => (
                 <Grid
                     key={item.cart_item_id}
@@ -41,15 +41,15 @@ const CartStudentDetail: React.FC<ICartStudentDetailProps> = ({
                     <Card
                         elevation={0}
                         sx={{
-                            borderRadius: 1,
+                            borderRadius: 2,
                             border: "1px solid",
                             borderColor: "divider",
                         }}
                     >
-                        <CardContent>
+                        <CardContent sx={{ p: { xs: 1.25, sm: 2 }, "&:last-child": { pb: { xs: 1.25, sm: 2 } } }}>
                             <Stack
                                 direction="row"
-                                spacing={2}
+                                spacing={{ xs: 1.1, sm: 2 }}
                                 sx={{
                                     alignItems: "flex-start",
                                 }}
@@ -62,20 +62,22 @@ const CartStudentDetail: React.FC<ICartStudentDetailProps> = ({
                                         item.main_image
                                     )}
                                     sx={{
-                                        width: 90,
-                                        height: 90,
-                                        borderRadius: 1,
+                                        width: { xs: 72, sm: 90 },
+                                        height: { xs: 72, sm: 90 },
+                                        borderRadius: 2,
                                         objectFit: "cover",
                                         flexShrink: 0,
                                     }}
                                 />
 
                                 {/* product_name */}
-                                <Box sx={{ flex: 1 }}>
+                                <Box sx={{ flex: 1, minWidth: 0 }}>
                                     <Typography
                                         sx={{
-                                            fontWeight: 700,
-                                            fontSize: 18,
+                                            fontWeight: 800,
+                                            fontSize: { xs: 14.5, sm: 18 },
+                                            lineHeight: 1.25,
+                                            overflowWrap: "anywhere",
                                         }}
                                     >
                                         {item.product_name}
@@ -87,6 +89,9 @@ const CartStudentDetail: React.FC<ICartStudentDetailProps> = ({
                                                 sx={{
                                                     color: "text.secondary",
                                                     mt: 0.5,
+                                                    fontSize: { xs: 12, sm: 14 },
+                                                    lineHeight: 1.35,
+                                                    overflowWrap: "anywhere",
                                                 }}
                                             >
                                                 Color: {item.color_name || "-"}
@@ -100,7 +105,7 @@ const CartStudentDetail: React.FC<ICartStudentDetailProps> = ({
                                             mt: 1,
                                             fontWeight: 700,
                                             color: "primary.main",
-                                            fontSize: 18,
+                                            fontSize: { xs: 15, sm: 18 },
                                         }}
                                     >
                                         ฿{item.price}
@@ -111,7 +116,7 @@ const CartStudentDetail: React.FC<ICartStudentDetailProps> = ({
                                         direction="row"
                                         spacing={2}
                                         sx={{
-                                            mt: 1,
+                                            mt: { xs: 0.75, sm: 1 },
                                             alignItems: "center",
                                         }}
                                     >
@@ -128,9 +133,10 @@ const CartStudentDetail: React.FC<ICartStudentDetailProps> = ({
 
                                         <Typography
                                             sx={{
-                                                minWidth: 24,
+                                                minWidth: { xs: 20, sm: 24 },
                                                 textAlign: "center",
-                                                fontSize: 18,
+                                                fontSize: { xs: 14, sm: 18 },
+                                                fontWeight: 700,
                                             }}
                                         >
                                             {item.quantity}
@@ -152,6 +158,7 @@ const CartStudentDetail: React.FC<ICartStudentDetailProps> = ({
                                 {/* ปุ่มลบ */}
                                 <IconButton
                                     color="error"
+                                    size="small"
                                 onClick={() =>
                                     masterController.handleDeleteCartItem?.(
                                         item.cart_item_id

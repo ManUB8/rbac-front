@@ -28,10 +28,10 @@ const PaymentSlipSection: React.FC<Props> = ({
     return (
         <Card
             sx={{
-                p: 3,
+                p: { xs: 2, sm: 3 },
                 borderRadius: 2,
                 border: "1px solid",
-                borderColor: "primary.light",
+                borderColor: "custom.cardBorder",
             }}
         >
             <Stack
@@ -42,12 +42,13 @@ const PaymentSlipSection: React.FC<Props> = ({
                     mb: 1,
                 }}
             >
-                <UploadOutlinedIcon color="primary" />
+                <UploadOutlinedIcon color="primary" sx={{ fontSize: { xs: 22, sm: 24 } }} />
 
                 <Typography
                     sx={{
-                        fontSize: 24,
+                        fontSize: { xs: 18, sm: 24 },
                         fontWeight: 900,
+                        lineHeight: 1.25,
                     }}
                 >
                     แนบหลักฐานการชำระเงิน *
@@ -57,7 +58,9 @@ const PaymentSlipSection: React.FC<Props> = ({
             <Typography
                 sx={{
                     color: "text.secondary",
-                    mb: 3,
+                    mb: { xs: 2, sm: 3 },
+                    fontSize: { xs: 13, sm: 16 },
+                    lineHeight: 1.5,
                 }}
             >
                 หลังโอนแล้ว กรุณาแนบรูปสลิป/หลักฐานการโอนเพื่อให้ Admin
@@ -68,6 +71,7 @@ const PaymentSlipSection: React.FC<Props> = ({
                 sx={{
                     fontWeight: 700,
                     mb: 1,
+                    fontSize: { xs: 13.5, sm: 16 },
                 }}
             >
                 เลือกรูปสลิป
@@ -79,11 +83,11 @@ const PaymentSlipSection: React.FC<Props> = ({
                 onChange={(url: any) => setSlipUrl(url ?? "")}
             />
 
-            <Divider sx={{ my: 3 }} />
+            <Divider sx={{ my: { xs: 2, sm: 3 } }} />
 
             <Stack
                 direction={{ xs: "column", sm: "row" }}
-                spacing={2}
+                spacing={{ xs: 1.25, sm: 2 }}
             >
                 <Button
                     fullWidth
@@ -95,6 +99,7 @@ const PaymentSlipSection: React.FC<Props> = ({
                         whiteSpace: "normal",
                         lineHeight: 1.3,
                         fontWeight: 700,
+                        fontSize: { xs: 13, sm: 14 },
                     }}
                 >
                     ข้ามไปก่อน (อัปสลิปที่หลัง)
@@ -112,6 +117,7 @@ const PaymentSlipSection: React.FC<Props> = ({
                         whiteSpace: "normal",
                         lineHeight: 1.3,
                         fontWeight: 700,
+                        fontSize: { xs: 13, sm: 14 },
                     }}
                 >
                     ส่งหลักฐานและยืนยันคำสั่งซื้อ

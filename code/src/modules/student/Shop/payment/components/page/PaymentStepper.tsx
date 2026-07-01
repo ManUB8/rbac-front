@@ -8,14 +8,14 @@ interface Props {
 
 const PaymentStepper: React.FC<Props> = ({ step }) => {
     return (
-        <Stack direction="row" sx={{ alignItems: "center", gap: 2 }}>
+        <Stack direction="row" sx={{ alignItems: "center", gap: { xs: 0.75, sm: 2 } }}>
             <Box
                 sx={{
-                    width: 36,
-                    height: 36,
+                    width: { xs: 28, sm: 36 },
+                    height: { xs: 28, sm: 36 },
                     borderRadius: "50%",
                     bgcolor: step === 1 ? "primary.main" : "primary.light",
-                    color: "#fff",
+                    color: "primary.contrastText",
                     display: "grid",
                     placeItems: "center",
                     fontWeight: 800,
@@ -24,7 +24,7 @@ const PaymentStepper: React.FC<Props> = ({ step }) => {
                 {step === 1 ? "1" : <CheckIcon />}
             </Box>
 
-            <Typography sx={{ fontWeight: 800, fontSize: 16 }}>
+            <Typography sx={{ fontWeight: 800, fontSize: { xs: 12, sm: 16 }, whiteSpace: "nowrap" }}>
                 ข้อมูลผู้รับ
             </Typography>
 
@@ -32,11 +32,11 @@ const PaymentStepper: React.FC<Props> = ({ step }) => {
 
             <Box
                 sx={{
-                    width: 36,
-                    height: 36,
+                    width: { xs: 28, sm: 36 },
+                    height: { xs: 28, sm: 36 },
                     borderRadius: "50%",
                     bgcolor: step === 2 ? "primary.main" : "action.hover",
-                    color: step === 2 ? "#fff" : "text.secondary",
+                    color: step === 2 ? "primary.contrastText" : "text.secondary",
                     display: "grid",
                     placeItems: "center",
                     fontWeight: 800,
@@ -48,8 +48,9 @@ const PaymentStepper: React.FC<Props> = ({ step }) => {
             <Typography
                 sx={{
                     fontWeight: 800,
-                    fontSize: 16,
+                    fontSize: { xs: 12, sm: 16 },
                     color: step === 2 ? "text.primary" : "text.secondary",
+                    whiteSpace: "nowrap",
                 }}
             >
                 ชำระเงิน

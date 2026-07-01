@@ -12,8 +12,8 @@ import {
 import { motion } from "framer-motion";
 
 import NoImg from "../../../../../../assets/image/no-img.jpg";
+import ComingSoon from "../../../../../../assets/image/coming-soon-cutout.png";
 import type { IuseFetchMasterFunctionShopStudent } from "../../hook/useFetchShopStudent";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 export interface ICardShopStudentProps {
     mastercontroller: IuseFetchMasterFunctionShopStudent;
@@ -44,8 +44,11 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
                     >
                         <Card
                             sx={{
-                                borderRadius: 3,
+                                borderRadius: 2,
                                 overflow: "hidden",
+                                bgcolor: "background.paper",
+                                borderColor: "custom.cardBorder",
+                                boxShadow: "0 14px 30px rgba(8, 19, 95, 0.16)",
                             }}
                         >
                             <Skeleton
@@ -76,13 +79,172 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
                                     variant="rounded"
                                     width={120}
                                     height={32}
-                                    sx={{ mt: 1 }}
+                                    sx={{
+                                        mt: 1,
+                                        borderRadius: 99,
+                                    }}
                                 />
                             </Box>
                         </Card>
                     </Grid>
                 ))}
             </Grid>
+        );
+    }
+
+    if (data.length === 0) {
+        return (
+            <Box
+                sx={{
+                    mt: 3,
+                    minHeight: { xs: 440, md: 520 },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    px: { xs: 1.5, md: 2 },
+                }}
+            >
+                <Box
+                    sx={{
+                        position: "relative",
+                        width: "100%",
+                        maxWidth: 980,
+                        overflow: "hidden",
+                        borderRadius: 5,
+                        border: (theme) => `1px solid ${theme.palette.custom.cardBorder}`,
+                        background: (theme) =>
+                            `radial-gradient(circle at 80% 18%, ${theme.palette.custom.brandAccentSoft} 0, transparent 30%), linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.primary.light} 100%)`,
+                        boxShadow: (theme) =>
+                            `0 26px 80px ${theme.palette.mode === "light"
+                                ? "rgba(8, 19, 95, 0.28)"
+                                : "rgba(0, 0, 0, 0.38)"
+                            }, inset 0 1px 0 rgba(255,255,255,0.08)`,
+                        px: { xs: 2.25, md: 6 },
+                        py: { xs: 4, md: 5 },
+                        display: "grid",
+                        gridTemplateColumns: { xs: "1fr", md: "1fr 0.9fr" },
+                        alignItems: "center",
+                        gap: { xs: 3, md: 4 },
+                        "&::before": {
+                            content: '""',
+                            position: "absolute",
+                            inset: 0,
+                            background: (theme) =>
+                                `linear-gradient(90deg, ${theme.palette.custom.brandAccentSoft} 1px, transparent 1px), linear-gradient(0deg, ${theme.palette.custom.brandAccentSoft} 1px, transparent 1px)`,
+                            backgroundSize: "34px 34px",
+                            maskImage:
+                                "linear-gradient(120deg, rgba(0,0,0,0.86), transparent 74%)",
+                            opacity: 0.55,
+                        },
+                        "&::after": {
+                            content: '""',
+                            position: "absolute",
+                            left: "-12%",
+                            right: "-12%",
+                            bottom: { xs: 18, md: 30 },
+                            height: 6,
+                            background: (theme) =>
+                                `linear-gradient(90deg, transparent, ${theme.palette.custom.brandAccent}, ${theme.palette.secondary.light}, transparent)`,
+                            transform: "rotate(-2deg)",
+                            opacity: 0.9,
+                        },
+                    }}
+                >
+                    <Box sx={{ position: "relative", zIndex: 1 }}>
+                        <Box
+                            sx={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 1,
+                                px: 1.5,
+                                py: 0.7,
+                                borderRadius: 999,
+                                bgcolor: "custom.brandSoft",
+                                border: (theme) => `1px solid ${theme.palette.custom.brandAccent}`,
+                                color: "secondary.light",
+                                fontSize: 13,
+                                fontWeight: 900,
+                                letterSpacing: 0,
+                            }}
+                        >
+                            RBAC Shop
+                        </Box>
+
+                        <Typography
+                            sx={{
+                                mt: 2,
+                                fontSize: { xs: 34, sm: 42, md: 56 },
+                                lineHeight: 0.95,
+                                fontWeight: 950,
+                                color: "#fff",
+                            }}
+                        >
+                            สินค้าใหม่
+                            <Box
+                                component="span"
+                                sx={{
+                                    display: "block",
+                                    mt: 0.75,
+                                    color: "secondary.light",
+                                    textShadow: "0 0 24px rgba(246, 215, 107, 0.28)",
+                                }}
+                            >
+                                กำลังมาเร็ว ๆ นี้
+                            </Box>
+                        </Typography>
+
+                        <Typography
+                            sx={{
+                                mt: 2,
+                                maxWidth: 460,
+                                fontSize: { xs: 15, md: 17 },
+                                lineHeight: 1.7,
+                                color: "rgba(255,255,255,0.76)",
+                                fontWeight: 500,
+                            }}
+                        >
+                            เตรียมพบกับสินค้าใหม่ ที่มากจากพี่น้องในมหาวิทยาลัย
+                        </Typography>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            position: "relative",
+                            zIndex: 1,
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <motion.div
+                            animate={{
+                                y: [0, -10, 0],
+                                rotate: [-1.5, 1.5, -1.5],
+                            }}
+                            transition={{
+                                duration: 3.2,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                            }}
+                            style={{
+                                width: "100%",
+                                maxWidth: 360,
+                            }}
+                        >
+                            <Box
+                                component="img"
+                                src={ComingSoon}
+                                alt="Coming soon"
+                                sx={{
+                                    width: "100%",
+                                    height: "auto",
+                                    objectFit: "contain",
+                                    filter: "drop-shadow(0 24px 28px rgba(0,0,0,0.42)) drop-shadow(0 0 20px rgba(246,215,107,0.24))",
+                                }}
+                            />
+                        </motion.div>
+                    </Box>
+                </Box>
+            </Box>
         );
     }
 
@@ -93,10 +255,10 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
 
                 const textColor = hasImage
                     ? "#fff"
-                    : "text.primary";
+                    : "primary.dark";
 
                 const priceColor = hasImage
-                    ? "#fff"
+                    ? "secondary.light"
                     : "primary.main";
 
                 return (
@@ -129,13 +291,15 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
                             <Card
                                 elevation={3}
                                 sx={{
-                                    borderRadius: 1,
+                                    borderRadius: 2,
                                     overflow: "hidden",
                                     height: "100%",
+                                    bgcolor: "background.paper",
+                                    borderColor: "custom.cardBorder",
                                     transition: "all .3s ease",
                                     "&:hover": {
-                                        boxShadow:
-                                            "0 12px 30px rgba(0,0,0,.15)",
+                                        boxShadow: (theme) =>
+                                            `0 18px 42px rgba(8,19,95,.28), 0 0 0 1px ${theme.palette.custom.brandAccentSoft}`,
                                     },
                                 }}
                             >
@@ -175,7 +339,7 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
                                                     width: "100%",
                                                     height: "100%",
                                                     objectFit: "cover",
-                                                    bgcolor: "grey.100",
+                                                    bgcolor: "rgba(8, 19, 95, 0.08)",
                                                 }}
                                             />
                                         </motion.div>
@@ -188,8 +352,11 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
                                                     position: "absolute",
                                                     top: 10,
                                                     right: 10,
-                                                    fontWeight: 600,
+                                                    fontWeight: 900,
                                                     zIndex: 2,
+                                                    color: "secondary.contrastText",
+                                                    bgcolor: "secondary.light",
+                                                    boxShadow: "0 10px 24px rgba(8, 19, 95, 0.18)",
                                                 }}
                                             />
                                         )}
@@ -197,18 +364,30 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
                                             sx={{
                                                 position: "absolute",
                                                 inset: 0,
-                                                background: hasImage
-                                                    ? "linear-gradient(to top, rgba(0,0,0,.92), rgba(0,0,0,.3), transparent)"
-                                                    : "rgba(255, 255, 255, 0.72)",
+                                                background: (theme) => hasImage
+                                                    ? `linear-gradient(to top, ${theme.palette.primary.dark}F5, ${theme.palette.primary.main}85, transparent 68%)`
+                                                    : `linear-gradient(145deg, rgba(255,255,255,0.88), ${theme.palette.custom.brandAccentSoft})`,
                                                 display: "flex",
                                                 flexDirection: "column",
                                                 justifyContent: "flex-end",
                                                 p: 1.5,
                                                 gap: 0.15,
+                                                "&::before": {
+                                                    content: '""',
+                                                    position: "absolute",
+                                                    left: 0,
+                                                    right: 0,
+                                                    bottom: 0,
+                                                    height: 3,
+                                                    background: (theme) =>
+                                                        `linear-gradient(90deg, ${theme.palette.custom.brandAccent}, ${theme.palette.secondary.light}, transparent)`,
+                                                },
                                             }}
                                         >
                                             <Typography
                                                 sx={{
+                                                    position: "relative",
+                                                    zIndex: 1,
                                                     color: textColor,
                                                     fontWeight: 700,
                                                     fontSize: {
@@ -226,6 +405,8 @@ const CardShopStudent: React.FC<ICardShopStudentProps> = ({
 
                                             <Typography
                                                 sx={{
+                                                    position: "relative",
+                                                    zIndex: 1,
                                                     color: priceColor,
                                                     fontWeight: 900,
                                                     fontSize: {

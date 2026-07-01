@@ -108,14 +108,20 @@ const PaymentShopPage: React.FC = () => {
     }, [summary?.student_name]);
 
     return (
-        <Container maxWidth="md" sx={{ py: 4 }}>
-            <Stack spacing={3}>
+        <Container
+            maxWidth="md"
+            sx={{
+                py: { xs: 2, sm: 4 },
+                px: { xs: 1.5, sm: 3 },
+            }}
+        >
+            <Stack spacing={{ xs: 2, sm: 3 }}>
                 <Box>
-                    <Typography sx={{ fontSize: 24, fontWeight: 900 }}>
+                    <Typography sx={{ fontSize: { xs: 22, sm: 24 }, fontWeight: 900, color: "primary.main" }}>
                         ชำระเงิน
                     </Typography>
 
-                    <Typography sx={{ color: "text.secondary", fontSize: 16 }}>
+                    <Typography sx={{ color: "text.secondary", fontSize: { xs: 13, sm: 16 } }}>
                         {step === 1
                             ? "ขั้นตอนที่ 1/2 — กรอกข้อมูลผู้รับ"
                             : "ขั้นตอนที่ 2/2 — ชำระเงินและแนบสลิป"}
@@ -154,8 +160,10 @@ const PaymentShopPage: React.FC = () => {
                             disabled={!canNext || creatingOrder}
                             onClick={handleCreateOrder}
                             sx={{
-                                fontSize: 20,
+                                minHeight: { xs: 46, sm: 52 },
+                                fontSize: { xs: 15, sm: 20 },
                                 fontWeight: 700,
+                                borderRadius: 3,
                             }}
                         >
                             {creatingOrder ? "กำลังสร้างคำสั่งซื้อ..." : "ถัดไป: ชำระเงิน"}
