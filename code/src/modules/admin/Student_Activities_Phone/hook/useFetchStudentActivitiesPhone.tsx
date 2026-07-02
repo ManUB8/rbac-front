@@ -192,16 +192,16 @@ export const useStudentActivitiesPhoneForm = () => {
         speakMessage(message);
     };
 
-    const showError = (message: string) => {
-        handleResultMessage("error", message);
+    // const showError = (message: string) => {
+    //     handleResultMessage("error", message);
 
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: message,
-            confirmButtonText: "ตกลง",
-        });
-    };
+    //     Swal.fire({
+    //         icon: "error",
+    //         title: "เกิดข้อผิดพลาด",
+    //         text: message,
+    //         confirmButtonText: "ตกลง",
+    //     });
+    // };
 
     const handleSubmit = async (rawValue = qrText) => {
         if (loadingSubmit) return;
@@ -209,40 +209,40 @@ export const useStudentActivitiesPhoneForm = () => {
         setErrorMessage("");
         setSuccessMessage("");
 
-        // if (!activityId) {
-        //     setErrorMessage("กรุณาเลือกกิจกรรมก่อน");
-        //     return;
-        // }
-
         if (!activityId) {
-            showError("กรุณาเลือกกิจกรรมก่อน");
+            setErrorMessage("กรุณาเลือกกิจกรรมก่อน");
             return;
         }
+
+        // if (!activityId) {
+        //     showError("กรุณาเลือกกิจกรรมก่อน");
+        //     return;
+        // }
 
         const payload = parseQR(rawValue);
 
-        // if (!payload.student_code) {
-        //     setErrorMessage("กรุณาสแกน QR หรือกรอกรหัสนิสิต");
-        //     return;
-        // }
         if (!payload.student_code) {
-            showError("กรุณาสแกน QR หรือกรอกรหัสนิสิต");
+            setErrorMessage("กรุณาสแกน QR หรือกรอกรหัสนิสิต");
             return;
         }
+        // if (!payload.student_code) {
+        //     showError("กรุณาสแกน QR หรือกรอกรหัสนิสิต");
+        //     return;
+        // }
 
         const lat = payload.lat ?? lastLat;
         const lng = payload.lng ?? lastLng;
 
-        // if (!lat || !lng) {
-        //     setErrorMessage("ไม่พบพิกัด กรุณากดขอตำแหน่งก่อน");
-        //     setQrText("");
-        //     return;
-        // }
         if (!lat || !lng) {
-            showError("ไม่พบพิกัด กรุณากดขอตำแหน่งก่อน");
+            setErrorMessage("ไม่พบพิกัด กรุณากดขอตำแหน่งก่อน");
             setQrText("");
             return;
         }
+        // if (!lat || !lng) {
+        //     showError("ไม่พบพิกัด กรุณากดขอตำแหน่งก่อน");
+        //     setQrText("");
+        //     return;
+        // }
 
         try {
             setLoadingSubmit(true);
@@ -276,24 +276,24 @@ export const useStudentActivitiesPhoneForm = () => {
             setLastLat(lat);
             setLastLng(lng);
             setQrText("");
-        } catch (error: any) {
-            const message =
-                error?.response?.data?.detail || "เกิดข้อผิดพลาด";
-
-            showError(message);
-            setQrText("");
-        } finally {
-            setLoadingSubmit(false);
-        }
         // } catch (error: any) {
         //     const message =
         //         error?.response?.data?.detail || "เกิดข้อผิดพลาด";
 
-        //     handleResultMessage("error", message);
+        //     showError(message);
         //     setQrText("");
         // } finally {
         //     setLoadingSubmit(false);
         // }
+        } catch (error: any) {
+            const message =
+                error?.response?.data?.detail || "เกิดข้อผิดพลาด";
+
+            handleResultMessage("error", message);
+            setQrText("");
+        } finally {
+            setLoadingSubmit(false);
+        }
     };
 
     const handleQrChange = (value: string) => {

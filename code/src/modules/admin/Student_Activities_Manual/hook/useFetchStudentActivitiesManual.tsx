@@ -138,16 +138,16 @@ export const useStudentActivitiesManualForm = () => {
         speakMessage(message);
     };
 
-    const showError = (message: string) => {
-        handleResultMessage("error", message);
+    // const showError = (message: string) => {
+    //     handleResultMessage("error", message);
 
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: message,
-            confirmButtonText: "ตกลง",
-        });
-    };
+    //     Swal.fire({
+    //         icon: "error",
+    //         title: "เกิดข้อผิดพลาด",
+    //         text: message,
+    //         confirmButtonText: "ตกลง",
+    //     });
+    // };
 
     const handleGetLocation = () => {
         setErrorMessage("");
@@ -199,34 +199,34 @@ export const useStudentActivitiesManualForm = () => {
 
         const code = studentCode.trim();
 
-        // if (!activityId) {
-        //     handleResultMessage("error", "กรุณาเลือกกิจกรรมก่อน");
-        //     return;
-        // }
-
-        // if (!/^\d{8}$/.test(code)) {
-        //     handleResultMessage("error", "กรุณากรอกรหัสนิสิต 8 หลัก");
-        //     return;
-        // }
-
-        // if (!lastLat || !lastLng) {
-        //     handleResultMessage("error", "กรุณากดขอตำแหน่งก่อน");
-        //     return;
-        // }
         if (!activityId) {
-            showError("กรุณาเลือกกิจกรรมก่อน");
+            handleResultMessage("error", "กรุณาเลือกกิจกรรมก่อน");
             return;
         }
 
         if (!/^\d{8}$/.test(code)) {
-            showError("กรุณากรอกรหัสนิสิต 8 หลัก");
+            handleResultMessage("error", "กรุณากรอกรหัสนิสิต 8 หลัก");
             return;
         }
 
         if (!lastLat || !lastLng) {
-            showError("กรุณากดขอตำแหน่งก่อน");
+            handleResultMessage("error", "กรุณากดขอตำแหน่งก่อน");
             return;
         }
+        // if (!activityId) {
+        //     showError("กรุณาเลือกกิจกรรมก่อน");
+        //     return;
+        // }
+
+        // if (!/^\d{8}$/.test(code)) {
+        //     showError("กรุณากรอกรหัสนิสิต 8 หลัก");
+        //     return;
+        // }
+
+        // if (!lastLat || !lastLng) {
+        //     showError("กรุณากดขอตำแหน่งก่อน");
+        //     return;
+        // }
 
         try {
             setLoadingSubmit(true);
@@ -258,23 +258,23 @@ export const useStudentActivitiesManualForm = () => {
             }
 
             setStudentCode("");
-        } catch (error: any) {
-            const message =
-                error?.response?.data?.detail || "เกิดข้อผิดพลาด";
-
-            showError(message);
-        } finally {
-            setLoadingSubmit(false);
-        }
         // } catch (error: any) {
         //     const message =
         //         error?.response?.data?.detail || "เกิดข้อผิดพลาด";
 
-        //     handleResultMessage("error", message);
-        // } 
-        // finally {
+        //     showError(message);
+        // } finally {
         //     setLoadingSubmit(false);
         // }
+        } catch (error: any) {
+            const message =
+                error?.response?.data?.detail || "เกิดข้อผิดพลาด";
+
+            handleResultMessage("error", message);
+        } 
+        finally {
+            setLoadingSubmit(false);
+        }
     };
 
     return {
