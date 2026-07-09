@@ -5,6 +5,7 @@ import {
     Autocomplete,
     Card,
     CardContent,
+    Box,
     Chip,
     Grid,
     Stack,
@@ -13,6 +14,7 @@ import {
 } from "@mui/material";
 
 import { formatDateThai } from "../../../../../shared/components/Date-Time/DateAndTime";
+import { Year_type } from "../../../Student_Manage/utils/student_option";
 
 export interface IFilterDashboardProps {
     mastercontroller: IuseuseFetchDashboardAdmin;
@@ -129,33 +131,64 @@ const FilterDashboard: React.FC<IFilterDashboardProps> = ({
                                 p: 2.5,
                                 height: "100%",
                                 display: "flex",
+                                gap: 2,
                                 alignItems: "center",
+                                flexDirection: { xs: "column", sm: "row" },
                             }}
                         >
-                            <Autocomplete
-                                fullWidth
-                                options={activity_filter}
-                                getOptionLabel={(option) => option.name}
-                                value={
-                                    activity_filter.find(
-                                        (item) =>
-                                            item.id ===
-                                            mastercontroller.selectedId
-                                    ) ?? null
-                                }
-                                onChange={(_, v) => {
-                                    mastercontroller.setSelectedId(
-                                        v?.id ?? 0
-                                    );
-                                }}
-                                renderInput={(p) => (
-                                    <TextField
-                                        {...p}
-                                        label="เลือกกิจกรรม"
-                                        variant="outlined"
-                                    />
-                                )}
-                            />
+                            <Box sx={{ flex: 1, width: "100%" }}>
+                                <Autocomplete
+                                    fullWidth
+                                    options={activity_filter}
+                                    getOptionLabel={(option) => option.name}
+                                    value={
+                                        activity_filter.find(
+                                            (item) =>
+                                                item.id ===
+                                                mastercontroller.selectedId
+                                        ) ?? null
+                                    }
+                                    onChange={(_, v) => {
+                                        mastercontroller.setSelectedId(
+                                            v?.id ?? 0
+                                        );
+                                    }}
+                                    renderInput={(p) => (
+                                        <TextField
+                                            {...p}
+                                            label="เลือกกิจกรรม"
+                                            variant="outlined"
+                                        />
+                                    )}
+                                />
+                            </Box>
+
+                            <Box sx={{ flex: 1, width: "100%" }}>
+                                <Autocomplete
+                                    fullWidth
+                                    options={Year_type}
+                                    getOptionLabel={(option) => option.label}
+                                    value={
+                                        Year_type.find(
+                                            (item) =>
+                                                item.id ===
+                                                mastercontroller.yearStatus
+                                        ) ?? null
+                                    }
+                                    onChange={(_, v) => {
+                                        mastercontroller.setYearStatus(
+                                            v?.id ?? ""
+                                        );
+                                    }}
+                                    renderInput={(p) => (
+                                        <TextField
+                                            {...p}
+                                            label="ชั้นปี"
+                                            variant="outlined"
+                                        />
+                                    )}
+                                />
+                            </Box>
                         </CardContent>
                     </Card>
                 </Stack>
