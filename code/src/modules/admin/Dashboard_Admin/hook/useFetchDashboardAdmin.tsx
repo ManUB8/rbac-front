@@ -18,55 +18,56 @@ export const useFetchDashboardAdmin = () => {
     const { activity_filter, activity_filter_Loading } = useFetchActivityFilter()
     const [version, setVersion] = useState(0);
     const [selectedId, setSelectedId] = useState<number | 0>(0);
+    const [yearStatus, setYearStatus] = useState<string>("");
     const reload = useCallback(() => {
         setVersion((v) => v + 1);
     }, []);
 
     const sumQuery = useQuery<IActivityDashboardResponse, Error>({
-        queryKey: ["dashboard-admin-sum", version, selectedId],
+        queryKey: ["dashboard-admin-sum", version, selectedId, yearStatus],
         retry: 1,
         queryFn: async () => {
-            return await getAllDashboardAdminSum(selectedId);
+            return await getAllDashboardAdminSum(selectedId, yearStatus);
         },
     });
 
     const activityRankQuery = useQuery({
-        queryKey: ["dashboard-admin-activity-rank", version, selectedId],
+        queryKey: ["dashboard-admin-activity-rank", version, selectedId, yearStatus],
         retry: 1,
         queryFn: async () => {
-            return await getAllDashboardAdminActivityRank(selectedId);
+            return await getAllDashboardAdminActivityRank(selectedId, yearStatus);
         },
     });
 
     const yearCountQuery = useQuery({
-        queryKey: ["dashboard-admin-year-count", version, selectedId],
+        queryKey: ["dashboard-admin-year-count", version, selectedId, yearStatus],
         retry: 1,
         queryFn: async () => {
-            return await getAllDashboardAdminYearCount(selectedId);
+            return await getAllDashboardAdminYearCount(selectedId, yearStatus);
         },
     });
 
     const facultyRankQuery = useQuery({
-        queryKey: ["dashboard-admin-faculty-rank", version, selectedId],
+        queryKey: ["dashboard-admin-faculty-rank", version, selectedId, yearStatus],
         retry: 1,
         queryFn: async () => {
-            return await getAllDashboardAdminFacultyRank(selectedId);
+            return await getAllDashboardAdminFacultyRank(selectedId, yearStatus);
         },
     });
 
     const majorRankQuery = useQuery({
-        queryKey: ["dashboard-admin-major-rank", version, selectedId],
+        queryKey: ["dashboard-admin-major-rank", version, selectedId, yearStatus],
         retry: 1,
         queryFn: async () => {
-            return await getAllDashboardAdminMajorRank(selectedId);
+            return await getAllDashboardAdminMajorRank(selectedId, yearStatus);
         },
     });
 
     const facultySummaryQuery = useQuery({
-        queryKey: ["dashboard-admin-faculty-summary", version, selectedId],
+        queryKey: ["dashboard-admin-faculty-summary", version, selectedId, yearStatus],
         retry: 1,
         queryFn: async () => {
-            return await getAllDashboardAdminFacultySummary(selectedId);
+            return await getAllDashboardAdminFacultySummary(selectedId, yearStatus);
         },
     });
 
@@ -92,6 +93,8 @@ export const useFetchDashboardAdmin = () => {
         reload,
         selectedId,
         setSelectedId,
+        yearStatus,
+        setYearStatus,
         activity_filter,
         activity_filter_Loading,
         dashboard_data,

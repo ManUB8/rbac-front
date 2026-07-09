@@ -11,6 +11,12 @@ const resolveDashboardList = <T,>(res: T[] | IDashboardListResponse<T>): T[] => 
     return Array.isArray(res) ? res : res.data ?? [];
 };
 
+const yearStatusParams = (yearStatus: string) => ({
+    params: {
+        year_status: yearStatus,
+    },
+});
+
 export const getAllDashboardAdmin = async (activity_id: number): Promise<IActivityDashboardResponse> => {
     const res = await api.get<IActivityDashboardResponse>(
         ApiConfig.DASHBOARD_API + `/admin/${activity_id}`
@@ -25,40 +31,46 @@ export const getAllYear = async (): Promise<IStudentSummaryResponse> => {
     return res;
 };
 
-export const getAllDashboardAdminSum = async (activity_id: number): Promise<IActivityDashboardResponse> => {
+export const getAllDashboardAdminSum = async (activity_id: number, yearStatus: string): Promise<IActivityDashboardResponse> => {
     const res = await api.get<IActivityDashboardResponse>(
-        ApiConfig.DASHBOARD_API + `/admin/sum/${activity_id}`
+        ApiConfig.DASHBOARD_API + `/admin/sum/${activity_id}`,
+        yearStatusParams(yearStatus)
   );
     return res;
 };
 
-export const getAllDashboardAdminActivityRank = async (activity_id: number): Promise<IActivityRankItem[]> => {
+export const getAllDashboardAdminActivityRank = async (activity_id: number, yearStatus: string): Promise<IActivityRankItem[]> => {
     const res = await api.get<IActivityRankItem[] | IDashboardListResponse<IActivityRankItem>>(
-        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/activity-rank`
+        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/activity-rank`,
+        yearStatusParams(yearStatus)
   );
     return resolveDashboardList(res);
 };
-export const getAllDashboardAdminYearCount = async (activity_id: number): Promise<IYearCount[]> => {
+export const getAllDashboardAdminYearCount = async (activity_id: number, yearStatus: string): Promise<IYearCount[]> => {
     const res = await api.get<IYearCount[] | IDashboardListResponse<IYearCount>>(
-        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/year-count`
+        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/year-count`,
+        yearStatusParams(yearStatus)
   );
     return resolveDashboardList(res);
 };
-export const getAllDashboardAdminFacultyRank = async (activity_id: number): Promise<IFacultyRankItem[]> => {
+export const getAllDashboardAdminFacultyRank = async (activity_id: number, yearStatus: string): Promise<IFacultyRankItem[]> => {
     const res = await api.get<IFacultyRankItem[] | IDashboardListResponse<IFacultyRankItem>>(
-        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/faculty-rank`
+        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/faculty-rank`,
+        yearStatusParams(yearStatus)
   );
     return resolveDashboardList(res);
 };
-export const getAllDashboardAdminMajorRank = async (activity_id: number): Promise<IMajorRankItem[]> => {
+export const getAllDashboardAdminMajorRank = async (activity_id: number, yearStatus: string): Promise<IMajorRankItem[]> => {
     const res = await api.get<IMajorRankItem[] | IDashboardListResponse<IMajorRankItem>>(
-        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/major-rank`
+        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/major-rank`,
+        yearStatusParams(yearStatus)
   );
     return resolveDashboardList(res);
 };
-export const getAllDashboardAdminFacultySummary = async (activity_id: number): Promise<IFacultySummary[]> => {
+export const getAllDashboardAdminFacultySummary = async (activity_id: number, yearStatus: string): Promise<IFacultySummary[]> => {
     const res = await api.get<IFacultySummary[] | IDashboardListResponse<IFacultySummary>>(
-        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/faculty`
+        ApiConfig.DASHBOARD_API + `/admin/${activity_id}/faculty`,
+        yearStatusParams(yearStatus)
   );
     return resolveDashboardList(res);
 };
