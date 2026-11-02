@@ -7,6 +7,20 @@ export interface ILoginStudentBody {
   username: string;
   password: string;
 }
+export interface IForgotPasswordStudentBody {
+  student_code: string;
+  new_password: string;
+}
+export interface IChangePasswordResponse {
+    detail: string;
+    first_name: string;
+    last_name: string;
+    student_code: string;
+    faculty_name: string;
+    major_name: string;
+    year_status: string;
+    new_password: string;
+}
 
 export interface ILoginResponse {
   success: boolean;
@@ -18,7 +32,7 @@ export type UserRole = "admin" | "temporary_admin" | "student";
 export interface ILoginAdminItem {
   user_id: string;
   username: string;
-  name:string;
+  name: string;
   role: "admin" | "temporary_admin";
 }
 
