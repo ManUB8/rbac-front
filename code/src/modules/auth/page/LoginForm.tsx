@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import { isAxiosError } from "axios";
 import {
   Alert,
   Box,
@@ -24,6 +25,7 @@ import type { ILoginAdminBody } from "../interface/Login.interface";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import Logo_Samo from "../../../assets/image/logo_samo.jpg";
+import ForgotPasswordStudentDialog from "./ForgotPasswordStudentDialog";
 const LoginForm: React.FC = () => {
   const { getAuthToken, handleLoginAdmin, handleLoginStudent } = useAuth();
 
@@ -32,6 +34,8 @@ const LoginForm: React.FC = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
+    getValues,
+    reset,
   } = useForm<ILoginAdminBody>({
     defaultValues: { username: "", password: "" },
     mode: "onSubmit",
@@ -39,6 +43,8 @@ const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [banner, setBanner] = useState<string | null>(null);
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [roleTab, setRoleTab] = useState<"student" | "admin">("student");
 
   const toggleShowPassword = useCallback(() => setShowPassword((v) => !v), []);
@@ -49,6 +55,7 @@ const LoginForm: React.FC = () => {
 
   const onSubmit = async (payload: ILoginAdminBody) => {
     setBanner(null);
+    setSuccessMessage(null);
 
     try {
       let res;
@@ -77,10 +84,10 @@ const LoginForm: React.FC = () => {
         return;
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const detail = isAxiosError(error) ? error.response?.data?.detail : undefined;
       const message =
-        error?.response?.data?.detail ||
-        "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง";
+        typeof detail === "string" ? detail : "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง";
 
       setBanner(message);
 
@@ -92,6 +99,7 @@ const LoginForm: React.FC = () => {
   const handleSelectTab = (tab: "student" | "admin") => {
     setRoleTab(tab);
     setBanner(null);
+    setSuccessMessage(null);
 
 
   };
@@ -249,6 +257,11 @@ const LoginForm: React.FC = () => {
                 แอดมิน
               </Button>
             </Box>
+            {successMessage && (
+              <Alert severity="success" sx={{ mb: 2, borderRadius: 3 }}>
+                {successMessage}
+              </Alert>
+            )}
             {banner && (
               <Alert
                 severity="error"
@@ -420,6 +433,18 @@ const LoginForm: React.FC = () => {
               </Box>
             </Stack>
 
+            {roleTab === "student" && (
+              <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
+                <Button
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={() => setForgotPasswordOpen(true)}
+                >
+                  ลืมรหัสผ่าน
+                </Button>
+              </Box>
+            )}
+
             <Button
               type="submit"
               fullWidth
@@ -503,6 +528,19 @@ const LoginForm: React.FC = () => {
           </CardContent>
         </Card>
       </Box>
+      {forgotPasswordOpen && (
+        <ForgotPasswordStudentDialog
+          studentCode={getValues("username")}
+          onClose={() => setForgotPasswordOpen(false)}
+          onSuccess={(studentCode) => {
+            reset({ username: studentCode, password: "" });
+            setShowPassword(false);
+            setBanner(null);
+            setSuccessMessage("เปลี่ยนรหัสผ่านสำเร็จ กรุณากรอกรหัสผ่านใหม่เพื่อเข้าสู่ระบบ");
+            setForgotPasswordOpen(false);
+          }}
+        />
+      )}
     </Container>
   );
 };

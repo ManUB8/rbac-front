@@ -25,14 +25,6 @@ import { useStudentActivitiesComputerForm } from "../../hook/useFetchStudentActi
 
 
 
-type Mode = "checkin" | "checkout";
-
-interface QRPayload {
-    student_code: string;
-    lat?: number;
-    lng?: number;
-}
-
 const StudentActivitiesComputerFrom: React.FC = () => {
     const controller = useStudentActivitiesComputerForm();
 
@@ -50,10 +42,6 @@ const StudentActivitiesComputerFrom: React.FC = () => {
                 onClose={() => controller.setOpenScanner(false)}
                 onScanSuccess={(value) => {
                     controller.handleQrChange(value);
-
-                    if (controller.isReadyToSubmit(value)) {
-                        controller.handleSubmit(value);
-                    }
                 }}
             />
 
@@ -140,6 +128,16 @@ const StudentActivitiesComputerFrom: React.FC = () => {
 
                     <CardContent sx={{ p: { xs: 2, md: 3 } }}>
                         <Stack spacing={2}>
+                            {controller.successMessage && (
+                                <Alert severity="success">
+                                    {controller.successMessage}
+                                </Alert>
+                            )}
+                            {controller.errorMessage && (
+                                <Alert severity="error">
+                                    {controller.errorMessage}
+                                </Alert>
+                            )}
                             <Grid container direction="row" spacing={2}>
                                 <Grid size={{ xs: 4, md: 4 }}>
                                     <Button

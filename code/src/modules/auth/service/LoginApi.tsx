@@ -1,7 +1,7 @@
 import { ApiConfig } from "../../../shared/service/ApiConfig";
 import { api } from "../../../shared/service/axiosInstance";
 import type { IFacultyMajorResponse } from "../../admin/Faculty_Majors/interface/Faculty_Majors.Interface";
-import type { IFaculty, ILoginAdminBody, ILoginAdminItem, ILoginStudentBody, IStudentItem } from "../interface/Login.interface";
+import type { IChangePasswordResponse, IFaculty, IForgotPasswordStudentBody, ILoginAdminBody, ILoginAdminItem, ILoginStudentBody, IStudentItem } from "../interface/Login.interface";
 
 export const getLoginAdmin = async (body: ILoginAdminBody): Promise<ILoginAdminItem> => {
   const res = await api.post<ILoginAdminItem>(
@@ -13,7 +13,14 @@ export const getLoginAdmin = async (body: ILoginAdminBody): Promise<ILoginAdminI
 
 export const getLoginStudent = async (body: ILoginStudentBody): Promise<IStudentItem> => {
   const res = await api.post<IStudentItem>(
-    ApiConfig.LOGIN_STUDENT_API, body,
+    ApiConfig.LOGIN_STUDENT_API + '/login', body,
+  );
+
+  return res;
+};
+export const ForgotPasswordStudent = async (body: IForgotPasswordStudentBody): Promise<IChangePasswordResponse> => {
+  const res = await api.post<IChangePasswordResponse>(
+    ApiConfig.LOGIN_STUDENT_API + '/forgot-password', body,
   );
 
   return res;

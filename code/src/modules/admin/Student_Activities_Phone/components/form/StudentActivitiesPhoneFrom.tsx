@@ -39,7 +39,7 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
 
     return (
         <>
-                        <QrScannerDialog
+            <QrScannerDialog
                 open={controller.openScanner}
                 onClose={() => controller.setOpenScanner(false)}
                 onScanSuccess={(value) => {
@@ -134,102 +134,102 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
 
                     <CardContent sx={{ p: { xs: 2, md: 3 } }}>
                         <Stack spacing={2}><Grid container direction="row" spacing={2}>
-                                <Grid size={{ xs: 4, md: 4 }}>
-                                    <Button
-                                        fullWidth
-                                        startIcon={<BoyIcon/>}
-                                        variant={
-                                            controller.targetGroup === "freshman"
-                                                ? "contained"
-                                                : "outlined"
-                                        }
-                                        onClick={() =>
-                                            controller.handleChangeTargetGroup("freshman")
-                                        }
-                                        sx={{
-                                            ...(controller.targetGroup === "freshman"
-                                                ? {
-                                                    bgcolor: "info.main",
-                                                    color: "primary.contrastText",
+                            <Grid size={{ xs: 4, md: 4 }}>
+                                <Button
+                                    fullWidth
+                                    startIcon={<BoyIcon />}
+                                    variant={
+                                        controller.targetGroup === "freshman"
+                                            ? "contained"
+                                            : "outlined"
+                                    }
+                                    onClick={() =>
+                                        controller.handleChangeTargetGroup("freshman")
+                                    }
+                                    sx={{
+                                        ...(controller.targetGroup === "freshman"
+                                            ? {
+                                                bgcolor: "info.main",
+                                                color: "primary.contrastText",
 
-                                                    "&:hover": {
-                                                        bgcolor: "primary.light",
-                                                    },
-                                                }
-                                                : {
-                                                    borderColor: "action.selected",
-                                                    color: "primary.light",
-                                                }),
-                                        }}
-                                    >
-                                        รุ่นน้อง
-                                    </Button>
-                                </Grid>
-
-                                <Grid size={{ xs: 4, md: 4 }}>
-                                    <Button
-                                        fullWidth
-                                        startIcon={<SchoolIcon/>}
-                                        variant={
-                                            controller.targetGroup === "senior"
-                                                ? "contained"
-                                                : "outlined"
-                                        }
-                                        onClick={() =>
-                                            controller.handleChangeTargetGroup("senior")
-                                        }
-                                        sx={{
-                                            ...(controller.targetGroup === "senior"
-                                                ? {
-                                                    bgcolor: "info.main",
-                                                    color: "primary.contrastText",
-
-                                                    "&:hover": {
-                                                        bgcolor: "primary.light",
-                                                    },
-                                                }
-                                                : {
-                                                    borderColor: "action.selected",
-                                                    color: "primary.light",
-                                                }),
-                                        }}
-                                    >
-                                        รุ่นพี่
-                                    </Button>
-                                </Grid>
-
-                                <Grid size={{ xs: 4, md: 4 }}>
-                                    <Button
-                                        fullWidth
-                                        startIcon={<GroupsIcon />}
-                                        variant={
-                                            controller.targetGroup === "all"
-                                                ? "contained"
-                                                : "outlined"
-                                        }
-                                        onClick={() =>
-                                            controller.handleChangeTargetGroup("all")
-                                        }
-                                        sx={{
-                                            ...(controller.targetGroup === "all"
-                                                ? {
-                                                    bgcolor: "info.main",
-                                                    color: "primary.contrastText",
-
-                                                    "&:hover": {
-                                                        bgcolor: "primary.light",
-                                                    },
-                                                }
-                                                : {
-                                                    borderColor: "action.selected",
-                                                    color: "primary.light",
-                                                }),
-                                        }}
-                                    >
-                                        ทั้งหมด
-                                    </Button>
-                                </Grid>
+                                                "&:hover": {
+                                                    bgcolor: "primary.light",
+                                                },
+                                            }
+                                            : {
+                                                borderColor: "action.selected",
+                                                color: "primary.light",
+                                            }),
+                                    }}
+                                >
+                                    รุ่นน้อง
+                                </Button>
                             </Grid>
+
+                            <Grid size={{ xs: 4, md: 4 }}>
+                                <Button
+                                    fullWidth
+                                    startIcon={<SchoolIcon />}
+                                    variant={
+                                        controller.targetGroup === "senior"
+                                            ? "contained"
+                                            : "outlined"
+                                    }
+                                    onClick={() =>
+                                        controller.handleChangeTargetGroup("senior")
+                                    }
+                                    sx={{
+                                        ...(controller.targetGroup === "senior"
+                                            ? {
+                                                bgcolor: "info.main",
+                                                color: "primary.contrastText",
+
+                                                "&:hover": {
+                                                    bgcolor: "primary.light",
+                                                },
+                                            }
+                                            : {
+                                                borderColor: "action.selected",
+                                                color: "primary.light",
+                                            }),
+                                    }}
+                                >
+                                    รุ่นพี่
+                                </Button>
+                            </Grid>
+
+                            <Grid size={{ xs: 4, md: 4 }}>
+                                <Button
+                                    fullWidth
+                                    startIcon={<GroupsIcon />}
+                                    variant={
+                                        controller.targetGroup === "all"
+                                            ? "contained"
+                                            : "outlined"
+                                    }
+                                    onClick={() =>
+                                        controller.handleChangeTargetGroup("all")
+                                    }
+                                    sx={{
+                                        ...(controller.targetGroup === "all"
+                                            ? {
+                                                bgcolor: "info.main",
+                                                color: "primary.contrastText",
+
+                                                "&:hover": {
+                                                    bgcolor: "primary.light",
+                                                },
+                                            }
+                                            : {
+                                                borderColor: "action.selected",
+                                                color: "primary.light",
+                                            }),
+                                    }}
+                                >
+                                    ทั้งหมด
+                                </Button>
+                            </Grid>
+                        </Grid>
                             <Autocomplete
                                 fullWidth
                                 loading={controller.activity_filter_Loading}
@@ -325,8 +325,8 @@ const StudentActivitiesPhoneFrom: React.FC = () => {
                                 }
                                 slotProps={{
                                     htmlInput: {
-                                        inputMode: "numeric",
-                                        maxLength: 8,
+                                        // inputMode: "numeric",
+                                        // maxLength: 8,
                                     },
                                 }}
                             />
